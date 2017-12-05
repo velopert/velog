@@ -1,0 +1,23 @@
+service:
+  name: velog
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: ap-northeast-2
+  stage: dev
+
+functions:
+  api:
+    handler: src/api.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+      - http:
+          path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
+          method: ANY
