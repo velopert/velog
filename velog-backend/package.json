@@ -29,6 +29,8 @@
     "koa": "^2.4.1",
     "koa-router": "^7.3.0",
     "nodemon": "^1.12.1",
+    "sequelize": "^4.26.0",
+    "sequelize-cockroachdb": "^1.0.2",
     "serverless-http": "^1.5.2"
   }
 }

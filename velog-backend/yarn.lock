@@ -55,6 +55,20 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@types/events@*":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/events/-/events-1.1.0.tgz#93b1be91f63c184450385272c47b6496fd028e02"
+
+"@types/geojson@^1.0.0":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.6.tgz#3e02972728c69248c2af08d60a48cbb8680fffdf"
+
+"@types/node@*":
+  version "8.0.54"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.54.tgz#3fd9357db4af388b79e03845340259440edffde6"
+  dependencies:
+    "@types/events" "*"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -818,7 +832,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.5.0:
+bluebird@^3.4.6, bluebird@^3.5.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
@@ -925,6 +939,10 @@ browserslist@^2.1.2:
 buffer-crc32@^0.2.1:
   version "0.2.13"
   resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
+
+buffer-writer@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/buffer-writer/-/buffer-writer-1.0.1.tgz#22a936901e3029afcd7547eb4487ceb697a3bf08"
 
 buffer-xor@^1.0.3:
   version "1.0.3"
@@ -1060,6 +1078,13 @@ cliui@^3.2.0:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
     wrap-ansi "^2.0.0"
+
+cls-bluebird@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/cls-bluebird/-/cls-bluebird-2.0.1.tgz#c259a480ae02c0e506134307bb13db30446ee2e7"
+  dependencies:
+    is-bluebird "^1.0.2"
+    shimmer "^1.1.0"
 
 co@^4.6.0:
   version "4.6.0"
@@ -1260,13 +1285,13 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
 
-debug@*, debug@^3.0.1, debug@^3.1.0:
+debug@*, debug@^3.0.0, debug@^3.0.1, debug@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
     ms "2.0.0"
 
-debug@^2.2.0, debug@^2.6.8:
+debug@^2.2.0, debug@^2.6.8, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   dependencies:
@@ -1367,6 +1392,10 @@ dot-prop@^4.1.0:
   resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.2.0.tgz#1f19e0c2e1aa0e32797c49799f2837ac6af69c57"
   dependencies:
     is-obj "^1.0.0"
+
+dottie@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/dottie/-/dottie-2.0.0.tgz#da191981c8b8d713ca0115d5898cf397c2f0ddd0"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -1876,6 +1905,14 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
+generic-pool@2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-2.4.3.tgz#780c36f69dfad05a5a045dd37be7adca11a4f6ff"
+
+generic-pool@^3.1.8:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-3.2.0.tgz#c1d485ecbd6f18c0513d4741d098a6715eaeeca8"
+
 get-caller-file@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.2.tgz#f702e63127e7e231c160a80c1554acb70d5047e5"
@@ -2108,6 +2145,10 @@ indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
 
+inflection@1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/inflection/-/inflection-1.12.0.tgz#a200935656d6f5f6bc4dc7502e1aecb703228416"
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
@@ -2169,6 +2210,10 @@ is-binary-path@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-binary-path/-/is-binary-path-1.0.1.tgz#75f16642b480f187a711c814161fd3a4a7655898"
   dependencies:
     binary-extensions "^1.0.0"
+
+is-bluebird@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/is-bluebird/-/is-bluebird-1.0.2.tgz#096439060f4aa411abee19143a84d6a55346d6e2"
 
 is-buffer@^1.1.5:
   version "1.1.6"
@@ -2322,6 +2367,10 @@ isobject@^2.0.0:
 isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
+
+js-string-escape@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/js-string-escape/-/js-string-escape-1.0.1.tgz#e2625badbc0d67c7533e9edc1068c587ae4137ef"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
@@ -2599,7 +2648,7 @@ lodash.restparam@^3.0.0:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/lodash.restparam/-/lodash.restparam-3.6.1.tgz#936a4e309ef330a7645ed4145986c85ae5b20805"
 
-lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.8.0:
+lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.1, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.8.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -2733,6 +2782,16 @@ minimist@^1.2.0:
   dependencies:
     minimist "0.0.8"
 
+moment-timezone@^0.5.4:
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.14.tgz#4eb38ff9538b80108ba467a458f3ed4268ccfcb1"
+  dependencies:
+    moment ">= 2.9.0"
+
+"moment@>= 2.9.0", moment@^2.13.0:
+  version "2.19.3"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.3.tgz#bdb99d270d6d7fda78cc0fbace855e27fe7da69f"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -2863,6 +2922,10 @@ oauth-sign@~0.8.1:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
 
+object-assign@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.0.tgz#7a3b3d0e98063d43f4c03f2e8ae6cd51a86883a0"
+
 object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
@@ -2956,6 +3019,10 @@ package-json@^4.0.0:
     registry-auth-token "^3.0.1"
     registry-url "^3.0.3"
     semver "^5.1.0"
+
+packet-reader@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/packet-reader/-/packet-reader-0.3.1.tgz#cd62e60af8d7fea8a705ec4ff990871c46871f27"
 
 pako@~1.0.5:
   version "1.0.6"
@@ -3056,6 +3123,50 @@ performance-now@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
 
+pg-connection-string@0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/pg-connection-string/-/pg-connection-string-0.1.3.tgz#da1847b20940e42ee1492beaf65d49d91b245df7"
+
+pg-int8@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/pg-int8/-/pg-int8-1.0.1.tgz#943bd463bf5b71b4170115f80f8efc9a0c0eb78c"
+
+pg-pool@1.*:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-1.8.0.tgz#f7ec73824c37a03f076f51bfdf70e340147c4f37"
+  dependencies:
+    generic-pool "2.4.3"
+    object-assign "4.1.0"
+
+pg-types@1.*:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/pg-types/-/pg-types-1.13.0.tgz#75f490b8a8abf75f1386ef5ec4455ecf6b345c63"
+  dependencies:
+    pg-int8 "1.0.1"
+    postgres-array "~1.0.0"
+    postgres-bytea "~1.0.0"
+    postgres-date "~1.0.0"
+    postgres-interval "^1.1.0"
+
+pg@^6.1.3:
+  version "6.4.2"
+  resolved "https://registry.yarnpkg.com/pg/-/pg-6.4.2.tgz#c364011060eac7a507a2ae063eb857ece910e27f"
+  dependencies:
+    buffer-writer "1.0.1"
+    js-string-escape "1.0.1"
+    packet-reader "0.3.1"
+    pg-connection-string "0.1.3"
+    pg-pool "1.*"
+    pg-types "1.*"
+    pgpass "1.*"
+    semver "4.3.2"
+
+pgpass@1.*:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pgpass/-/pgpass-1.0.2.tgz#2a7bb41b6065b67907e91da1b07c1847c877b306"
+  dependencies:
+    split "^1.0.0"
+
 pify@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
@@ -3089,6 +3200,24 @@ pkg-dir@^2.0.0:
 pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
+
+postgres-array@~1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/postgres-array/-/postgres-array-1.0.2.tgz#8e0b32eb03bf77a5c0a7851e0441c169a256a238"
+
+postgres-bytea@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/postgres-bytea/-/postgres-bytea-1.0.0.tgz#027b533c0aa890e26d172d47cf9ccecc521acd35"
+
+postgres-date@~1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/postgres-date/-/postgres-date-1.0.3.tgz#e2d89702efdb258ff9d9cee0fe91bd06975257a8"
+
+postgres-interval@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/postgres-interval/-/postgres-interval-1.1.1.tgz#acdb0f897b4b1c6e496d9d4e0a853e1c428f06f0"
+  dependencies:
+    xtend "^4.0.0"
 
 prelude-ls@~1.1.2:
   version "1.1.2"
@@ -3361,6 +3490,13 @@ restore-cursor@^2.0.0:
     onetime "^2.0.0"
     signal-exit "^3.0.2"
 
+retry-as-promised@^2.3.1:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/retry-as-promised/-/retry-as-promised-2.3.2.tgz#cd974ee4fd9b5fe03cbf31871ee48221c07737b7"
+  dependencies:
+    bluebird "^3.4.6"
+    debug "^2.6.9"
+
 right-align@^0.1.1:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/right-align/-/right-align-0.1.3.tgz#61339b722fe6a3515689210d24e14c96148613ef"
@@ -3406,9 +3542,42 @@ semver-diff@^2.0.0:
   dependencies:
     semver "^5.0.3"
 
-"semver@2 || 3 || 4 || 5", semver@^5.0.3, semver@^5.1.0, semver@^5.3.0, semver@^5.4.1:
+"semver@2 || 3 || 4 || 5", semver@^5.0.1, semver@^5.0.3, semver@^5.1.0, semver@^5.3.0, semver@^5.4.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.4.1.tgz#e059c09d8571f0540823733433505d3a2f00b18e"
+
+semver@4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-4.3.2.tgz#c7a07158a80bedd052355b770d82d6640f803be7"
+
+sequelize-cockroachdb@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/sequelize-cockroachdb/-/sequelize-cockroachdb-1.0.2.tgz#0f0d0f67f182fcff66e74896f3e10cefffffb620"
+  dependencies:
+    pg "^6.1.3"
+    sequelize "3.30.2 - 4"
+
+"sequelize@3.30.2 - 4", sequelize@^4.26.0:
+  version "4.26.0"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.26.0.tgz#789ecfa1cd95add5155734879602d95da9d24682"
+  dependencies:
+    bluebird "^3.4.6"
+    cls-bluebird "^2.0.1"
+    debug "^3.0.0"
+    depd "^1.1.0"
+    dottie "^2.0.0"
+    generic-pool "^3.1.8"
+    inflection "1.12.0"
+    lodash "^4.17.1"
+    moment "^2.13.0"
+    moment-timezone "^0.5.4"
+    retry-as-promised "^2.3.1"
+    semver "^5.0.1"
+    terraformer-wkt-parser "^1.1.2"
+    toposort-class "^1.0.1"
+    uuid "^3.0.0"
+    validator "^9.1.0"
+    wkx "^0.4.1"
 
 serverless-http@^1.5.2:
   version "1.5.2"
@@ -3459,6 +3628,10 @@ shebang-command@^1.2.0:
 shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
+
+shimmer@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/shimmer/-/shimmer-1.2.0.tgz#f966f7555789763e74d8841193685a5e78736665"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
@@ -3515,6 +3688,12 @@ spdx-license-ids@^1.0.2:
 split@0.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/split/-/split-0.3.3.tgz#cd0eea5e63a211dfff7eb0f091c4133e2d0dd28f"
+  dependencies:
+    through "2"
+
+split@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/split/-/split-1.0.1.tgz#605bd9be303aa59fb35f9229fbea0ddec9ea07d9"
   dependencies:
     through "2"
 
@@ -3673,6 +3852,18 @@ term-size@^1.2.0:
   dependencies:
     execa "^0.7.0"
 
+terraformer-wkt-parser@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/terraformer-wkt-parser/-/terraformer-wkt-parser-1.1.2.tgz#336a0c8fc82094a5aff83288f69aedecd369bf0c"
+  dependencies:
+    terraformer "~1.0.5"
+
+terraformer@~1.0.5:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/terraformer/-/terraformer-1.0.8.tgz#51e0ad89746fcf2161dc6f65aa70e42377c8b593"
+  dependencies:
+    "@types/geojson" "^1.0.0"
+
 text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
@@ -3708,6 +3899,10 @@ to-fast-properties@^1.0.3:
 to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"
+
+toposort-class@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/toposort-class/-/toposort-class-1.0.1.tgz#7ffd1f78c8be28c3ba45cd4e1a3f5ee193bd9988"
 
 touch@^3.1.0:
   version "3.1.0"
@@ -3883,6 +4078,10 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
 
+validator@^9.1.0:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-9.1.2.tgz#5711b6413f78bd9d56003130c81b47c39e86546c"
+
 vary@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
@@ -3968,6 +4167,12 @@ widest-line@^2.0.0:
 window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
+
+wkx@^0.4.1:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/wkx/-/wkx-0.4.2.tgz#776d35a634a5c22e656e4744bdeb54f83fd2ce8d"
+  dependencies:
+    "@types/node" "*"
 
 wordwrap@0.0.2:
   version "0.0.2"
