@@ -5,7 +5,7 @@ import db from 'database/db';
 import { generate } from 'lib/token';
 
 export interface UserModel {
-  id?: string,
+  id: string,
   username: string,
   email: string,
   password_hash?: string,
@@ -54,7 +54,7 @@ User.prototype.generateToken = function generateToken(): Promise<string> {
   };
 
   const { id, username } : TokenPayload = this;
-  return generate({ id, username });
+  return generate({ user: { id, username } });
 };
 
 User.prototype.validatePassword = function validatePassword(password: string): Promise<boolean> {

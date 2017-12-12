@@ -3,8 +3,10 @@ import type { Context } from 'koa';
 import Joi from 'joi';
 
 import User from 'database/models/User';
-import type { UserModel } from 'database/models/User';
+import UserProfile from 'database/models/UserProfile';
 
+import type { UserModel } from 'database/models/User';
+import type { UserProfileModel } from 'database/models/UserProfile';
 
 export const createLocalAccount = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -59,11 +61,23 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
       password_hash: hash,
     }).save();
 
-    console.log(user);
+    const userProfile = await UserProfile.build({
+      fk_user_id: user.id,
+    }).save();
 
     const token: string = await user.generateToken();
+
+    // $FlowFixMe: intersection bug
+    ctx.cookies.set('access_token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
     ctx.body = {
-      user,
+      user: {
+        id: user.id,
+        username: user.username,
+      },
       token,
     };
   } catch (e) {
@@ -111,6 +125,14 @@ export const localLogin = async (ctx: Context): Promise<*> => {
 
     const user: UserModel = await User.findUser(type, value);
 
+    if (!user) {
+      ctx.status = 401;
+      ctx.body = {
+        name: 'LOGIN_FAILURE',
+      };
+      return;
+    }
+
     const validated: boolean = await user.validatePassword(password);
     if (!validated) {
       ctx.status = 401;
@@ -121,10 +143,26 @@ export const localLogin = async (ctx: Context): Promise<*> => {
     }
 
     const token: string = await user.generateToken();
+
+    // set-cookie
+    // $FlowFixMe: intersection bug
+    ctx.cookies.set('access_token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
     ctx.body = {
+      user: {
+        id: user.id,
+        username: user.username,
+      },
       token,
     };
   } catch (e) {
     ctx.throw(500, e);
   }
+};
+
+export const check = async (ctx: Context): Promise<*> => {
+  ctx.body = ctx.user;
 };

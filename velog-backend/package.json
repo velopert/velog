@@ -34,6 +34,7 @@
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.3.0",
+    "lodash": "^4.17.4",
     "nodemon": "^1.12.1",
     "sequelize": "^4.26.0",
     "sequelize-cockroachdb": "^1.0.2",

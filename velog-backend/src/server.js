@@ -2,6 +2,7 @@
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import serverless from 'serverless-http';
+import authToken from 'lib/middlewares/authToken';
 import router from './router';
 
 export default class Server {
@@ -14,6 +15,7 @@ export default class Server {
 
   middleware(): void {
     const { app } = this;
+    app.use(authToken);
     app.use(bodyParser());
     app.use(router.routes())
       .use(router.allowedMethods());
