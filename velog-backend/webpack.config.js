@@ -5,20 +5,33 @@ const slsw = require('serverless-webpack');
 module.exports = {
   entry: slsw.lib.entries,
   target: 'node',
+  resolve: {
+    modules: [
+      path.resolve('./src'),
+      'node_modules',
+    ],
+  },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: [{
+    loaders: [
+      {
+        test: /node_modules[/\\]rc/i,
+        use: {
+          loader: require.resolve('shebang-loader'),
+        },
+      },
+      {
+        test: /\.(js|jsx)$/,
+        include: __dirname,
+        exclude: /node_modules\/(?!(koa-bodyparser)\/).*/,
         loader: 'babel-loader',
         options: {
+          plugins: ['transform-object-rest-spread', 'transform-async-to-generator'],
           presets: [
             'flow',
           ],
         },
-      }],
-      include: __dirname,
-      exclude: /node_modules/,
-    }],
+      },
+    ],
   },
   output: {
     libraryTarget: 'commonjs',

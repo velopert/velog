@@ -1,5 +1,5 @@
 service:
-  name: velog
+  name: api-velog
 
 # Add the serverless-webpack plugin
 plugins:
@@ -10,6 +10,18 @@ provider:
   runtime: nodejs6.10
   region: ap-northeast-2
   stage: dev
+  environment:
+    SECRET_KEY: ${file(./env.json):SECRET_KEY}
+    COCKROACHDB_HOST: ${file(./env.json):COCKROACHDB_HOST}
+    COCKROACHDB_PW: ${file(./env.json):COCKROACHDB_PW}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ec2:CreateNetworkInterface"
+        - "ec2:DescribeNetworkInterfaces"
+        - "ec2:DetachNetworkInterface"
+        - "ec2:DeleteNetworkInterface"
+      Resource: "*"
 
 functions:
   api:
@@ -21,3 +33,8 @@ functions:
       - http:
           path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
           method: ANY
+    vpc:
+      securityGroupIds:
+        - sg-5bc57830
+      subnetIds:
+        - subnet-d438debc
