@@ -2,7 +2,7 @@ import React from 'react';
 import Responsive from 'components/common/Responsive';
 import './HomeTemplate.scss';
 
-const HomeTemplate = () => {
+const HomeTemplate = ({ form }) => {
   return (
     <div className="home-template">
       <Responsive className="block">
@@ -19,7 +19,8 @@ const HomeTemplate = () => {
         </div>
         <div className="right-form">
           <div className="black-box">
-            제 이름은요 어쩌고인데
+            <h2>로그인 또는 회원가입</h2>
+            {form}
           </div>
           <div className="register-button">
             지금 시작하기

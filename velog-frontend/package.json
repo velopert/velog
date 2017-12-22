@@ -36,6 +36,7 @@
     "react": "^16.2.0",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.2.0",
+    "react-icons": "^2.2.7",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",

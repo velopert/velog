@@ -1,0 +1,56 @@
+@import 'utils';
+
+.social-login-button {
+  padding: 1rem;
+  display: flex;
+  border-radius: 2px;
+  align-items: center;
+  transition: all .15s ease-in;
+  cursor: pointer;
+  svg {
+    font-size: 2rem;
+  }
+  .text {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-left: 1rem;
+    &:first-letter {
+      text-transform: capitalize;
+    }
+    .login {
+      font-weight: 400;
+    }
+  }
+  &.github {
+    background: $oc-gray-2;
+    color: $oc-gray-9;
+    @include hover() {
+      background: $oc-gray-0;
+    }
+    &:active {
+      background: $oc-gray-3;
+    }
+  }
+  &.facebook {
+    background: $oc-blue-8;
+    @include hover() {
+      background: $oc-blue-7;
+    }
+    &:active {
+      background: $oc-blue-9;
+    }
+  }
+  &.google {
+    background: $oc-red-9;
+    @include hover() {
+      background: $oc-red-8;
+    }
+    &:active {
+      background: $oc-red-9;
+    }
+  }
+
+  & + & {
+    margin-top: 1.5rem;
+  }
+}
