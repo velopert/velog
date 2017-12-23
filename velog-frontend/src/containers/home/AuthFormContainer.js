@@ -1,12 +1,36 @@
+// @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { AuthActions } from 'store/actionCreators';
+import type { State } from 'store';
 import AuthForm from 'components/home/AuthForm';
 
-class AuthFormContainer extends Component {
+type Props = {
+  email: string
+}
+
+class AuthFormContainer extends Component<Props> {
+  onChange = (e) => {
+    const { value } = e.target;
+    AuthActions.setEmailInput(value);
+  }
+
   render() {
+    const { onChange } = this;
+    const { email } = this.props;
+
     return (
-      <AuthForm />
+      <AuthForm
+        email={email}
+        onChange={onChange}
+      />
     );
   }
 }
 
-export default AuthFormContainer;
+export default connect(
+  (state: State) => ({
+    email: state.auth.email,
+  }),
+  () => ({}),
+)(AuthFormContainer);

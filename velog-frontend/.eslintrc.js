@@ -20,6 +20,9 @@ module.exports = {
     "react/prop-types": 0,
     "react/self-closing-comp": 1,
     "react/prefer-stateless-function": 0,
-    "react/default-props-match-prop-types": 0
+    "react/default-props-match-prop-types": 0,
+    "no-underscore-dangle": 0,
+    "function-paren-newline": 0,
+    "react/no-unused-prop-types": 1,
   }
 }
