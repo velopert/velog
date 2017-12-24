@@ -24,5 +24,8 @@ module.exports = {
     "no-underscore-dangle": 0,
     "function-paren-newline": 0,
     "react/no-unused-prop-types": 1,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "object-curly-newline": 0,
   }
 }

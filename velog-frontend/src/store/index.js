@@ -1,11 +1,16 @@
 // @flow
 import configure from './configure';
-import type { AuthRecordType } from './modules/auth';
+import type { Auth } from './modules/auth';
 
 const store = configure();
 
 export default store;
 
 export type State = {
-  auth: AuthRecordType
+  auth: Auth,
+  pender: {
+    pending: any,
+    success: any,
+    failure: any
+  }
 };

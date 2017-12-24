@@ -4,6 +4,19 @@
   margin-top: 2rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  .sent-email {
+    display: flex;
+    align-items: center;
+    background: $oc-green-2;
+    color: $oc-green-9;
+    padding: 1rem;
+    svg {
+      font-size: 1.5rem;
+    }
+    .text {
+      margin-left: 0.5rem;
+    }
+  }
   .input-with-button {
     display: flex;
     input {
@@ -19,15 +32,14 @@
     .button {
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px;
-      padding-left: 1rem;
-      padding-right: 1rem;
+      width: 6rem;
       display: flex;
       align-items: center;
+      justify-content: center;
       font-size: 1.2rem;
       font-weight: 600;
       transition: background 0.15s ease-in;
       background: $oc-violet-6;
-      border-left: $oc-violet-9;
       cursor: pointer;
       user-select: none;
       @include hover() {
@@ -35,6 +47,13 @@
       }
       &:active {
         background: $oc-violet-7;
+      }
+    }
+    transition: opacity 0.3s ease-in;
+    &.sending {
+      opacity: 0.75;
+      .button {
+        cursor: default;
       }
     }
   }
