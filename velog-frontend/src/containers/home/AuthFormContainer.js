@@ -25,7 +25,7 @@ class AuthFormContainer extends Component<Props> {
   onSendVerification = async (): Promise<*> => {
     const { email } = this.props;
     try {
-      await AuthActions.sendVerificationEmail(email);
+      await AuthActions.sendAuthEmail(email);
     } catch (e) {
       console.log(e);
     }
@@ -52,7 +52,7 @@ export default connect(
   ({ auth, pender }: State) => ({
     email: auth.email,
     sentEmail: auth.sentEmail,
-    sending: pender.pending['auth/SEND_VERIFICATION_EMAIL'],
+    sending: pender.pending['auth/SEND_AUTH_EMAIL'],
   }),
   () => ({}),
 )(AuthFormContainer);

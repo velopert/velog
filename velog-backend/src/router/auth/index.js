@@ -8,6 +8,6 @@ const auth:Router = new Router();
 auth.post('/register/local', authCtrl.createLocalAccount);
 auth.post('/login/local', authCtrl.localLogin);
 auth.get('/check', authCtrl.check);
-auth.post('/verify-email', authCtrl.verifyEmail);
+auth.post('/send-auth-email', authCtrl.sendAuthEmail);
 
 export default auth;

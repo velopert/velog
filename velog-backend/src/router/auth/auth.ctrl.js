@@ -6,11 +6,10 @@ import mailgun from 'mailgun-js';
 
 import User from 'database/models/User';
 import UserProfile from 'database/models/UserProfile';
-import EmailVerification from 'database/models/EmailVerification';
+import EmailAuth from 'database/models/EmailAuth';
 
 import type { UserModel } from 'database/models/User';
-import type { UserProfileModel } from 'database/models/UserProfile';
-import type { EmailVerificationModel } from 'database/models/EmailVerification';
+import type { EmailAuthModel } from 'database/models/EmailAuth';
 
 const { MAILGUN_KEY: mailgunKey } = process.env;
 
@@ -38,7 +37,7 @@ const sendVerificationEmail = ({ email, code }: { email: string, code: string })
   return mg.messages().send(data);
 };
 
-export const verifyEmail = async (ctx: Context): Promise<*> => {
+export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   type BodySchema = {
     email: string
   };
@@ -60,7 +59,7 @@ export const verifyEmail = async (ctx: Context): Promise<*> => {
 
   try {
     const { email } : BodySchema = (ctx.request.body: any);
-    const verification: EmailVerificationModel = await EmailVerification.build({
+    const verification: EmailAuthModel = await EmailAuth.build({
       email,
     }).save();
     const data = await sendVerificationEmail({

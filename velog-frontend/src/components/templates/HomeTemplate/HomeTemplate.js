@@ -1,5 +1,6 @@
 import React from 'react';
 import Responsive from 'components/common/Responsive';
+import BackgroundColor from 'components/common/BackgroundColor';
 import './HomeTemplate.scss';
 
 const HomeTemplate = ({ form }) => {

@@ -19,9 +19,6 @@ export default class Server {
     app.use(bodyParser());
     app.use(router.routes())
       .use(router.allowedMethods());
-    app.use((ctx: any) => {
-      ctx.body = process.env.WORKING;
-    });
   }
 
   listen(port: number): void {

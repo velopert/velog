@@ -5,16 +5,16 @@ import { pender } from 'redux-pender';
 import * as AuthAPI from 'lib/api/auth';
 
 const SET_EMAIL_INPUT = 'auth/SET_EMAIL_INPUT';
-const SEND_VERIFICATION_EMAIL = 'auth/SEND_VERIFICATION_EMAIL';
+const SEND_AUTH_EMAIL = 'auth/SEND_AUTH_EMAIL';
 
 export const actionCreators = {
   setEmailInput: createAction(SET_EMAIL_INPUT, (value: string) => value),
-  sendVerificationEmail: createAction(SEND_VERIFICATION_EMAIL, AuthAPI.sendVerificationEmail),
+  sendAuthEmail: createAction(SEND_AUTH_EMAIL, AuthAPI.sendAuthEmail),
 };
 
 export type AuthActionCreators = {
   setEmailInput(value: string): any,
-  sendVerificationEmail(email: string): any
+  sendAuthEmail(email: string): any
 }
 
 export type Auth = {
@@ -34,7 +34,7 @@ export default handleActions({
     return state.set('email', value);
   },
   ...pender({
-    type: SEND_VERIFICATION_EMAIL,
+    type: SEND_AUTH_EMAIL,
     onSuccess: (state) => {
       return state.set('sentEmail', true);
     },

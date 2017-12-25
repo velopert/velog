@@ -3,14 +3,14 @@ import Sequelize from 'sequelize';
 import db from 'database/db';
 import shortid from 'shortid';
 
-export interface EmailVerificationModel {
+export interface EmailAuthModel {
   id: number,
   code: string,
   email: string,
   createdAt: string
 }
 
-const EmailVerification = db.define('email_verification', {
+const EmailAuth = db.define('email_auth', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -22,8 +22,11 @@ const EmailVerification = db.define('email_verification', {
     defaultValue: shortid.generate,
   },
   email: Sequelize.STRING,
+}, {
+  freezeTableName: true,
+  tableName: 'email_auth',
 });
 
-EmailVerification.sync();
+EmailAuth.sync();
 
-export default EmailVerification;
+export default EmailAuth;
