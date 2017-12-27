@@ -1,0 +1,71 @@
+@import 'utils';
+
+.register-form {
+  @include media("<=large") {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .form-head {
+    background: $oc-violet-7;
+    padding: 1.5rem;
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: white;
+    }
+    @include media("<=large") {
+      padding: 1.15rem;
+      h2 {
+        font-size: 1.15rem;
+      }
+    }
+  }
+  .form-contents {
+    padding: 3rem;
+    background: white;
+    @include media("<=large") {
+      padding: 1.5rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .agreement {
+      margin-top: 2rem;
+      color: $oc-gray-6;
+      font-size: 0.85rem;
+      span {
+        font-weight: 600;
+      }
+    }
+    .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .icon-button {
+      margin-top: 1rem;
+      background: $oc-violet-6;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      font-size: 1.25rem;
+      line-height: 1.25rem;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: all .15s ease-in;
+      cursor: pointer;
+      user-select: none;
+      svg {
+        margin-left: 0.5rem;
+      }
+      @include hover() {
+        @include material-shadow(2, 0.5);
+        background: $oc-violet-5;
+      }
+      &:active {
+        background: $oc-violet-7;
+      }
+    }
+  }
+}

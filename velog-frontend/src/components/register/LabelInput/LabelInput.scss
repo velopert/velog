@@ -1,0 +1,59 @@
+@import 'utils';
+
+.register.label-input {
+  position: relative;
+  .label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $oc-gray-7;
+    span {
+      color: $oc-red-7;
+    }
+    @include media("<large") {
+      font-size: 0.75rem;
+    }
+  }
+  input {
+    width: 100%;
+    font-size: 1.25rem;
+    outline: none;
+    border: none;
+    margin-top: 0.5rem;
+    border-bottom: 1px solid $oc-gray-4;
+    padding-bottom: 0.5rem;
+    font-weight: 300;
+    @include media("<large") {
+      font-size: 1rem;
+      padding-bottom: 0.35rem;
+    }
+    &:focus {
+      border-bottom: 1px solid $oc-violet-7;
+    }
+    &.disabled {
+      width: calc(100% - 3rem);
+    }
+  }
+
+  .lock-wrapper {
+    position: relative;
+    cursor: not-allowed;
+  }
+  .lock {
+    padding: 0.25rem;
+    padding-right: 0.5rem;
+    background: white;
+    position: absolute;
+    right: 0rem;
+    top: -2.3rem;
+    color: $oc-gray-6;
+  }
+  & + & {
+    margin-top: 2rem;
+  }
+  &.disabled {
+    input {
+      cursor: not-allowed;
+      color: $oc-gray-7;
+    }
+  }
+}
