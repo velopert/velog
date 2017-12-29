@@ -34,7 +34,7 @@
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.169.0",
+    "aws-sdk": "^2.175.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^4.0.0",
@@ -49,6 +49,7 @@
     "sequelize": "^4.26.0",
     "sequelize-cockroachdb": "^1.0.2",
     "serverless-http": "^1.5.2",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "striptags": "^3.1.1"
   }
 }

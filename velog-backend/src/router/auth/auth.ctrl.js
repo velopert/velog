@@ -1,41 +1,14 @@
 // @flow
 import type { Context } from 'koa';
 import Joi from 'joi';
-import mailgun from 'mailgun-js';
 
-
+import sendMail from 'lib/sendMail';
 import User from 'database/models/User';
 import UserProfile from 'database/models/UserProfile';
 import EmailAuth from 'database/models/EmailAuth';
 
 import type { UserModel } from 'database/models/User';
 import type { EmailAuthModel } from 'database/models/EmailAuth';
-
-const { MAILGUN_KEY: mailgunKey } = process.env;
-
-const sendVerificationEmail = ({ email, code }: { email: string, code: string }): Promise<*> => {
-  const mg = mailgun({
-    apiKey: mailgunKey,
-    domain: 'mg.velog.io',
-  });
-
-  const data = {
-    from: 'Velog <verification@velog.io>',
-    to: email,
-    subject: 'Velog 이메일 회원가입',
-    html: `
-    <a href="https://velog.io"><img src="https://i.imgur.com/xtxnddg.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
-    <div style="max-width: 100%; width: 400px; margin: 0 auto; padding: 1rem; text-align: justify; background: #f8f9fa; border: 1px solid #dee2e6; box-sizing: border-box; border-radius: 4px; color: #868e96; margin-top: 0.5rem; box-sizing: border-box;">
-      <b style="black">velog 에 오신것을 환영합니다! </b>회원가입을 계속하시려면 하단의 링크를 클릭하세요. 만약에 실수로 가입하셨거나, 본인이 가입신청하지 않았다면, 이 메일을 무시하세요.
-    </div>
-    
-    <a href="https://velog.io/register?code=${code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">velog 가입하기</a>
-    
-    <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>위 버튼을 클릭하시거나, 다음 링크를 열으세요: <br/> <a style="color: #b197fc;" href="https://velog.io/register?code=${code}">https://velog.io/register?code=${code}</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
-  };
-
-  return mg.messages().send(data);
-};
 
 export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -62,9 +35,19 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
     const verification: EmailAuthModel = await EmailAuth.build({
       email,
     }).save();
-    const data = await sendVerificationEmail({
-      email,
-      code: verification.code,
+
+    const data = await sendMail({
+      to: email,
+      subject: 'Velog 이메일 회원가입',
+      from: 'Velog <verification@velog.io>',
+      body: `<a href="https://velog.io"><img src="https://i.imgur.com/xtxnddg.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
+      <div style="max-width: 100%; width: 400px; margin: 0 auto; padding: 1rem; text-align: justify; background: #f8f9fa; border: 1px solid #dee2e6; box-sizing: border-box; border-radius: 4px; color: #868e96; margin-top: 0.5rem; box-sizing: border-box;">
+        <b style="black">velog 에 오신것을 환영합니다! </b>회원가입을 계속하시려면 하단의 링크를 클릭하세요. 만약에 실수로 가입하셨거나, 본인이 가입신청하지 않았다면, 이 메일을 무시하세요.
+      </div>
+      
+      <a href="https://velog.io/register?code=${verification.code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">velog 가입하기</a>
+      
+      <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>위 버튼을 클릭하시거나, 다음 링크를 열으세요: <br/> <a style="color: #b197fc;" href="https://velog.io/register?code=${verification.code}">https://velog.io/register?code=${verification.code}</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
     });
     console.log(data);
   } catch (e) {
@@ -73,6 +56,26 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   ctx.body = {
     status: true,
   };
+};
+
+export const getCode = async (ctx: Context): Promise<*> => {
+  const { code } = ctx.params;
+
+  try {
+    const auth: EmailAuthModel = await EmailAuth.findCode(code);
+    if (!auth) {
+      ctx.status = 404;
+      return;
+    }
+    const { email } = auth;
+
+    ctx.body = {
+      email,
+    };
+    await auth.use();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
 
 export const createLocalAccount = async (ctx: Context): Promise<*> => {
