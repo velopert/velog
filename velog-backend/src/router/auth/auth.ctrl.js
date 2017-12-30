@@ -6,6 +6,8 @@ import sendMail from 'lib/sendMail';
 import User from 'database/models/User';
 import UserProfile from 'database/models/UserProfile';
 import EmailAuth from 'database/models/EmailAuth';
+import { generate, decode } from 'lib/token';
+
 
 import type { UserModel } from 'database/models/User';
 import type { EmailAuthModel } from 'database/models/EmailAuth';
@@ -69,8 +71,11 @@ export const getCode = async (ctx: Context): Promise<*> => {
     }
     const { email } = auth;
 
+    const registerToken = await generate({ email }, { expiresIn: '1h', subject: 'auth-register' });
+
     ctx.body = {
       email,
+      registerToken,
     };
     await auth.use();
   } catch (e) {
@@ -80,16 +85,22 @@ export const getCode = async (ctx: Context): Promise<*> => {
 
 export const createLocalAccount = async (ctx: Context): Promise<*> => {
   type BodySchema = {
-    email: string,
-    password: string,
-    username: string
+    registerToken: string,
+    form: {
+      displayName: string,
+      username: string,
+      shortBio: string
+    }
   };
 
   const schema = Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
-    username: Joi.string().alphanum().min(3).max(20)
-      .required(),
+    registerToken: Joi.string().required(),
+    form: Joi.object().keys({
+      displayName: Joi.string().min(1).max(40),
+      username: Joi.string().alphanum().min(3).max(16)
+        .required(),
+      shortBio: Joi.string().max(140),
+    }).required(),
   });
 
   const result: any = Joi.validate(ctx.request.body, schema);
@@ -103,9 +114,30 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
     return;
   }
 
-  const { email, password, username }: BodySchema = (ctx.request.body: any);
+  const { 
+    registerToken,
+    form: {
+      username,
+      shortBio, 
+      displayName 
+    },
+  }: BodySchema = (ctx.request.body: any);
+
+  let decoded = null;
 
   try {
+    decoded = await decode(registerToken);
+  } catch (e) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'INVALID_TOKEN',
+    };
+    return;
+  }
+
+  try {
+    const { email } = decoded;
+
     const [emailExists, usernameExists] = await Promise.all([
       User.findUser('email', email),
       User.findUser('username', username),
