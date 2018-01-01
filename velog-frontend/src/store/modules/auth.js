@@ -4,32 +4,36 @@ import { Record, fromJS, type Map } from 'immutable';
 import { pender } from 'redux-pender';
 import * as AuthAPI from 'lib/api/auth';
 
+
 const SET_EMAIL_INPUT = 'auth/SET_EMAIL_INPUT';
 const SEND_AUTH_EMAIL = 'auth/SEND_AUTH_EMAIL';
 const CHANGE_REGISTER_FORM = 'auth/CHANGE_REGISTER_FORM';
 const GET_CODE = 'auth/GET_CODE';
+const LOCAL_REGISTER = 'auth/LOCAL_REGISTER';
 
-
-export const actionCreators = {
-  setEmailInput: createAction(SET_EMAIL_INPUT, (value: string) => value),
-  sendAuthEmail: createAction(SEND_AUTH_EMAIL, (email: string) => AuthAPI.sendAuthEmail(email)),
-  getCode: createAction(GET_CODE, (code: string) => AuthAPI.getCode(code)),
-  changeRegisterForm: createAction(CHANGE_REGISTER_FORM,
-    (payload: { name: string, value: string }) => payload),
-};
 
 export type AuthActionCreators = {
   setEmailInput(value: string): any,
   sendAuthEmail(email: string): any,
   changeRegisterForm({ name: string, value: string }): any,
-  getCode(code: string): any
+  getCode(code: string): any,
+  localRegister(payload: AuthAPI.LocalRegisterPayload): any
 }
+
+export const actionCreators = {
+  setEmailInput: createAction(SET_EMAIL_INPUT),
+  sendAuthEmail: createAction(SEND_AUTH_EMAIL, AuthAPI.sendAuthEmail),
+  getCode: createAction(GET_CODE, AuthAPI.getCode),
+  changeRegisterForm: createAction(CHANGE_REGISTER_FORM),
+  localRegister: createAction(LOCAL_REGISTER, AuthAPI.localRegister),
+};
 
 export type Auth = {
   email: string,
   sentEmail: boolean,
+  isUser: boolean,
   registerForm: {
-    name: string,
+    displayName: string,
     email: string,
     username: string,
     shortBio: string
@@ -40,8 +44,9 @@ export type Auth = {
 const AuthRecord = Record(({
   email: '',
   sentEmail: false,
+  isUser: false,
   registerForm: Record({
-    name: '',
+    displayName: '',
     email: '',
     username: '',
     shortBio: '',
@@ -57,8 +62,9 @@ export default handleActions({
   },
   ...pender({
     type: SEND_AUTH_EMAIL,
-    onSuccess: (state) => {
-      return state.set('sentEmail', true);
+    onSuccess: (state, { payload: { data } }) => {
+      return state.set('sentEmail', true)
+        .set('isUser', data.isUser);
     },
   }),
   [CHANGE_REGISTER_FORM]: (state, { payload: { name, value } }) => {

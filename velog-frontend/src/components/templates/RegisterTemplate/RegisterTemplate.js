@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import type { Node } from 'react';
+import { Link } from 'react-router-dom';
 import BackgroundColor from 'components/common/BackgroundColor';
 import Responsive from 'components/common/Responsive';
 
@@ -17,9 +18,9 @@ class RegisterTemplate extends Component<Props> {
       <div className="register-template">
         <BackgroundColor color="#495057" />
         <Responsive className="mock-header">
-          <div className="brand">
+          <Link to="/" className="brand">
             velog
-          </div>
+          </Link>
           <div className="light">
             <span>/</span>회원가입
           </div>

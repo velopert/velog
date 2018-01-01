@@ -2,6 +2,7 @@
 import Sequelize from 'sequelize';
 import db from 'database/db';
 import { generate } from 'lib/token';
+import UserProfile, { type UserProfileModel } from './UserProfile';
 
 export interface UserModel {
   id: string,
@@ -28,20 +29,23 @@ const User = db.define('user', {
   },
 });
 
-User.sync();
-
 User.findUser = function findUser(type: 'email' | 'username', value: string) {
   return User.findOne({ where: { [type]: value } });
 };
 
-User.prototype.generateToken = function generateToken(): Promise<string> {
+User.prototype.generateToken = async function generateToken(): Promise<string> {
   type TokenPayload = {
     id: string,
     username: string
   };
 
   const { id, username } : TokenPayload = this;
-  return generate({ user: { id, username } });
+  const userProfile: UserProfileModel = await UserProfile.findByUserId(id);
+  if (!userProfile) {
+    throw new Error('user profile not found');
+  }
+  const { display_name: displayName } = userProfile;
+  return generate({ user: { id, username, displayName } });
 };
 
 export default User;

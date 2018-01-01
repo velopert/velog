@@ -34,8 +34,6 @@ const EmailAuth = db.define('email_auth', {
   tableName: 'email_auth',
 });
 
-EmailAuth.sync();
-
 EmailAuth.findCode = function findCode(code: string): Promise<*> {
   return EmailAuth.findOne({
     where: {

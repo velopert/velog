@@ -17,17 +17,18 @@ class BackgroundColor extends Component<Props> {
     const { color } = this.props;
     if (!document.body) return;
     this.prevColor = document.body.style.background;
+    console.log(this.prevColor.toString());
     this.setBgColor(color);
   }
 
   componentWillUnmount() {
-    if (!this.prevColor) return;
+    if (typeof this.prevColor !== 'string') return;
     this.setBgColor(this.prevColor);
   }
 
   render() {
     return (
-      null
+      <div></div>
     );
   }
 }

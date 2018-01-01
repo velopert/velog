@@ -28,5 +28,6 @@ module.exports = {
     "jsx-a11y/no-static-element-interactions": 0,
     "object-curly-newline": 0,
     "react/sort-comp": 0,
+    "jsx-a11y/anchor-is-valid": 0,
   }
 }

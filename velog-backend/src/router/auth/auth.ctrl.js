@@ -10,6 +10,7 @@ import { generate, decode } from 'lib/token';
 
 
 import type { UserModel } from 'database/models/User';
+import type { UserProfileModel } from 'database/models/UserProfile';
 import type { EmailAuthModel } from 'database/models/EmailAuth';
 
 export const sendAuthEmail = async (ctx: Context): Promise<*> => {
@@ -34,30 +35,40 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
 
   try {
     const { email } : BodySchema = (ctx.request.body: any);
+
+    // TODO: check email existancy
+    const user = await User.findUser('email', email);
+    const emailKeywords = user ? {
+      type: 'email-login',
+      text: '로그인',
+    } : {
+      type: 'register',
+      text: '회원가입',
+    };
+
     const verification: EmailAuthModel = await EmailAuth.build({
       email,
     }).save();
 
     const data = await sendMail({
       to: email,
-      subject: 'Velog 이메일 회원가입',
+      subject: `Velog ${emailKeywords.text}`,
       from: 'Velog <verification@velog.io>',
       body: `<a href="https://velog.io"><img src="https://i.imgur.com/xtxnddg.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
       <div style="max-width: 100%; width: 400px; margin: 0 auto; padding: 1rem; text-align: justify; background: #f8f9fa; border: 1px solid #dee2e6; box-sizing: border-box; border-radius: 4px; color: #868e96; margin-top: 0.5rem; box-sizing: border-box;">
-        <b style="black">velog 에 오신것을 환영합니다! </b>회원가입을 계속하시려면 하단의 링크를 클릭하세요. 만약에 실수로 가입하셨거나, 본인이 가입신청하지 않았다면, 이 메일을 무시하세요.
+        <b style="black">안녕하세요! </b>${emailKeywords.text}을 계속하시려면 하단의 링크를 클릭하세요. 만약에 실수로 요청하셨거나, 본인이 요청하지 않았다면, 이 메일을 무시하세요.
       </div>
       
-      <a href="https://velog.io/register?code=${verification.code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">velog 가입하기</a>
+      <a href="https://velog.io/${emailKeywords.type}?code=${verification.code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">계속하기</a>
       
-      <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>위 버튼을 클릭하시거나, 다음 링크를 열으세요: <br/> <a style="color: #b197fc;" href="https://velog.io/register?code=${verification.code}">https://velog.io/register?code=${verification.code}</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
+      <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>위 버튼을 클릭하시거나, 다음 링크를 열으세요: <br/> <a style="color: #b197fc;" href="https://velog.io/${emailKeywords.type}?code=${verification.code}">https://velog.io/${emailKeywords.type}?code=${verification.code}</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
     });
-    console.log(data);
+    ctx.body = {
+      isUser: !!user,
+    };
   } catch (e) {
     ctx.throw(500, e);
   }
-  ctx.body = {
-    status: true,
-  };
 };
 
 export const getCode = async (ctx: Context): Promise<*> => {
@@ -77,6 +88,7 @@ export const getCode = async (ctx: Context): Promise<*> => {
       email,
       registerToken,
     };
+
     await auth.use();
   } catch (e) {
     ctx.throw(500, e);
@@ -114,12 +126,12 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
     return;
   }
 
-  const { 
+  const {
     registerToken,
     form: {
       username,
-      shortBio, 
-      displayName 
+      shortBio,
+      displayName,
     },
   }: BodySchema = (ctx.request.body: any);
 
@@ -135,9 +147,9 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
     return;
   }
 
-  try {
-    const { email } = decoded;
+  const { email } = decoded;
 
+  try {
     const [emailExists, usernameExists] = await Promise.all([
       User.findUser('email', email),
       User.findUser('username', username),
@@ -156,15 +168,15 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
   }
 
   try {
-    const hash = await User.crypt(password);
     const user:User = await User.build({
       username,
       email,
-      password_hash: hash,
     }).save();
 
-    const userProfile = await UserProfile.build({
+    await UserProfile.build({
       fk_user_id: user.id,
+      display_name: displayName,
+      short_bio: shortBio,
     }).save();
 
     const token: string = await user.generateToken();
@@ -179,6 +191,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
       user: {
         id: user.id,
         username: user.username,
+        displayName,
       },
       token,
     };
@@ -266,5 +279,10 @@ export const localLogin = async (ctx: Context): Promise<*> => {
 };
 
 export const check = async (ctx: Context): Promise<*> => {
+  if (!ctx.user) {
+    ctx.status = 401;
+    return;
+  }
+
   ctx.body = ctx.user;
 };

@@ -15,7 +15,8 @@ const SocialAccount = db.define('social_account', {
   provider: Sequelize.STRING,
 });
 
-SocialAccount.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
-SocialAccount.sync();
+SocialAccount.associate = function associate() {
+  SocialAccount.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
+};
 
 export default SocialAccount;

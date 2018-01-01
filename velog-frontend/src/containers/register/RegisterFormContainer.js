@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { withRouter, type Match, type Location } from 'react-router-dom';
+import { withRouter, type Match, type Location, type RouterHistory } from 'react-router-dom';
 import RegisterForm from 'components/register/RegisterForm';
 import { connect } from 'react-redux';
 import type { State } from 'store';
@@ -9,12 +9,14 @@ import { AuthActions } from 'store/actionCreators';
 import queryString from 'query-string';
 
 type Props = {
-  name: string,
+  displayName: string,
   email: string,
   username: string,
   shortBio: string,
+  registerToken: string,
   match: Match,
-  location: Location
+  location: Location,
+  history: RouterHistory
 };
 
 class RegisterFormContainer extends Component<Props> {
@@ -44,14 +46,32 @@ class RegisterFormContainer extends Component<Props> {
     });
   }
 
+  onRegister = async () => {
+    const { displayName, username, shortBio, registerToken, history } = this.props;
+    try {
+      await AuthActions.localRegister({
+        registerToken,
+        form: {
+          displayName,
+          username,
+          shortBio,
+        },
+      });
+      history.push('/');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   render() {
-    const { onChange } = this;
-    const { name, email, username, shortBio } = this.props;
+    const { onChange, onRegister } = this;
+    const { displayName, email, username, shortBio } = this.props;
 
     return (
       <RegisterForm
         onChange={onChange}
-        name={name}
+        onRegister={onRegister}
+        displayName={displayName}
         email={email}
         username={username}
         shortBio={shortBio}
@@ -62,11 +82,15 @@ class RegisterFormContainer extends Component<Props> {
 
 export default connect(
   ({ auth }: State) => {
-    const { registerForm } = auth;
-    const { name, email, username, shortBio } = registerForm;
+    const { registerForm, registerToken } = auth;
+    const { displayName, email, username, shortBio } = registerForm;
 
     return {
-      name, email, username, shortBio,
+      displayName,
+      email,
+      username,
+      shortBio,
+      registerToken,
     };
   },
   () => ({}),
