@@ -10,6 +10,7 @@ const SEND_AUTH_EMAIL = 'auth/SEND_AUTH_EMAIL';
 const CHANGE_REGISTER_FORM = 'auth/CHANGE_REGISTER_FORM';
 const GET_CODE = 'auth/GET_CODE';
 const LOCAL_REGISTER = 'auth/LOCAL_REGISTER';
+const CODE_LOGIN = 'auth/CODE_LOGIN';
 
 
 export type AuthActionCreators = {
@@ -17,7 +18,8 @@ export type AuthActionCreators = {
   sendAuthEmail(email: string): any,
   changeRegisterForm({ name: string, value: string }): any,
   getCode(code: string): any,
-  localRegister(payload: AuthAPI.LocalRegisterPayload): any
+  localRegister(payload: AuthAPI.LocalRegisterPayload): any,
+  codeLogin(code: string): any
 }
 
 export const actionCreators = {
@@ -26,6 +28,7 @@ export const actionCreators = {
   getCode: createAction(GET_CODE, AuthAPI.getCode),
   changeRegisterForm: createAction(CHANGE_REGISTER_FORM),
   localRegister: createAction(LOCAL_REGISTER, AuthAPI.localRegister),
+  codeLogin: createAction(CODE_LOGIN, AuthAPI.codeLogin),
 };
 
 export type Auth = {
@@ -38,8 +41,27 @@ export type Auth = {
     username: string,
     shortBio: string
   },
-  registerToken: string
+  registerToken: string,
+  authResult: ?{
+    user: {
+      id: string,
+      username: string,
+      displayName: string,
+    },
+    token: string
+  }
 };
+
+const UserSubrecord = Record({
+  id: '',
+  username: '',
+  displayName: '',
+});
+
+const AuthResultSubrecord = Record({
+  user: UserSubrecord(),
+  token: '',
+});
 
 const AuthRecord = Record(({
   email: '',
@@ -52,6 +74,7 @@ const AuthRecord = Record(({
     shortBio: '',
   })(),
   registerToken: '',
+  authResult: null,
 }:Auth));
 
 const initialState: Auth = AuthRecord();
@@ -76,6 +99,26 @@ export default handleActions({
       const { email, registerToken } = data;
       return state.setIn(['registerForm', 'email'], email)
         .set('registerToken', registerToken);
+    },
+  }),
+  ...pender({
+    type: LOCAL_REGISTER,
+    onSuccess: (state, { payload: { data } }) => {
+      const { user, token } = data;
+      return state.set('authResult', AuthResultSubrecord({
+        user: UserSubrecord(user),
+        token,
+      }));
+    },
+  }),
+  ...pender({
+    type: CODE_LOGIN,
+    onSuccess: (state, { payload: { data } }) => {
+      const { user, token } = data;
+      return state.set('authResult', AuthResultSubrecord({
+        user: UserSubrecord(user),
+        token,
+      }));
     },
   }),
 }, initialState);

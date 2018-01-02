@@ -20,3 +20,5 @@ export const localRegister = ({
   registerToken,
   form,
 });
+
+export const codeLogin = (code: string): Promise<*> => axios.post('/auth/code-login', { code });

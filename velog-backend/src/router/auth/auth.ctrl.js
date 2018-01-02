@@ -50,7 +50,7 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
       email,
     }).save();
 
-    const data = await sendMail({
+    await sendMail({
       to: email,
       subject: `Velog ${emailKeywords.text}`,
       from: 'Velog <verification@velog.io>',
@@ -89,6 +89,55 @@ export const getCode = async (ctx: Context): Promise<*> => {
       registerToken,
     };
 
+    await auth.use();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const codeLogin = async (ctx: Context): Promise<*> => {
+  type BodySchema = {
+    code: string
+  };
+
+  const { code }: BodySchema = (ctx.request.body: any);
+
+  if (typeof code !== 'string') {
+    ctx.status = 400;
+    return;
+  }
+
+  try {
+    const auth: EmailAuthModel = await EmailAuth.findCode(code);
+    if (!auth) {
+      ctx.status = 404;
+      return;
+    }
+    const { email } = auth;
+    const user: UserModel = await User.findUser('email', email);
+
+    if (!user) {
+      ctx.status = 401;
+      return;
+    }
+
+    const token = await user.generateToken();
+    const profile: UserProfileModel = await user.getProfile();
+
+    // $FlowFixMe: intersection bug
+    ctx.cookies.set('access_token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
+    ctx.body = {
+      user: {
+        id: user.id,
+        username: user.username,
+        displayName: profile.display_name,
+      },
+      token,
+    };
     await auth.use();
   } catch (e) {
     ctx.throw(500, e);
@@ -200,83 +249,83 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
   }
 };
 
-export const localLogin = async (ctx: Context): Promise<*> => {
-  type BodySchema = {
-    email?: string,
-    password: string,
-    username?: string
-  };
+// export const localLogin = async (ctx: Context): Promise<*> => {
+//   type BodySchema = {
+//     email?: string,
+//     password: string,
+//     username?: string
+//   };
 
-  const { email, username, password }: BodySchema = (ctx.request.body: any);
+//   const { email, username, password }: BodySchema = (ctx.request.body: any);
 
-  // neither email & username not given
-  if (!(email || username)) {
-    ctx.status = 401;
-    ctx.body = {
-      name: 'LOGIN_FAILURE',
-    };
-    return;
-  }
+//   // neither email & username not given
+//   if (!(email || username)) {
+//     ctx.status = 401;
+//     ctx.body = {
+//       name: 'LOGIN_FAILURE',
+//     };
+//     return;
+//   }
 
-  const schema = Joi.object().keys({
-    email: Joi.string().email(),
-    password: Joi.string().min(6).required(),
-    username: Joi.string().alphanum().min(3).max(20),
-  });
+//   const schema = Joi.object().keys({
+//     email: Joi.string().email(),
+//     password: Joi.string().min(6).required(),
+//     username: Joi.string().alphanum().min(3).max(20),
+//   });
 
-  // somehow wrong schema
-  const result: any = Joi.validate(ctx.request.body, schema);
-  if (result.error) {
-    ctx.status = 401;
-    ctx.body = {
-      name: 'LOGIN_FAILURE',
-    };
-    return;
-  }
+//   // somehow wrong schema
+//   const result: any = Joi.validate(ctx.request.body, schema);
+//   if (result.error) {
+//     ctx.status = 401;
+//     ctx.body = {
+//       name: 'LOGIN_FAILURE',
+//     };
+//     return;
+//   }
 
-  try {
-    const value: any = email || username;
-    const type: ('email' | 'username') = email ? 'email' : 'username';
+//   try {
+//     const value: any = email || username;
+//     const type: ('email' | 'username') = email ? 'email' : 'username';
 
-    const user: UserModel = await User.findUser(type, value);
+//     const user: UserModel = await User.findUser(type, value);
 
-    if (!user) {
-      ctx.status = 401;
-      ctx.body = {
-        name: 'LOGIN_FAILURE',
-      };
-      return;
-    }
+//     if (!user) {
+//       ctx.status = 401;
+//       ctx.body = {
+//         name: 'LOGIN_FAILURE',
+//       };
+//       return;
+//     }
 
-    const validated: boolean = await user.validatePassword(password);
-    if (!validated) {
-      ctx.status = 401;
-      ctx.body = {
-        name: 'LOGIN_FAILURE',
-      };
-      return;
-    }
+//     const validated: boolean = await user.validatePassword(password);
+//     if (!validated) {
+//       ctx.status = 401;
+//       ctx.body = {
+//         name: 'LOGIN_FAILURE',
+//       };
+//       return;
+//     }
 
-    const token: string = await user.generateToken();
+//     const token: string = await user.generateToken();
 
-    // set-cookie
-    // $FlowFixMe: intersection bug
-    ctx.cookies.set('access_token', token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
+//     // set-cookie
+//     // $FlowFixMe: intersection bug
+//     ctx.cookies.set('access_token', token, {
+//       httpOnly: true,
+//       maxAge: 1000 * 60 * 60 * 24 * 7,
+//     });
 
-    ctx.body = {
-      user: {
-        id: user.id,
-        username: user.username,
-      },
-      token,
-    };
-  } catch (e) {
-    ctx.throw(500, e);
-  }
-};
+//     ctx.body = {
+//       user: {
+//         id: user.id,
+//         username: user.username,
+//       },
+//       token,
+//     };
+//   } catch (e) {
+//     ctx.throw(500, e);
+//   }
+// };
 
 export const check = async (ctx: Context): Promise<*> => {
   if (!ctx.user) {

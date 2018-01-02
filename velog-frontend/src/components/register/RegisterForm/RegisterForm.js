@@ -7,7 +7,7 @@ import './RegisterForm.scss';
 
 type Props = {
   onChange(e: SyntheticInputEvent<HTMLInputElement>): void,
-  onRegister(): void,
+  onRegister(): Promise<*>,
   displayName: string,
   email: string,
   username: string,
