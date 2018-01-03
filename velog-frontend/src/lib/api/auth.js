@@ -22,3 +22,4 @@ export const localRegister = ({
 });
 
 export const codeLogin = (code: string): Promise<*> => axios.post('/auth/code-login', { code });
+export const check = (): Promise<*> => axios.get('/auth/check');
