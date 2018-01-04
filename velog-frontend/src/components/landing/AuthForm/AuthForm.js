@@ -1,6 +1,6 @@
 // @flow
 import React, { KeyboardEvent } from 'react';
-import SocialLoginButton from 'components/home/SocialLoginButton';
+import SocialLoginButton from 'components/landing/SocialLoginButton';
 import CheckIcon from 'react-icons/lib/md/check';
 import Spinner from 'components/common/Spinner';
 import cx from 'classnames';

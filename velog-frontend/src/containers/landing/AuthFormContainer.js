@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { AuthActions } from 'store/actionCreators';
 import type { State } from 'store';
-import AuthForm from 'components/home/AuthForm';
+import AuthForm from 'components/landing/AuthForm';
 import { pressedEnter } from 'lib/common';
 
 type Props = {
