@@ -2,11 +2,17 @@
 import React, { Component } from 'react';
 import { type Location, type RouterHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import { AuthActions } from 'store/actionCreators';
+import { AuthActions, UserActions } from 'store/actionCreators';
+import { connect } from 'react-redux';
+import type { State } from 'store';
+import type { AuthResult } from 'store/modules/auth';
+import storage, { keys } from 'lib/storage';
+
 
 type Props = {
   location: Location,
   history: RouterHistory,
+  authResult: AuthResult,
 };
 
 class EmailLogin extends Component<Props> {
@@ -15,6 +21,13 @@ class EmailLogin extends Component<Props> {
     const { code } = queryString.parse(search);
     try {
       await AuthActions.codeLogin(code);
+      const { authResult } = this.props;
+
+      if (!authResult) return;
+      const { token, user } = authResult;
+
+      UserActions.setUser(user);
+      storage.set(keys.user, user);
     } catch (e) {
       console.log(e);
     }
@@ -31,4 +44,9 @@ class EmailLogin extends Component<Props> {
   }
 }
 
-export default EmailLogin;
+export default connect(
+  ({ auth }: State) => ({
+    authResult: auth.authResult,
+  }),
+  () => ({}),
+)(EmailLogin);

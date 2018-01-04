@@ -4,8 +4,12 @@ const st = ((typeof localStorage) === 'object' ? localStorage : { });
 
 type Storage = {
   set(key: string, value: any): void,
-  get(key): ?any,
-  remove(key): void
+  get(key: string): ?any,
+  remove(key: string): void
+};
+
+export const keys = {
+  user: '__velog_user__',
 };
 
 const storage: Storage = {

@@ -4,7 +4,6 @@ import { Record, fromJS, type Map } from 'immutable';
 import { pender } from 'redux-pender';
 import * as AuthAPI from 'lib/api/auth';
 
-
 const SET_EMAIL_INPUT = 'auth/SET_EMAIL_INPUT';
 const SEND_AUTH_EMAIL = 'auth/SEND_AUTH_EMAIL';
 const CHANGE_REGISTER_FORM = 'auth/CHANGE_REGISTER_FORM';
@@ -31,6 +30,15 @@ export const actionCreators = {
   codeLogin: createAction(CODE_LOGIN, AuthAPI.codeLogin),
 };
 
+export type AuthResult = ?{
+  user: {
+    id: string,
+    username: string,
+    displayName: string,
+  },
+  token: string
+};
+
 export type Auth = {
   email: string,
   sentEmail: boolean,
@@ -42,14 +50,7 @@ export type Auth = {
     shortBio: string
   },
   registerToken: string,
-  authResult: ?{
-    user: {
-      id: string,
-      username: string,
-      displayName: string,
-    },
-    token: string
-  }
+  authResult: AuthResult
 };
 
 const UserSubrecord = Record({
