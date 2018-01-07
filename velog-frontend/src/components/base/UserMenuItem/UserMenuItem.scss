@@ -1,0 +1,10 @@
+@import 'utils';
+
+.user-menu-item {
+  padding: 0.5rem;
+  color: $oc-gray-6;
+  cursor: pointer;
+  &:hover {
+    color: black;
+  }
+}

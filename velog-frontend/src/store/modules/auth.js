@@ -35,6 +35,7 @@ export type AuthResult = ?{
     id: string,
     username: string,
     displayName: string,
+    thumbnail: ?string,
   },
   token: string
 };
@@ -57,6 +58,7 @@ const UserSubrecord = Record({
   id: '',
   username: '',
   displayName: '',
+  thumbnail: null,
 });
 
 const AuthResultSubrecord = Record({

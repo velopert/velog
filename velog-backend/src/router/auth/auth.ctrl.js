@@ -135,6 +135,7 @@ export const codeLogin = async (ctx: Context): Promise<*> => {
         id: user.id,
         username: user.username,
         displayName: profile.display_name,
+        thumbnail: profile.thumbnail,
       },
       token,
     };
@@ -336,4 +337,10 @@ export const check = async (ctx: Context): Promise<*> => {
   ctx.body = {
     user: ctx.user,
   };
+};
+
+export const logout = (ctx: Context) => {
+  // $FlowFixMe: intersection bug
+  ctx.cookies.set('access_token', null);
+  ctx.status = 204;
 };

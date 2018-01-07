@@ -3,14 +3,11 @@ import React, { Component } from 'react';
 import { UserActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import type { State } from 'store';
+import type { UserData } from 'store/modules/user';
 import storage from 'lib/storage';
 
 type Props = {
-  user: ?{
-    id: string,
-    username: string,
-    displayName: string
-  }
+  user: ?UserData
 };
 
 class Core extends Component<Props> {

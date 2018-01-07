@@ -5,14 +5,14 @@ import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/etc/Core';
 
 const App = () => (
-  [
-    <Switch key={0}>
+  <React.Fragment>
+    <Switch>
       <Route exact path="/" component={Home} />
       <Route path="/register" component={Register} />
       <Route path="/email-login" component={EmailLogin} />
-    </Switch>,
-    <Core key={1} />,
-  ]
+    </Switch>
+    <Core />
+  </React.Fragment>
 );
 
 export default App;

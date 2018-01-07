@@ -1,0 +1,16 @@
+@import 'utils';
+
+.user-button {
+  img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    @include material-shadow(2, 0.5);
+    transition: all 0.15s ease-in;
+    cursor: pointer;
+    &:hover {
+      @include material-shadow(3, 0.5);
+    }
+  }
+}

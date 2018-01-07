@@ -7,25 +7,31 @@ import * as AuthAPI from 'lib/api/auth';
 const CHECK_USER = 'user/CHECK_USER';
 const SET_USER = 'user/SET_USER';
 const PROCESS = 'user/PROCESS';
+const LOGOUT = 'user/LOGOUT';
 
 export type UserActionCreators = {
   checkUser(): any,
   setUser({ id: string, username: string, displayName: string}): any,
-  process(): any
+  process(): any,
+  logout(): any
 };
 
 export const actionCreators = {
   checkUser: createAction(CHECK_USER, AuthAPI.check),
   setUser: createAction(SET_USER),
   process: createAction(PROCESS),
+  logout: createAction(LOGOUT, AuthAPI.logout),
+};
+
+export type UserData = {
+  id: string,
+  username: string,
+  displayName: string,
+  thumbnail: ?string
 };
 
 export type User = {
-  user: ?{
-    id: string,
-    username: string,
-    displayName: string
-  },
+  user: ?UserData,
   processed: boolean,
 };
 
@@ -33,6 +39,7 @@ const UserSubrecord = Record({
   id: '',
   username: '',
   displayName: '',
+  thumbnail: null,
 });
 
 const UserRecord = Record({

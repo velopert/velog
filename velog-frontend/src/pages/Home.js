@@ -1,12 +1,12 @@
 import React from 'react';
 import PageTemplate from 'components/templates/PageTemplate';
 import LandingTemplateContainer from 'containers/landing/LandingTemplateContainer';
-import Header from 'components/base/Header';
+import HeaderContainer from 'containers/base/HeaderContainer';
 import AuthFormContainer from 'containers/landing/AuthFormContainer';
 
 const Home = () => {
   return (
-    <PageTemplate header={<Header />}>
+    <PageTemplate header={<HeaderContainer />}>
       <LandingTemplateContainer
         form={<AuthFormContainer />}
       />
