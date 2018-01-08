@@ -23,6 +23,7 @@
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
+    "hellojs": "next",
     "html-webpack-plugin": "2.29.0",
     "immutable": "^3.8.2",
     "include-media": "^1.4.9",

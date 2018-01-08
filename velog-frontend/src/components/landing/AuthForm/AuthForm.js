@@ -1,5 +1,5 @@
 // @flow
-import React, { KeyboardEvent } from 'react';
+import React from 'react';
 import SocialLoginButton from 'components/landing/SocialLoginButton';
 import CheckIcon from 'react-icons/lib/md/check';
 import Spinner from 'components/common/Spinner';
@@ -25,6 +25,7 @@ const AuthForm = ({
   sentEmail,
   sending,
   isUser,
+  onGithubLogin,
 }: Props) => {
   return (
     <div className="auth-form">
@@ -57,7 +58,7 @@ const AuthForm = ({
         <div className="or">OR</div>
       </div>
       <div className="social-buttons">
-        <SocialLoginButton type="github" />
+        <SocialLoginButton type="github" onClick={onGithubLogin} />
         <SocialLoginButton type="google" />
         <SocialLoginButton type="facebook" />
       </div>

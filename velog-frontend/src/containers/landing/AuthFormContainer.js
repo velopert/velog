@@ -13,7 +13,15 @@ type Props = {
   isUser: boolean
 }
 
+function popup(url, title, w, h) {
+  const y = (window.top.outerHeight / 2) + (window.top.screenY - (h / 2));
+  const x = (window.top.outerWidth / 2) + (window.top.screenX - (w / 2));
+  return window.open(url, title, `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+}
+
 class AuthFormContainer extends Component<Props> {
+  githubLogin: any = null;
+
   onEnterKeyPress = pressedEnter(() => {
     this.onSendVerification();
   })
@@ -32,8 +40,15 @@ class AuthFormContainer extends Component<Props> {
     }
   }
 
+  onGithubLogin = () => {
+    window.name = 'velogApp';
+    const url = 'https://github.com/login/oauth/authorize?client_id=7c3902d881910d52ae3e&redirect_uri=http://localhost:3000/callback';
+
+    const githubLogin = popup(url, 'githubLogin', 400, 730);
+  }
+
   render() {
-    const { onChange, onSendVerification, onEnterKeyPress } = this;
+    const { onChange, onSendVerification, onEnterKeyPress, onGithubLogin } = this;
     const { email, sentEmail, sending, isUser } = this.props;
 
     return (
@@ -45,6 +60,7 @@ class AuthFormContainer extends Component<Props> {
         onChange={onChange}
         onSendVerification={onSendVerification}
         onEnterKeyPress={onEnterKeyPress}
+        onGithubLogin={onGithubLogin}
       />
     );
   }
