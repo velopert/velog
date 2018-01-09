@@ -40,15 +40,12 @@ class AuthFormContainer extends Component<Props> {
     }
   }
 
-  onGithubLogin = () => {
-    window.name = 'velogApp';
-    const url = 'https://github.com/login/oauth/authorize?client_id=7c3902d881910d52ae3e&redirect_uri=http://localhost:3000/callback';
-
-    const githubLogin = popup(url, 'githubLogin', 400, 730);
+  onSocialLogin = (provider: string) => {
+    AuthActions.socialLogin(provider);
   }
 
   render() {
-    const { onChange, onSendVerification, onEnterKeyPress, onGithubLogin } = this;
+    const { onChange, onSendVerification, onEnterKeyPress, onSocialLogin } = this;
     const { email, sentEmail, sending, isUser } = this.props;
 
     return (
@@ -60,7 +57,7 @@ class AuthFormContainer extends Component<Props> {
         onChange={onChange}
         onSendVerification={onSendVerification}
         onEnterKeyPress={onEnterKeyPress}
-        onGithubLogin={onGithubLogin}
+        onSocialLogin={onSocialLogin}
       />
     );
   }
