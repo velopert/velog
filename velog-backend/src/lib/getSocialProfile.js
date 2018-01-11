@@ -33,7 +33,7 @@ const profileGetters = {
     return FacebookAPI.api('me', { fields: ['email', 'picture'], access_token: accessToken })
       .then(auth => ({
         id: auth.id,
-        email: auth.email,
+        email: auth.email || null,
         thumbnail: auth.picture.data.url,
       }));
   },
@@ -44,7 +44,11 @@ const profileGetters = {
         userId: 'me',
         access_token: accessToken,
       }, (err, auth) => {
-        if (err) reject(err);
+        console.log(err, auth);
+        if (err) {
+          reject(err);
+          return;
+        }
         const {
           id,
           image,

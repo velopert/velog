@@ -5,8 +5,8 @@ import User from './User';
 
 const SocialAccount = db.define('social_account', {
   id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV1,
     primaryKey: true,
   },
   /* foreignKey fk_user_id */
