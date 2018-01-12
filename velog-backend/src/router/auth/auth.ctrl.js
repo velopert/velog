@@ -344,9 +344,34 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
 
   const { id, thumbnail, email } = profile;
   const { displayName, username, shortBio } = form;
+  const socialId = id.toString();
 
   try {
-    const user:User = await User.build({
+    const [emailExists, usernameExists] = await Promise.all([
+      User.findUser('email', email),
+      User.findUser('username', username),
+    ]);
+
+    if (emailExists || usernameExists) {
+      ctx.status = 409;
+      ctx.body = {
+        name: 'DUPLICATED_ACCOUNT',
+        payload: emailExists ? 'email' : 'username',
+      };
+      return;
+    }
+
+    const socialExists = await SocialAccount.findBySocialId(socialId);
+
+    if (socialExists) {
+      ctx.status = 409;
+      ctx.body = {
+        name: 'SOCIAL_ACCOUNT_EXISTS',
+      };
+      return;
+    }
+
+    const user:UserModel = await User.build({
       username,
       email: email || fallbackEmail,
     }).save();
@@ -355,18 +380,66 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
       fk_user_id: user.id,
       display_name: displayName,
       short_bio: shortBio,
+      thumbnail,
     }).save();
 
     // create SocialAccount row;
-    
-    /*
-      TODO
-        - email exists (already registered)
-        - social id exists (already registered)
-    */
+    await SocialAccount.build({
+      fk_user_id: user.id,
+      social_id: id.toString(),
+      provider,
+      access_token: accessToken,
+    }).save();
+
+    ctx.body = user.getProfile();
+
+    const token: string = await user.generateToken();
+
+    // $FlowFixMe: intersection bug
+    ctx.cookies.set('access_token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
+    ctx.body = {
+      user: {
+        id: user.id,
+        username: user.username,
+        displayName,
+        thumbnail,
+      },
+      token,
+    };
   } catch (e) {
-    
+    ctx.throw(500, e);
+  }
+};
+
+export const socialLogin = async (ctx: Context): Promise<*> => {
+  type BodySchema = {
+    accessToken: string
+  };
+
+  const { accessToken }: BodySchema = (ctx.request.body: any);
+  const { provider } = ctx.params;
+
+  if (typeof accessToken !== 'string') {
+    ctx.status = 400;
+    return;
   }
 
+  let profile = null;
 
-};
+  try {
+    profile = await getSocialProfile(provider, accessToken);
+  } catch (e) {
+    ctx.status = 401;
+    ctx.body = {
+      name: 'WRONG_CREDENTIALS',
+    };
+  }
+
+  const socialid = profile.id.toString();
+
+
+}

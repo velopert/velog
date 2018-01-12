@@ -15,6 +15,10 @@ const SocialAccount = db.define('social_account', {
   provider: Sequelize.STRING,
 });
 
+SocialAccount.findBySocialId = function findBySocialId(socialId: string) {
+  return SocialAccount.findOne({ where: { social_id: socialId } });
+};
+
 SocialAccount.associate = function associate() {
   SocialAccount.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
 };
