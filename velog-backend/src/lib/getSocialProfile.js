@@ -3,8 +3,14 @@ import GithubAPI from 'github';
 import GoogleAPI from 'googleapis';
 import FacebookAPI from 'fb';
 
+export type Profile = {
+  id: number | string,
+  thumbnail: ?string,
+  email: ?string
+};
+
 const profileGetters = {
-  github(accessToken: string) {
+  github(accessToken: string): Promise<Profile> {
     const github = new GithubAPI();
     github.authenticate({
       type: 'token',
@@ -29,7 +35,7 @@ const profileGetters = {
       });
     });
   },
-  facebook(accessToken: string) {
+  facebook(accessToken: string): Promise<Profile> {
     return FacebookAPI.api('me', { fields: ['email', 'picture'], access_token: accessToken })
       .then(auth => ({
         id: auth.id,
@@ -37,14 +43,13 @@ const profileGetters = {
         thumbnail: auth.picture.data.url,
       }));
   },
-  google(accessToken: string) {
+  google(accessToken: string): Promise<Profile> {
     const plus = GoogleAPI.plus('v1');
     return new Promise((resolve, reject) => {
       plus.people.get({
         userId: 'me',
         access_token: accessToken,
       }, (err, auth) => {
-        console.log(err, auth);
         if (err) {
           reject(err);
           return;
