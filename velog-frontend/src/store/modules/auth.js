@@ -12,6 +12,9 @@ const GET_CODE = 'auth/GET_CODE';
 const LOCAL_REGISTER = 'auth/LOCAL_REGISTER';
 const CODE_LOGIN = 'auth/CODE_LOGIN';
 const SOCIAL_LOGIN = 'auth/SOCIAL_LOGIN';
+const VERIFY_SOCIAL = 'auth/VERIFY_SOCIAL';
+const SOCIAL_REGISTER = 'auth/SOCIAL_REGISTER';
+const SOCIAL_VELOG_LOGIN = 'auth/SOCIAL_VELOG_LOGIN';
 
 export type AuthActionCreators = {
   setEmailInput(value: string): any,
@@ -20,7 +23,10 @@ export type AuthActionCreators = {
   getCode(code: string): any,
   localRegister(payload: AuthAPI.LocalRegisterPayload): any,
   codeLogin(code: string): any,
-  socialLogin(provider: string): any
+  socialLogin(provider: string): any,
+  verifySocial(payload: AuthAPI.VerifySocialPayload): any,
+  socialRegister(payload: AuthAPI.SocialRegisterPayload): any,
+  socialVelogLogin(payload: AuthAPI.SocialLoginPayload): any;
 }
 
 export const actionCreators = {

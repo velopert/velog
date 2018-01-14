@@ -18,7 +18,10 @@ const profileGetters = {
     });
     return new Promise((resolve, reject) => {
       github.users.get({}, (err, res) => {
-        if (err) reject(err);
+        if (err) {
+          reject(err);
+          return;
+        }
         const {
           id,
           avatar_url: thumbnail,

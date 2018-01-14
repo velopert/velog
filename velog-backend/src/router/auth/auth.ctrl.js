@@ -276,21 +276,37 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
   const { accessToken }: BodySchema = (ctx.request.body: any);
   const { provider } = ctx.params;
 
+  let profile: ?Profile = null;
+
   try {
-    const profile = await getSocialProfile(provider, accessToken);
-    /*
-      TODO:
-        - check both email, social-id existancy
-    */
-    ctx.body = {
-      profile,
-      exists: false,
-    };
+    profile = await getSocialProfile(provider, accessToken);
   } catch (e) {
     ctx.status = 401;
     ctx.body = {
       name: 'WRONG_CREDENTIAL',
     };
+  }
+
+  if (!profile) {
+    ctx.status = 401;
+    ctx.body = {
+      name: 'WRONG_CREDENTIAL',
+    };
+    return;
+  }
+
+  try {
+    const [socialAccount, user] = await Promise.all([
+      User.findUser('email', profile.email),
+      SocialAccount.findBySocialId(profile.id.toString()),
+    ]);
+
+    ctx.body = {
+      profile,
+      exists: !!(socialAccount || user),
+    };
+  } catch (e) {
+    ctx.throw(500, e);
   }
 };
 
@@ -449,14 +465,24 @@ export const socialLogin = async (ctx: Context): Promise<*> => {
 
   const socialId = profile.id.toString();
   try {
-    const user = await SocialAccount.findUserBySocialId(socialId);
+    let user = await SocialAccount.findUserBySocialId(socialId);
     if (!user) {
-      // TODO: check email
-      ctx.status = 401;
-      ctx.body = {
-        name: 'NOT_REGISTERED',
-      };
-      return;
+      // if socialaccount not found, try find by email
+      user = await User.findUser('email', profile.email);
+      if (!user) {
+        ctx.status = 401;
+        ctx.body = {
+          name: 'NOT_REGISTERED',
+        };
+        return;
+      }
+      // if user is found, link social account
+      await SocialAccount.build({
+        fk_user_id: user.id,
+        social_id: profile.id.toString(),
+        provider,
+        access_token: accessToken,
+      }).save();
     }
 
     const userProfile = await user.getProfile();
