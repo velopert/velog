@@ -1,23 +1,24 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { AuthActions } from 'store/actionCreators';
+import { withRouter, type RouterHistory } from 'react-router-dom';
+import { AuthActions, UserActions } from 'store/actionCreators';
 import type { State } from 'store';
 import AuthForm from 'components/landing/AuthForm';
 import { pressedEnter } from 'lib/common';
+import type { SocialAuthResult, VerifySocialResult, AuthResult } from 'store/modules/auth';
+import storage, { keys } from 'lib/storage';
 
 type Props = {
   email: string,
   sentEmail: boolean,
   sending: boolean,
-  isUser: boolean
-}
-
-function popup(url, title, w, h) {
-  const y = (window.top.outerHeight / 2) + (window.top.screenY - (h / 2));
-  const x = (window.top.outerWidth / 2) + (window.top.screenX - (w / 2));
-  return window.open(url, title, `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${y}, left=${x}`);
-}
+  isUser: boolean,
+  socialAuthResult: SocialAuthResult,
+  verifySocialResult: VerifySocialResult,
+  authResult: AuthResult,
+  history: RouterHistory,
+};
 
 class AuthFormContainer extends Component<Props> {
   githubLogin: any = null;
@@ -40,8 +41,44 @@ class AuthFormContainer extends Component<Props> {
     }
   }
 
-  onSocialLogin = (provider: string) => {
-    AuthActions.socialLogin(provider);
+  onSocialLogin = async (provider: string) => {
+    try {
+      await AuthActions.socialLogin(provider);
+    } catch (e) {
+      // TODO: handle social login error
+    }
+
+    try {
+      // CHECK ACCOUNT EXISTANCY
+      const { socialAuthResult } = this.props;
+      if (!socialAuthResult) return;
+      const { accessToken } = socialAuthResult;
+      await AuthActions.verifySocial({ accessToken, provider });
+
+      const { verifySocialResult } = this.props;
+      if (!verifySocialResult) return;
+      const { exists } = verifySocialResult;
+
+      if (exists) { // exists -> login
+        await AuthActions.socialVelogLogin({ accessToken, provider });
+        const { authResult } = this.props;
+        if (!authResult) return;
+        const { user } = authResult;
+        UserActions.setUser(user);
+        storage.set(keys.user, user);
+      } else { // does not exist -> enroute to register, auto complete
+        const { email, name } = verifySocialResult;
+        if (!email) {
+          console.log('?');
+          // TODO
+        }
+        console.log(email, name);
+        AuthActions.autoCompleteRegisterForm({ email, name });
+        this.props.history.push('/register');
+      }
+    } catch (e) {
+      // TODO: verify error
+    }
   }
 
   render() {
@@ -69,6 +106,9 @@ export default connect(
     sentEmail: auth.sentEmail,
     isUser: auth.isUser,
     sending: pender.pending['auth/SEND_AUTH_EMAIL'],
+    socialAuthResult: auth.socialAuthResult,
+    verifySocialResult: auth.verifySocialResult,
+    authResult: auth.authResult,
   }),
   () => ({}),
-)(AuthFormContainer);
+)(withRouter(AuthFormContainer));

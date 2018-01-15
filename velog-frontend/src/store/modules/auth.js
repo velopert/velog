@@ -15,6 +15,12 @@ const SOCIAL_LOGIN = 'auth/SOCIAL_LOGIN';
 const VERIFY_SOCIAL = 'auth/VERIFY_SOCIAL';
 const SOCIAL_REGISTER = 'auth/SOCIAL_REGISTER';
 const SOCIAL_VELOG_LOGIN = 'auth/SOCIAL_VELOG_LOGIN';
+const AUTOCOMPLETE_REGISTER_FORM = 'auth/AUTOCOMPLETE_REGISTER_FORM';
+
+type AutocompleteFormPayload = {
+  email: ?string,
+  name: ?string
+};
 
 export type AuthActionCreators = {
   setEmailInput(value: string): any,
@@ -26,8 +32,10 @@ export type AuthActionCreators = {
   socialLogin(provider: string): any,
   verifySocial(payload: AuthAPI.VerifySocialPayload): any,
   socialRegister(payload: AuthAPI.SocialRegisterPayload): any,
-  socialVelogLogin(payload: AuthAPI.SocialLoginPayload): any;
-}
+  socialVelogLogin(payload: AuthAPI.SocialLoginPayload): any,
+  autoCompleteRegisterForm(payload: AutocompleteFormPayload): any
+};
+
 
 export const actionCreators = {
   setEmailInput: createAction(SET_EMAIL_INPUT),
@@ -37,6 +45,10 @@ export const actionCreators = {
   localRegister: createAction(LOCAL_REGISTER, AuthAPI.localRegister),
   codeLogin: createAction(CODE_LOGIN, AuthAPI.codeLogin),
   socialLogin: createAction(SOCIAL_LOGIN, provider => socialAuth[provider](), provider => provider),
+  verifySocial: createAction(VERIFY_SOCIAL, AuthAPI.verifySocial),
+  socialRegister: createAction(SOCIAL_REGISTER, AuthAPI.socialRegister),
+  socialVelogLogin: createAction(SOCIAL_VELOG_LOGIN, AuthAPI.socialLogin),
+  autoCompleteRegisterForm: createAction(AUTOCOMPLETE_REGISTER_FORM),
 };
 
 export type SocialAuthResult = ?{
@@ -54,6 +66,14 @@ export type AuthResult = ?{
   token: string
 };
 
+export type VerifySocialResult = ?{
+  id: string,
+  thumbnail: ?string,
+  email: ?string,
+  name: ?string,
+  exists: boolean,
+};
+
 export type Auth = {
   email: string,
   sentEmail: boolean,
@@ -64,9 +84,11 @@ export type Auth = {
     username: string,
     shortBio: string
   },
+  autoCompleted: false,
   registerToken: string,
   authResult: AuthResult,
   socialAuthResult: SocialAuthResult,
+  verifySocialResult: VerifySocialResult,
 };
 
 const UserSubrecord = Record({
@@ -86,19 +108,31 @@ const SocialAuthResultSubrecord = Record({
   accessToken: '',
 });
 
+const VerifySocialResultSubrecord = Record({
+  id: '',
+  thumbnail: '',
+  email: '',
+  name: '',
+  exists: false,
+});
+
+const RegisterFormSubrecord = Record({
+  displayName: '',
+  email: '',
+  username: '',
+  shortBio: '',
+});
+
 const AuthRecord = Record(({
   email: '',
   sentEmail: false,
   isUser: false,
-  registerForm: Record({
-    displayName: '',
-    email: '',
-    username: '',
-    shortBio: '',
-  })(),
+  registerForm: RegisterFormSubrecord(),
+  autoCompleted: false,
   registerToken: '',
   authResult: null,
   socialAuthResult: null,
+  verifySocialResult: null,
 }:Auth));
 
 const initialState: Auth = AuthRecord();
@@ -156,4 +190,31 @@ export default handleActions({
       }));
     },
   }),
+  ...pender({
+    type: VERIFY_SOCIAL,
+    onSuccess: (state, { payload: response }) => {
+      const { profile, exists } = response.data;
+      const { id, thumbnail, email, name } = profile;
+      return state.set('verifySocialResult', VerifySocialResultSubrecord({
+        id, thumbnail, email, name, exists,
+      }));
+    },
+  }),
+  ...pender({
+    type: SOCIAL_VELOG_LOGIN,
+    onSuccess: (state, { payload: { data } }) => {
+      const { user, token } = data;
+      return state.set('authResult', AuthResultSubrecord({
+        user: UserSubrecord(user),
+        token,
+      }));
+    },
+  }),
+  [AUTOCOMPLETE_REGISTER_FORM]: (state, { payload }: { payload: AutocompleteFormPayload }) => {
+    const { email, name } = payload;
+    const registerForm = RegisterFormSubrecord({ displayName: name, email });
+    return state.withMutations(
+      s => s.set('registerForm', registerForm).set('autoCompleted', true),
+    );
+  },
 }, initialState);

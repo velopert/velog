@@ -301,6 +301,8 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
       SocialAccount.findBySocialId(profile.id.toString()),
     ]);
 
+    console.log(socialAccount, user);
+
     ctx.body = {
       profile,
       exists: !!(socialAccount || user),
