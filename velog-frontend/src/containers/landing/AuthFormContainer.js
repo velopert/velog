@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, type RouterHistory } from 'react-router-dom';
-import { AuthActions, UserActions } from 'store/actionCreators';
+import { AuthActions, UserActions, BaseActions } from 'store/actionCreators';
 import type { State } from 'store';
 import AuthForm from 'components/landing/AuthForm';
 import { pressedEnter } from 'lib/common';
@@ -42,9 +42,12 @@ class AuthFormContainer extends Component<Props> {
   }
 
   onSocialLogin = async (provider: string) => {
+    BaseActions.setFullscreenLoader(true);
     try {
       await AuthActions.socialLogin(provider);
     } catch (e) {
+      BaseActions.setFullscreenLoader(false);
+      return;
       // TODO: handle social login error
     }
 
@@ -79,6 +82,7 @@ class AuthFormContainer extends Component<Props> {
     } catch (e) {
       // TODO: verify error
     }
+    BaseActions.setFullscreenLoader(false);
   }
 
   render() {

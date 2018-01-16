@@ -84,7 +84,7 @@ export type Auth = {
     username: string,
     shortBio: string
   },
-  autoCompleted: false,
+  isSocial: false,
   registerToken: string,
   authResult: AuthResult,
   socialAuthResult: SocialAuthResult,
@@ -128,7 +128,7 @@ const AuthRecord = Record(({
   sentEmail: false,
   isUser: false,
   registerForm: RegisterFormSubrecord(),
-  autoCompleted: false,
+  isSocial: false,
   registerToken: '',
   authResult: null,
   socialAuthResult: null,
@@ -214,7 +214,17 @@ export default handleActions({
     const { email, name } = payload;
     const registerForm = RegisterFormSubrecord({ displayName: name, email });
     return state.withMutations(
-      s => s.set('registerForm', registerForm).set('autoCompleted', true),
+      s => s.set('registerForm', registerForm).set('isSocial', true),
     );
   },
+  ...pender({
+    type: SOCIAL_REGISTER,
+    onSuccess: (state, { payload: { data } }) => {
+      const { user, token } = data;
+      return state.set('authResult', AuthResultSubrecord({
+        user: UserSubrecord(user),
+        token,
+      }));
+    },
+  }),
 }, initialState);

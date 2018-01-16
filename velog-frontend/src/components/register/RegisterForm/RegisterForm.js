@@ -11,12 +11,13 @@ type Props = {
   displayName: string,
   email: string,
   username: string,
-  shortBio: string
+  shortBio: string,
+  emailEditable: boolean
 };
 
 const RegisterForm = ({
   onChange, onRegister,
-  displayName, email, username, shortBio,
+  displayName, email, username, shortBio, emailEditable,
 }: Props) => {
   return (
     <div className="register-form">
@@ -25,7 +26,7 @@ const RegisterForm = ({
       </div>
       <div className="form-contents">
         <LabelInput value={displayName} name="displayName" required label="이름" placeholder="이름을 입력하세요" onChange={onChange} />
-        <LabelInput value={email} name="email" required label="이메일" disabled />
+        <LabelInput type="email" value={email} name="email" required label="이메일" placeholder="이메일을 입력하세요" onChange={onChange} disabled={!emailEditable} />
         <LabelInput value={username} name="username" required label="아이디" placeholder="아이디를 입력하세요" onChange={onChange} />
         <LabelInput value={shortBio} name="shortBio" label="한줄소개" placeholder="한줄 소개를 입력하세요" onChange={onChange} />
         <div className="agreement">

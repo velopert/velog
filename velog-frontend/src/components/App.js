@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Home, Register } from 'pages';
 import EmailLogin from 'containers/etc/EmailLogin';
-import Core from 'containers/etc/Core';
+import Core from 'containers/base/Core';
 
 const App = () => (
   <React.Fragment>
