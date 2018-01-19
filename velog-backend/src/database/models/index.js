@@ -5,3 +5,5 @@ export { default as EmailAuth } from './EmailAuth';
 export { default as Post } from './Post';
 export { default as Category } from './Category';
 export { default as PostsCategories } from './PostsCategories';
+export { default as Tag } from './Tag';
+export { default as PostsTags } from './PostsTags';

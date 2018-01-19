@@ -2,8 +2,6 @@
 import Sequelize from 'sequelize';
 import db from 'database/db';
 import User from './User';
-import Post from './Post';
-import PostsCategories from './PostsCategories';
 
 export type CategoryModel = {
   id: string,
@@ -27,14 +25,6 @@ const Category = db.define('category', {
 
 Category.associate = function associate() {
   Category.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
-  Category.belongsToMany(Post, {
-    onDelete: 'restrict',
-    onUpdate: 'restrict',
-    through: {
-      model: PostsCategories,
-    },
-    foreignKey: 'fk_category_id',
-  });
 };
 
 export default Category;

@@ -6,6 +6,8 @@ import {
   Post,
   Category,
   PostsCategories,
+  Tag,
+  PostsTags,
 } from './models';
 
 export default function sync() {
@@ -14,6 +16,8 @@ export default function sync() {
   SocialAccount.associate();
   Post.associate();
   Category.associate();
+  PostsCategories.associate();
+  PostsTags.associate();
 
   // sync Models
   User.sync();
@@ -23,8 +27,7 @@ export default function sync() {
   Post.sync();
   Category.sync();
   PostsCategories.sync();
+  Tag.sync();
+  PostsTags.sync();
 }
-
-
-// configure relations
 
