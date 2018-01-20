@@ -1,5 +1,5 @@
 import React from 'react';
-import LandingTemplate from 'components/templates/LandingTemplate';
+import LandingTemplate from 'components/landing/LandingTemplate';
 import withUser from 'lib/hoc/withUser';
 
 
