@@ -19,6 +19,9 @@ export default function sync() {
   PostsCategories.associate();
   PostsTags.associate();
 
+  if (process.env.SYNC_DB !== 'true') {
+    return;
+  }
   // sync Models
   User.sync();
   UserProfile.sync();
