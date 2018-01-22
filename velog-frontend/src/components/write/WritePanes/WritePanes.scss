@@ -1,5 +1,12 @@
+@import 'utils';
+
 .WriteTemplate {
   .pane {
     flex: 1;
+    display: flex;
+    min-width: 0;
+    &.right {
+      background: $oc-gray-0;
+    }
   }
 }

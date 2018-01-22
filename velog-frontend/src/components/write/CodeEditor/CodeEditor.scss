@@ -1,0 +1,30 @@
+@import 'utils';
+
+.CodeEditor {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  .editor {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    .CodeMirror {
+      flex: 1;
+      height: auto;
+      font-family: 'D2 coding';
+      font-size: 1rem;
+      &.cm-s-default {
+        border-right: 1px solid $oc-gray-2;
+      }
+      &.cm-s-material {
+        .cm-header {
+          color: $oc-cyan-4;
+        }
+        .cm-quote {
+          color: $oc-gray-4;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}

@@ -1413,9 +1413,17 @@ coa@~1.0.1:
   dependencies:
     q "^1.1.2"
 
+code-mirror-themes@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/code-mirror-themes/-/code-mirror-themes-1.0.0.tgz#7ad8c27aeb1a6279b4b2800722f1599d4e27cc61"
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
+
+codemirror@^5.33.0:
+  version "5.33.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.33.0.tgz#462ad9a6fe8d38b541a9536a3997e1ef93b40c6a"
 
 color-convert@^1.3.0, color-convert@^1.9.0:
   version "1.9.1"

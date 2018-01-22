@@ -9,6 +9,7 @@ const WriteHeader = () => {
       <div className="title-area">
         <input
           placeholder="제목을 입력해주세요"
+          autoFocus
         />
       </div>
       <div className="submit-button">

@@ -30,6 +30,8 @@ module.exports = {
     "react/sort-comp": 0,
     "jsx-a11y/anchor-is-valid": 0,
     "eol-last": 0,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "jsx-a11y/no-autofocus": 0,
+    "global-require": 0
   }
 }
