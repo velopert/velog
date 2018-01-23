@@ -10,7 +10,23 @@ export type TagModel = {
 
 const Tag = db.define('tag', {
   id: primaryUUID,
-  name: Sequelize.STRING,
+  name: {
+    type: Sequelize.STRING,
+    unique: 'compositeIndex',
+  },
 });
+
+// gets tag id if exists, creates one if !exists.
+Tag.getId = async function getId(name: string) {
+  try {
+    let tag = await Tag.findOne({ where: { name } });
+    if (!tag) {
+      tag = await Tag.build({ name }).save();
+    }
+    return tag.id;
+  } catch (e) {
+    throw (e);
+  }
+};
 
 export default Tag;

@@ -8,6 +8,7 @@ export type CategoryModel = {
   name: string,
   order: number,
   parent: string,
+  private: boolean,
   fk_user_id: string,
 };
 
@@ -21,6 +22,10 @@ const Category = db.define('category', {
   order: Sequelize.INTEGER,
   parent: Sequelize.STRING,
   fk_user_id: Sequelize.UUID,
+  private: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
 Category.associate = function associate() {

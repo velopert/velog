@@ -2,7 +2,7 @@
 
 import type { Context } from 'koa';
 import Joi from 'joi';
-import { validateSchema } from 'lib/common';
+import { validateSchema, filterUnique } from 'lib/common';
 import { Category, Post, PostsCategories, PostsTags, Tag, User, UserProfile } from 'database/models';
 
 import { type PostModel } from 'database/models/Post';
@@ -27,7 +27,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     thumbnail: Joi.string(),
     isMarkdown: Joi.boolean().required(),
     isTemp: Joi.boolean().required(),
-    meta: Joi.any(),
+    meta: Joi.object(),
     categories: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string()),
   });
@@ -41,9 +41,10 @@ export const writePost = async (ctx: Context): Promise<*> => {
     isMarkdown, isTemp, meta, categories, tags,
   }: BodySchema = (ctx.request.body: any);
 
-  console.log(ctx.request.body);
+  const uniqueTags: Array<string> = filterUnique(tags);
 
   try {
+    const tagIds = await Promise.all(uniqueTags.map(tag => Tag.getId(tag)));
     // create Post data
     const post = await Post.build({
       title,
@@ -53,8 +54,15 @@ export const writePost = async (ctx: Context): Promise<*> => {
       is_markdown: isMarkdown,
       is_temp: isTemp,
       fk_user_id: ctx.user.id,
+      meta_json: JSON.stringify(meta),
     }).save();
-    ctx.body = post.toJSON();
+
+    ctx.body = {
+      ...post.toJSON(),
+    };
+
+    const postId = post.id;
+    await PostsTags.link(postId, tagIds);
   } catch (e) {
     ctx.throw(500, e);
   }

@@ -30,4 +30,13 @@ PostsTags.associate = function associate() {
   });
 };
 
+// links postId to tagIds
+PostsTags.link = function link(postId: string, tagIds: Array<string>): Promise<*> {
+  const promises = tagIds.map(tagId => PostsTags.build({
+    fk_post_id: postId,
+    fk_tag_id: tagId,
+  }).save());
+  return Promise.all(promises);
+};
+
 export default PostsTags;
