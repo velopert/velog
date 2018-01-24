@@ -2,7 +2,8 @@ import React from 'react';
 import WriteTemplate from 'components/write/WriteTemplate';
 import WriteHeader from 'components/write/WriteHeader';
 import WritePanes from 'components/write/WritePanes';
-import CodeEditor from 'components/write/CodeEditor/CodeEditor';
+import CodeEditorContainer from 'containers/write/CodeEditorContainer';
+
 
 const Write = () => {
   return (
@@ -11,7 +12,7 @@ const Write = () => {
       panes={(
         <WritePanes
           left={
-            <CodeEditor />
+            <CodeEditorContainer />
           }
           right="alaram"
         />

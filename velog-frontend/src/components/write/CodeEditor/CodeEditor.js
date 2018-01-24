@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
@@ -20,8 +22,26 @@ if (process.env.APP_ENV !== 'server') {
   require('codemirror/mode/clike/clike');
 }
 
-class CodeEditor extends Component {
+type Props = {
+  body: string,
+  onEditBody(value: string): any
+}
+
+type State = {
+  cursor: any
+};
+
+class CodeEditor extends Component<Props, State> {
+  codeMirror: any
+  editor: any
+
+  state = {
+    cursor: null,
+  }
+
   initialize = () => {
+    if (!CodeMirror) return;
+
     this.codeMirror = CodeMirror(this.editor, {
       mode: 'markdown',
       theme: 'default',
@@ -29,10 +49,40 @@ class CodeEditor extends Component {
       lineWrapping: true, // 내용이 너무 길면 다음 줄에 작성
       scrollbarStyle: 'overlay',
     });
+    this.codeMirror.on('change', this.onChange);
+  }
+
+  onChange = (doc: any) => {
+    this.setState({
+      cursor: doc.getCursor(),
+    });
+    const { onEditBody, body } = this.props;
+    if (body !== doc.getValue()) {
+      onEditBody(doc.getValue());
+    }
   }
 
   componentDidMount() {
     this.initialize();
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const { codeMirror } = this;
+    const { cursor } = this.state;
+    const { body } = this.props;
+
+    if (!codeMirror) return;
+
+    // diff cursor
+    if (prevState.cursor !== cursor) {
+      codeMirror.setCursor(cursor);
+      return;
+    }
+    if (prevProps.body !== body) {
+      codeMirror.setValue(body);
+      if (!cursor) return;
+      codeMirror.setCursor(cursor);
+    }
   }
 
   render() {

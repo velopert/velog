@@ -32,6 +32,7 @@ module.exports = {
     "eol-last": 0,
     "import/prefer-default-export": 0,
     "jsx-a11y/no-autofocus": 0,
-    "global-require": 0
+    "global-require": 0,
+    "react/no-unused-state": 1
   }
 }
