@@ -32,5 +32,24 @@ Category.associate = function associate() {
   Category.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
 };
 
+Category.countRootCategories = function countRootCategories(userId: string) {
+  return Category.findAndCountAll({
+    where: {
+      parent: null,
+      fk_user_id: userId,
+    },
+  }).then(data => data.count);
+};
+
+Category.listAllCategories = function listAllCategories(userId: string) {
+  return Category.findAll({
+    attributes: ['id', 'order', 'parent', 'private'],
+    where: {
+      fk_user_id: userId,
+    },
+    raw: true,
+  });
+};
+
 export default Category;
 

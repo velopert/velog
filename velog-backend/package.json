@@ -49,6 +49,7 @@
     "lodash": "^4.17.4",
     "mailgun-js": "^0.13.1",
     "nodemon": "^1.12.1",
+    "pg": "^7.4.1",
     "sequelize": "^4.26.0",
     "sequelize-cockroachdb": "^1.0.2",
     "serverless-http": "^1.5.2",

@@ -1,5 +1,4 @@
 // @flow
-
 import Sequelize from 'sequelize';
 import Joi from 'joi';
 
@@ -9,8 +8,9 @@ export const primaryUUID = {
   primaryKey: true,
 };
 
+
 // validates schema, return 400 error if not valid
-export const validateSchema = (ctx, schema) => {
+export const validateSchema = (ctx: any, schema: any): any => {
   const result = Joi.validate(ctx.request.body, schema);
   if (result.error) {
     ctx.status = 400;
@@ -23,6 +23,6 @@ export const validateSchema = (ctx, schema) => {
   return true;
 };
 
-export const filterUnique = (array: Array<*>): Array<*> => {
+export const filterUnique = (array: Array<string>): Array<string> => {
   return [...new Set(array)];
 };
