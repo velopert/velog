@@ -4,6 +4,11 @@
   display: flex;
   flex: 1;
   min-width: 0;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  &.material {
+    background: #263238;
+  }
   .editor {
     min-width: 0;
     flex: 1;
@@ -11,17 +16,47 @@
     .CodeMirror {
       flex: 1;
       height: auto;
-      font-family: 'D2 coding';
-      font-size: 1rem;
+      // font-family: 'D2 coding';
+      font-family: 'D2 Coding', sans-serif;
+      font-size: 1.25rem;
+      line-height: 1.5em;
+
+      .cm-header {
+        font-family: 'Noto Sans KR';
+      }
+
+      .cm-header-1 {
+        font-size: 3rem;
+        line-height: 4rem;
+      }
+      .cm-header-2 {
+        font-size: 2.5rem;
+        line-height: 3.5rem;
+      }
+      .cm-header-3 {
+        font-size: 2rem;
+        line-height: 3rem;
+      }
+      .cm-header-4 { 
+        font-size: 1.75rem;
+        line-height: 2.5rem;
+      }
       &.cm-s-default {
         border-right: 1px solid $oc-gray-2;
+        .cm-header {
+          color: $oc-gray-9;
+          font-weight: 600;
+        }
       }
       &.cm-s-material {
+        &.CodeMirror-empty {
+          color: $oc-gray-5;
+        }
         .cm-header {
-          color: $oc-cyan-4;
+          color: white;
         }
         .cm-quote {
-          color: $oc-gray-4;
+          color: $oc-gray-5;
           font-style: italic;
         }
       }
