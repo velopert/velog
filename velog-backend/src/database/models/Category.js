@@ -43,7 +43,7 @@ Category.countRootCategories = function countRootCategories(userId: string) {
 
 Category.listAllCategories = function listAllCategories(userId: string) {
   return Category.findAll({
-    attributes: ['id', 'order', 'parent', 'private'],
+    attributes: ['id', 'order', 'parent', 'private', 'name'],
     where: {
       fk_user_id: userId,
     },
