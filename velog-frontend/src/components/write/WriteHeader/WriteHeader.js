@@ -1,8 +1,16 @@
+// @flow
 import React from 'react';
 import BackIcon from 'react-icons/lib/md/arrow-back';
 import './WriteHeader.scss';
 
-const WriteHeader = () => {
+type Props = {
+  onChangeTitle(e: any): void,
+  value: string
+};
+const WriteHeader = ({
+  onChangeTitle,
+  title,
+}: Props) => {
   return (
     <div className="WriteHeader">
       <BackIcon className="back-icon" />
@@ -10,6 +18,8 @@ const WriteHeader = () => {
         <input
           placeholder="제목을 입력해주세요"
           autoFocus
+          onChange={onChangeTitle}
+          value={title}
         />
       </div>
       <div className="submit-button">

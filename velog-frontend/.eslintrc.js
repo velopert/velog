@@ -33,6 +33,7 @@ module.exports = {
     "import/prefer-default-export": 0,
     "jsx-a11y/no-autofocus": 0,
     "global-require": 0,
-    "react/no-unused-state": 1
+    "react/no-unused-state": 1,
+    "dangerouslySetInnerHTML": 0
   }
 }

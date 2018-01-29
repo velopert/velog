@@ -12,7 +12,10 @@ type Props = {
 
 class CodeEditorContainer extends Component<Props> {
   onEditBody = (value) => {
-    WriteActions.editBody(value);
+    WriteActions.editField({
+      field: 'body',
+      value,
+    });
   }
 
   render() {

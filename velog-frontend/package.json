@@ -30,6 +30,7 @@
     "immutable": "^3.8.2",
     "include-media": "^1.4.9",
     "jest": "20.0.4",
+    "marked": "^0.3.12",
     "node-sass": "^4.7.2",
     "object-assign": "4.1.1",
     "open-color": "^1.6.1",

@@ -1,0 +1,9 @@
+.MarkdownPreview {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  width: 100%;
+  & > h1 {
+    font-size: 3em;
+    font-weight: 500;
+  }
+}

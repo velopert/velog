@@ -5,7 +5,6 @@
   flex: 1;
   min-width: 0;
   padding-left: 2rem;
-  padding-right: 2rem;
   &.material {
     background: #263238;
   }
@@ -14,6 +13,10 @@
     flex: 1;
     display: flex;
     .CodeMirror {
+      
+      .CodeMirror-lines {
+        padding-right: 1rem;
+      }
       flex: 1;
       height: auto;
       // font-family: 'D2 coding';
@@ -46,6 +49,9 @@
         .cm-header {
           color: $oc-gray-9;
           font-weight: 600;
+          &.cm-comment  {
+            color: $oc-gray-7;
+          }
         }
       }
       &.cm-s-material {
@@ -54,6 +60,9 @@
         }
         .cm-header {
           color: white;
+          &.cm-comment  {
+            color: $oc-gray-6;
+          }
         }
         .cm-quote {
           color: $oc-gray-5;
