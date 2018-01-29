@@ -117,7 +117,11 @@ export const reorderCategories = async (ctx: Context): Promise<*> => {
     return Promise.resolve();
   });
 
-  await promises;
+  try {
+    await promises;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 
   ctx.body = categories.sort(sortCategoryOrder);
 };
