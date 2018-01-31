@@ -28,8 +28,8 @@ export const writePost = async (ctx: Context): Promise<*> => {
     isMarkdown: Joi.boolean().required(),
     isTemp: Joi.boolean().required(),
     meta: Joi.object(),
-    categories: Joi.array().items(Joi.string()),
-    tags: Joi.array().items(Joi.string()),
+    categories: Joi.array().items(Joi.string()).required(),
+    tags: Joi.array().items(Joi.string()).required(),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -42,8 +42,24 @@ export const writePost = async (ctx: Context): Promise<*> => {
   }: BodySchema = (ctx.request.body: any);
 
   const uniqueTags: Array<string> = filterUnique(tags);
+  const uniqueCategories: Array<string> = filterUnique(categories);
 
   try {
+    // check: all categories are valid
+    const ownCategories = await Category.listAllCategories(ctx.user.id);
+
+    for (let i = 0; i < uniqueCategories.length; i++) {
+      const categoryId = uniqueCategories[i];
+      if (ownCategories.findIndex(c => c.id === categoryId) === -1) {
+        ctx.status = 400;
+        ctx.body = {
+          name: 'INVALID_CATEGORY',
+          payload: categoryId,
+        };
+        return;
+      }
+    }
+
     const tagIds = await Promise.all(uniqueTags.map(tag => Tag.getId(tag)));
     // create Post data
     const post = await Post.build({
@@ -57,12 +73,17 @@ export const writePost = async (ctx: Context): Promise<*> => {
       meta_json: JSON.stringify(meta),
     }).save();
 
-    ctx.body = {
-      ...post.toJSON(),
-    };
-
     const postId = post.id;
     await PostsTags.link(postId, tagIds);
+    await PostsCategories.link(postId, uniqueCategories);
+
+    const categoriesInfo = await PostsCategories.findCategoriesByPostId(postId);
+
+    ctx.body = {
+      ...post.toJSON(),
+      tags: uniqueTags,
+      categories: categoriesInfo.map(({ id, name }) => ({ id, name })),
+    };
   } catch (e) {
     ctx.throw(500, e);
   }

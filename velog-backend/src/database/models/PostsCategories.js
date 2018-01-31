@@ -33,4 +33,27 @@ PostsCategories.associate = function associate() {
   });
 };
 
+// links postId to categoryIds
+PostsCategories.link = function (postId: string, categoryIds: Array<string>): Promise<*> {
+  const promises = categoryIds.map(categoryId => PostsCategories.build({
+    fk_post_id: postId,
+    fk_category_id: categoryId,
+  }).save());
+  return Promise.all(promises);
+};
+
+PostsCategories.findCategoriesByPostId = function (postId: string): Promise<*> {
+  return Post.findAll({
+    include: [{
+      model: Category,
+      attributes: ['id', 'name'],
+    }],
+    attributes: ['categories.id', 'categories.name'],
+    where: {
+      id: postId,
+    },
+    raw: true,
+  });
+};
+
 export default PostsCategories;
