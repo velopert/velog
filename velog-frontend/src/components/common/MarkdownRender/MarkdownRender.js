@@ -60,7 +60,7 @@ class MarkdownRender extends Component<Props, State> {
     const markup = { __html: html };
 
     return (
-      <div className="MarkdownRender atom-one" dangerouslySetInnerHTML={markup} />
+      <div className="MarkdownRender atom-one" dangerouslySetInnerHTML={markup} id="markdown-render" />
     );
   }
 }

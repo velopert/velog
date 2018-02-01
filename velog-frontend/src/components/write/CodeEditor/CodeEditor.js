@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import marked from 'marked';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/addon/scroll/simplescrollbars.css';
@@ -52,6 +53,24 @@ class CodeEditor extends Component<Props, State> {
       placeholder: '당신의 이야기를 적어보세요...',
     });
     this.codeMirror.on('change', this.onChange);
+    this.codeMirror.on('scroll', (e) => {
+      const scrollInfo = e.getScrollInfo();
+      const lineNumber = e.lineAtHeight(scrollInfo.top, 'local');
+      const range = e.getRange({ line: 0, ch: null }, { line: lineNumber, ch: null });
+      const markdown = `<h1></h1><div>${marked(range)}</div>`;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(markdown, 'text/html');
+      if (!doc.body) return;
+      const totalLines = doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
+      const markdownRender = document.getElementById('markdown-render');
+      const preview = document.getElementById('preview');
+      if (!markdownRender || !preview) return;
+      const elements = markdownRender.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
+      if (!elements) return;
+      const index = (totalLines.length > elements.length) ? elements.length : totalLines.length;
+      preview.scrollTop = elements[index - 1].offsetTop;
+      // console.log(elements[index - 1]);
+    });
   }
 
   onChange = (doc: any) => {

@@ -35,4 +35,5 @@ Post.associate = function associate() {
   Post.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
 };
 
+
 export default Post;
