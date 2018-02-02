@@ -29,6 +29,13 @@ const Post = db.define('post', {
   meta_json: Sequelize.TEXT,
   fk_user_id: Sequelize.UUID,
   original_post_id: Sequelize.UUID,
+  url_slug: Sequelize.STRING,
+}, {
+  indexes: [
+    {
+      fields: ['url_slug'],
+    },
+  ],
 });
 
 Post.associate = function associate() {

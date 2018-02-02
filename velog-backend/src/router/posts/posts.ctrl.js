@@ -4,8 +4,9 @@ import type { Context } from 'koa';
 import Joi from 'joi';
 import { validateSchema, filterUnique } from 'lib/common';
 import { Category, Post, PostsCategories, PostsTags, Tag, User, UserProfile } from 'database/models';
-
+import shortid from 'shortid';
 import { type PostModel } from 'database/models/Post';
+import Sequelize from 'sequelize';
 
 export const writePost = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -17,7 +18,8 @@ export const writePost = async (ctx: Context): Promise<*> => {
     isTemp: boolean,
     meta: any,
     categories: Array<string>,
-    tags: Array<string>
+    tags: Array<string>,
+    urlSlug: string,
   };
 
   const schema = Joi.object().keys({
@@ -30,6 +32,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     meta: Joi.object(),
     categories: Joi.array().items(Joi.string()).required(),
     tags: Joi.array().items(Joi.string()).required(),
+    urlSlug: Joi.string().max(130),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -38,8 +41,12 @@ export const writePost = async (ctx: Context): Promise<*> => {
 
   const {
     title, body, shortDescription, thumbnail,
-    isMarkdown, isTemp, meta, categories, tags,
+    isMarkdown, isTemp, meta, categories, tags, urlSlug,
   }: BodySchema = (ctx.request.body: any);
+
+  const generatedUrlSlug = `${title}-${shortid.generate()}`;
+  const escapedUrlSlug = encodeURIComponent((urlSlug || generatedUrlSlug).replace(/ /g, '-'));
+  // TODO: validate url slug
 
   const uniqueTags: Array<string> = filterUnique(tags);
   const uniqueCategories: Array<string> = filterUnique(categories);
@@ -71,6 +78,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
       is_temp: isTemp,
       fk_user_id: ctx.user.id,
       meta_json: JSON.stringify(meta),
+      url_slug: escapedUrlSlug,
     }).save();
 
     const postId = post.id;
@@ -82,8 +90,28 @@ export const writePost = async (ctx: Context): Promise<*> => {
     ctx.body = {
       ...post.toJSON(),
       tags: uniqueTags,
-      categories: categoriesInfo.map(({ id, name }) => ({ id, name })),
+      categories: categoriesInfo.map(({ id, name }) => ({ id, name }))
+        .filter(({ id }) => id),
     };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const readPost = async (ctx: Context): Promise<*> => {
+  try {
+    const posts = await Post.findAll({
+      attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'createdAt', 'updatedAt'],
+      include: [{
+        model: User,
+        attributes: ['username'],
+        where: {
+          username: 'jn4kim',
+        },
+      }],
+      raw: true,
+    });
+    ctx.body = posts;
   } catch (e) {
     ctx.throw(500, e);
   }
