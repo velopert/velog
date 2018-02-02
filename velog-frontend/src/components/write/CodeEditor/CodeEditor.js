@@ -36,6 +36,7 @@ type State = {
 class CodeEditor extends Component<Props, State> {
   codeMirror: any
   editor: any
+  prevScrollTop: number
 
   state = {
     cursor: null,
@@ -55,6 +56,8 @@ class CodeEditor extends Component<Props, State> {
     this.codeMirror.on('change', this.onChange);
     this.codeMirror.on('scroll', (e) => {
       const scrollInfo = e.getScrollInfo();
+      const down = scrollInfo.top > this.prevScrollTop;
+      this.prevScrollTop = scrollInfo.top;
       const lineNumber = e.lineAtHeight(scrollInfo.top, 'local');
       const range = e.getRange({ line: 0, ch: null }, { line: lineNumber, ch: null });
       const markdown = `<h1></h1><div>${marked(range)}</div>`;
@@ -68,7 +71,11 @@ class CodeEditor extends Component<Props, State> {
       const elements = markdownRender.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
       if (!elements) return;
       const index = (totalLines.length > elements.length) ? elements.length : totalLines.length;
-      preview.scrollTop = elements[index - 1].offsetTop;
+      console.log(down);
+      (preview :any).scroll({
+        behavior: 'smooth',
+        top: elements[index - 1].offsetTop,
+      });
       // console.log(elements[index - 1]);
     });
   }
