@@ -99,19 +99,37 @@ export const writePost = async (ctx: Context): Promise<*> => {
 };
 
 export const readPost = async (ctx: Context): Promise<*> => {
+  const { username, urlSlug } = ctx.params;
   try {
-    const posts = await Post.findAll({
-      attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'createdAt', 'updatedAt'],
+    const post = await Post.findOne({
+      attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
       include: [{
         model: User,
         attributes: ['username'],
         where: {
-          username: 'jn4kim',
+          username,
         },
-      }],
-      raw: true,
+      }, Tag, Category],
+      where: {
+        url_slug: encodeURIComponent(urlSlug),
+      },
     });
-    ctx.body = posts;
+    if (!post) {
+      ctx.status = 404;
+      return;
+    }
+    const serialize = (data) => {
+      const {
+        id, title, body, thumbnail, is_markdown, created_at, updated_at,
+      } = data;
+      const tags = data.tags.map(tag => tag.name);
+      const categories = data.categories.map(category => category.name);
+      return {
+        id, title, body, thumbnail, is_markdown,
+        created_at, updated_at, tags, categories,
+      };
+    };
+    ctx.body = serialize(post);
   } catch (e) {
     ctx.throw(500, e);
   }

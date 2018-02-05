@@ -27,10 +27,10 @@ export default function sync() {
   UserProfile.sync();
   SocialAccount.sync();
   EmailAuth.sync();
+  Tag.sync();
   Post.sync();
   Category.sync();
   PostsCategories.sync();
-  Tag.sync();
   PostsTags.sync();
 }
 

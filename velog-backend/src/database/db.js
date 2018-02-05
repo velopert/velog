@@ -18,6 +18,9 @@ const db:Sequelize = new SequelizeCockroach('velog', 'velog', COCKROACHDB_PW, {
     ssl: true,
     supportBigNumbers: true,
   },
+  define: {
+    underscored: true,
+  },
 });
 
 export default db;

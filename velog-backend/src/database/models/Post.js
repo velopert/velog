@@ -1,7 +1,7 @@
 // @flow
 import Sequelize from 'sequelize';
 import db from 'database/db';
-import { User } from 'database/models';
+import { User, Tag } from 'database/models';
 
 export type PostModel= {
   id: string,
@@ -41,6 +41,5 @@ const Post = db.define('post', {
 Post.associate = function associate() {
   Post.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
 };
-
 
 export default Post;
