@@ -19,6 +19,7 @@ const Category = db.define('category', {
     primaryKey: true,
   },
   name: Sequelize.STRING,
+  url_slug: Sequelize.STRING,
   order: Sequelize.INTEGER,
   parent: Sequelize.STRING,
   fk_user_id: Sequelize.UUID,
@@ -31,6 +32,9 @@ const Category = db.define('category', {
     {
       name: 'category_order_of_user',
       fields: ['fk_user_id', 'parent', 'order'],
+    },
+    {
+      fields: ['url_slug'],
     },
   ],
 });
@@ -46,6 +50,15 @@ Category.countRootCategories = function countRootCategories(userId: string) {
       fk_user_id: userId,
     },
   }).then(data => data.count);
+};
+
+Category.checkUrlSlugExists = function (userId, urlSlug) {
+  return Category.findOne({
+    where: {
+      fk_user_id: userId,
+      url_slug: urlSlug,
+    },
+  });
 };
 
 Category.listAllCategories = function listAllCategories(userId: string, raw: boolean = true) {

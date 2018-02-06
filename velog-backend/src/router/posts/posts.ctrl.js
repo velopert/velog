@@ -45,10 +45,11 @@ export const writePost = async (ctx: Context): Promise<*> => {
   }: BodySchema = (ctx.request.body: any);
 
   const generatedUrlSlug = `${title}-${shortid.generate()}`;
-  const escapedUrlSlug = encodeURIComponent((urlSlug || generatedUrlSlug).replace(/ /g, '-'));
+  const escapedUrlSlug = (urlSlug || generatedUrlSlug).replace(/ /g, '-');
+  const replaceDashToSpace = text => text.replace(/-/g, ' ');
   // TODO: validate url slug
 
-  const uniqueTags: Array<string> = filterUnique(tags);
+  const uniqueTags: Array<string> = filterUnique(tags).map(replaceDashToSpace);
   const uniqueCategories: Array<string> = filterUnique(categories);
 
   try {
@@ -101,36 +102,29 @@ export const writePost = async (ctx: Context): Promise<*> => {
 export const readPost = async (ctx: Context): Promise<*> => {
   const { username, urlSlug } = ctx.params;
   try {
-    const post = await Post.findOne({
-      attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
-      include: [{
-        model: User,
-        attributes: ['username'],
-        where: {
-          username,
-        },
-      }, Tag, Category],
-      where: {
-        url_slug: encodeURIComponent(urlSlug),
-      },
-    });
+    const post = await Post.readPost(username, urlSlug);
     if (!post) {
       ctx.status = 404;
       return;
     }
     const serialize = (data) => {
       const {
-        id, title, body, thumbnail, is_markdown, created_at, updated_at,
+        id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug,
       } = data;
       const tags = data.tags.map(tag => tag.name);
       const categories = data.categories.map(category => category.name);
       return {
         id, title, body, thumbnail, is_markdown,
-        created_at, updated_at, tags, categories,
+        created_at, updated_at, tags, categories, url_slug,
       };
     };
     ctx.body = serialize(post);
   } catch (e) {
     ctx.throw(500, e);
   }
+};
+
+export const listPosts = async (ctx: Context): Promise<*> => {
+  const { username, category } = ctx.params;
+
 };

@@ -8,5 +8,6 @@ const posts: Router = new Router();
 
 posts.post('/', needsAuth, postsCtrl.writePost);
 posts.get('/@:username/:urlSlug', postsCtrl.readPost);
+posts.get('/@:username/:category?', postsCtrl.listPosts);
 
 export default posts;
