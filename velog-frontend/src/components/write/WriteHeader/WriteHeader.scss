@@ -2,7 +2,7 @@
 
 .WriteHeader {
   height: 4rem;
-  background: $oc-gray-7;
+  background: $oc-gray-8;
   padding-left: 1rem;
   padding-right: 1rem;
   display: flex;
@@ -33,16 +33,61 @@
       }
     }
   }
-  .submit-button {
-    background: $oc-violet-5;
-    padding: 0.4rem;
-    font-weight: 500;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: box-shadow 0.2s ease-in;
-    @include material-shadow(1, 0.5);
-    @include hover() {
-      @include material-shadow(2, 0.7);
+  .actions {
+    display: flex;
+    align-items: center;
+
+    .button {
+      background: $oc-gray-0;
+      padding: 0.6rem;
+      font-weight: 500;
+      border-radius: 2px;
+      line-height: 0.9rem;
+      font-size: 0.9rem;
+      @include material-shadow(2, 0.75);
+      transition: 0.05s all ease-in;
+      user-select: none;
+      cursor: pointer;
+      & + .button {
+        margin-left: 0.75rem;
+      }
+
+      &.temp-save {
+        background: #65707b;
+        &:hover {
+          background: lighten(#65707b, 5%);
+        }
+        &:active {
+          background: darken(#65707b, 5%);
+        }
+      }
+      
+      &.submit {
+        background: $oc-violet-4;
+        color: white;
+        &:hover {
+          background: lighten($oc-violet-4, 5%);
+        }
+        &:active {
+          background: darken($oc-violet-4, 5%);
+        }
+      }
+    }
+
+    .more {
+      margin-left: 0.75rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.05s all ease-in;
+      &:hover {
+        background: rgba(255,255,255,0.125);
+      }
+      &:active {
+        background: rgba(255,255,255,0.075);
+      }
     }
   }
 }

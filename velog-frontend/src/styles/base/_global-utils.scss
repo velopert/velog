@@ -1,0 +1,13 @@
+.util {
+  &.stick-right {
+    margin-left: auto;
+  }
+  &.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &.flex-placeholder {
+    flex: 1;
+  }
+}

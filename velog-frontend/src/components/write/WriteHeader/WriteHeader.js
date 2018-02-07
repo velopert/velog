@@ -1,11 +1,13 @@
 // @flow
 import React from 'react';
 import BackIcon from 'react-icons/lib/md/arrow-back';
+import MoreIcon from 'react-icons/lib/md/more-vert';
 import './WriteHeader.scss';
 
 type Props = {
   onChangeTitle(e: any): void,
-  value: string
+  value: string,
+  title: string,
 };
 const WriteHeader = ({
   onChangeTitle,
@@ -22,8 +24,16 @@ const WriteHeader = ({
           value={title}
         />
       </div>
-      <div className="submit-button">
-        작성하기
+      <div className="actions">
+        <div className="button temp-save">
+          임시저장
+        </div>
+        <div className="button submit">
+          작성하기
+        </div>
+        <div className="more util flex-center">
+          <MoreIcon />
+        </div>
       </div>
     </div>
   );
