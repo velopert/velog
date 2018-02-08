@@ -57,33 +57,52 @@ Post.readPost = function (username: string, urlSlug: string) {
     },
   });
 };
-
-// TODO: implement this later
-Post.listPosts = function ({
-  username, 
-  category,
-  page
-}: {
+type PostsQueryInfo = {
   username: string,
-  category: ?string,
+  tag: ?string,
+  categoryUrlSlug: ?string,
   page: ?number
-}) {
-  const include = [
-    {
-      model: User,
-      attributes: ['username'],
-      where: { username },
-    },
-  ];
-  if (category) {
+};
 
-  }
+Post.countPosts = function ({
+  username,
+  categoryUrlSlug,
+  tag,
+  page,
+}: PostsQueryInfo) {
+
+};
+
+Post.listPosts = function ({
+  username,
+  categoryUrlSlug,
+  tag,
+  page,
+}: PostsQueryInfo) {
+  const limit = 10;
   return Post.findAll({
+    order: [['created_at', 'DESC']],
     attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
     include: [
-      
-    ]
-  })
+      {
+        model: User,
+        attributes: ['username'],
+        where: { username },
+      },
+      {
+        model: Category,
+        attributes: ['url_slug', 'name'],
+        where: categoryUrlSlug ? { url_slug: categoryUrlSlug } : null,
+      },
+      {
+        model: Tag,
+        attributes: ['name'],
+        where: tag ? { name: tag } : null,
+      },
+    ],
+    offset: ((!page ? 1 : page) - 1) * limit,
+    limit,
+  });
 };
 
 export default Post;

@@ -15,7 +15,8 @@ module.exports = {
     "class-methods-use-this": 0,
     "no-plusplus": 0,
     "func-names": 0,
-    "object-property-newline": 0
+    "object-property-newline": 0,
+    "no-unused-vars": 1,
   },
   "plugins": [
     "flowtype"
