@@ -1,7 +1,16 @@
+// hover only for non-mobile
 @mixin hover() {
   @media (hover: hover) {
     &:hover { 
       @content;
      }
   }
+}
+
+// set ellipsis
+@mixin ellipsis() {
+  min-width: 0; // for flex
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

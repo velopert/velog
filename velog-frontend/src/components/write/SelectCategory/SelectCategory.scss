@@ -1,0 +1,41 @@
+@import 'utils';
+
+.SelectCategory {
+  background: darken($oc-gray-7, 10%);
+  padding: 0.5rem;
+  height: 8rem;
+  overflow-y: auto;
+  .category {
+    padding: 0.25rem;
+    cursor: pointer;
+    border-radius: 3px;
+    color: $oc-gray-2;
+    display: flex;
+    align-items: center;
+    .text {
+      flex: 1;
+      @include ellipsis();
+      font-size: 0.9rem;
+    }
+    svg {
+      opacity: 0;
+      margin-right: 0.5rem;
+      margin-left: 0.5rem;
+      color: $oc-violet-5;
+    }
+    & + .category {
+      margin-top: 0.25rem;
+    }
+    @include hover() {
+      background: rgba(255,255,255, 0.1);
+    }
+    &.active {
+      background: white;
+      color: $oc-gray-9;
+      font-weight: 600;
+      svg {
+        opacity: 1;
+      }
+    }
+  }
+}

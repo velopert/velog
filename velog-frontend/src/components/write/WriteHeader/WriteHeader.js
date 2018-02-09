@@ -6,7 +6,6 @@ import './WriteHeader.scss';
 
 type Props = {
   onChangeTitle(e: any): void,
-  value: string,
   title: string,
 };
 const WriteHeader = ({

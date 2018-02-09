@@ -4,12 +4,29 @@
   right: 0.5rem;
   top: 0.5rem;
   background: $oc-gray-7;
-  width: 25rem;
-  padding: 1rem;
+  width: 20rem;
+  padding: 1.5rem;
   z-index: z('submit-box');
   @include material-shadow(2, 1);
   color: white;
   transition: transform 0.075s ease-in;
   transform-origin: top right;
   transform: scale(1);
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .sections {
+    margin-top: 0.5rem;
+    section {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: $oc-gray-4;
+    }
+  }
 }

@@ -5,7 +5,9 @@ import type { State } from 'store';
 import { WriteActions } from 'store/actionCreators';
 import WriteHeader from 'components/write/WriteHeader/WriteHeader';
 
-type Props = {};
+type Props = {
+  title: string,
+};
 
 class WriteHeaderContainer extends Component<Props> {
   onChangeTitle = (e) => {
