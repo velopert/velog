@@ -140,14 +140,21 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     };
   };
 
+  const query = { username, categorySlug: category, tag };
   try {
     const posts = await Post.listPosts({
-      username,
-      categoryUrlSlug: category,
-      tag,
+      ...query,
       page,
     });
-    ctx.body = posts.map(serialize);
+    const postCount = posts.count;
+    const pageLimit = Math.ceil(postCount / 10);
+
+
+    console.log(postCount);
+
+    ctx.set('Page-Limit', (pageLimit || 1).toString());
+    ctx.set('Post-Count', (postCount).toString());
+    ctx.body = posts.rows.map(serialize);
   } catch (e) {
     ctx.throw(500, e);
   }

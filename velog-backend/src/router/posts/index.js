@@ -9,5 +9,6 @@ const posts: Router = new Router();
 posts.post('/', needsAuth, postsCtrl.writePost);
 posts.get('/@:username/:urlSlug', postsCtrl.readPost);
 posts.get('/@:username', postsCtrl.listPosts);
+posts.get('/public', postsCtrl.listPosts);
 
 export default posts;

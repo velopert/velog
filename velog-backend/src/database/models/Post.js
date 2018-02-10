@@ -58,19 +58,10 @@ Post.readPost = function (username: string, urlSlug: string) {
   });
 };
 type PostsQueryInfo = {
-  username: string,
+  username: ?string,
   tag: ?string,
   categoryUrlSlug: ?string,
   page: ?number
-};
-
-Post.countPosts = function ({
-  username,
-  categoryUrlSlug,
-  tag,
-  page,
-}: PostsQueryInfo) {
-
 };
 
 Post.listPosts = function ({
@@ -80,9 +71,10 @@ Post.listPosts = function ({
   page,
 }: PostsQueryInfo) {
   const limit = 10;
-  return Post.findAll({
+  return Post.findAndCountAll({
     order: [['created_at', 'DESC']],
     attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
+    distinct: 'id',
     include: [
       {
         model: User,
@@ -100,6 +92,29 @@ Post.listPosts = function ({
         where: tag ? { name: tag } : null,
       },
     ],
+    offset: ((!page ? 1 : page) - 1) * limit,
+    limit,
+  });
+};
+
+type PublicPostsQueryInfo = {
+  tag: string,
+  page: number,
+  option: any
+};
+
+Post.listPublicPosts = function ({
+  tag, page, option,
+}: PublicPostsQueryInfo) {
+  const limit = 10;
+  return Post.findAndCountAll({
+    distinct: 'id',
+    order: [['created_at', 'DESC']],
+    include: [{
+      model: Tag,
+      attributes: ['name'],
+      where: tag ? { name: tag } : null,
+    }],
     offset: ((!page ? 1 : page) - 1) * limit,
     limit,
   });
