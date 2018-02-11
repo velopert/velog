@@ -1,0 +1,63 @@
+@import 'utils';
+
+.InputTags {
+  .input-button {
+    display: flex;
+    @include material-shadow(2, 0.75);
+    input {
+      font-size: 1rem;
+      padding: 0.5rem;
+      flex: 7;
+      border: none;
+      outline: none;
+    }
+    .button {
+      flex: 2;
+      background: darken($oc-gray-6, 15%);
+      color: white;
+      font-weight: 600;
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
+      font-size: 0.9rem;
+      transition: 0.05s all ease-in;
+      user-select: none;
+      cursor: pointer;
+      &:hover {
+        background: $oc-gray-6
+      }
+      &:active {
+        background: darken($oc-gray-6, 20%);
+      }
+    }
+  }
+  .tags {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+    .tag {
+      margin: 0.25rem;
+      padding: 0.25rem;
+      padding-right: 0rem;
+      font-size: 0.85rem;
+      color: $oc-gray-9;
+      align-items: center;
+      display: flex;
+      background: $oc-gray-2;
+      font-weight: 500;
+      @include material-shadow(2, 0.75);
+      border-radius: 6px;
+      .remove {
+        font-size: 0.9rem;
+        color: $oc-gray-6;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        &:hover {
+          cursor: pointer;
+          color: $oc-red-9;
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ import WriteHeaderContainer from 'containers/write/WriteHeaderContainer';
 import MarkdownPreviewContainer from 'containers/write/MarkdownPreviewContainer';
 import SubmitBox from 'components/write/SubmitBox';
 import SelectCategory from 'components/write/SelectCategory';
+import SubmitBoxContainer from 'containers/write/SubmitBoxContainer';
 
 
 const Write = () => {
@@ -15,9 +16,7 @@ const Write = () => {
     <WriteTemplate
       header={<WriteHeaderContainer />}
     >
-      <SubmitBox
-        selectCategory={<SelectCategory />}
-      />
+      <SubmitBoxContainer />
       <WritePanes
         left={
           <CodeEditorContainer />
