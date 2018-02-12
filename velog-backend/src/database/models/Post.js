@@ -57,6 +57,21 @@ Post.readPost = function (username: string, urlSlug: string) {
     },
   });
 };
+
+Post.readPostById = function (id) {
+  return Post.findOne({
+    attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
+    include: [{
+      model: User,
+      attributes: ['username'],
+    }, Tag, Category],
+    where: {
+      id,
+    },
+  });
+};
+
+
 type PostsQueryInfo = {
   username: ?string,
   tag: ?string,
@@ -64,37 +79,32 @@ type PostsQueryInfo = {
   page: ?number
 };
 
-Post.listPosts = function ({
+Post.listPosts = async function ({
   username,
   categoryUrlSlug,
   tag,
   page,
 }: PostsQueryInfo) {
-  const limit = 10;
-  return Post.findAndCountAll({
+  // get postId list
+  let posts = await Post.findAll({
+    attributes: ['id'],
     order: [['created_at', 'DESC']],
-    attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
-    distinct: 'id',
-    include: [
-      {
-        model: User,
-        attributes: ['username'],
-        where: { username },
-      },
-      {
-        model: Category,
-        attributes: ['url_slug', 'name'],
-        where: categoryUrlSlug ? { url_slug: categoryUrlSlug } : null,
-      },
-      {
-        model: Tag,
-        attributes: ['name'],
-        where: tag ? { name: tag } : null,
-      },
-    ],
-    offset: ((!page ? 1 : page) - 1) * limit,
-    limit,
+    include: [{
+      model: User,
+      attributes: ['username'],
+      where: username ? { username } : null,
+    }, {
+      model: Tag,
+      where: tag ? { name: tag } : null,
+    }, {
+      model: Category,
+      where: categoryUrlSlug ? { url_slug: categoryUrlSlug } : null,
+    }],
+    raw: true,
   });
+
+  posts = await Promise.all(posts.map(({ id }) => id).map(Post.readPostById));
+  return posts;
 };
 
 type PublicPostsQueryInfo = {

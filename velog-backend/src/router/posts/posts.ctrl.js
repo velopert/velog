@@ -124,6 +124,32 @@ export const readPost = async (ctx: Context): Promise<*> => {
   }
 };
 
+const serialize = (data) => {
+  const {
+    id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug,
+  } = data;
+  const tags = data.tags.map(t => t.name);
+  const categories = data.categories.map(c => c.name);
+  return {
+    id, title, body: body.slice(0, 250), thumbnail, is_markdown,
+    created_at, updated_at, tags, categories, url_slug,
+  };
+};
+
+export const listPosts = async (ctx: Context): Promise<*> => {
+  const { username } = ctx.params;
+  const { category, tag, page } = ctx.query;
+
+  const query = { username, categorySlug: category, tag };
+
+  try {
+    const data = await Post.listPosts(query);
+    ctx.body = data.map(serialize);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+/*
 export const listPosts = async (ctx: Context): Promise<*> => {
   const { username } = ctx.params;
   const { category, tag, page } = ctx.query;
@@ -159,3 +185,4 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     ctx.throw(500, e);
   }
 };
+*/
