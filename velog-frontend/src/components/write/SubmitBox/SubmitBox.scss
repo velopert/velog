@@ -1,5 +1,28 @@
 @import 'utils';
+
 .SubmitBox {
+  @keyframes appear {
+    0% {
+      opacity: 0;
+      transform: translateY(-25%);
+    }
+    100% {
+      opacity: 1;
+      trasnform: translateY(0px);
+    }
+  }
+
+  @keyframes disappear {
+    0% {
+      opacity: 1;
+      trasnform: translateY(0px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-25%);
+    }
+  }
+  
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
@@ -9,9 +32,17 @@
   z-index: z('submit-box');
   @include material-shadow(2, 1);
   color: white;
-  transition: transform 0.075s ease-in;
-  transform-origin: top right;
-  transform: scale(1);
+  // transition: transform 0.075s ease-in;
+  // transform-origin: top right;
+  // transform: scale(1);
+  &.appear {
+    animation: appear .15s ease-in-out;
+    animation-fill-mode: forwards;
+  }
+  &.disappear {
+    animation: disappear .15s ease-in-out;
+    animation-fill-mode: forwards;
+  }
   .title {
     font-size: 1.25rem;
     font-weight: 600;
@@ -27,6 +58,38 @@
       font-weight: 600;
       margin-bottom: 0.5rem;
       color: $oc-gray-4;
+    }
+  }
+  .footer {
+    display: flex;
+    margin-top: 1rem;
+    user-select: none;
+    .open-options {
+      padding-top: 1rem;
+      flex: 2;
+      font-size: 0.9rem;
+      color: $oc-yellow-6;
+      span {
+        &:hover {
+          cursor: pointer;
+          color: $oc-yellow-5;
+        }
+      }
+    }
+    .submit-button {
+      @include material-shadow(2, 0.75);
+      flex: 3;
+      background: $oc-violet-5;
+      border-radius: 3px;
+      font-weight: 600;
+      transition: 0.1s all ease-in;
+      cursor: pointer;
+      &:hover {
+        background: lighten($oc-violet-5, 5%);
+      }
+      &:active {
+        background:$oc-violet-5;
+      }
     }
   }
 }

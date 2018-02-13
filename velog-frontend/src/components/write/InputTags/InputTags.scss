@@ -39,6 +39,7 @@
     .tag {
       margin: 0.25rem;
       padding: 0.25rem;
+      padding-left: 0.5rem;
       padding-right: 0rem;
       font-size: 0.85rem;
       color: $oc-gray-9;
@@ -59,5 +60,7 @@
         }
       }
     }
+  }
+  .submit-button {
   }
 }

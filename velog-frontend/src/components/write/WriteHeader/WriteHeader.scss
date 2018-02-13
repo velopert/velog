@@ -1,6 +1,8 @@
 @import 'utils';
 
 .WriteHeader {
+  position: relative;
+  z-index: z('write-header');
   height: 4rem;
   background: $oc-gray-8;
   padding-left: 1rem;
@@ -45,7 +47,7 @@
       line-height: 0.9rem;
       font-size: 0.9rem;
       @include material-shadow(2, 0.75);
-      transition: 0.05s all ease-in;
+      transition: 0.1s all ease-in;
       user-select: none;
       cursor: pointer;
       & + .button {
@@ -63,13 +65,13 @@
       }
       
       &.submit {
-        background: $oc-violet-4;
+        background: $oc-violet-5;
         color: white;
         &:hover {
-          background: lighten($oc-violet-4, 5%);
+          background: lighten($oc-violet-5, 5%);
         }
         &:active {
-          background: darken($oc-violet-4, 5%);
+          background: $oc-violet-5;
         }
       }
     }

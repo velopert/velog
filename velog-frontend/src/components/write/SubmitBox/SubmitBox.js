@@ -1,21 +1,68 @@
 // @flow
 import React, { Component } from 'react';
+import onClickOutside from 'react-onclickoutside';
+import cx from 'classnames';
+
 import './SubmitBox.scss';
 
 type Props = {
   isEditing: boolean,
   selectCategory: any,
   inputTags: any,
+  visible: boolean,
+  onClose(): void,
 };
-class SubmitBox extends Component<Props> {
+
+type State = {
+  animating: boolean,
+};
+
+class SubmitBox extends Component<Props, State> {
+  animateTimeout: any;
+
   static defaultProps = {
     isEditing: false,
   }
+
+  state = {
+    animating: false,
+  }
+
+  handleClickOutside = () => {
+    const { onClose } = this.props;
+    onClose();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.visible && !nextProps.visible) {
+      this.animate();
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.animateTimeout);
+  }
+
+  animate = () => {
+    clearTimeout(this.animateTimeout);
+    this.setState({
+      animating: true,
+    });
+    this.animateTimeout = setTimeout(() => {
+      this.setState({
+        animating: false,
+      });
+    }, 150);
+  }
+
   render() {
-    const { isEditing, selectCategory, inputTags } = this.props;
+    const { isEditing, selectCategory, inputTags, visible } = this.props;
+    const { animating } = this.state;
+
+    if (!visible && !animating) return null;
 
     return (
-      <div className="SubmitBox">
+      <div className={cx('SubmitBox', visible ? 'appear' : 'disappear')}>
         <div className="title">
           {isEditing ? '수정하기' : '새 글 작성하기'}
         </div>
@@ -33,9 +80,15 @@ class SubmitBox extends Component<Props> {
             {inputTags}
           </section>
         </div>
+        <div className="footer">
+          <div className="open-options">
+            <span>추가설정</span>
+          </div>
+          <div className="submit-button util flex-center">작성하기</div>
+        </div>
       </div>
     );
   }
 }
 
-export default SubmitBox;
+export default onClickOutside(SubmitBox);

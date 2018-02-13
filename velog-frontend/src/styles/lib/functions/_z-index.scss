@@ -1,5 +1,6 @@
 $z-layers: (
-  "submit-box": 10
+  "submit-box": 10,
+  "write-header": 15,
 );
 
 @function z($layer) {
