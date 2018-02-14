@@ -87,25 +87,39 @@ Post.listPosts = async function ({
   tag,
   page,
 }: PostsQueryInfo) {
+  const rows = await db.query(`SELECT DISTINCT p.id, p.created_at FROM posts p
+    ${username ? 'JOIN users u ON p.fk_user_id = u.id' : ''}
+    ${tag ? `JOIN posts_tags pt ON p.id = pt.fk_post_id
+    JOIN tags t ON t.id = pt.fk_tag_id` : ''}
+    ${categoryUrlSlug ? `JOIN posts_categories pc ON p.id = pc.fk_post_id
+    JOIN categories c ON c.id = pc.fk_category_id` : ''}
+    WHERE true
+    ${username ? 'AND u.username = $username' : ''}
+    ${tag ? 'AND t.name = $tag' : ''}
+    ${categoryUrlSlug ? 'AND c.url_slug = $category' : ''}
+    ORDER BY created_at DESC
+  `, { bind: { tag, username, category: categoryUrlSlug }, type: Sequelize.QueryTypes.SELECT });
   // get postId list
-  const posts = await Post.findAll({
-    attributes: ['id'],
-    order: [['created_at', 'DESC']],
-    include: [{
-      model: User,
-      attributes: ['username'],
-      where: username ? { username } : null,
-    }, {
-      model: Tag,
-      where: tag ? { name: tag } : null,
-    }, {
-      model: Category,
-      where: categoryUrlSlug ? { url_slug: categoryUrlSlug } : null,
-    }],
-    raw: true,
-  });
+  // const posts = await Post.findAll({
+  //   limit: 10,
+  //   order: [['created_at', 'DESC']],
+  //   include: [{
+  //     model: User,
+  //     attributes: ['username'],
+  //     where: username ? { username } : null,
+  //   }, {
+  //     model: Tag,
+  //     where: tag ? { name: tag } : null,
+  //   }, {
+  //     model: Category,
+  //     where: categoryUrlSlug ? { url_slug: categoryUrlSlug } : null,
+  //   }],
+  //   raw: true,
+  // });
 
-  const postIds = posts.map(({ id }) => id);
+  if (rows.length === 0) return [];
+  const postIds = rows.map(({ id }) => id);
+
   const fullPosts = await Post.findAll({
     include: [User, Tag, Category],
     where: {

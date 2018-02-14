@@ -140,11 +140,12 @@ export const listPosts = async (ctx: Context): Promise<*> => {
   const { username } = ctx.params;
   const { category, tag, page } = ctx.query;
 
-  const query = { username, categorySlug: category, tag };
+  const query = { username, categoryUrlSlug: category, tag };
 
   try {
     const data = await Post.listPosts(query);
     ctx.body = data.map(serialize);
+    // ctx.body = data;
   } catch (e) {
     ctx.throw(500, e);
   }
