@@ -63,7 +63,7 @@ Category.checkUrlSlugExists = function (userId, urlSlug) {
 
 Category.listAllCategories = function listAllCategories(userId: string, raw: boolean = true) {
   return Category.findAll({
-    attributes: ['id', 'order', 'parent', 'private', 'name'],
+    attributes: ['id', 'order', 'parent', 'private', 'name', 'url_slug'],
     order: [
       ['order', 'ASC'],
     ],
