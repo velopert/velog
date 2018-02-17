@@ -87,7 +87,8 @@ Post.listPosts = async function ({
   tag,
   page,
 }: PostsQueryInfo) {
-  const rows = await db.query(`SELECT DISTINCT p.id, p.created_at FROM posts p
+  // reusable query for COUNT & SELECT
+  const query = `
     ${username ? 'JOIN users u ON p.fk_user_id = u.id' : ''}
     ${tag ? `JOIN posts_tags pt ON p.id = pt.fk_post_id
     JOIN tags t ON t.id = pt.fk_tag_id` : ''}
@@ -97,39 +98,40 @@ Post.listPosts = async function ({
     ${username ? 'AND u.username = $username' : ''}
     ${tag ? 'AND t.name = $tag' : ''}
     ${categoryUrlSlug ? 'AND c.url_slug = $category' : ''}
-    ORDER BY created_at DESC
-  `, { bind: { tag, username, category: categoryUrlSlug }, type: Sequelize.QueryTypes.SELECT });
-  // get postId list
-  // const posts = await Post.findAll({
-  //   limit: 10,
-  //   order: [['created_at', 'DESC']],
-  //   include: [{
-  //     model: User,
-  //     attributes: ['username'],
-  //     where: username ? { username } : null,
-  //   }, {
-  //     model: Tag,
-  //     where: tag ? { name: tag } : null,
-  //   }, {
-  //     model: Category,
-  //     where: categoryUrlSlug ? { url_slug: categoryUrlSlug } : null,
-  //   }],
-  //   raw: true,
-  // });
+  `;
 
-  if (rows.length === 0) return [];
-  const postIds = rows.map(({ id }) => id);
+  try {
+    const countResult = await db.query(`SELECT COUNT(DISTINCT p.id) as count FROM posts p ${query}`, { bind: { tag, username, category: categoryUrlSlug }, type: Sequelize.QueryTypes.SELECT });
+    const { count } = countResult[0];
 
-  const fullPosts = await Post.findAll({
-    include: [User, Tag, Category],
-    where: {
-      id: {
-        $or: postIds,
+    if (!count) return { count: 0, data: null };
+
+    const rows = await db.query(`SELECT DISTINCT p.id, p.created_at FROM posts p
+      ${query}
+      ORDER BY created_at DESC
+      LIMIT 10
+      OFFSET ${((page || 1) - 1) * 10}
+    `, { bind: { tag, username, category: categoryUrlSlug }, type: Sequelize.QueryTypes.SELECT });
+
+    if (rows.length === 0) return { count: 0, data: null };
+    const postIds = rows.map(({ id }) => id);
+
+    const fullPosts = await Post.findAll({
+      include: [User, Tag, Category],
+      where: {
+        id: {
+          $or: postIds,
+        },
       },
-    },
-  });
-  // posts = await Promise.all();
-  return fullPosts;
+    });
+    // posts = await Promise.all();
+    return {
+      count,
+      data: fullPosts,
+    };
+  } catch (e) {
+    throw e;
+  }
 };
 
 type PublicPostsQueryInfo = {

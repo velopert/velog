@@ -36,6 +36,9 @@
     flex-wrap: wrap;
     margin-left: -0.25rem;
     margin-right: -0.25rem;
+    max-height: 5.5rem;
+    overflow-y: auto;
+    position: relative;
     .tag {
       margin: 0.25rem;
       padding: 0.25rem;
@@ -47,6 +50,7 @@
       display: flex;
       background: $oc-gray-2;
       font-weight: 500;
+      word-break: break-all;
       @include material-shadow(2, 0.75);
       border-radius: 6px;
       .remove {

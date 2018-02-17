@@ -1,14 +1,18 @@
 // @flow
 import { createAction, handleActions } from 'redux-actions';
-import { Record, fromJS, List, type Map } from 'immutable';
+import { Record, fromJS, List, Set, type Map } from 'immutable';
 import * as MeAPI from 'lib/api/me';
+import * as PostsAPI from 'lib/api/posts';
 import { pender } from 'redux-pender';
 
 const EDIT_FIELD = 'write/EDIT_FIELD';
 const OPEN_SUBMIT_BOX = 'write/OPEN_SUBMIT_BOX';
 const CLOSE_SUBMIT_BOX = 'write/CLOSE_SUBMIT_BOX';
-const LIST_CATEGORIES = 'user/LIST_CATEGORIES';
-const TOGGLE_CATEGORY = 'user/TOGGLE_CATEGORY';
+const LIST_CATEGORIES = 'write/LIST_CATEGORIES';
+const TOGGLE_CATEGORY = 'write/TOGGLE_CATEGORY';
+const INSERT_TAG = 'write/INSERT_TAG';
+const REMOVE_TAG = 'write/REMOVE_TAG';
+const WRITE_POST = 'write/WRITE_POST';
 
 export type WriteActionCreators = {
   editField({field: string, value: string}): any,
@@ -16,6 +20,9 @@ export type WriteActionCreators = {
   closeSubmitBox(): any,
   listCategories(): any,
   toggleCategory(id: string): any,
+  insertTag(tag: string): any,
+  removeTag(tag: string): any,
+  writePost(payload: PostsAPI.WritePostPayload): Promise<*>,
 };
 
 export const actionCreators = {
@@ -24,6 +31,9 @@ export const actionCreators = {
   closeSubmitBox: createAction(CLOSE_SUBMIT_BOX),
   listCategories: createAction(LIST_CATEGORIES, MeAPI.listCategories),
   toggleCategory: createAction(TOGGLE_CATEGORY, id => id),
+  insertTag: createAction(INSERT_TAG, tag => tag),
+  removeTag: createAction(REMOVE_TAG, tag => tag),
+  writePost: createAction(WRITE_POST, PostsAPI.writePost),
 };
 
 export type Category = {
@@ -39,18 +49,21 @@ export type Category = {
 export type Categories = List<Category>;
 
 export type SubmitBox = {
-  open: boolean
+  open: boolean,
+  tags: List<string>,
+  categories: ?Categories
 };
 
 export type Write = {
   body: string,
   title: string,
   submitBox: SubmitBox,
-  categories: ?Categories,
 };
 
 const SubmitBoxSubrecord = Record({
   open: false,
+  categories: null,
+  tags: List([]),
 });
 
 const CategorySubrecord = Record({
@@ -67,7 +80,6 @@ const WriteRecord = Record({
   body: '',
   title: '',
   submitBox: SubmitBoxSubrecord(),
-  categories: null,
 });
 
 const initialState: Map<string, *> = WriteRecord();
@@ -87,11 +99,16 @@ export default handleActions({
         name: category.name,
         urlSlug: category.url_slug,
       }));
-      return state.set('categories', List(categories));
+      return state.setIn(['submitBox', 'categories'], List(categories));
     },
   }),
   [TOGGLE_CATEGORY]: (state, { payload: id }) => {
-    const index = state.categories.findIndex(category => category.id === id);
-    return state.updateIn(['categories', index, 'active'], active => !active);
+    const index = state.submitBox.categories.findIndex(category => category.id === id);
+    return state.updateIn(['submitBox', 'categories', index, 'active'], active => !active);
   },
+  [INSERT_TAG]: (state, { payload: tag }) => state.updateIn(['submitBox', 'tags'], tags => tags.concat(tag)),
+  [REMOVE_TAG]: (state, { payload: tag }) => state.updateIn(
+    ['submitBox', 'tags'],
+    tags => tags.filter(t => tag !== t),
+  ),
 }, initialState);

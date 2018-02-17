@@ -140,50 +140,28 @@ export const listPosts = async (ctx: Context): Promise<*> => {
   const { username } = ctx.params;
   const { category, tag, page } = ctx.query;
 
-  const query = { username, categoryUrlSlug: category, tag };
-
-  try {
-    const data = await Post.listPosts(query);
-    ctx.body = data.map(serialize);
-    // ctx.body = data;
-  } catch (e) {
-    ctx.throw(500, e);
+  if (page === '0') {
+    ctx.status = 400;
+    return;
   }
-};
-/*
-export const listPosts = async (ctx: Context): Promise<*> => {
-  const { username } = ctx.params;
-  const { category, tag, page } = ctx.query;
 
-  const serialize = (data) => {
-    const {
-      id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug,
-    } = data;
-    const tags = data.tags.map(t => t.name);
-    const categories = data.categories.map(c => c.name);
-    return {
-      id, title, body: body.slice(0, 250), thumbnail, is_markdown,
-      created_at, updated_at, tags, categories, url_slug,
-    };
+  const query = {
+    username, categoryUrlSlug: category, tag, page: parseInt(page, 10),
   };
 
-  const query = { username, categorySlug: category, tag };
   try {
-    const posts = await Post.listPosts({
-      ...query,
-      page,
-    });
-    const postCount = posts.count;
-    const pageLimit = Math.ceil(postCount / 10);
-
-
-    console.log(postCount);
-
-    ctx.set('Page-Limit', (pageLimit || 1).toString());
-    ctx.set('Post-Count', (postCount).toString());
-    ctx.body = posts.rows.map(serialize);
+    const result = await Post.listPosts(query);
+    if (!result.data) {
+      ctx.set('Page-Limit', '1');
+      ctx.body = [];
+      return;
+    }
+    ctx.body = result.data
+      ? result.data.map(serialize)
+      : [];
+    ctx.set('Post-Count', (result.count).toString());
+    ctx.set('Page-Limit', Math.ceil(result.count / 10).toString());
   } catch (e) {
     ctx.throw(500, e);
   }
 };
-*/
