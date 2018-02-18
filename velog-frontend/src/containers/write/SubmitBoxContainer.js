@@ -10,7 +10,6 @@ import { WriteActions, UserActions } from 'store/actionCreators';
 import type { Categories } from 'store/modules/write';
 import type { List } from 'immutable';
 
-
 type Props = {
   open: boolean,
   categories: ?Categories,
