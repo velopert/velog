@@ -32,6 +32,10 @@ const Post = db.define('post', {
   fk_user_id: Sequelize.UUID,
   original_post_id: Sequelize.UUID,
   url_slug: Sequelize.STRING,
+  likes: {
+    defaultValue: 0,
+    type: Sequelize.INTEGER,
+  },
 }, {
   indexes: [
     {
@@ -46,7 +50,7 @@ Post.associate = function associate() {
 
 Post.readPost = function (username: string, urlSlug: string) {
   return Post.findOne({
-    attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
+    attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug', 'likes'],
     include: [{
       model: User,
       attributes: ['username'],
@@ -62,7 +66,7 @@ Post.readPost = function (username: string, urlSlug: string) {
 
 Post.readPostById = function (id) {
   return Post.findOne({
-    attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug'],
+    attributes: ['id', 'title', 'body', 'thumbnail', 'is_markdown', 'created_at', 'updated_at', 'url_slug', 'likes'],
     include: [{
       model: User,
       attributes: ['username'],
@@ -155,6 +159,26 @@ Post.listPublicPosts = function ({
     offset: ((!page ? 1 : page) - 1) * limit,
     limit,
   });
+};
+
+Post.prototype.like = async function like(): Promise<*> {
+  return this.increment('likes', { by: 1 });
+};
+
+Post.prototype.unlike = async function like(): Promise<*> {
+  return this.decrement('likes', { by: 1 });
+};
+
+export const serializePost = (data: any) => {
+  const {
+    id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug, likes,
+  } = data;
+  const tags = data.tags.map(tag => tag.name);
+  const categories = data.categories.map(category => ({ id: category.id, name: category.name }));
+  return {
+    id, title, body, thumbnail, is_markdown,
+    created_at, updated_at, tags, categories, url_slug, likes,
+  };
 };
 
 export default Post;

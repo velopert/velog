@@ -7,7 +7,6 @@ import post from './post';
 import * as postsCtrl from './posts.ctrl';
 import { checkPostExistancy } from './post.ctrl';
 
-
 const posts: Router = new Router();
 
 posts.post('/', needsAuth, postsCtrl.writePost);

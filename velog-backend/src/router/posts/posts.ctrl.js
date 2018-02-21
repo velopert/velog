@@ -5,7 +5,7 @@ import Joi from 'joi';
 import { validateSchema, filterUnique } from 'lib/common';
 import { Category, Post, PostsCategories, PostsTags, Tag, User, UserProfile } from 'database/models';
 import shortid from 'shortid';
-import { type PostModel } from 'database/models/Post';
+import { serializePost, type PostModel } from 'database/models/Post';
 import Sequelize from 'sequelize';
 
 export const writePost = async (ctx: Context): Promise<*> => {
@@ -86,14 +86,12 @@ export const writePost = async (ctx: Context): Promise<*> => {
     await PostsTags.link(postId, tagIds);
     await PostsCategories.link(postId, uniqueCategories);
 
-    const categoriesInfo = await PostsCategories.findCategoriesByPostId(postId);
+    // const categoriesInfo = await PostsCategories.findCategoriesByPostId(postId);
 
-    ctx.body = {
-      ...post.toJSON(),
-      tags: uniqueTags,
-      categories: categoriesInfo.map(({ id, name }) => ({ id, name }))
-        .filter(({ id }) => id),
-    };
+    const postData = await Post.readPostById(postId);
+    const serialized = serializePost(postData);
+
+    ctx.body = serialized;
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -107,18 +105,8 @@ export const readPost = async (ctx: Context): Promise<*> => {
       ctx.status = 404;
       return;
     }
-    const serialize = (data) => {
-      const {
-        id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug,
-      } = data;
-      const tags = data.tags.map(tag => tag.name);
-      const categories = data.categories.map(category => category.name);
-      return {
-        id, title, body, thumbnail, is_markdown,
-        created_at, updated_at, tags, categories, url_slug,
-      };
-    };
-    ctx.body = serialize(post);
+
+    ctx.body = serializePost(post);
   } catch (e) {
     ctx.throw(500, e);
   }
