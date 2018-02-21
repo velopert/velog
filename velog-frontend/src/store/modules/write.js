@@ -54,11 +54,26 @@ export type SubmitBox = {
   categories: ?Categories
 };
 
+export type PostData = {
+  id: string,
+  title: string,
+  body: string,
+  thumbnail: string,
+  is_markdown: boolean,
+  created_at: string,
+  updated_at: string,
+  tags: Array<string>,
+  categories: Array<{ id: string, name: string }>,
+  url_slug: string
+};
+
 export type Write = {
   body: string,
   title: string,
   submitBox: SubmitBox,
+  postData: ?PostData,
 };
+
 
 const SubmitBoxSubrecord = Record({
   open: false,
@@ -80,6 +95,7 @@ const WriteRecord = Record({
   body: '',
   title: '',
   submitBox: SubmitBoxSubrecord(),
+  postData: null,
 });
 
 const initialState: Map<string, *> = WriteRecord();
@@ -111,4 +127,8 @@ export default handleActions({
     ['submitBox', 'tags'],
     tags => tags.filter(t => tag !== t),
   ),
+  ...pender({
+    type: WRITE_POST,
+    onSuccess: (state, { payload: response }) => state.set('postData', response.data),
+  }),
 }, initialState);

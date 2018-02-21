@@ -1,7 +1,7 @@
 @import 'utils';
 
 .SubmitBox {
-  @keyframes appear {
+  @keyframes submitBoxAppear {
     0% {
       opacity: 0;
       transform: translateY(-25%);
@@ -12,7 +12,7 @@
     }
   }
 
-  @keyframes disappear {
+  @keyframes submitBoxDisappear {
     0% {
       opacity: 1;
       trasnform: translateY(0px);
@@ -36,11 +36,11 @@
   // transform-origin: top right;
   // transform: scale(1);
   &.appear {
-    animation: appear .15s ease-in-out;
+    animation: submitBoxAppear .15s ease-in-out;
     animation-fill-mode: forwards;
   }
   &.disappear {
-    animation: disappear .15s ease-in-out;
+    animation: submitBoxDisappear .15s ease-in-out;
     animation-fill-mode: forwards;
   }
   .title {
@@ -56,8 +56,29 @@
     .section-title {
       font-size: 0.8rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
       color: $oc-gray-4;
+      &.category {
+        display: flex;
+        align-items: center;
+        .edit {
+          line-height: 0.8rem;
+          margin-left: auto;
+          padding: 0.25rem;
+          border: 1px solid $oc-gray-0;
+          border-radius: 2px;
+          color: white;
+          cursor: pointer;
+          div {
+            margin-top: 0.1rem;
+            margin-left: 0.25rem;
+          }
+          &:hover {
+            background: white;
+            color: $oc-gray-9;
+          }
+        }
+      }
     }
   }
   .footer {

@@ -45,15 +45,27 @@ class SubmitBoxContainer extends Component<Props> {
   onToggleCategory = (id) => {
     WriteActions.toggleCategory(id);
   }
-  onSubmit = () => {
+  onSubmit = async () => {
     const { categories, tags, body, title } = this.props;
 
-    console.log({
-      title,
-      body,
-      categories: categories ? categories.filter(c => c.active).map(c => c.id).toJS() : [],
-      tags: tags.toJS(),
-    });
+    // console.log({
+    //   title,
+    //   body,
+    //   categories: categories ? categories.filter(c => c.active).map(c => c.id).toJS() : [],
+    //   tags: tags.toJS(),
+    // });
+    try {
+      await WriteActions.writePost({
+        title,
+        body,
+        isMarkdown: true,
+        isTemp: false,
+        tags: tags.toJS(),
+        categories: categories ? categories.filter(c => c.active).map(c => c.id).toJS() : [],
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
   render() {
     const { onClose, onToggleCategory, onInsertTag, onRemoveTag, onSubmit } = this;

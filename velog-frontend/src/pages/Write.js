@@ -9,6 +9,7 @@ import MarkdownPreviewContainer from 'containers/write/MarkdownPreviewContainer'
 import SubmitBox from 'components/write/SubmitBox';
 import SelectCategory from 'components/write/SelectCategory';
 import SubmitBoxContainer from 'containers/write/SubmitBoxContainer';
+import CategoryEditModal from 'components/write/CategoryEditModal';
 
 
 const Write = () => {
@@ -25,6 +26,7 @@ const Write = () => {
           <MarkdownPreviewContainer />
         }
       />
+      <CategoryEditModal />
     </WriteTemplate>
   );
 };

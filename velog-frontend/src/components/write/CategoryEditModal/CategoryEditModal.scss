@@ -1,0 +1,55 @@
+@import 'utils';
+
+.CategoryEditModal {
+  background: white;
+  border-top: 4px solid $oc-violet-5;
+  padding: 1rem;
+  width: 450px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  @include material-shadow(2, 0.75);
+  h2 {
+    margin: 0;
+    font-weight: 300;
+    font-size: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $oc-gray-4;
+  }
+  .content {
+    flex: 1;
+  }
+  .foot {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 1rem;
+    background: $oc-gray-1;
+    border-top: 1px solid darken($oc-gray-1, 5%);
+    .button {
+      @include common-button-style();
+      padding-left: 1rem;
+      padding-right: 1rem;
+      @include material-shadow(2, 0.3);
+      background: white;
+      transition: all 0.1s ease-in;
+      &.save {
+        color: $oc-violet-6;
+      }
+      &.cancel {
+        color: $oc-gray-7;
+      }
+      &:hover {
+        @include material-shadow(2, 0.75);
+      }
+      &:active {
+        background: $oc-gray-0;
+      }
+    }
+    .button + .button {
+      margin-left: 0.5rem;
+    }
+  }
+}
