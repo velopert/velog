@@ -2,9 +2,8 @@
 
 import type { Context } from 'koa';
 import Joi from 'joi';
-import { validateSchema, filterUnique } from 'lib/common';
+import { validateSchema, filterUnique, generateSlugId, escapeForUrl } from 'lib/common';
 import { Category, Post, PostsCategories, PostsTags, Tag, User, UserProfile } from 'database/models';
-import shortid from 'shortid';
 import { serializePost, type PostModel } from 'database/models/Post';
 import Sequelize from 'sequelize';
 
@@ -44,8 +43,8 @@ export const writePost = async (ctx: Context): Promise<*> => {
     isMarkdown, isTemp, meta, categories, tags, urlSlug,
   }: BodySchema = (ctx.request.body: any);
 
-  const generatedUrlSlug = `${title}-${shortid.generate()}`;
-  const escapedUrlSlug = (urlSlug || generatedUrlSlug).replace(/ /g, '-');
+  const generatedUrlSlug = `${title}-${generateSlugId()}`;
+  const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
   const replaceDashToSpace = text => text.replace(/-/g, ' ');
   // TODO: validate url slug
 

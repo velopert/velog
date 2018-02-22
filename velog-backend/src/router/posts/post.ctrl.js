@@ -3,6 +3,9 @@ import type { Context } from 'koa';
 import { Post, PostLike } from 'database/models';
 import { serializePost } from 'database/models/Post';
 import db from 'database/db';
+import Joi from 'joi';
+import { validateSchema, generateSlugId, escapeForUrl } from 'lib/common';
+
 
 export const checkPostExistancy = async (ctx: Context, next: () => Promise<*>): Promise<*> => {
   const { id } = ctx.params;
@@ -19,7 +22,7 @@ export const checkPostExistancy = async (ctx: Context, next: () => Promise<*>): 
   return next();
 };
 
-export const checkPostOwnership = (ctx: Context, next: () => any) => {
+export const checkPostOwnership = (ctx: Context, next: () => Promise<*>) => {
   const { post, user } = ctx;
   if (post.fk_user_id !== user.id) {
     ctx.status = 403;
@@ -29,6 +32,55 @@ export const checkPostOwnership = (ctx: Context, next: () => any) => {
     return;
   }
   return next();
+};
+
+export const updatePost = async (ctx: Context): Promise<*> => {
+  /*
+    - title ✅
+    - body ✅
+    - tags
+    - categories
+    - url_slug ✅
+    - thumbnail ✅
+    - is_temp ✅
+  */
+  type BodySchema = {
+    title: string,
+    body: string,
+    tags: Array<string>,
+    categories: Array<string>,
+    urlSlug: string,
+    thumbnail: string,
+    isTemp: boolean,
+  }
+
+  const schema = Joi.object().keys({
+    title: Joi.string().required().min(1).max(120),
+    body: Joi.string().required().min(1),
+    thumbnail: Joi.string(),
+    isTemp: Joi.boolean().required(),
+    categories: Joi.array().items(Joi.string()).required(),
+    tags: Joi.array().items(Joi.string()).required(),
+    urlSlug: Joi.string().max(130),
+  });
+
+  if (!validateSchema(ctx, schema)) {
+    return;
+  }
+
+  const {
+    title, body, tags,
+    categories, urlSlug, thumbnail, isTemp,
+  }: BodySchema = (ctx.request.body: any);
+
+  const generatedUrlSlug = `title-${generateSlugId()}`;
+  // const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
+
+  // ctx.post.update({
+  //   title,
+  //   body,
+  //   url_slug; escapeForUrl,
+  // })
 };
 
 export const readPost = async (ctx: Context): Promise<*> => {
