@@ -1,0 +1,71 @@
+@import 'utils';
+
+.CategoryEditItemList {
+  padding-right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  .category {
+    display: flex;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    transition: all 0.1s ease-in;
+    cursor: pointer;
+    align-items: center;
+    .text {
+      padding-left: 0.5rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      flex: 1;
+    }
+    .buttons {
+      display: flex;
+      padding-right: 0.25rem;
+      color: $oc-gray-5;
+      opacity: 0;
+      transition: all 0.1s ease-in;
+      .button {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        font-size: 1.25rem;
+        transition: all 0.15s ease-in;
+        &:hover {
+          &.edit {
+            color: $oc-gray-9;
+          }
+          &.remove {
+            color: $oc-red-7;
+          }
+        }
+      }
+    }
+    &:hover {
+      border-color: $oc-gray-3;
+      .buttons {
+        opacity: 1;
+      }
+    }
+  }
+  .create-category {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    flex-direction: column;
+    cursor: pointer;
+    svg {
+      font-size: 3rem;
+      color: $oc-gray-5;
+      transition: all 0.15s ease-in;
+    }
+    div {
+      margin-top: 0.5rem;
+      font-size: 1.15rem;
+      color: $oc-gray-6;
+      font-weight: 400;
+      transition: all 0.15s ease-in;
+    }
+    &:hover {
+      svg, div { 
+        color: $oc-violet-5;
+      }
+    }
+  }
+}
