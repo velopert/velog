@@ -31,7 +31,6 @@ const CategoryEditItemList = (props: Props) => (
     <Category />
     <Category />
     <Category />
-
     <div className="create-category util flex-center">
       <CreateIcon />
       <div>새 카테고리 만들기</div>

@@ -43,7 +43,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     isMarkdown, isTemp, meta, categories, tags, urlSlug,
   }: BodySchema = (ctx.request.body: any);
 
-  const generatedUrlSlug = `${title}-${generateSlugId()}`;
+  const generatedUrlSlug = `${title} ${generateSlugId()}`;
   const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
   const replaceDashToSpace = text => text.replace(/-/g, ' ');
   // TODO: validate url slug
