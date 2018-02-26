@@ -144,6 +144,18 @@ type PublicPostsQueryInfo = {
   option: any
 };
 
+Post.checkUrlSlugExistancy = function ({
+  userId,
+  urlSlug,
+}) {
+  return Post.count({
+    where: {
+      fk_user_id: userId,
+      url_slug: urlSlug,
+    },
+  });
+};
+
 Post.listPublicPosts = function ({
   tag, page, option,
 }: PublicPostsQueryInfo) {
@@ -167,6 +179,19 @@ Post.prototype.like = async function like(): Promise<*> {
 
 Post.prototype.unlike = async function like(): Promise<*> {
   return this.decrement('likes', { by: 1 });
+};
+
+Post.prototype.getTagNames = async function (): Promise<*> {
+  const { id } = this;
+  return Post.find({
+    include: [{
+      model: Tag,
+      attributes: ['name'],
+    }],
+    where: {
+      id,
+    },
+  });
 };
 
 export const serializePost = (data: any) => {

@@ -7,8 +7,8 @@ import * as postCtrl from './post.ctrl';
 const post: Router = new Router();
 
 post.get('/', postCtrl.readPost);
-post.patch('/', postCtrl.checkPostOwnership, postCtrl.updatePost);
-post.delete('/', postCtrl.checkPostOwnership, postCtrl.deletePost);
+post.patch('/', needsAuth, postCtrl.checkPostOwnership, postCtrl.updatePost);
+post.delete('/', needsAuth, postCtrl.checkPostOwnership, postCtrl.deletePost);
 post.post('/like', needsAuth, postCtrl.likePost);
 post.delete('/like', needsAuth, postCtrl.unlikePost);
 

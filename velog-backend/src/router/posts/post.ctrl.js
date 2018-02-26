@@ -5,6 +5,7 @@ import { serializePost } from 'database/models/Post';
 import db from 'database/db';
 import Joi from 'joi';
 import { validateSchema, generateSlugId, escapeForUrl } from 'lib/common';
+import { diff } from 'json-diff';
 
 
 export const checkPostExistancy = async (ctx: Context, next: () => Promise<*>): Promise<*> => {
@@ -18,6 +19,7 @@ export const checkPostExistancy = async (ctx: Context, next: () => Promise<*>): 
     ctx.post = post;
   } catch (e) {
     ctx.throw(500, e);
+    return;
   }
   return next();
 };
@@ -73,14 +75,28 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     categories, urlSlug, thumbnail, isTemp,
   }: BodySchema = (ctx.request.body: any);
 
-  const generatedUrlSlug = `title ${generateSlugId()}`;
+  const generatedUrlSlug = `${title} ${generateSlugId()}`;
   const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
 
 
   const { id } = ctx.params;
 
-  const urlSlugShouldChange = title && (ctx.post.title !== title);
-  console.log(ctx.post.title, title);
+  const urlSlugShouldChange = urlSlug || (title && (ctx.post.title !== title));
+
+  // current !== received -> check urlSlugExistancy
+  if (urlSlugShouldChange) {
+    const exists = await Post.checkUrlSlugExistancy({
+      userId: ctx.user.id,
+      urlSlug: escapedUrlSlug,
+    });
+    if (exists > 1) {
+      ctx.body = {
+        name: 'URL_SLUG_EXISTS',
+      };
+      ctx.status = 409;
+    }
+  }
+
   const updateQuery = {
     title,
     body,
@@ -95,8 +111,15 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     }
   });
 
-  console.log(updateQuery);
-
+  const currentTags = await ctx.post.getTagNames();
+  const tagNames = currentTags.tags.map(tag => tag.name);
+  const diffed = diff(tagNames, tags);
+  console.log(currentTags);
+  console.log(tags);
+  console.log(diffed);
+  // TODO: Add Tags,
+  // TODO: Delete Tags
+  // TODO: Do the same thing with Category
   try {
     await ctx.post.update(updateQuery);
     const post = await Post.readPostById(id);
@@ -105,9 +128,6 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   } catch (e) {
     ctx.throw(500, e);
   }
-  // TODO: current !== received -> check urlSlugExistancy
-  // TODO: tags / categories edit logic
-  // TODO: URL SLUG CHANGE NOT WORKING
 };
 
 export const readPost = async (ctx: Context): Promise<*> => {
