@@ -6,17 +6,19 @@ import EditIcon from 'react-icons/lib/md/edit';
 import './CategoryEditItem.scss';
 
 type Props = {
-  edit?: boolean
+  edit?: boolean,
+  name: string,
 }
 
 const defaultProps = {
   edit: false,
+  name: '카테고리',
 };
 
-const DefaultItem = ({ edit }: Props) => {
+const DefaultItem = ({ edit, name }: Props) => {
   return (
     <Fragment>
-      <div className="text">카테고리</div>
+      <div className="text">{name}</div>
       <div className="buttons">
         <div className="button edit"><EditIcon /></div>
         <div className="button remove"><RemoveIcon /></div>
@@ -43,11 +45,13 @@ EditingItem.defaultProps = defaultProps;
 class CategoryEditItem extends Component<Props> {
   static defaultProps = defaultProps;
   render() {
-    const { edit } = this.props;
+    const { edit, name } = this.props;
     return (
       <div className={cx('CategoryEditItem', { edit })}>
         {
-          edit ? <EditingItem /> : <DefaultItem />
+          edit
+            ? <EditingItem {...this.props} />
+            : <DefaultItem {...this.props} />
         }
       </div>
     );

@@ -6,19 +6,60 @@ import './ModalWrapper.scss';
 
 type Props = {
   children: Node,
-  className: ?string
+  className: ?string,
+  open: boolean,
 }
 
-class ModalWrapper extends Component<Props> {
+type State = {
+  animate: boolean,
+}
+
+class ModalWrapper extends Component<Props, State> {
+  animateId: any = null;
+
+  state = {
+    animate: false,
+  }
+
+  animate(): void {
+    this.setState({ animate: true });
+    this.animateId = setTimeout(() => {
+      this.setState({
+        animate: false,
+      });
+    }, 150);
+  }
+
+  componentDidMount() {
+
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.open !== this.props.open) {
+      this.animate();
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.animateId);
+  }
+
   render() {
-    const { children, className } = this.props;
+    const { children, className, open } = this.props;
+    const { animate } = this.state;
+
+    if (!open && !animate) return null;
 
     return (
       <div className="ModalWrapper">
         <div className="dimmer" />
         <div className="center">
           <div className="modal-positioner">
-            <div className={cx('modal-content', className)}>
+            <div className={cx('modal-content', className, {
+                appear: open,
+                disappear: animate && !open,
+              })}
+            >
               {children}
             </div>
           </div>

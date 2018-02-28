@@ -5,26 +5,51 @@ import ModalWrapper from 'components/common/ModalWrapper';
 import './CategoryEditModal.scss';
 
 type Props = {
+  open: boolean,
   children: Node,
+  onClose(): void,
 };
 
 class CategoryEditModal extends Component<Props> {
   content: any = null;
+  ps: any = null;
 
+  setupScrollbar(): void {
+    if (!this.content) return;
+
+    if (this.ps) {
+      // kill existing ps
+      this.ps.destroy();
+      this.ps = null;
+    }
+
+    this.ps = new PerfectScrollbar(this.content);
+    window.ps = this.ps;
+  }
+
+  initialize(): void {
+    this.setupScrollbar();
+  }
   componentDidMount() {
-    const ps = new PerfectScrollbar(this.content);
+    this.initialize();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (!prevProps.open && this.props.open) {
+      this.initialize();
+    }
   }
 
   render() {
-    const { children } = this.props;
+    const { children, open, onClose } = this.props;
     return (
-      <ModalWrapper className="CategoryEditModal">
+      <ModalWrapper className="CategoryEditModal" open={open}>
         <h2>카테고리 수정</h2>
         <div className="content" ref={(ref) => { this.content = ref; }}>
           {children}
         </div>
         <div className="foot">
-          <div className="button cancel">
+          <div className="button cancel" onClick={onClose}>
             취소
           </div>
           <div className="button save">

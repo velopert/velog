@@ -1,5 +1,27 @@
 @import 'utils';
 
+@keyframes modalAppear {
+  0% {
+    opacity: 0;
+    transform: scale(1.25, 1.25);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes modalDisappear {
+  0% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25, 1.25);
+  }
+}
+
 .ModalWrapper {
   position: relative;
   z-index: z('modal');
@@ -17,7 +39,15 @@
     left: 50%;
     transform: translate(-50%, -50%);
     .modal-content {
-      
+      transform-origin: top;
+      &.appear {
+        animation: modalAppear .15s ease-in-out;
+        animation-fill-mode: forwards;
+      }
+      &.disappear {
+        animation: modalDisappear .15s ease-in-out;
+        animation-fill-mode: forwards;
+      }
     }
   }
 }

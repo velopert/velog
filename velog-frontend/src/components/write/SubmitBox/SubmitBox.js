@@ -13,6 +13,7 @@ type Props = {
   visible: boolean,
   onClose(): void,
   onSubmit(): void,
+  onEditCategoryClick(): void,
 };
 
 type State = {
@@ -58,7 +59,10 @@ class SubmitBox extends Component<Props, State> {
   }
 
   render() {
-    const { isEditing, selectCategory, inputTags, visible, onSubmit } = this.props;
+    const {
+      isEditing, selectCategory, inputTags,
+      visible, onSubmit, onEditCategoryClick,
+    } = this.props;
     const { animating } = this.state;
 
     if (!visible && !animating) return null;
@@ -70,7 +74,7 @@ class SubmitBox extends Component<Props, State> {
         </div>
         <div className="sections">
           <section>
-            <div className="section-title category">
+            <div className="section-title category" onClick={onEditCategoryClick}>
               카테고리 선택
               <div className="edit util flex-center">
                 <SettingsIcon />
