@@ -29,4 +29,27 @@ Tag.getId = async function getId(name: string) {
   }
 };
 
+Tag.bulkGetId = async function (names: Array<string>): Promise<*> {
+  if (names.length === 0) return [];
+  try {
+    const tagData = await Tag.findAll({
+      where: {
+        name: {
+          $or: names,
+        },
+      },
+      raw: true,
+    });
+    // find the missing tags
+    const missingTags = names.filter(name => tagData.findIndex(tag => tag.name === name) === -1);
+    // create the missing tags
+    const newTagIds = (await Tag.bulkCreate(missingTags.map(name => ({ name }))))
+      .map(tag => tag.id);
+    const tagIds = tagData.map(tag => tag.id);
+    return tagIds.concat(newTagIds);
+  } catch (e) {
+    throw (e);
+  }
+};
+
 export default Tag;

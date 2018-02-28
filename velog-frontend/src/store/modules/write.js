@@ -13,6 +13,8 @@ const TOGGLE_CATEGORY = 'write/TOGGLE_CATEGORY';
 const INSERT_TAG = 'write/INSERT_TAG';
 const REMOVE_TAG = 'write/REMOVE_TAG';
 const WRITE_POST = 'write/WRITE_POST';
+const OPEN_CATEGORY_MODAL = 'write/OPEN_CATEGORY_MODAL';
+const CLOSE_CATEGORY_MODAL = 'write/CLOSE_CATEOGRY_MODAL';
 
 export type WriteActionCreators = {
   editField({field: string, value: string}): any,
@@ -23,6 +25,8 @@ export type WriteActionCreators = {
   insertTag(tag: string): any,
   removeTag(tag: string): any,
   writePost(payload: PostsAPI.WritePostPayload): any,
+  openCategoryModal(): any,
+  closeCategoryModal(): any
 };
 
 export const actionCreators = {
@@ -34,6 +38,8 @@ export const actionCreators = {
   insertTag: createAction(INSERT_TAG, tag => tag),
   removeTag: createAction(REMOVE_TAG, tag => tag),
   writePost: createAction(WRITE_POST, PostsAPI.writePost),
+  openCategoryModal: createAction(OPEN_CATEGORY_MODAL),
+  closeCategoryModal: createAction(CLOSE_CATEGORY_MODAL),
 };
 
 export type Category = {
@@ -54,6 +60,11 @@ export type SubmitBox = {
   categories: ?Categories
 };
 
+export type CategoryModal = {
+  open: boolean,
+  categories: ?Categories,
+}
+
 export type PostData = {
   id: string,
   title: string,
@@ -72,6 +83,7 @@ export type Write = {
   title: string,
   submitBox: SubmitBox,
   postData: ?PostData,
+  categoryModal: CategoryModal,
 };
 
 
@@ -80,6 +92,12 @@ const SubmitBoxSubrecord = Record({
   categories: null,
   tags: List([]),
 });
+
+const CategoryModalSubrecord = Record({
+  open: false,
+  categories: null,
+});
+
 
 const CategorySubrecord = Record({
   id: '',
@@ -96,6 +114,7 @@ const WriteRecord = Record({
   title: '',
   submitBox: SubmitBoxSubrecord(),
   postData: null,
+  categoryModal: CategoryModalSubrecord(),
 });
 
 const initialState: Map<string, *> = WriteRecord();
@@ -131,4 +150,12 @@ export default handleActions({
     type: WRITE_POST,
     onSuccess: (state, { payload: response }) => state.set('postData', response.data),
   }),
+  [OPEN_CATEGORY_MODAL]: state => state.withMutations(
+    s => s.setIn(['categoryModal', 'open'], true)
+      .setIn(
+        ['categoryModal', 'categories'],
+        state.getIn(['submitBox', 'categories']),
+      ),
+  ),
+  [CLOSE_CATEGORY_MODAL]: state => state.setIn(['categoryModal', 'open'], false),
 }, initialState);

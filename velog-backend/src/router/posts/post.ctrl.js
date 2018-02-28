@@ -1,6 +1,6 @@
 // @flow
 import type { Context } from 'koa';
-import { Post, PostLike } from 'database/models';
+import { Post, PostLike, PostsTags } from 'database/models';
 import { serializePost } from 'database/models/Post';
 import db from 'database/db';
 import Joi from 'joi';
@@ -81,7 +81,8 @@ export const updatePost = async (ctx: Context): Promise<*> => {
 
   const { id } = ctx.params;
 
-  const urlSlugShouldChange = urlSlug || (title && (ctx.post.title !== title));
+  const urlSlugShouldChange = urlSlug !== ctx.post.url_slug
+    || (title && (ctx.post.title !== title));
 
   // current !== received -> check urlSlugExistancy
   if (urlSlugShouldChange) {
@@ -94,6 +95,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
         name: 'URL_SLUG_EXISTS',
       };
       ctx.status = 409;
+      return;
     }
   }
 
@@ -113,14 +115,17 @@ export const updatePost = async (ctx: Context): Promise<*> => {
 
   const currentTags = await ctx.post.getTagNames();
   const tagNames = currentTags.tags.map(tag => tag.name);
-  const diffed = diff(tagNames, tags);
-  console.log(currentTags);
-  console.log(tags);
-  console.log(diffed);
-  // TODO: Add Tags,
+  const diffed = diff(tagNames.sort(), tags.sort()) || [];
+
+  const tagsToRemove = diffed.filter(info => info[0] === '-').map(info => info[1]);
+  const tagsToAdd = diffed.filter(info => info[0] === '+').map(info => info[1]);
+  console.log({ tagsToRemove, tagsToAdd });
   // TODO: Delete Tags
+  // TODO: Add Tags,
   // TODO: Do the same thing with Category
   try {
+    await PostsTags.removeTagsFromPost(id, tagsToRemove);
+    await PostsTags.addTagsToPost(id, tagsToAdd);
     await ctx.post.update(updateQuery);
     const post = await Post.readPostById(id);
     const serialized = serializePost(post);
