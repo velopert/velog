@@ -1,12 +1,11 @@
 // @flow
 import type { Context } from 'koa';
-import { Post, PostLike, PostsTags } from 'database/models';
 import { serializePost } from 'database/models/Post';
 import db from 'database/db';
 import Joi from 'joi';
 import { validateSchema, generateSlugId, escapeForUrl } from 'lib/common';
 import { diff } from 'json-diff';
-
+import { Post, PostLike, PostsTags, PostsCategories } from 'database/models';
 
 export const checkPostExistancy = async (ctx: Context, next: () => Promise<*>): Promise<*> => {
   const { id } = ctx.params;
@@ -115,17 +114,22 @@ export const updatePost = async (ctx: Context): Promise<*> => {
 
   const currentTags = await ctx.post.getTagNames();
   const tagNames = currentTags.tags.map(tag => tag.name);
-  const diffed = diff(tagNames.sort(), tags.sort()) || [];
+  const tagDiff = diff(tagNames.sort(), tags.sort()) || [];
 
-  const tagsToRemove = diffed.filter(info => info[0] === '-').map(info => info[1]);
-  const tagsToAdd = diffed.filter(info => info[0] === '+').map(info => info[1]);
-  console.log({ tagsToRemove, tagsToAdd });
-  // TODO: Delete Tags
-  // TODO: Add Tags,
-  // TODO: Do the same thing with Category
+  const tagsToRemove = tagDiff.filter(info => info[0] === '-').map(info => info[1]);
+  const tagsToAdd = tagDiff.filter(info => info[0] === '+').map(info => info[1]);
+
+  // TODO: Verify Categories
+  const currentCategories = await ctx.post.getCategoryIds();
+  const categoryDiff = diff(currentCategories.sort(), categories.sort());
+  const categoriesToRemove = categoryDiff.filter(info => info[0] === '-').map(info => info[1]);
+  const categoriesToAdd = categoryDiff.filter(info => info[0] === '+').map(info => info[1]);
+
   try {
     await PostsTags.removeTagsFromPost(id, tagsToRemove);
     await PostsTags.addTagsToPost(id, tagsToAdd);
+    await PostsCategories.removeCategoriesFromPost(id, categoriesToRemove);
+    await PostsCategories.addCategoriesToPost(id, categoriesToAdd);
     await ctx.post.update(updateQuery);
     const post = await Post.readPostById(id);
     const serialized = serializePost(post);

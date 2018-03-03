@@ -194,6 +194,27 @@ Post.prototype.getTagNames = async function (): Promise<*> {
   });
 };
 
+Post.prototype.getCategoryIds = async function (): Promise<*> {
+  const { id } = this;
+  try {
+    const post = await Post.findOne({
+      include: [{
+        model: Category,
+        attributes: ['id'],
+      }],
+      where: {
+        id,
+      },
+    });
+    if (!post) {
+      return null;
+    }
+    return post.categories.map(c => c.id);
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const serializePost = (data: any) => {
   const {
     id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug, likes,

@@ -42,6 +42,40 @@ PostsCategories.link = function (postId: string, categoryIds: Array<string>): Pr
   return Promise.all(promises);
 };
 
+PostsCategories.addCategoriesToPost = async function (
+  postId: string,
+  categoryIds: Array<string>,
+): Promise<*> {
+  try {
+    const bulkCreateQuery = categoryIds.map(categoryId => ({
+      fk_post_id: postId,
+      fk_category_id: categoryId,
+    }));
+    await this.bulkCreate(bulkCreateQuery);
+  } catch (e) {
+    throw e;
+  }
+};
+
+PostsCategories.removeCategoriesFromPost = async function (
+  postId: string,
+  categoryIds: Array<string>,
+): Promise<*> {
+  if (categoryIds.length === 0) return;
+  try {
+    await PostsCategories.destroy({
+      where: {
+        fk_category_id: {
+          $or: categoryIds,
+        },
+        fk_post_id: postId,
+      },
+    });
+  } catch (e) {
+    throw e;
+  }
+};
+
 PostsCategories.findCategoriesByPostId = function (postId: string): Promise<*> {
   return Post.findAll({
     include: [{

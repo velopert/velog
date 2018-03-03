@@ -43,7 +43,6 @@ PostsTags.addTagsToPost = async function (postId: string, tags: Array<string>): 
   try {
     const tagIds = await Tag.bulkGetId(tags);
     await this.bulkCreate(tagIds.map(tagId => ({ fk_post_id: postId, fk_tag_id: tagId })));
-    console.log(tagIds.map(tagId => ({ fk_post_id: postId, fk_tag_id: tagId })));
   } catch (e) {
     throw e;
   }
