@@ -8,23 +8,37 @@ import './CategoryEditItemList.scss';
 import CategoryEditItem from '../CategoryEditItem';
 
 type Props = {
-  categories: ?Categories
+  categories: ?Categories;
+  onCreate(): void;
+  onToggleEditCategory(id: string): void;
+  onChange({ id: string, name: string }): void;
+  onHideCategory(id: string): void;
 }
 
-const CategoryEditItemList = ({ categories }: Props) => {
+const CategoryEditItemList = ({
+  categories, onCreate, onToggleEditCategory, onChange, onHideCategory,
+}: Props) => {
   if (!categories) return null;
-  const categoryList = categories.map(
+  const categoryList = categories.filter(c => !c.hide).map(
     category => (
       <CategoryEditItem
         key={category.id}
         name={category.name}
+        edit={category.edit}
+        temp={category.temp}
+        onToggleEditCategory={() => onToggleEditCategory(category.id)}
+        onChange={(e: SyntheticInputEvent<HTMLInputElement>) => onChange({
+          id: category.id,
+          name: e.target.value,
+        })}
+        onHide={() => onHideCategory(category.id)}
       />
     ),
   );
   return (
     <div className="CategoryEditItemList">
       {categoryList}
-      <div className="create-category util flex-center">
+      <div className="create-category util flex-center" onClick={onCreate}>
         <CreateIcon />
         <div>새 카테고리 만들기</div>
       </div>

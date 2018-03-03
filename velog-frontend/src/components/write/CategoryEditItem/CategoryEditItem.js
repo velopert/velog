@@ -6,22 +6,27 @@ import EditIcon from 'react-icons/lib/md/edit';
 import './CategoryEditItem.scss';
 
 type Props = {
-  edit?: boolean,
-  name: string,
+  edit?: boolean;
+  name: string;
+  temp?: boolean;
+  onToggleEditCategory(): void;
+  onChange(e: SyntheticInputEvent<HTMLInputElement>): any;
+  onHide(): void;
 }
 
 const defaultProps = {
   edit: false,
+  temp: false,
   name: '카테고리',
 };
 
-const DefaultItem = ({ edit, name }: Props) => {
+const DefaultItem = ({ name, onHide, onToggleEditCategory }: Props) => {
   return (
     <Fragment>
       <div className="text">{name}</div>
       <div className="buttons">
-        <div className="button edit"><EditIcon /></div>
-        <div className="button remove"><RemoveIcon /></div>
+        <div className="button edit" onClick={onToggleEditCategory}><EditIcon /></div>
+        <div className="button remove" onClick={onHide}><RemoveIcon /></div>
       </div>
     </Fragment>
   );
@@ -29,11 +34,11 @@ const DefaultItem = ({ edit, name }: Props) => {
 
 DefaultItem.defaultProps = defaultProps;
 
-const EditingItem = ({ edit }: Props) => {
+const EditingItem = ({ edit, temp, name, onToggleEditCategory, onChange }: Props) => {
   return (
     <Fragment>
-      <input />
-      <div className="apply-button">
+      <input placeholder="새 카테고리" autoFocus onChange={onChange} value={name} />
+      <div className="apply-button" onClick={onToggleEditCategory}>
         적용
       </div>
     </Fragment>

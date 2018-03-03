@@ -15,6 +15,12 @@ const REMOVE_TAG = 'write/REMOVE_TAG';
 const WRITE_POST = 'write/WRITE_POST';
 const OPEN_CATEGORY_MODAL = 'write/OPEN_CATEGORY_MODAL';
 const CLOSE_CATEGORY_MODAL = 'write/CLOSE_CATEOGRY_MODAL';
+const CREATE_TEMP_CATEGORY = 'write/CREATE_TEMP_CATEGORY';
+const TOGGLE_EDIT_CATEGORY = 'write/TOGGLE_EDIT_CATEGORY';
+const CHANGE_CATEGORY_NAME = 'write/CHANGE_CATEGORY_NAME';
+const HIDE_CATEGORY = 'write/HIDE_CATEGORY';
+
+let tempCategoryId = 0;
 
 export type WriteActionCreators = {
   editField({field: string, value: string}): any,
@@ -26,7 +32,11 @@ export type WriteActionCreators = {
   removeTag(tag: string): any,
   writePost(payload: PostsAPI.WritePostPayload): any,
   openCategoryModal(): any,
-  closeCategoryModal(): any
+  closeCategoryModal(): any,
+  createTempCategory(): any,
+  toggleEditCategory(id: string): any,
+  changeCategoryName({ id: string, name: string }): any,
+  hideCategory(id: string): any,
 };
 
 export const actionCreators = {
@@ -40,6 +50,10 @@ export const actionCreators = {
   writePost: createAction(WRITE_POST, PostsAPI.writePost),
   openCategoryModal: createAction(OPEN_CATEGORY_MODAL),
   closeCategoryModal: createAction(CLOSE_CATEGORY_MODAL),
+  createTempCategory: createAction(CREATE_TEMP_CATEGORY),
+  toggleEditCategory: createAction(TOGGLE_EDIT_CATEGORY, id => id),
+  changeCategoryName: createAction(CHANGE_CATEGORY_NAME, ({ id, name }) => ({ id, name })),
+  hideCategory: createAction(HIDE_CATEGORY, id => id),
 };
 
 export type Category = {
@@ -50,6 +64,9 @@ export type Category = {
   name: string,
   urlSlug: string,
   active: boolean,
+  temp?: boolean,
+  edit?: boolean,
+  hide?: boolean,
 }
 
 export type Categories = List<Category>;
@@ -107,6 +124,9 @@ const CategorySubrecord = Record({
   name: '',
   urlSlug: '',
   active: false,
+  edit: false,
+  temp: false,
+  hide: false,
 });
 
 const WriteRecord = Record({
@@ -158,4 +178,43 @@ export default handleActions({
       ),
   ),
   [CLOSE_CATEGORY_MODAL]: state => state.setIn(['categoryModal', 'open'], false),
+  [CREATE_TEMP_CATEGORY]: state => state.updateIn(
+    ['categoryModal', 'categories'],
+    (categories) => {
+      tempCategoryId += 1;
+      return categories.push(CategorySubrecord({
+        id: tempCategoryId,
+        name: '',
+        edit: true,
+        temp: true,
+      }));
+    },
+  ),
+  [TOGGLE_EDIT_CATEGORY]: (state, { payload: id }) => {
+    const index = state.categoryModal.categories.findIndex(
+      c => c.id === id,
+    );
+    return state.updateIn(
+      ['categoryModal', 'categories', index, 'edit'],
+      edit => !edit,
+    );
+  },
+  [CHANGE_CATEGORY_NAME]: (state, { payload: { id, name } }) => {
+    const index = state.categoryModal.categories.findIndex(
+      c => c.id === id,
+    );
+    return state.setIn(
+      ['categoryModal', 'categories', index, 'name'],
+      name,
+    );
+  },
+  [HIDE_CATEGORY]: (state, { payload: id }) => {
+    const index = state.categoryModal.categories.findIndex(
+      c => c.id === id,
+    );
+    return state.setIn(
+      ['categoryModal', 'categories', index, 'hide'],
+      true,
+    );
+  },
 }, initialState);

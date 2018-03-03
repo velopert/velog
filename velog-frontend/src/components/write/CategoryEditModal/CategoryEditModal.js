@@ -38,6 +38,7 @@ class CategoryEditModal extends Component<Props> {
     if (!prevProps.open && this.props.open) {
       this.initialize();
     }
+    this.setupScrollbar();
   }
 
   render() {

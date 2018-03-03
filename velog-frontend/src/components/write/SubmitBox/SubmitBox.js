@@ -32,7 +32,8 @@ class SubmitBox extends Component<Props, State> {
   }
 
   handleClickOutside = () => {
-    const { onClose } = this.props;
+    const { onClose, visible } = this.props;
+    if (!visible) return;
     onClose();
   }
 

@@ -17,13 +17,34 @@ class CategoryEditModalContainer extends Component<Props> {
   onClose = () => {
     WriteActions.closeCategoryModal();
   }
+  onCreate = () => {
+    WriteActions.createTempCategory();
+  }
+  onToggleEditCategory = (id) => {
+    WriteActions.toggleEditCategory(id);
+  }
+  onChange = ({ id, name }: { id: string, name: string }) => {
+    WriteActions.changeCategoryName({
+      id,
+      name,
+    });
+  }
+  onHideCategory = (id: string) => {
+    WriteActions.hideCategory(id);
+  }
   render() {
     const { open, categories } = this.props;
-    const { onClose } = this;
+    const { onClose, onCreate, onToggleEditCategory, onChange, onHideCategory } = this;
 
     return (
       <CategoryEditModal open={open} onClose={onClose}>
-        <CategoryEditItemList categories={categories} />
+        <CategoryEditItemList
+          categories={categories}
+          onCreate={onCreate}
+          onToggleEditCategory={onToggleEditCategory}
+          onChange={onChange}
+          onHideCategory={onHideCategory}
+        />
       </CategoryEditModal>
     );
   }
