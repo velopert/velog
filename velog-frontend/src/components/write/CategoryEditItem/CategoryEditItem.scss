@@ -18,12 +18,10 @@
     padding-right: 0.25rem;
     color: $oc-gray-5;
     opacity: 0;
-    transition: all 0.1s ease-in;
     .button {
       padding-left: 0.25rem;
       padding-right: 0.25rem;
       font-size: 1.25rem;
-      transition: all 0.15s ease-in;
       &:hover {
         &.edit {
           color: $oc-gray-9;

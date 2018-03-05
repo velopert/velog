@@ -32,12 +32,30 @@ class CategoryEditModalContainer extends Component<Props> {
   onHideCategory = (id: string) => {
     WriteActions.hideCategory(id);
   }
+  onSave = async () => {
+    WriteActions.closeCategoryModal();
+    const { categories } = this.props;
+    if (!categories) return;
+    const shouldRemove = categories.filter(c => c.hide);
+    const shouldCreate = categories.filter(c => c.temp && !c.hide);
+    const shouldUpdate = categories.filter(c => c.edited && !c.temp && !c.hide);
+
+    try {
+      const create = shouldCreate.map(c => WriteActions.createCategory(c.name));
+      const remove = shouldRemove.map(c => WriteActions.deleteCategory(c.id));
+      await Promise.all(create);
+      await Promise.all(remove);
+      WriteActions.listCategories();
+    } catch (e) {
+      console.log(e);
+    }
+  }
   render() {
     const { open, categories } = this.props;
-    const { onClose, onCreate, onToggleEditCategory, onChange, onHideCategory } = this;
+    const { onClose, onCreate, onToggleEditCategory, onChange, onHideCategory, onSave } = this;
 
     return (
-      <CategoryEditModal open={open} onClose={onClose}>
+      <CategoryEditModal open={open} onClose={onClose} onSave={onSave}>
         <CategoryEditItemList
           categories={categories}
           onCreate={onCreate}

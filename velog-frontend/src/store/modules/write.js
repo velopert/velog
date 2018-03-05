@@ -19,6 +19,8 @@ const CREATE_TEMP_CATEGORY = 'write/CREATE_TEMP_CATEGORY';
 const TOGGLE_EDIT_CATEGORY = 'write/TOGGLE_EDIT_CATEGORY';
 const CHANGE_CATEGORY_NAME = 'write/CHANGE_CATEGORY_NAME';
 const HIDE_CATEGORY = 'write/HIDE_CATEGORY';
+const CREATE_CATEGORY = 'write/CREATE_CATEGORY';
+const DELETE_CATEGORY = 'write/DELETE_CATERGORY';
 
 let tempCategoryId = 0;
 
@@ -37,6 +39,8 @@ export type WriteActionCreators = {
   toggleEditCategory(id: string): any,
   changeCategoryName({ id: string, name: string }): any,
   hideCategory(id: string): any,
+  createCategory(name: string): any,
+  deleteCategory(id: string): any,
 };
 
 export const actionCreators = {
@@ -54,6 +58,8 @@ export const actionCreators = {
   toggleEditCategory: createAction(TOGGLE_EDIT_CATEGORY, id => id),
   changeCategoryName: createAction(CHANGE_CATEGORY_NAME, ({ id, name }) => ({ id, name })),
   hideCategory: createAction(HIDE_CATEGORY, id => id),
+  createCategory: createAction(CREATE_CATEGORY, MeAPI.createCategory),
+  deleteCategory: createAction(DELETE_CATEGORY, MeAPI.deleteCategory),
 };
 
 export type Category = {
@@ -67,6 +73,7 @@ export type Category = {
   temp?: boolean,
   edit?: boolean,
   hide?: boolean,
+  edited?: boolean,
 }
 
 export type Categories = List<Category>;
@@ -126,6 +133,7 @@ const CategorySubrecord = Record({
   active: false,
   edit: false,
   temp: false,
+  edited: false,
   hide: false,
 });
 
@@ -194,9 +202,13 @@ export default handleActions({
     const index = state.categoryModal.categories.findIndex(
       c => c.id === id,
     );
+
     return state.updateIn(
-      ['categoryModal', 'categories', index, 'edit'],
-      edit => !edit,
+      ['categoryModal', 'categories', index],
+      category => category.withMutations(
+        c => c.update('edit', edit => !edit)
+          .set('edited', true),
+      ),
     );
   },
   [CHANGE_CATEGORY_NAME]: (state, { payload: { id, name } }) => {

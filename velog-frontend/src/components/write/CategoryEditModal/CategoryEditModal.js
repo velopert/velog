@@ -8,6 +8,7 @@ type Props = {
   open: boolean,
   children: Node,
   onClose(): void,
+  onSave(): Promise<*>,
 };
 
 class CategoryEditModal extends Component<Props> {
@@ -42,7 +43,7 @@ class CategoryEditModal extends Component<Props> {
   }
 
   render() {
-    const { children, open, onClose } = this.props;
+    const { children, open, onClose, onSave } = this.props;
     return (
       <ModalWrapper className="CategoryEditModal" open={open}>
         <h2>카테고리 수정</h2>
@@ -53,7 +54,7 @@ class CategoryEditModal extends Component<Props> {
           <div className="button cancel" onClick={onClose}>
             취소
           </div>
-          <div className="button save">
+          <div className="button save" onClick={onSave}>
             저장
           </div>
         </div>
