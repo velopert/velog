@@ -178,6 +178,7 @@ export const deleteCategory = async (ctx: Context): Promise<*> => {
   const { id } = ctx.params;
   const { id: userId } = ctx.user;
 
+  // TODO: unset categories
   const category = await Category.findOne({
     attributes: ['id', 'order', 'parent', 'private', 'name'],
     where: {
