@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import type { State } from 'store';
 import { WriteActions } from 'store/actionCreators';
 import type { Categories } from 'store/modules/write';
+import Sortable from 'sortablejs';
 
 type Props = {
   open: boolean,
@@ -14,6 +15,9 @@ type Props = {
 };
 
 class CategoryEditModalContainer extends Component<Props> {
+  listElement:any = null;
+  sortable:any = null;
+
   onClose = () => {
     WriteActions.closeCategoryModal();
   }
@@ -43,13 +47,34 @@ class CategoryEditModalContainer extends Component<Props> {
     try {
       const create = shouldCreate.map(c => WriteActions.createCategory(c.name));
       const remove = shouldRemove.map(c => WriteActions.deleteCategory(c.id));
+      const update = shouldUpdate.map(c => WriteActions.updateCategory({
+        id: c.id,
+        name: c.name,
+      }));
       await Promise.all(create);
       await Promise.all(remove);
+      await Promise.all(update);
       WriteActions.listCategories();
     } catch (e) {
       console.log(e);
     }
   }
+
+  initialize = () => {
+    this.sortable = Sortable.create(this.listElement, {
+      animation: 150,
+      chosenClass: 'chosen',
+      ghostClass: 'ghost', // Class name for the drop placeholder
+      dragClass: 'drag', // Class name for the dragging item
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.open && this.props.open) {
+      this.initialize();
+    }
+  }
+
   render() {
     const { open, categories } = this.props;
     const { onClose, onCreate, onToggleEditCategory, onChange, onHideCategory, onSave } = this;
@@ -62,6 +87,11 @@ class CategoryEditModalContainer extends Component<Props> {
           onToggleEditCategory={onToggleEditCategory}
           onChange={onChange}
           onHideCategory={onHideCategory}
+          innerRef={
+            (ref) => {
+              this.listElement = ref;
+            }
+          }
         />
       </CategoryEditModal>
     );

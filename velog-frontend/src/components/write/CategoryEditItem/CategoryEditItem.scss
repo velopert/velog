@@ -5,7 +5,8 @@
   border-radius: 5px;
   border: 1px solid transparent;
   transition: all 0.1s ease-in;
-  cursor: pointer;
+  cursor: move;
+
   align-items: center;
   .text {
     padding-left: 0.5rem;
@@ -17,7 +18,8 @@
     display: flex;
     padding-right: 0.25rem;
     color: $oc-gray-5;
-    opacity: 0;
+    opacity: 0.8;
+    cursor: pointer;
     .button {
       padding-left: 0.25rem;
       padding-right: 0.25rem;
@@ -32,15 +34,17 @@
       }
     }
   }
-  &:hover {
-    border-color: $oc-gray-3;
-    .buttons {
-      opacity: 1;
-    }
+  &.chosen {
+    border: 1px solid $oc-gray-2;
+  }
+  &.ghost {
+    border: 1px solid $oc-gray-2;
+  }
+  &.drag {
+
   }
   &.edit {
     background: $oc-gray-0;
-    border: 1px solid $oc-gray-1;
     input {
       padding-left: 0.5rem;
       padding-top: 0.5rem;

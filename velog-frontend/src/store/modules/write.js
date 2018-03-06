@@ -21,6 +21,7 @@ const CHANGE_CATEGORY_NAME = 'write/CHANGE_CATEGORY_NAME';
 const HIDE_CATEGORY = 'write/HIDE_CATEGORY';
 const CREATE_CATEGORY = 'write/CREATE_CATEGORY';
 const DELETE_CATEGORY = 'write/DELETE_CATERGORY';
+const UPDATE_CATEGORY = 'write/UPDATE_CATEGORY';
 
 let tempCategoryId = 0;
 
@@ -41,6 +42,7 @@ export type WriteActionCreators = {
   hideCategory(id: string): any,
   createCategory(name: string): any,
   deleteCategory(id: string): any,
+  updateCategory({ id: string, name: string }): any,
 };
 
 export const actionCreators = {
@@ -60,6 +62,7 @@ export const actionCreators = {
   hideCategory: createAction(HIDE_CATEGORY, id => id),
   createCategory: createAction(CREATE_CATEGORY, MeAPI.createCategory),
   deleteCategory: createAction(DELETE_CATEGORY, MeAPI.deleteCategory),
+  updateCategory: createAction(UPDATE_CATEGORY, MeAPI.updateCategory),
 };
 
 export type Category = {
