@@ -45,6 +45,19 @@ export type WriteParams = {
   level: number,
 };
 
+Comment.readComment = function (commentId: string) {
+  console.log(commentId);
+  return Comment.findOne({
+    include: [{
+      model: User,
+      attributes: ['username'],
+    }],
+    where: {
+      id: commentId,
+    },
+  });
+};
+
 Comment.write = function ({
   postId,
   userId,
@@ -58,7 +71,7 @@ Comment.write = function ({
     text,
     reply_to: replyTo,
     level,
-  });
+  }).save();
 };
 
 export default Comment;

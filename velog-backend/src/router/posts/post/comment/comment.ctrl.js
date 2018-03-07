@@ -31,7 +31,12 @@ export const writeComment: Middleware = async (ctx: Context) => {
     const comment = await Comment.write({
       postId, userId, text, replyTo,
     });
-    ctx.body = comment;
+    if (!comment) {
+      ctx.status = 500;
+      return;
+    }
+    const commentWithUsername = await Comment.readComment(comment.id);
+    ctx.body = commentWithUsername;
     // TODO: edit return data type
   } catch (e) {
     ctx.throw(e);
