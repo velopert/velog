@@ -1,3 +1,4 @@
+// @flow
 import Sequelize from 'sequelize';
 import db from 'database/db';
 import { primaryUUID } from 'lib/common';
@@ -36,6 +37,31 @@ Comment.associate = function associate() {
   Comment.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
 };
 
+export type WriteParams = {
+  postId: string,
+  userId: string,
+  text: string,
+  replyTo: ?string,
+  level: number,
+};
+
+Comment.write = function ({
+  postId,
+  userId,
+  text,
+  replyTo,
+  level,
+}: WriteParams) {
+  return Comment.build({
+    fk_user_id: userId,
+    fk_post_id: postId,
+    text,
+    reply_to: replyTo,
+    level,
+  });
+};
+
+export default Comment;
 /* COMMENT LOGIC
   1) Ordinary Comment
     - level: 0

@@ -5,7 +5,7 @@ import { checkUUID } from 'lib/common';
 import post from './post';
 
 import * as postsCtrl from './posts.ctrl';
-import { checkPostExistancy } from './post.ctrl';
+import { checkPostExistancy } from './post/post.ctrl';
 
 const posts: Router = new Router();
 
