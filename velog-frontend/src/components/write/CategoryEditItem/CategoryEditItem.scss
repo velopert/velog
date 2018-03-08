@@ -6,6 +6,9 @@
   border: 1px solid transparent;
   transition: all 0.1s ease-in;
   cursor: move;
+  &:hover {
+    background: $oc-gray-0;
+  }
 
   align-items: center;
   .text {

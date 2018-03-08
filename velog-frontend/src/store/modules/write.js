@@ -22,6 +22,9 @@ const HIDE_CATEGORY = 'write/HIDE_CATEGORY';
 const CREATE_CATEGORY = 'write/CREATE_CATEGORY';
 const DELETE_CATEGORY = 'write/DELETE_CATERGORY';
 const UPDATE_CATEGORY = 'write/UPDATE_CATEGORY';
+const REORDER_CATEGORY = 'write/REORDER_CATEGORY';
+const REORDER_CATEGORIES = 'write/REORDER_CATEGORIES';
+
 
 let tempCategoryId = 0;
 
@@ -43,6 +46,8 @@ export type WriteActionCreators = {
   createCategory(name: string): any,
   deleteCategory(id: string): any,
   updateCategory({ id: string, name: string }): any,
+  reorderCategory({ from: number, to: number }): any,
+  reorderCategories(categoryOrders: MeAPI.ReorderCategoryPayload): any
 };
 
 export const actionCreators = {
@@ -63,6 +68,8 @@ export const actionCreators = {
   createCategory: createAction(CREATE_CATEGORY, MeAPI.createCategory),
   deleteCategory: createAction(DELETE_CATEGORY, MeAPI.deleteCategory),
   updateCategory: createAction(UPDATE_CATEGORY, MeAPI.updateCategory),
+  reorderCategory: createAction(REORDER_CATEGORY),
+  reorderCategories: createAction(REORDER_CATEGORIES, MeAPI.reorderCategories),
 };
 
 export type Category = {
@@ -90,6 +97,7 @@ export type SubmitBox = {
 export type CategoryModal = {
   open: boolean,
   categories: ?Categories,
+  ordered: boolean,
 }
 
 export type PostData = {
@@ -123,6 +131,7 @@ const SubmitBoxSubrecord = Record({
 const CategoryModalSubrecord = Record({
   open: false,
   categories: null,
+  ordered: false,
 });
 
 
@@ -186,7 +195,7 @@ export default handleActions({
       .setIn(
         ['categoryModal', 'categories'],
         state.getIn(['submitBox', 'categories']),
-      ),
+      ).setIn(['categoryModal', 'ordered'], false),
   ),
   [CLOSE_CATEGORY_MODAL]: state => state.setIn(['categoryModal', 'open'], false),
   [CREATE_TEMP_CATEGORY]: state => state.updateIn(
@@ -231,5 +240,15 @@ export default handleActions({
       ['categoryModal', 'categories', index, 'hide'],
       true,
     );
+  },
+  [REORDER_CATEGORY]: (state, { payload: { from, to } }) => {
+    const fromItem = state.categoryModal.categories.get(from);
+    return state.withMutations((s) => {
+      s.removeIn(['categoryModal', 'categories', from])
+        .updateIn(['categoryModal', 'categories'], (categories) => {
+          return categories.insert(to, fromItem);
+        })
+        .setIn(['categoryModal', 'ordered'], true);
+    });
   },
 }, initialState);

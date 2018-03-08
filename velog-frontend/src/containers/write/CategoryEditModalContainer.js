@@ -12,6 +12,7 @@ import Sortable from 'sortablejs';
 type Props = {
   open: boolean,
   categories: ?Categories,
+  ordered: boolean,
 };
 
 class CategoryEditModalContainer extends Component<Props> {
@@ -38,7 +39,7 @@ class CategoryEditModalContainer extends Component<Props> {
   }
   onSave = async () => {
     WriteActions.closeCategoryModal();
-    const { categories } = this.props;
+    const { categories, ordered } = this.props;
     if (!categories) return;
     const shouldRemove = categories.filter(c => c.hide);
     const shouldCreate = categories.filter(c => c.temp && !c.hide);
@@ -54,7 +55,9 @@ class CategoryEditModalContainer extends Component<Props> {
       await Promise.all(create);
       await Promise.all(remove);
       await Promise.all(update);
-      WriteActions.listCategories();
+      const categoryOrders = categories.map((category, i) => ({ id: category.id, order: i }))
+        .toJS();
+      await WriteActions.reorderCategories(categoryOrders);
     } catch (e) {
       console.log(e);
     }
@@ -66,6 +69,10 @@ class CategoryEditModalContainer extends Component<Props> {
       chosenClass: 'chosen',
       ghostClass: 'ghost', // Class name for the drop placeholder
       dragClass: 'drag', // Class name for the dragging item
+      onUpdate: (e:any) => {
+        const { oldIndex, newIndex } = e;
+        WriteActions.reorderCategory({ from: oldIndex, to: newIndex });
+      },
     });
   }
 
@@ -102,6 +109,7 @@ export default connect(
   ({ write }: State) => ({
     open: write.categoryModal.open,
     categories: write.categoryModal.categories,
+    ordered: write.categoryModal.ordered,
   }),
   () => ({}),
 )(CategoryEditModalContainer);

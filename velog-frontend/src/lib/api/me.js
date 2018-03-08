@@ -16,3 +16,13 @@ export const updateCategory = ({ id, name }: UpdateCategoryPayload): Promise<*> 
   `/me/categories/${id}`,
   { name },
 );
+
+export type ReorderCategoryPayload = Array<{
+  id: string,
+  order: number
+}>;
+
+export const reorderCategories = (categoryOrders: ReorderCategoryPayload): Promise<*> => axios.put(
+  '/me/categories/reorder',
+  categoryOrders,
+);

@@ -29,6 +29,12 @@ class SubmitBoxContainer extends Component<Props> {
   componentDidMount() {
     this.initialize();
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.open && this.props.open) {
+      this.initialize();
+    }
+  }
+
   onInsertTag = (tag) => {
     const { tags } = this.props;
     const processedTag = tag.trim();
