@@ -1,8 +1,9 @@
 // @flow
 import Sequelize from 'sequelize';
 import db from 'database/db';
-import { primaryUUID } from 'lib/common';
+import { primaryUUID, extractKeys } from 'lib/common';
 import { Post, User } from 'database/models';
+
 
 const Comment = db.define('comment', {
   id: primaryUUID,
@@ -15,7 +16,6 @@ const Comment = db.define('comment', {
   },
   meta_json: Sequelize.TEXT,
   reply_to: Sequelize.UUID,
-  actual_reply_to: Sequelize.UUID,
   level: {
     defaultValue: 0,
     type: Sequelize.INTEGER,
@@ -42,20 +42,44 @@ export type WriteParams = {
   userId: string,
   text: string,
   replyTo: ?string,
-  level: number,
+  level: number
 };
 
-Comment.readComment = function (commentId: string) {
-  console.log(commentId);
-  return Comment.findOne({
-    include: [{
-      model: User,
-      attributes: ['username'],
-    }],
-    where: {
-      id: commentId,
-    },
-  });
+Comment.readComment = async function (commentId: string) {
+  try {
+    const data = await Comment.findOne({
+      include: [{
+        model: User,
+        attributes: ['username'],
+      }],
+      where: {
+        id: commentId,
+      },
+    });
+    if (!data) return null;
+    return this.serialize(data);
+  } catch (e) {
+    throw e;
+  }
+};
+
+Comment.listComments = async function (postId: string) {
+  try {
+    const data = await Comment.findAll({
+      include: [{ model: User, attributes: ['username'] }],
+      where: {
+        fk_post_id: postId,
+      },
+      order: [
+        ['created_at', 'DESC'],
+      ],
+      limit: 20,
+    });
+    if (!data) return [];
+    return data.map(this.serialize);
+  } catch (e) {
+    throw e;
+  }
 };
 
 Comment.write = function ({
@@ -74,9 +98,18 @@ Comment.write = function ({
   }).save();
 };
 
+Comment.serialize = (data: any) => {
+  return Object.assign(extractKeys(data, [
+    'id', 'text', 'likes', 'meta_json', 'reply_to',
+    'actual_reply_to', 'level', 'created_at', 'updated_at',
+  ]), {
+    username: data.user.username,
+  });
+};
+
 export default Comment;
 /* COMMENT LOGIC
-  1) Ordinary Comment
+  1) Ordinary Comment ✅
     - level: 0
     - replyTo: null
   2) Level 1 Comment

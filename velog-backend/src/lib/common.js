@@ -54,3 +54,12 @@ export const escapeForUrl = (text: string): string => {
     .replace(/ /g, '-')
     .replace(/--+/g, '-');
 };
+
+
+export const extractKeys = (object: any, params: Array<string>): any => {
+  const converted = {};
+  params.forEach((key) => {
+    converted[key] = object[key];
+  });
+  return converted;
+};
