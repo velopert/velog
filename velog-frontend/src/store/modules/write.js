@@ -43,7 +43,7 @@ export type WriteActionCreators = {
   toggleEditCategory(id: string): any,
   changeCategoryName({ id: string, name: string }): any,
   hideCategory(id: string): any,
-  createCategory(name: string): any,
+  createCategory(name: string, id: string): any,
   deleteCategory(id: string): any,
   updateCategory({ id: string, name: string }): any,
   reorderCategory({ from: number, to: number }): any,
@@ -65,12 +65,13 @@ export const actionCreators = {
   toggleEditCategory: createAction(TOGGLE_EDIT_CATEGORY, id => id),
   changeCategoryName: createAction(CHANGE_CATEGORY_NAME, ({ id, name }) => ({ id, name })),
   hideCategory: createAction(HIDE_CATEGORY, id => id),
-  createCategory: createAction(CREATE_CATEGORY, MeAPI.createCategory),
+  createCategory: createAction(CREATE_CATEGORY, MeAPI.createCategory, (name, id) => id),
   deleteCategory: createAction(DELETE_CATEGORY, MeAPI.deleteCategory),
   updateCategory: createAction(UPDATE_CATEGORY, MeAPI.updateCategory),
   reorderCategory: createAction(REORDER_CATEGORY),
   reorderCategories: createAction(REORDER_CATEGORIES, MeAPI.reorderCategories),
 };
+
 
 export type Category = {
   id: string,
@@ -241,6 +242,14 @@ export default handleActions({
       true,
     );
   },
+  ...pender({
+    type: CREATE_CATEGORY,
+    onSuccess: (state, action) => {
+      const index = state.categoryModal.categories.findIndex(
+        category => category.id === action.meta);
+      return state.setIn(['categoryModal', 'categories', index, 'id'], action.payload.data.id);
+    },
+  }),
   [REORDER_CATEGORY]: (state, { payload: { from, to } }) => {
     const fromItem = state.categoryModal.categories.get(from);
     return state.withMutations((s) => {

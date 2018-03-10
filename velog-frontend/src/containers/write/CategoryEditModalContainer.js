@@ -46,7 +46,7 @@ class CategoryEditModalContainer extends Component<Props> {
     const shouldUpdate = categories.filter(c => c.edited && !c.temp && !c.hide);
 
     try {
-      const create = shouldCreate.map(c => WriteActions.createCategory(c.name));
+      const create = shouldCreate.map(c => WriteActions.createCategory(c.name, c.id));
       const remove = shouldRemove.map(c => WriteActions.deleteCategory(c.id));
       const update = shouldUpdate.map(c => WriteActions.updateCategory({
         id: c.id,
@@ -55,7 +55,9 @@ class CategoryEditModalContainer extends Component<Props> {
       await Promise.all(create);
       await Promise.all(remove);
       await Promise.all(update);
-      const categoryOrders = categories.map((category, i) => ({ id: category.id, order: i }))
+      if (!this.props.categories) return;
+      const categoryOrders = this.props.categories.map(
+        (category, i) => ({ id: category.id, order: i }))
         .toJS();
       await WriteActions.reorderCategories(categoryOrders);
     } catch (e) {
