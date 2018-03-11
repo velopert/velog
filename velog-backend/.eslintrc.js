@@ -17,6 +17,9 @@ module.exports = {
     "func-names": 0,
     "object-property-newline": 0,
     "no-unused-vars": 1,
+    "no-confusing-arrow": 0,
+    "no-continue": 0,
+    "no-await-in-loop": 0
   },
   "plugins": [
     "flowtype"

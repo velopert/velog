@@ -31,7 +31,7 @@ export const writeComment: Middleware = async (ctx: Context) => {
   if (replyTo) {
     // check that it exists
     try {
-      const c = await Comment.findById(replyTo, { raw: true });
+      const c = await Comment.findById(replyTo);
       if (!c) {
         ctx.status = 404;
         ctx.body = {
@@ -46,6 +46,10 @@ export const writeComment: Middleware = async (ctx: Context) => {
         processedReplyTo = c.reply_to;
       }
       // TODO: update hasReply
+      c.has_reply = true;
+      await c.update({
+        has_replies: true,
+      });
     } catch (e) {
       ctx.throw(500, e);
     }

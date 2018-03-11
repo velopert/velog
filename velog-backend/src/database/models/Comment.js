@@ -63,12 +63,22 @@ Comment.readComment = async function (commentId: string) {
   }
 };
 
+Comment.getChildrenOf = function (id) {
+  return Comment.findAll({
+    include: [{ model: User, attributes: ['username'] }],
+    where: {
+      reply_to: id,
+    },
+  });
+};
+
 Comment.listComments = async function (postId: string) {
   try {
     const data = await Comment.findAll({
       include: [{ model: User, attributes: ['username'] }],
       where: {
         fk_post_id: postId,
+        level: 0,
       },
       order: [
         ['created_at', 'DESC'],
@@ -76,7 +86,20 @@ Comment.listComments = async function (postId: string) {
       limit: 20,
     });
     if (!data) return [];
-    return data.map(this.serialize);
+    const comments = data.map(c => c.toJSON());
+    for (let i = 0; i < comments.length; i++) {
+      if (!comments[i].has_replies) continue;
+      const c2 = (await Comment.getChildrenOf(comments[i].id))
+        .map(c => c.toJSON());
+      comments[i].children = c2.map(c => c.toJSON());
+      for (let j = 0; j < c2.length; j++) {
+        if (c2[j].has_replies) continue;
+        const c3 = (await Comment.getChildrenOf(c2[j].id))
+          .map(c => c.toJSON());
+        c2[j].children = c3;
+      }
+    }
+    return comments;
   } catch (e) {
     throw e;
   }
