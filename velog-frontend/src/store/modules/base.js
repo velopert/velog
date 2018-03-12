@@ -28,6 +28,7 @@ const BaseRecord = Record({
   fullscreenLoader: false,
 });
 
+
 const initialState: Map<string, *> = BaseRecord();
 
 export default handleActions({
