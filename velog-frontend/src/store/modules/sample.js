@@ -27,14 +27,14 @@ type InsertAction = ActionType<typeof insert>;
 type ChangeAction = ActionType<typeof change>;
 
 /* EXPORTING ACTION CREATORS / ACTION CREATORS TYPES */
-export type SampleActionCreators = {
+export interface SampleActionCreators {
   plain(): PlainAction,
   increase(value: number): IncreaseAction,
   insert(payload: InsertPayload): InsertAction,
-  change(text: string): IncreaseAction
-};
+  change(text: string): ChangeAction,
+}
 
-export const actionCreators = {
+export const actionCreators: SampleActionCreators = {
   plain, increase, insert, change,
 };
 
@@ -45,13 +45,13 @@ type TodoItem = {
   done: boolean
 };
 
-type State = {
+export type Sample = {
   value: number,
   text: string,
   todos: TodoItem[],
 }
 
-const initialState: State = {
+const initialState: Sample = {
   value: 0,
   text: '',
   todos: [],

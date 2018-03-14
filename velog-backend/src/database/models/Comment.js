@@ -86,19 +86,19 @@ Comment.listComments = async function (postId: string) {
       limit: 20,
     });
     if (!data) return [];
+    // TODO: Pagination
     const comments = data.map(c => c.toJSON());
-    for (let i = 0; i < comments.length; i++) {
-      if (!comments[i].has_replies) continue;
-      const c2 = (await Comment.getChildrenOf(comments[i].id))
-        .map(c => c.toJSON());
-      comments[i].children = c2.map(c => c.toJSON());
-      for (let j = 0; j < c2.length; j++) {
-        if (c2[j].has_replies) continue;
-        const c3 = (await Comment.getChildrenOf(c2[j].id))
-          .map(c => c.toJSON());
-        c2[j].children = c3;
+    const fetchChildren = async (list: any[], level = 0) => {
+      for (let i = 0; i < list.length; i++) {
+        if (!list[i].has_replies) continue;
+        const children = await Comment.getChildrenOf(list[i].id);
+        const childrenJSON = children.map(c => c.toJSON());
+        list[i].children = childrenJSON;
+        if (level === 2) return;
+        return fetchChildren(childrenJSON, level + 1);
       }
-    }
+    };
+    await fetchChildren(comments);
     return comments;
   } catch (e) {
     throw e;

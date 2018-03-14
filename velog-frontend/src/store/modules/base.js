@@ -1,38 +1,51 @@
 // @flow
-import { createAction, handleActions } from 'redux-actions';
-import { Record, type Map } from 'immutable';
+import { createAction, handleActions, type ActionTypes } from 'redux-actions';
+import produce from 'immer';
 
 const SHOW_USER_MENU = 'base/SHOW_USER_MENU';
 const HIDE_USER_MENU = 'base/HIDE_USER_MENU';
 const SET_FULLSCREEN_LOADER = 'base/SET_FULLSCREEN_LOADER';
 
-export type BaseActionCreators = {
-  showUserMenu(): any,
-  hideUserMenu(): any,
-  setFullscreenLoader(visibility: boolean): any,
-};
+const showUserMenu = createAction(SHOW_USER_MENU);
+const hideUserMenu = createAction(HIDE_USER_MENU);
+const setFullscreenLoader = createAction(
+  SET_FULLSCREEN_LOADER,
+  (visibility): boolean => visibility);
 
-export const actionCreators = {
-  showUserMenu: createAction(SHOW_USER_MENU),
-  hideUserMenu: createAction(HIDE_USER_MENU),
-  setFullscreenLoader: createAction(SET_FULLSCREEN_LOADER),
+type ShowUserMenuAction = ActionType<typeof showUserMenu>;
+type HideUserMenuAction = ActionType<typeof hideUserMenu>;
+type SetFullscreenLoaderAction = ActionType<typeof setFullscreenLoader>;
+
+export interface BaseActionCreators {
+  showUserMenu(): ShowUserMenuAction,
+  hideUserMenu(): HideUserMenuAction,
+  setFullscreenLoader(): SetFullscreenLoaderAction
+}
+
+export const actionCreators: BaseActionCreators = {
+  showUserMenu, hideUserMenu, setFullscreenLoader,
 };
 
 export type Base = {
   userMenu: boolean,
   fullscreenLoader: boolean
-}
+};
 
-const BaseRecord = Record({
+const initialState: Base = {
   userMenu: false,
   fullscreenLoader: false,
-});
-
-
-const initialState: Map<string, *> = BaseRecord();
+};
 
 export default handleActions({
-  [SHOW_USER_MENU]: state => state.set('userMenu', true),
-  [HIDE_USER_MENU]: state => state.set('userMenu', false),
-  [SET_FULLSCREEN_LOADER]: (state, { payload: visibility }) => state.set('fullscreenLoader', visibility),
+  [SHOW_USER_MENU]: state => produce(state, (draft) => {
+    draft.userMenu = true;
+  }),
+  [HIDE_USER_MENU]: state => produce(state, (draft) => {
+    draft.userMenu = false;
+  }),
+  [SET_FULLSCREEN_LOADER]: (state, action: SetFullscreenLoaderAction) => {
+    return produce(state, (draft) => {
+      draft.fullscreenLoader = action.payload;
+    });
+  },
 }, initialState);
