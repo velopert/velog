@@ -63,31 +63,47 @@ Comment.readComment = async function (commentId: string) {
   }
 };
 
-Comment.getChildrenOf = function (id) {
-  return Comment.findAll({
-    include: [{ model: User, attributes: ['username'] }],
+Comment.countChildrenOf = function (id) {
+  return Comment.count({
     where: {
       reply_to: id,
     },
   });
 };
 
-Comment.listComments = async function (postId: string) {
+Comment.getChildrenOf = function (id) {
+  return Comment.findAll({
+    include: [{ model: User, attributes: ['username'] }],
+    where: {
+      reply_to: id,
+    },
+    limit: 20,
+  });
+};
+
+Comment.listComments = async function ({
+  postId,
+  replyTo,
+  offset = 0,
+  order,
+}) {
   try {
-    const data = await Comment.findAll({
+    const { rows: data, count } = await Comment.findAndCountAll({
       include: [{ model: User, attributes: ['username'] }],
       where: {
         fk_post_id: postId,
-        level: 0,
+        ...(replyTo ? { reply_to: replyTo } : { level: 0 }),
       },
       order: [
         ['created_at', 'DESC'],
       ],
       limit: 20,
+      offset,
     });
     if (!data) return [];
     // TODO: Pagination
     const comments = data.map(c => c.toJSON());
+    /*
     const fetchChildren = async (list: any[], level = 0) => {
       for (let i = 0; i < list.length; i++) {
         if (!list[i].has_replies) continue;
@@ -99,7 +115,15 @@ Comment.listComments = async function (postId: string) {
       }
     };
     await fetchChildren(comments);
-    return comments;
+    */
+    for (let i = 0; i < comments.length; i++) {
+      if (!comments[i].has_replies) continue;
+      comments[i].replies_count = await Comment.countChildrenOf(comments[i].id);
+    }
+    return {
+      data: comments,
+      count,
+    };
   } catch (e) {
     throw e;
   }

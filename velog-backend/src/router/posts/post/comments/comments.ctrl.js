@@ -5,6 +5,7 @@ import db from 'database/db';
 import Comment, { type WriteParams } from 'database/models/Comment';
 import { validateSchema } from 'lib/common';
 
+
 export const writeComment: Middleware = async (ctx: Context) => {
   type BodySchema = {
     text: string,
@@ -40,13 +41,13 @@ export const writeComment: Middleware = async (ctx: Context) => {
         return;
       }
       level = c.level + 1;
-      processedReplyTo = replyTo;
       if (level === 4) {
         level = 3; // downgrade
         processedReplyTo = c.reply_to;
+      } else {
+        processedReplyTo = replyTo;
+        c.has_reply = true;
       }
-      // TODO: update hasReply
-      c.has_reply = true;
       await c.update({
         has_replies: true,
       });
@@ -76,11 +77,33 @@ export const writeComment: Middleware = async (ctx: Context) => {
 
 export const getCommentList: Middleware = async (ctx: Context) => {
   const postId = ctx.post.id;
+  const { offset = 0 } = ctx.query;
+
   try {
-    const comments = await Comment.listComments(postId);
-    // TODO: re-comment * 3
-    ctx.body = comments;
+    const { data, count } = await Comment.listComments({
+      postId,
+    });
+    const link = `<${ctx.path}?offset=${offset + 20}>; rel="next";`;
+    ctx.set('Link', link);
+    ctx.body = data;
   } catch (e) {
     throw e;
+  }
+};
+
+
+export const getReplies: Middleware = async (ctx: Context) => {
+  const postId = ctx.post.id;
+  const { commentId } = ctx.params;
+  try {
+    const comments = await Comment.listComments({
+      postId,
+      replyTo: commentId,
+    });
+    const link = `<${ctx.path}>; rel="next";`;
+    console.log(link);
+    ctx.body = comments.data;
+  } catch (e) {
+    ctx.throw(500, e);
   }
 };
