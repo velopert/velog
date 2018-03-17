@@ -217,13 +217,14 @@ Post.prototype.getCategoryIds = async function (): Promise<*> {
 
 export const serializePost = (data: any) => {
   const {
-    id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug, likes,
+    id, title, body, thumbnail, is_markdown, created_at,
+    updated_at, url_slug, likes, comments_count,
   } = data;
   const tags = data.tags.map(tag => tag.name);
   const categories = data.categories.map(category => ({ id: category.id, name: category.name }));
   return {
     id, title, body, thumbnail, is_markdown,
-    created_at, updated_at, tags, categories, url_slug, likes,
+    created_at, updated_at, tags, categories, url_slug, likes, comments_count,
   };
 };
 

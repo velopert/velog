@@ -45,6 +45,18 @@ export type WriteParams = {
   level: number
 };
 
+Comment.getCommentsCount = async function (postId: string) {
+  return Comment.count({
+    where: {
+      fk_post_id: postId,
+    },
+  });
+};
+
+Comment.getCommentsCountList = function (postIds: string[]) {
+  return postIds.map(this.getCommentsCount);
+};
+
 Comment.readComment = async function (commentId: string) {
   try {
     const data = await Comment.findOne({
@@ -87,6 +99,7 @@ Comment.listComments = async function ({
   offset = 0,
   order,
 }) {
+  console.log(offset);
   try {
     const { rows: data, count } = await Comment.findAndCountAll({
       include: [{ model: User, attributes: ['username'] }],

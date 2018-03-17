@@ -36,5 +36,9 @@ module.exports = {
     "react/no-unused-state": 1,
     "dangerouslySetInnerHTML": 0,
     "no-param-reassign": 0
+  },
+  "overrides": {
+    "files": ["src/*.js"],
+    "excludedFiles": "*.test.js"
   }
 }

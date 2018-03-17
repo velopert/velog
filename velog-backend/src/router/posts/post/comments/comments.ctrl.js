@@ -79,12 +79,16 @@ export const getCommentList: Middleware = async (ctx: Context) => {
   const postId = ctx.post.id;
   const { offset = 0 } = ctx.query;
 
+  console.log(offset);
   try {
     const { data, count } = await Comment.listComments({
       postId,
+      offset,
     });
-    const link = `<${ctx.path}?offset=${offset + 20}>; rel="next";`;
-    ctx.set('Link', link);
+    const link = `<${ctx.path}?offset=${parseInt(offset, 10) + 20}>; rel="next";`;
+    if (count >= offset + 20) {
+      ctx.set('Link', link);
+    }
     ctx.body = data;
   } catch (e) {
     throw e;
