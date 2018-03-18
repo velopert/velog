@@ -38,7 +38,9 @@ module.exports = {
     "no-param-reassign": 0
   },
   "overrides": {
-    "files": ["src/*.js"],
-    "excludedFiles": "*.test.js"
+    "files": ["src/*.js"]
+  },
+  "env": {
+    "jest": true
   }
 }

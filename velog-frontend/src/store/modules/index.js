@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { penderReducer } from 'redux-pender';
 
 // imports all file except index.js
-const req = require.context('.', true, /^(?!.\/index).*.js$/);
+const req = require.context('.', true, /^(?!.\/index)(?!.\/__tests__).*.js$/);
 
 const modules = { };
 
