@@ -1,65 +1,96 @@
 // @flow
-import { createAction, handleActions } from 'redux-actions';
-import { Record, fromJS, type Map } from 'immutable';
-import { pender } from 'redux-pender';
+import { createAction, handleActions, type ActionType } from 'redux-actions';
+import produce from 'immer';
+import { applyPenders } from 'lib/common';
 import * as AuthAPI from 'lib/api/auth';
 
+/* ACTION TYPE */
 const CHECK_USER = 'user/CHECK_USER';
 const SET_USER = 'user/SET_USER';
-const PROCESS = 'user/PROCESS';
+const PROCESS_USER = 'user/PROCESS_USER';
 const LOGOUT = 'user/LOGOUT';
 
-export type UserActionCreators = {
+
+/* ACTION CREATOR */
+const checkUser = createAction(CHECK_USER, AuthAPI.check);
+
+type SetUserPayload = {
+  id: string,
+  username: string,
+  displayName: string,
+  thumbnail?: ?string,
+};
+const setUser = createAction(SET_USER, (payload: SetUserPayload) => payload);
+const processUser = createAction(PROCESS_USER);
+const logout = createAction(LOGOUT);
+
+
+/* ACTION FLOW TYPE */
+type CheckUserAction = ActionType<typeof checkUser>;
+type SetUserAction = ActionType<typeof setUser>;
+type ProcessUserAction = ActionType<typeof processUser>;
+type LogoutAction = ActionType<typeof logout>;
+
+
+/* ACTION CREATORS INTERFACE */
+export interface UserActionCreators {
   checkUser(): any,
-  setUser({ id: string, username: string, displayName: string}): any,
-  process(): any,
+  setUser(payload: SetUserPayload): any,
+  processUser(): any,
   logout(): any
+}
+
+/* EXPORT ACTION CREATORS */
+export const actionCreators: UserActionCreators = {
+  checkUser, setUser, processUser, logout,
 };
 
-export const actionCreators = {
-  checkUser: createAction(CHECK_USER, AuthAPI.check),
-  setUser: createAction(SET_USER),
-  process: createAction(PROCESS),
-  logout: createAction(LOGOUT, AuthAPI.logout),
-};
-
+/* STATE TYPES */
 export type UserData = {
   id: string,
   username: string,
   displayName: string,
-  thumbnail: ?string
+  thumbnail?: ?string
 };
 
 export type User = {
   user: ?UserData,
-  processed: boolean,
+  processed: boolean
 };
 
-const UserSubrecord = Record({
-  id: '',
-  username: '',
-  displayName: '',
-  thumbnail: null,
-});
-
-const UserRecord = Record({
+/* INITIAL STATE */
+const initialState: User = {
   user: null,
   processed: false,
-});
+};
 
-const initialState: Map<string, *> = UserRecord();
-
-export default handleActions({
-  [SET_USER]: (state, { payload: user }) => {
-    return state.set('user', UserSubrecord(user));
+/* REDUCER */
+const reducer = handleActions({
+  [SET_USER]: (state, action: SetUserAction) => {
+    return produce(state, (draft) => {
+      if (!action) return;
+      draft.user = action.payload;
+    });
   },
-  ...pender({
+  [PROCESS_USER]: (state, action: ProcessUserAction) => {
+    return produce(state, (draft) => {
+      draft.processed = true;
+    });
+  },
+}, initialState);
+
+export default ((applyPenders(reducer, [
+  {
     type: CHECK_USER,
     onSuccess: (state, { payload: { data } }) => {
-      return state.set('user', UserSubrecord(data.user))
-        .set('processed', true);
+      return produce(state, (draft) => {
+        draft.user = data.user;
+        draft.processed = true;
+      });
     },
-    onError: state => state.set('user', null).set('processed', true),
-  }),
-  [PROCESS]: state => state.set('processed', true),
-}, initialState);
+    onError: state => produce(state, (draft) => {
+      draft.user = null;
+      draft.processed = true;
+    }),
+  },
+]): any): typeof reducer);

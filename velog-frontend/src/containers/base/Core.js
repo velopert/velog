@@ -15,7 +15,7 @@ class Core extends Component<Props> {
   checkUser = async () => {
     const storedUser = storage.get('__velog_user__');
     if (!storedUser) {
-      UserActions.process();
+      UserActions.processUser();
       return;
     }
     UserActions.setUser(storedUser);

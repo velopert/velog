@@ -61,7 +61,7 @@ export type AuthResult = ?{
     id: string,
     username: string,
     displayName: string,
-    thumbnail: ?string,
+    thumbnail?: ?string,
   },
   token: string
 };
