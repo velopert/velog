@@ -79,7 +79,7 @@ const reducer = handleActions({
   },
 }, initialState);
 
-export default ((applyPenders(reducer, [
+export default applyPenders(reducer, [
   {
     type: CHECK_USER,
     onSuccess: (state, { payload: { data } }) => {
@@ -93,4 +93,4 @@ export default ((applyPenders(reducer, [
       draft.processed = true;
     }),
   },
-]): any): typeof reducer);
+]);
