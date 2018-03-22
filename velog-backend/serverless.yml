@@ -30,9 +30,11 @@ functions:
       - http:
           path: /
           method: ANY
+          cors: true
       - http:
           path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
           method: ANY
+          cors: true
     vpc:
       securityGroupIds:
         - sg-5bc57830

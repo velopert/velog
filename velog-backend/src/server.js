@@ -35,6 +35,9 @@ export default class Server {
     app.use(bodyParser());
     app.use(router.routes())
       .use(router.allowedMethods());
+    app.use((ctx) => {
+      ctx.body = ctx.path;
+    });
   }
 
   listen(port: number): void {
