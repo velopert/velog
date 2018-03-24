@@ -1,5 +1,6 @@
 // @flow
 import { pender } from 'redux-pender';
+import type { $AxiosXHR, $AxiosError } from 'axios';
 
 export const pressedEnter = (fn: () => void) => (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
@@ -22,3 +23,9 @@ export function applyPenders<T: Reducer>(
     return reducer(state, action);
   }): any);
 }
+
+export type ResponseAction = {
+  type: string,
+  payload: $AxiosXHR<*>,
+  error: $AxiosError<*>
+};

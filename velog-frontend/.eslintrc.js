@@ -35,7 +35,8 @@ module.exports = {
     "global-require": 0,
     "react/no-unused-state": 1,
     "dangerouslySetInnerHTML": 0,
-    "no-param-reassign": 0
+    "no-param-reassign": 0,
+    "prefer-const": 1
   },
   "overrides": {
     "files": ["src/*.js"]

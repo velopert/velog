@@ -1,5 +1,5 @@
 // @flow
-import axios from 'axios';
+import axios from 'lib/defaultClient';
 
 export type WritePostPayload = {
   title: string,

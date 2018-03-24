@@ -30,11 +30,31 @@ functions:
       - http:
           path: /
           method: ANY
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - LAFTEL
+            allowCredentials: false
       - http:
           path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
           method: ANY
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - LAFTEL
+            allowCredentials: false
     vpc:
       securityGroupIds:
         - sg-5bc57830

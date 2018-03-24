@@ -71,11 +71,11 @@ class AuthFormContainer extends Component<Props> {
         storage.set(keys.user, user);
       } else { // does not exist -> enroute to register, auto complete
         const { email, name } = verifySocialResult;
-        if (!email) {
+        if (!email || !name) {
           console.log('?');
+          return;
           // TODO
         }
-        console.log(email, name);
         AuthActions.autoCompleteRegisterForm({ email, name });
         this.props.history.push('/register');
       }

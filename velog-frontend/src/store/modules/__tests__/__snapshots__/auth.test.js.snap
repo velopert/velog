@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`auth reducer initializes state 1`] = `
+Object {
+  "authResult": null,
+  "email": "",
+  "isSocial": false,
+  "isUser": false,
+  "registerForm": Object {
+    "displayName": "",
+    "email": "",
+    "shortBio": "",
+    "username": "",
+  },
+  "registerToken": "",
+  "sentEmail": false,
+  "socialAuthResult": null,
+  "verifySocialResult": null,
+}
+`;

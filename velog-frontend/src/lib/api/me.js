@@ -1,7 +1,8 @@
 // @flow
-import axios from 'axios';
+import axios from 'lib/defaultClient';
 
 export const listCategories = (): Promise<*> => axios.get('/me/categories');
+
 export const createCategory = (name: string): Promise<*> => axios.post('/me/categories', {
   name,
 });
