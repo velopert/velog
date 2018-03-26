@@ -2,12 +2,11 @@
 import React, { Component } from 'react';
 import uniqBy from 'lodash/uniqBy';
 import RemoveIcon from 'react-icons/lib/md/remove-circle';
-import type { List } from 'immutable';
 import PerfectScrollbar from 'perfect-scrollbar';
 import './InputTags.scss';
 
 type Props = {
-  tags: List<string>,
+  tags: string[],
   onInsert(string): void,
   onRemove(string): void,
 };

@@ -1,10 +1,12 @@
 // @flow
-import { createAction, handleActions } from 'redux-actions';
-import { Record, fromJS, List, Set, type Map } from 'immutable';
+import { createAction, handleActions, type ActionType } from 'redux-actions';
+import produce from 'immer';
 import * as MeAPI from 'lib/api/me';
 import * as PostsAPI from 'lib/api/posts';
-import { pender } from 'redux-pender';
+import { applyPenders } from 'lib/common';
 
+
+/* ACTION TYPE */
 const EDIT_FIELD = 'write/EDIT_FIELD';
 const OPEN_SUBMIT_BOX = 'write/OPEN_SUBMIT_BOX';
 const CLOSE_SUBMIT_BOX = 'write/CLOSE_SUBMIT_BOX';
@@ -28,8 +30,15 @@ const REORDER_CATEGORIES = 'write/REORDER_CATEGORIES';
 
 let tempCategoryId = 0;
 
-export type WriteActionCreators = {
-  editField({field: string, value: string}): any,
+/* ACTION CREATOR */
+type EditFieldPayload = { field: string, value: string };
+type ChangeCategoryNamePayload = { id: string, name: string };
+type ReorderCategoryPayload = { from: number, to: number };
+
+
+/* ACTION CREATORS INTERFACE */
+export interface WriteActionCreators {
+  editField(payload: EditFieldPayload): any,
   openSubmitBox(): any,
   closeSubmitBox(): any,
   listCategories(): any,
@@ -41,29 +50,31 @@ export type WriteActionCreators = {
   closeCategoryModal(): any,
   createTempCategory(): any,
   toggleEditCategory(id: string): any,
-  changeCategoryName({ id: string, name: string }): any,
+  changeCategoryName(payload: ChangeCategoryNamePayload): any,
   hideCategory(id: string): any,
   createCategory(name: string, id: string): any,
   deleteCategory(id: string): any,
-  updateCategory({ id: string, name: string }): any,
-  reorderCategory({ from: number, to: number }): any,
+  updateCategory(payload: MeAPI.UpdateCategoryPayload): any,
+  reorderCategory(payload: ReorderCategoryPayload): any,
   reorderCategories(categoryOrders: MeAPI.ReorderCategoryPayload): any
-};
+}
 
+/* EXPORT ACTION CREATORS */
 export const actionCreators = {
-  editField: createAction(EDIT_FIELD),
+  editField: createAction(EDIT_FIELD, (payload: EditFieldPayload) => payload),
   openSubmitBox: createAction(OPEN_SUBMIT_BOX),
   closeSubmitBox: createAction(CLOSE_SUBMIT_BOX),
   listCategories: createAction(LIST_CATEGORIES, MeAPI.listCategories),
-  toggleCategory: createAction(TOGGLE_CATEGORY, id => id),
-  insertTag: createAction(INSERT_TAG, tag => tag),
-  removeTag: createAction(REMOVE_TAG, tag => tag),
+  toggleCategory: createAction(TOGGLE_CATEGORY, (id: string) => id),
+  insertTag: createAction(INSERT_TAG, (tag: string) => tag),
+  removeTag: createAction(REMOVE_TAG, (tag: string) => tag),
   writePost: createAction(WRITE_POST, PostsAPI.writePost),
   openCategoryModal: createAction(OPEN_CATEGORY_MODAL),
   closeCategoryModal: createAction(CLOSE_CATEGORY_MODAL),
   createTempCategory: createAction(CREATE_TEMP_CATEGORY),
   toggleEditCategory: createAction(TOGGLE_EDIT_CATEGORY, id => id),
-  changeCategoryName: createAction(CHANGE_CATEGORY_NAME, ({ id, name }) => ({ id, name })),
+  changeCategoryName: createAction(
+    CHANGE_CATEGORY_NAME, (payload: ChangeCategoryNamePayload) => payload),
   hideCategory: createAction(HIDE_CATEGORY, id => id),
   createCategory: createAction(CREATE_CATEGORY, MeAPI.createCategory, (name, id) => id),
   deleteCategory: createAction(DELETE_CATEGORY, MeAPI.deleteCategory),
@@ -72,7 +83,17 @@ export const actionCreators = {
   reorderCategories: createAction(REORDER_CATEGORIES, MeAPI.reorderCategories),
 };
 
+/* ACTION FLOW TYPE */
+type EditFieldAction = ActionType<typeof actionCreators.editField>;
+type ToggleCategoryAction = ActionType<typeof actionCreators.toggleCategory>;
+type InsertTagAction = ActionType<typeof actionCreators.insertTag>;
+type RemovetagAction = ActionType<typeof actionCreators.removeTag>;
+type ToggleEditCategoryAction = ActionType<typeof actionCreators.toggleEditCategory>;
+type ChangeCategoryNameAction = ActionType<typeof actionCreators.changeCategoryName>;
+type HideCategoryAction = ActionType<typeof actionCreators.hideCategory>;
+type ReorderCategoryAction = ActionType<typeof actionCreators.reorderCategory>;
 
+/* STATE TYPES */
 export type Category = {
   id: string,
   order: number,
@@ -86,21 +107,17 @@ export type Category = {
   hide?: boolean,
   edited?: boolean,
 }
-
-export type Categories = List<Category>;
-
+export type Categories = Category[];
 export type SubmitBox = {
   open: boolean,
-  tags: List<string>,
+  tags: string[],
   categories: ?Categories
 };
-
 export type CategoryModal = {
   open: boolean,
   categories: ?Categories,
-  ordered: boolean,
-}
-
+  ordered: boolean
+};
 export type PostData = {
   id: string,
   title: string,
@@ -109,11 +126,10 @@ export type PostData = {
   is_markdown: boolean,
   created_at: string,
   updated_at: string,
-  tags: Array<string>,
-  categories: Array<{ id: string, name: string }>,
+  tags: string[],
+  categories: { id: string, name: string }[],
   url_slug: string
 };
-
 export type Write = {
   body: string,
   title: string,
@@ -122,52 +138,140 @@ export type Write = {
   categoryModal: CategoryModal,
 };
 
-
-const SubmitBoxSubrecord = Record({
-  open: false,
-  categories: null,
-  tags: List([]),
-});
-
-const CategoryModalSubrecord = Record({
-  open: false,
-  categories: null,
-  ordered: false,
-});
-
-
-const CategorySubrecord = Record({
-  id: '',
-  order: 0,
-  parent: null,
-  private: false,
-  name: '',
-  urlSlug: '',
-  active: false,
-  edit: false,
-  temp: false,
-  edited: false,
-  hide: false,
-});
-
-const WriteRecord = Record({
+const initialState: Write = {
   body: '',
   title: '',
-  submitBox: SubmitBoxSubrecord(),
+  submitBox: {
+    open: false,
+    categories: null,
+    tags: [],
+  },
   postData: null,
-  categoryModal: CategoryModalSubrecord(),
-});
+  categoryModal: {
+    open: false,
+    categories: null,
+    ordered: false,
+  },
+};
 
-const initialState: Map<string, *> = WriteRecord();
+const reducer = handleActions({
+  [EDIT_FIELD]: (state, { payload }: EditFieldAction) => {
+    const { field, value } = payload;
+    return produce(state, (draft) => {
+      draft[field] = value;
+    });
+  },
+  [OPEN_SUBMIT_BOX]: (state) => {
+    return produce(state, (draft) => {
+      draft.submitBox.open = true;
+    });
+  },
+  [CLOSE_SUBMIT_BOX]: state => produce(state, (draft) => {
+    draft.submitBox.open = false;
+  }),
+  [TOGGLE_CATEGORY]: (state, { payload: id }: ToggleCategoryAction) => {
+    if (!state.submitBox.categories) return state;
+    const index = state.submitBox.categories.findIndex(
+      category => category.id === id,
+    );
+    return produce(state, (draft) => {
+      if (!draft.submitBox.categories) return;
+      draft.submitBox.categories[index].active = !draft.submitBox.categories[index].active;
+    });
+  },
+  [INSERT_TAG]: (state, { payload: tag }: InsertTagAction) => {
+    return produce(state, (draft) => {
+      draft.submitBox.tags.push(tag);
+    });
+  },
+  [REMOVE_TAG]: (state, { payload: tag }: RemovetagAction) => {
+    return produce(state, (draft) => {
+      draft.submitBox.tags = draft.submitBox.tags.filter(t => t !== tag);
+    });
+  },
+  [OPEN_CATEGORY_MODAL]: (state) => {
+    return produce(state, (draft) => {
+      draft.categoryModal.open = true;
+      draft.categoryModal.categories = state.submitBox.categories;
+      draft.categoryModal.ordered = false;
+    });
+  },
+  [CLOSE_CATEGORY_MODAL]: (state) => {
+    return produce(state, (draft) => {
+      draft.categoryModal.open = false;
+    });
+  },
+  [CREATE_TEMP_CATEGORY]: (state) => {
+    return produce(state, (draft) => {
+      tempCategoryId += 1;
+      const tempCategory: Category = {
+        id: tempCategoryId.toString(),
+        order: 0,
+        parent: '',
+        private: false,
+        name: '',
+        urlSlug: '',
+        active: false,
+        edit: false,
+        temp: false,
+        edited: false,
+        hide: false,
+      };
+      if (!draft.categoryModal.categories) return;
+      draft.categoryModal.categories.push(tempCategory);
+    });
+  },
+  [TOGGLE_EDIT_CATEGORY]: (state, { payload: id }: ToggleEditCategoryAction) => {
+    if (!state.categoryModal.categories) return state;
+    const index = state.categoryModal.categories.findIndex(
+      c => c.id === id,
+    );
+    return produce(state, (draft) => {
+      if (!draft.categoryModal.categories) return;
+      const category = draft.categoryModal.categories[index];
+      category.edit = !category.edit;
+      category.edited = true;
+    });
+  },
+  [CHANGE_CATEGORY_NAME]: (state, { payload: { id, name } }: ChangeCategoryNameAction) => {
+    if (!state.categoryModal.categories) return state;
+    const index = state.categoryModal.categories.findIndex(
+      c => c.id === id,
+    );
+    return produce(state, (draft) => {
+      if (!draft.categoryModal.categories) return;
+      draft.categoryModal.categories[index].name = name;
+    });
+  },
+  [HIDE_CATEGORY]: (state, { payload: id }: HideCategoryAction) => {
+    if (!state.categoryModal.categories) return state;
+    const index = state.categoryModal.categories.findIndex(
+      c => c.id === id,
+    );
+    return produce(state, (draft) => {
+      if (!draft.categoryModal.categories) return;
+      draft.categoryModal.categories[index].hide = true;
+    });
+  },
+  [REORDER_CATEGORY]: (state, { payload: { from, to } }: ReorderCategoryAction) => {
+    if (!state.categoryModal.categories) return state;
+    const fromItem = state.categoryModal.categories[from];
+    return produce(state, (draft) => {
+      if (!draft.categoryModal.categories) return;
+      draft.categoryModal.categories.splice(from, 1);
 
-export default handleActions({
-  [EDIT_FIELD]: (state, { payload: { field, value } }) => state.set(field, value),
-  [OPEN_SUBMIT_BOX]: state => state.setIn(['submitBox', 'open'], true),
-  [CLOSE_SUBMIT_BOX]: state => state.setIn(['submitBox', 'open'], false),
-  ...pender({
+      if (!draft.categoryModal.categories) return;
+      draft.categoryModal.categories.splice(to, 0, fromItem);
+      draft.categoryModal.ordered = true;
+    });
+  },
+}, initialState);
+
+export default applyPenders(reducer, [
+  {
     type: LIST_CATEGORIES,
-    onSuccess: (state, { payload: { data } }) => {
-      const categories = data.map(category => CategorySubrecord({
+    onSuccess: (state: Write, { payload: { data } }) => {
+      const categories: Categories = data.map(category => ({
         id: category.id,
         order: category.order,
         parent: category.parent,
@@ -175,89 +279,29 @@ export default handleActions({
         name: category.name,
         urlSlug: category.url_slug,
       }));
-      return state.setIn(['submitBox', 'categories'], List(categories));
+      return produce(state, (draft) => {
+        draft.submitBox.categories = categories;
+      });
     },
-  }),
-  [TOGGLE_CATEGORY]: (state, { payload: id }) => {
-    const index = state.submitBox.categories.findIndex(category => category.id === id);
-    return state.updateIn(['submitBox', 'categories', index, 'active'], active => !active);
   },
-  [INSERT_TAG]: (state, { payload: tag }) => state.updateIn(['submitBox', 'tags'], tags => tags.concat(tag)),
-  [REMOVE_TAG]: (state, { payload: tag }) => state.updateIn(
-    ['submitBox', 'tags'],
-    tags => tags.filter(t => tag !== t),
-  ),
-  ...pender({
+  {
     type: WRITE_POST,
-    onSuccess: (state, { payload: response }) => state.set('postData', response.data),
-  }),
-  [OPEN_CATEGORY_MODAL]: state => state.withMutations(
-    s => s.setIn(['categoryModal', 'open'], true)
-      .setIn(
-        ['categoryModal', 'categories'],
-        state.getIn(['submitBox', 'categories']),
-      ).setIn(['categoryModal', 'ordered'], false),
-  ),
-  [CLOSE_CATEGORY_MODAL]: state => state.setIn(['categoryModal', 'open'], false),
-  [CREATE_TEMP_CATEGORY]: state => state.updateIn(
-    ['categoryModal', 'categories'],
-    (categories) => {
-      tempCategoryId += 1;
-      return categories.push(CategorySubrecord({
-        id: tempCategoryId,
-        name: '',
-        edit: true,
-        temp: true,
-      }));
+    onSuccess: (state: Write, { payload: { data } }) => {
+      return produce(state, (draft) => {
+        draft.postData = data;
+      });
     },
-  ),
-  [TOGGLE_EDIT_CATEGORY]: (state, { payload: id }) => {
-    const index = state.categoryModal.categories.findIndex(
-      c => c.id === id,
-    );
-
-    return state.updateIn(
-      ['categoryModal', 'categories', index],
-      category => category.withMutations(
-        c => c.update('edit', edit => !edit)
-          .set('edited', true),
-      ),
-    );
   },
-  [CHANGE_CATEGORY_NAME]: (state, { payload: { id, name } }) => {
-    const index = state.categoryModal.categories.findIndex(
-      c => c.id === id,
-    );
-    return state.setIn(
-      ['categoryModal', 'categories', index, 'name'],
-      name,
-    );
-  },
-  [HIDE_CATEGORY]: (state, { payload: id }) => {
-    const index = state.categoryModal.categories.findIndex(
-      c => c.id === id,
-    );
-    return state.setIn(
-      ['categoryModal', 'categories', index, 'hide'],
-      true,
-    );
-  },
-  ...pender({
+  {
     type: CREATE_CATEGORY,
-    onSuccess: (state, action) => {
-      const index = state.categoryModal.categories.findIndex(
-        category => category.id === action.meta);
-      return state.setIn(['categoryModal', 'categories', index, 'id'], action.payload.data.id);
+    onSuccess: (state: Write, action) => {
+      const { payload, meta } = action;
+      if (!state.categoryModal.categories) return state;
+      const index = state.categoryModal.categories.findIndex(c => c.id === meta);
+      return produce(state, (draft) => {
+        if (!draft.categoryModal.categories) return;
+        draft.categoryModal.categories[index].id = payload.data.id;
+      });
     },
-  }),
-  [REORDER_CATEGORY]: (state, { payload: { from, to } }) => {
-    const fromItem = state.categoryModal.categories.get(from);
-    return state.withMutations((s) => {
-      s.removeIn(['categoryModal', 'categories', from])
-        .updateIn(['categoryModal', 'categories'], (categories) => {
-          return categories.insert(to, fromItem);
-        })
-        .setIn(['categoryModal', 'ordered'], true);
-    });
   },
-}, initialState);
+]);

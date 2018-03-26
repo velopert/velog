@@ -13,7 +13,7 @@ import type { List } from 'immutable';
 type Props = {
   open: boolean,
   categories: ?Categories,
-  tags: List<string>,
+  tags: string[],
   title: string,
   body: string,
 }
@@ -68,10 +68,10 @@ class SubmitBoxContainer extends Component<Props> {
       await WriteActions.writePost({
         title,
         body,
+        tags,
         isMarkdown: true,
         isTemp: false,
-        tags: tags.toJS(),
-        categories: categories ? categories.filter(c => c.active).map(c => c.id).toJS() : [],
+        categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
       });
     } catch (e) {
       console.log(e);

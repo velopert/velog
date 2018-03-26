@@ -10,3 +10,5 @@ export { default as Tag } from './Tag';
 export { default as PostsTags } from './PostsTags';
 export { default as PostLike } from './PostLike';
 export { default as Comment } from './Comment';
+export { default as FollowUser } from './FollowUser';
+export { default as FollowTag } from './FollowTag';

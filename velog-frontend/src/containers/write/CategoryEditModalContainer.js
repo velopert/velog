@@ -57,8 +57,7 @@ class CategoryEditModalContainer extends Component<Props> {
       await Promise.all(update);
       if (!this.props.categories) return;
       const categoryOrders = this.props.categories.map(
-        (category, i) => ({ id: category.id, order: i }))
-        .toJS();
+        (category, i) => ({ id: category.id, order: i }));
       await WriteActions.reorderCategories(categoryOrders);
     } catch (e) {
       console.log(e);

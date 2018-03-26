@@ -21,6 +21,7 @@ provider:
         - "ec2:DescribeNetworkInterfaces"
         - "ec2:DetachNetworkInterface"
         - "ec2:DeleteNetworkInterface"
+        - "ses:SendEmail"
       Resource: "*"
 
 functions:
@@ -59,4 +60,6 @@ functions:
       securityGroupIds:
         - sg-5bc57830
       subnetIds:
-        - subnet-d438debc
+        - subnet-91481ef9
+        - subnet-2c59dc60
+        - subnet-4f59dc03

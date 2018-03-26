@@ -10,6 +10,8 @@ import {
   PostsTags,
   PostLike,
   Comment,
+  FollowUser,
+  FollowTag,
 } from './models';
 
 export default function sync() {
@@ -22,6 +24,8 @@ export default function sync() {
   PostsTags.associate();
   PostLike.associate();
   Comment.associate();
+  FollowUser.associate();
+  FollowTag.associate();
 
   if (process.env.SYNC_DB !== 'true') {
     return;
@@ -38,5 +42,7 @@ export default function sync() {
   PostsTags.sync();
   PostLike.sync();
   Comment.sync();
+  FollowUser.sync();
+  FollowTag.sync();
 }
 
