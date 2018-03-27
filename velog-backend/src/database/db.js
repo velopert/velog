@@ -7,7 +7,6 @@ pg.defaults.parseInt8 = true; // fixes issue: umbers returning as string.
 
 
 const { COCKROACHDB_HOST, COCKROACHDB_PW } = process.env;
-
 const db:Sequelize = new SequelizeCockroach('velog', 'velog', COCKROACHDB_PW, {
   host: COCKROACHDB_HOST,
   dialect: 'postgres',

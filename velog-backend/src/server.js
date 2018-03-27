@@ -5,7 +5,7 @@ import serverless from 'serverless-http';
 import cors from 'lib/middlewares/cors';
 import authToken from 'lib/middlewares/authToken';
 import db from 'database/db';
-import sync from 'database/sync';
+import { associate } from 'database/sync';
 import router from './router';
 
 
@@ -21,7 +21,7 @@ export default class Server {
   initializeDb(): void {
     db.authenticate().then(
       () => {
-        sync();
+        associate();
         console.log('DB Connection has been established');
       },
       (err) => {

@@ -14,7 +14,7 @@ import {
   FollowTag,
 } from './models';
 
-export default function sync() {
+export function associate() {
   // configure relations
   UserProfile.associate();
   SocialAccount.associate();
@@ -26,10 +26,9 @@ export default function sync() {
   Comment.associate();
   FollowUser.associate();
   FollowTag.associate();
-
-  if (process.env.SYNC_DB !== 'true') {
-    return;
-  }
+}
+export default function sync() {
+  associate();
   // sync Models
   User.sync();
   UserProfile.sync();
