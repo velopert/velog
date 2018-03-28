@@ -2,17 +2,21 @@
 import React from 'react';
 import BackIcon from 'react-icons/lib/md/arrow-back';
 import MoreIcon from 'react-icons/lib/md/more-vert';
+import cx from 'classnames';
 import './WriteHeader.scss';
+
 
 type Props = {
   onChangeTitle(e: any): void,
   onOpenSubmitBox(): void,
   title: string,
+  isEdit: boolean,
 };
 const WriteHeader = ({
   onChangeTitle,
   onOpenSubmitBox,
   title,
+  isEdit,
 }: Props) => {
   return (
     <div className="WriteHeader">
@@ -29,8 +33,8 @@ const WriteHeader = ({
         <div className="button temp-save">
           임시저장
         </div>
-        <div className="button submit" onClick={onOpenSubmitBox}>
-          작성하기
+        <div className={cx('button', isEdit ? 'edit' : 'submit')} onClick={onOpenSubmitBox}>
+          { isEdit ? '업데이트' : '작성하기' }
         </div>
         <div className="more util flex-center">
           <MoreIcon />

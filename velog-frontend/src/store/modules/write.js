@@ -281,6 +281,15 @@ export default applyPenders(reducer, [
       }));
       return produce(state, (draft) => {
         draft.submitBox.categories = categories;
+        // turn on active categories
+        if (state.postData) {
+          const categoryIds = state.postData.categories.map(c => c.id);
+          if (!draft.submitBox.categories) return;
+          draft.submitBox.categories = draft.submitBox.categories.map(c => ({
+            ...c,
+            active: categoryIds.indexOf(c.id) !== -1,
+          }));
+        }
       });
     },
   },

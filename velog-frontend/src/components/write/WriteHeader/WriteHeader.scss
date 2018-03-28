@@ -74,6 +74,17 @@
           background: $oc-violet-5;
         }
       }
+
+      &.edit {
+        background: $oc-indigo-6;
+        color: white;
+        &:hover {
+          background: lighten($oc-indigo-6, 5%);
+        }
+        &:active {
+          background: $oc-indigo-6;
+        }
+      }
     }
 
     .more {

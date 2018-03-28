@@ -4,10 +4,13 @@ import { connect } from 'react-redux';
 import type { State } from 'store';
 import { WriteActions } from 'store/actionCreators';
 import WriteHeader from 'components/write/WriteHeader/WriteHeader';
+import type { PostData } from 'store/modules/write';
 
 type Props = {
   title: string,
+  postData: ?PostData,
 };
+
 
 class WriteHeaderContainer extends Component<Props> {
   onChangeTitle = (e) => {
@@ -28,12 +31,13 @@ class WriteHeaderContainer extends Component<Props> {
 
   render() {
     const { onChangeTitle, onOpenSubmitBox } = this;
-    const { title } = this.props;
+    const { title, postData } = this.props;
     return (
       <WriteHeader
         onOpenSubmitBox={onOpenSubmitBox}
         onChangeTitle={onChangeTitle}
         title={title}
+        isEdit={!!postData}
       />
     );
   }
@@ -42,6 +46,7 @@ class WriteHeaderContainer extends Component<Props> {
 export default connect(
   ({ write }: State) => ({
     title: write.title,
+    postData: write.postData,
   }),
   () => ({}),
 )(WriteHeaderContainer);

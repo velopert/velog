@@ -7,7 +7,7 @@ import InputTags from 'components/write/InputTags';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { WriteActions, UserActions } from 'store/actionCreators';
-import type { Categories } from 'store/modules/write';
+import type { Categories, PostData } from 'store/modules/write';
 import type { List } from 'immutable';
 
 type Props = {
@@ -16,6 +16,7 @@ type Props = {
   tags: string[],
   title: string,
   body: string,
+  postData: ?PostData,
 }
 
 class SubmitBoxContainer extends Component<Props> {
@@ -82,7 +83,7 @@ class SubmitBoxContainer extends Component<Props> {
       onClose, onToggleCategory, onInsertTag,
       onRemoveTag, onSubmit, onEditCategoryClick,
     } = this;
-    const { open, categories, tags } = this.props;
+    const { open, categories, tags, postData } = this.props;
     return (
       <SubmitBox
         onEditCategoryClick={onEditCategoryClick}
@@ -97,6 +98,7 @@ class SubmitBoxContainer extends Component<Props> {
         visible={open}
         onClose={onClose}
         onSubmit={onSubmit}
+        isEdit={!!postData}
       />
     );
   }
@@ -109,6 +111,7 @@ export default connect(
     tags: write.submitBox.tags,
     body: write.body,
     title: write.title,
+    postData: write.postData,
   }),
   () => ({}),
 )(SubmitBoxContainer);

@@ -8,7 +8,8 @@ import { BaseActions, UserActions } from 'store/actionCreators';
 import storage, { keys } from 'lib/storage';
 
 type Props = {
-  visible: boolean
+  visible: boolean,
+  username: string,
 };
 
 class UserMenuContainer extends Component<Props> {
@@ -31,12 +32,13 @@ class UserMenuContainer extends Component<Props> {
   }
 
   render() {
-    const { visible } = this.props;
+    const { visible, username } = this.props;
     const { onClickOutside, onClick, onLogout } = this;
     if (!visible) return null;
 
     return (
       <UserMenu
+        username={username}
         onClickOutside={onClickOutside}
         onClick={onClick}
         onLogout={onLogout}
@@ -47,8 +49,9 @@ class UserMenuContainer extends Component<Props> {
 }
 
 export default connect(
-  ({ base }: State) => ({
+  ({ base, user }: State) => ({
     visible: base.userMenu,
+    username: user.user && user.user.username,
   }),
   () => ({}),
 )(UserMenuContainer);

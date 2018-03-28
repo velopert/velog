@@ -5,18 +5,25 @@ import { Link } from 'react-router-dom';
 import UserMenuItem from 'components/base/UserMenuItem';
 import './UserMenu.scss';
 
-const UserMenu = ({ onClick, onLogout }) => {
+type Props = {
+  onClick(): void,
+  onLogout(): Promise<*>,
+  username: string,
+};
+
+
+const UserMenu = ({ onClick, onLogout, username }: Props) => {
   return (
     <div className="user-menu-wrapper">
       <div className="user-menu-positioner">
         <div className="user-menu" onClick={onClick}>
           <div className="me">
             <div className="username">
-              @velopert
+              @{username}
             </div>
           </div>
           <div className="menu-items">
-            <UserMenuItem>
+            <UserMenuItem to="/write">
               새 글 작성
             </UserMenuItem>
             <UserMenuItem>
