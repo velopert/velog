@@ -24,4 +24,22 @@ FollowTag.associate = function associate() {
   FollowTag.belongsTo(Tag, { foreignKey: 'fk_tag_id', onDelete: 'restrict', onUpdate: 'restrict' });
 };
 
+FollowTag.getListOfUser = function getListOfUser(userId) {
+  return FollowTag.findAll({
+    where: {
+      fk_user_id: userId,
+    },
+    include: [Tag],
+  });
+};
+
+FollowTag.serialize = function serialize(data) {
+  return {
+    id: data.id,
+    fk_tag_id: data.fk_tag_id,
+    name: data.tag.name,
+    create_at: data.created_at,
+  };
+};
+
 export default FollowTag;

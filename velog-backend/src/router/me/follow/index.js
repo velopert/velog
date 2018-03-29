@@ -6,9 +6,11 @@ import * as followCtrl from './follow.ctrl';
 const follow: Router = new Router();
 
 follow.get('/', checkUUID, followCtrl.getFollows); // get all follow info (tags / users)
-follow.post('/users/:id'); // follow user
-follow.post('/tags/:id'); // follow tag
-follow.delete('/users/:id'); // unfollow user
-follow.delete('/tags/:id'); // unfollow tag
+follow.get('/users/:id', checkUUID, followCtrl.getFollowUserStatus);
+follow.post('/users/:id', checkUUID, followCtrl.followUser); // follow user
+follow.delete('/users/:id', checkUUID); // unfollow user
+follow.get('/tags/:id', checkUUID, followCtrl.getFollowTagStatus); // follow tag
+follow.post('/tags/:id', checkUUID, followCtrl.followTag); // follow tag
+follow.delete('/tags/:id', checkUUID); // unfollow tag
 
 export default follow;
