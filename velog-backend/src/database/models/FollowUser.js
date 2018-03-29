@@ -33,7 +33,6 @@ FollowUser.getListOfUser = function getListOfUser(userId) {
 };
 
 FollowUser.serialize = function serialize(data) {
-  console.log(data);
   return {
     id: data.id,
     fk_follow_user_id: data.fk_follow_user_id,
