@@ -26,6 +26,8 @@ const DELETE_CATEGORY = 'write/DELETE_CATERGORY';
 const UPDATE_CATEGORY = 'write/UPDATE_CATEGORY';
 const REORDER_CATEGORY = 'write/REORDER_CATEGORY';
 const REORDER_CATEGORIES = 'write/REORDER_CATEGORIES';
+const UPDATE_POST = 'write/UPDATE_POST';
+const RESET = 'write/RESET';
 
 
 let tempCategoryId = 0;
@@ -34,7 +36,6 @@ let tempCategoryId = 0;
 type EditFieldPayload = { field: string, value: string };
 type ChangeCategoryNamePayload = { id: string, name: string };
 type ReorderCategoryPayload = { from: number, to: number };
-
 
 /* ACTION CREATORS INTERFACE */
 export interface WriteActionCreators {
@@ -56,7 +57,9 @@ export interface WriteActionCreators {
   deleteCategory(id: string): any,
   updateCategory(payload: MeAPI.UpdateCategoryPayload): any,
   reorderCategory(payload: ReorderCategoryPayload): any,
-  reorderCategories(categoryOrders: MeAPI.ReorderCategoryPayload): any
+  reorderCategories(categoryOrders: MeAPI.ReorderCategoryPayload): any,
+  updatePost(payload: PostsAPI.UpdatePostPayload): any,
+  reset(): any,
 }
 
 /* EXPORT ACTION CREATORS */
@@ -81,6 +84,8 @@ export const actionCreators = {
   updateCategory: createAction(UPDATE_CATEGORY, MeAPI.updateCategory),
   reorderCategory: createAction(REORDER_CATEGORY),
   reorderCategories: createAction(REORDER_CATEGORIES, MeAPI.reorderCategories),
+  updatePost: createAction(UPDATE_POST, PostsAPI.updatePost),
+  reset: createAction(RESET),
 };
 
 /* ACTION FLOW TYPE */
@@ -265,6 +270,10 @@ const reducer = handleActions({
       draft.categoryModal.ordered = true;
     });
   },
+  [RESET]: (state, action) => {
+    // resets the state (when leaves write page)
+    return initialState;
+  },
 }, initialState);
 
 export default applyPenders(reducer, [
@@ -310,6 +319,14 @@ export default applyPenders(reducer, [
       return produce(state, (draft) => {
         if (!draft.categoryModal.categories) return;
         draft.categoryModal.categories[index].id = payload.data.id;
+      });
+    },
+  },
+  {
+    type: UPDATE_POST,
+    onSuccess: (state: Write, { payload: { data } }) => {
+      return produce(state, (draft) => {
+        draft.postData = data;
       });
     },
   },

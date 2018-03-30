@@ -57,27 +57,33 @@ class SubmitBoxContainer extends Component<Props> {
     WriteActions.closeSubmitBox();
   }
   onSubmit = async () => {
-    const { categories, tags, body, title } = this.props;
+    const { categories, tags, body, title, postData } = this.props;
 
-    // console.log({
-    //   title,
-    //   body,
-    //   categories: categories ? categories.filter(c => c.active).map(c => c.id).toJS() : [],
-    //   tags: tags.toJS(),
-    // });
     try {
-      await WriteActions.writePost({
-        title,
-        body,
-        tags,
-        isMarkdown: true,
-        isTemp: false,
-        categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
-      });
+      if (postData) { // update if the post alreadyy exists
+        await WriteActions.updatePost({
+          id: postData.id,
+          title,
+          body,
+          tags,
+          is_temp: false,
+          categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
+        });
+      } else {
+        await WriteActions.writePost({
+          title,
+          body,
+          tags,
+          isMarkdown: true,
+          isTemp: false,
+          categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
+        });
+      }
     } catch (e) {
       console.log(e);
     }
   }
+
   render() {
     const {
       onClose, onToggleCategory, onInsertTag,

@@ -18,6 +18,10 @@ class CodeEditorContainer extends Component<Props> {
     });
   }
 
+  componentWillUnmount() {
+    WriteActions.reset(); // reset Write Module on page leave
+  }
+
   render() {
     const { onEditBody } = this;
     const { body } = this.props;

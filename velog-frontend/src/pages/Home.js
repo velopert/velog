@@ -3,6 +3,7 @@ import PageTemplate from 'components/base/PageTemplate';
 import LandingTemplateContainer from 'containers/landing/LandingTemplateContainer';
 import HeaderContainer from 'containers/base/HeaderContainer';
 import AuthFormContainer from 'containers/landing/AuthFormContainer';
+import Main from 'containers/main/Main';
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <LandingTemplateContainer
         form={<AuthFormContainer />}
       />
+      <Main />
     </PageTemplate>
   );
 };

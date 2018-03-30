@@ -1,11 +1,14 @@
 @import 'utils';
 
 .common.responsive {
-  width: 1200px;
+  width: 1600px;
   padding-left: 1rem;
   padding-right: 1rem;
   margin: 0 auto;
   @include media("<huge") {
+    width: $wide-w;
+  }
+  @include media("<wide") {
     width: $large-w;
   }
   @include media("<large") {

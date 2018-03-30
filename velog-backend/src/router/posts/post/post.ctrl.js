@@ -50,19 +50,19 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     body: string,
     tags: Array<string>,
     categories: Array<string>,
-    urlSlug: string,
+    url_slug: string,
     thumbnail: string,
-    isTemp: boolean,
+    is_temp: boolean,
   }
 
   const schema = Joi.object().keys({
     title: Joi.string().min(1).max(120),
     body: Joi.string().min(1),
     thumbnail: Joi.string(),
-    isTemp: Joi.boolean(),
+    is_temp: Joi.boolean(),
     categories: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string()),
-    urlSlug: Joi.string().max(130),
+    url_slug: Joi.string().max(130),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -70,8 +70,13 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   }
 
   const {
-    title, body, tags,
-    categories, urlSlug, thumbnail, isTemp,
+    title,
+    body,
+    tags,
+    categories,
+    url_slug: urlSlug,
+    thumbnail,
+    is_temp: isTemp,
   }: BodySchema = (ctx.request.body: any);
 
   const generatedUrlSlug = `${title} ${generateSlugId()}`;
