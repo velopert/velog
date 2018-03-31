@@ -12,6 +12,7 @@ import {
   Comment,
   FollowUser,
   FollowTag,
+  PostHistory,
 } from './models';
 
 export function associate() {
@@ -26,6 +27,7 @@ export function associate() {
   Comment.associate();
   FollowUser.associate();
   FollowTag.associate();
+  PostHistory.associate();
 }
 export default function sync() {
   associate();
@@ -43,5 +45,6 @@ export default function sync() {
   Comment.sync();
   FollowUser.sync();
   FollowTag.sync();
+  PostHistory.sync();
 }
 

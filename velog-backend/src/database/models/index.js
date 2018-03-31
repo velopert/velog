@@ -12,3 +12,4 @@ export { default as PostLike } from './PostLike';
 export { default as Comment } from './Comment';
 export { default as FollowUser } from './FollowUser';
 export { default as FollowTag } from './FollowTag';
+export { default as PostHistory } from './PostHistory';
