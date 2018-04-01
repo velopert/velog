@@ -1,0 +1,16 @@
+@import 'utils';
+
+.MainTab {
+  margin-bottom: 2rem;
+  a {
+    font-size: 1.25rem;
+    color: $oc-gray-8;
+    &.active {
+      color: $oc-violet-6;
+      font-weight: 500;
+    }
+    & + a {
+      margin-left: 1.5rem;
+    }
+  }
+}

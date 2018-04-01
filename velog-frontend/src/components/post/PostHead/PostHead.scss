@@ -1,0 +1,51 @@
+@import 'utils';
+
+.PostHead {
+  margin-top: 3rem;
+  .sub-info {
+    display: flex;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid $oc-gray-2;
+    margin-bottom: 1.5rem;
+    .thumbnail {
+      img {
+        display: block;
+        width: 4rem;
+        height: 4rem;
+        object-fit: cover;
+        border-radius: 50%;
+        @include material-shadow(1, 0.5);
+      }
+    }
+    .information {
+      display: flex;
+      align-items: center;
+      margin-left: 1rem;
+      font-size: 0.85rem;
+      color: $oc-gray-7;
+      font-weight: 300;
+      .username {
+        color: black;
+        font-weight: 500;
+      }
+    }
+  }
+
+  h1 {
+    margin: 0;
+    font-weight: 300;
+    font-size: 3rem;
+  }
+  .tags { 
+    margin-top: 1rem;
+    .tag {
+      padding: 0.5rem;
+      background: $oc-gray-1;
+      border: 1px solid $oc-gray-2;
+      border-radius: 4px;
+      font-family: 'Inconsolata', 'D2 Coding';
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 .base.header {
   .header-wrapper {
-    height: 6rem;
+    height: 5rem;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -10,21 +10,6 @@
       font-size: 2.25rem;
       font-family: 'Inconsolata', monospace;
       font-weight: 700;
-    }
-    nav {
-      margin-left: 3rem;
-
-      a {
-        font-size: 1.25rem;
-        color: $oc-gray-8;
-        &.active {
-          color: $oc-violet-6;
-          font-weight: 500;
-        }
-        & + a {
-          margin-left: 1.5rem;
-        }
-      }
     }
     .right {
       margin-left: auto;

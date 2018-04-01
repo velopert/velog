@@ -1,13 +1,19 @@
 // @flow
-import React from 'react';
+import React, { type Node } from 'react';
 import Responsive from 'components/common/Responsive';
 import './MainTemplate.scss';
 
-type Props = { }
+type Props = {
+  tab: Node,
+  children: Node,
+}
 
-const MainTemplate = (props: Props) => (
+const MainTemplate = ({ tab, children }: Props) => (
   <Responsive className="MainTemplate">
-    MainTemplate
+    <div className="tab-area">
+      {tab}
+    </div>
+    {children}
   </Responsive>
 );
 
