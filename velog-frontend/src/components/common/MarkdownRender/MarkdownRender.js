@@ -41,6 +41,10 @@ class MarkdownRender extends Component<Props, State> {
     });
   }
 
+  componentDidMount() {
+    this.renderMarkdown();
+  }
+
   renderPrism() {
     if (!Prism) return;
     Prism.highlightAll();

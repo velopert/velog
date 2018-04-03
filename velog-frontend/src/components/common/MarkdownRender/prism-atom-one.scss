@@ -25,6 +25,7 @@ pre[class*="language-"] {
   hyphens: none;
 }
 
+
 pre[class*="language-"]::-moz-selection,
 pre[class*="language-"] ::-moz-selection,
 code[class*="language-"]::-moz-selection,
@@ -53,6 +54,15 @@ code[class*="language-"] ::selection {
 pre[class*="language-"] {
   padding: 1em;
   margin: .5em 0;
+  overflow: auto;
+}
+
+pre[class*="language-"] {
+  padding: 1em;
+  margin-left: -2rem;
+  margin-right: -2rem;
+  padding-top: 2em;
+  padding-bottom: 2em;
   overflow: auto;
 }
 

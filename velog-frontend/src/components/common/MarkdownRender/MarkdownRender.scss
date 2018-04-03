@@ -4,6 +4,10 @@
   text-align: justify;
   font-size: 1.5rem;
   word-break: break-all;
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+  }
   &.atom-one {
     @import './prism-atom-one';
   }
@@ -29,6 +33,8 @@
 
   pre {
     padding: 1em;
+    padding-top: 2em;
+    padding-bottom: 2em;
     margin: .5em 0;
     overflow: auto;
     background: #282c34;
