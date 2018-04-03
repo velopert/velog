@@ -54,7 +54,6 @@ export const writePost = async (ctx: Context): Promise<*> => {
   try {
     // check: all categories are valid
     const ownCategories = await Category.listAllCategories(ctx.user.id);
-
     for (let i = 0; i < uniqueCategories.length; i++) {
       const categoryId = uniqueCategories[i];
       if (ownCategories.findIndex(c => c.id === categoryId) === -1) {

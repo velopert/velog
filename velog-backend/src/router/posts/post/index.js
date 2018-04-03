@@ -11,7 +11,9 @@ const post: Router = new Router();
 post.get('/', postCtrl.readPost);
 post.patch('/', needsAuth, postCtrl.checkPostOwnership, postCtrl.updatePost);
 post.delete('/', needsAuth, postCtrl.checkPostOwnership, postCtrl.deletePost);
+post.post('/temp', needsAuth, postCtrl.checkPostOwnership, postCtrl.tempSave);
 post.use('/comments', comments.routes());
 post.use('/like', like.routes());
+
 
 export default post;

@@ -3,9 +3,10 @@ import type { Context } from 'koa';
 import { serializePost } from 'database/models/Post';
 import db from 'database/db';
 import Joi from 'joi';
-import { validateSchema, generateSlugId, escapeForUrl } from 'lib/common';
+import { validateSchema, generateSlugId, escapeForUrl, extractKeys } from 'lib/common';
 import { diff } from 'json-diff';
 import { Post, PostLike, PostsTags, PostsCategories, Category } from 'database/models';
+import PostHistory from 'database/models/PostHistory';
 
 export const checkPostExistancy = async (ctx: Context, next: () => Promise<*>): Promise<*> => {
   const { id } = ctx.params;
@@ -200,6 +201,41 @@ export const deletePost = async (ctx: Context): Promise<*> => {
     ]);
     await post.destroy();
     ctx.status = 204;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const tempSave = async (ctx: Context): Promise<*> => {
+  type BodySchema = {
+    title: string,
+    body: string,
+    is_release: boolean,
+  };
+
+  const { id } = ctx.params;
+
+  const schema = Joi.object().keys({
+    title: Joi.string().min(1).max(120),
+    body: Joi.string().min(1),
+    is_release: Joi.boolean(),
+  });
+
+  if (!validateSchema(ctx, schema)) return;
+
+  const { title, body, is_release }: BodySchema = (ctx.request.body: any);
+
+  try {
+    const postHistory = await PostHistory.build({
+      fk_post_id: id,
+      title,
+      body,
+      is_release,
+    }).save();
+
+    ctx.body = extractKeys(postHistory, [
+      'id', 'title', 'body', 'created_at', 'is_release',
+    ]);
   } catch (e) {
     ctx.throw(500, e);
   }
