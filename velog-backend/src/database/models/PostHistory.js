@@ -12,12 +12,39 @@ const PostHistory = db.define('post_history', {
   is_release: {
     type: Sequelize.BOOLEAN,
     allowNull: false,
-    defaultValue: true,
+    defaultValue: false,
   },
+}, {
+  indexes: [
+    {
+      fields: ['created_at'],
+    },
+  ],
 });
 
 PostHistory.associate = function associate() {
   PostHistory.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'restrict', onUpdate: 'restrict' });
+};
+
+PostHistory.list = function list(postId, page = 1) {
+  return PostHistory.findAll({
+    where: {
+      fk_post_id: postId,
+    },
+    order: [
+      ['created_at', 'DESC'],
+    ],
+    limit: 10,
+    offset: (page - 1) * 10,
+  });
+};
+
+PostHistory.countTempSaves = function countTempSaves(postId) {
+  return PostHistory.count({
+    where: {
+      fk_post_id: postId,
+    },
+  });
 };
 
 export default PostHistory;

@@ -143,7 +143,7 @@ export const listPosts = async (ctx: Context): Promise<*> => {
       return;
     }
     ctx.body = result.data.map(serializePost);
-    ctx.set('Post-Count', (result.count).toString());
+    ctx.set('Count', (result.count).toString());
     ctx.set('Page-Limit', Math.ceil(result.count / 10).toString());
   } catch (e) {
     ctx.throw(500, e);
