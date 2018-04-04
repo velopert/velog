@@ -257,6 +257,21 @@ export const check = async (ctx: Context): Promise<*> => {
     return;
   }
 
+  const now = new Date();
+  if (ctx.tokenExpire - now < 1000 * 60 * 60 * 24 * 4) {
+    try {
+      const user = await User.findById(ctx.user.id);
+      const token = await user.generateToken();
+      // $FlowFixMe: intersection bug
+      ctx.cookies.set('access_token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      });
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+  }
+
   ctx.body = {
     user: ctx.user,
   };

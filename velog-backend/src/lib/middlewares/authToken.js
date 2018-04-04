@@ -15,7 +15,7 @@ export default async (ctx: Context, next: () => Promise<*>) => {
     const { user, exp } = decoded;
 
     ctx.user = user;
-    ctx.tokenExpire = exp;
+    ctx.tokenExpire = new Date(exp * 1000);
   } catch (e) {
     ctx.user = null;
   }
