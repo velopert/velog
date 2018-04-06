@@ -2,11 +2,26 @@
 
 .MarkdownRender {
   text-align: justify;
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   word-break: break-all;
   
+  p {
+    line-height: 1.75em;
+    font-weight: 300;
+  }
+
+  strong, b {
+    font-weight: 500;
+  }
+  
+  p + p {
+    margin-top: 2em;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 1em;
   }
   &.atom-one {
     @import './prism-atom-one';
@@ -44,13 +59,18 @@
       font-size: 0.81em;
     }
   }
+  ul, ol {
+    font-weight: 300;
+  }
   ul {
     padding-left: 30px;
+    line-height: 1.75em;
     li + li {
       margin-top: 0.75rem;
     }
   }
   ol {
+    line-height: 1.75em;
     padding-left: 30px;
   }
   ol li ul:first-of-type {
@@ -163,5 +183,9 @@
   }
   img {
     max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
   }
 }
