@@ -217,8 +217,8 @@ const reducer = handleActions({
         name: '',
         urlSlug: '',
         active: false,
-        edit: false,
-        temp: false,
+        edit: true,
+        temp: true,
         edited: false,
         hide: false,
       };

@@ -1,13 +1,26 @@
 @import 'utils';
 
 .PostHead {
-  margin-top: 3rem;
+  width: 980px;
+  margin: 0 auto;
+  @include media("<980px") {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    width: 100%;
+  }
+
+  margin-top: 5rem;
+  @include media("<980px") {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin-top: 2.5rem;
+  }
   padding-bottom: 2rem;
   .sub-info {
     display: flex;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid $oc-gray-2;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
     .thumbnail {
       img {
         display: block;
@@ -35,7 +48,10 @@
   h1 {
     margin: 0;
     font-weight: 500;
-    font-size: 3.5rem;
+    font-size: 2.75rem;
+    @include media("<large") {
+      font-size: 2rem;
+    }
   }
   .tags { 
     margin-top: 1rem;

@@ -4,6 +4,7 @@ import type { Auth } from './modules/auth';
 import type { User } from './modules/user';
 import type { Base } from './modules/base';
 import type { Write } from './modules/write';
+import type { Posts } from './modules/posts';
 import type { Sample } from './modules/sample';
 
 const store = configure();
@@ -15,6 +16,7 @@ export type State = {
   user: User,
   base: Base,
   write: Write,
+  posts: Posts,
   sample: Sample,
   pender: {
     pending: any,

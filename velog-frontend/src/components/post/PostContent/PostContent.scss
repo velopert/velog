@@ -2,6 +2,9 @@
 
 .PostContent {
   margin-top: 10rem;
+  @include media("<large") {
+    margin-top: 7.5rem;
+  }
   background: #f4f6f8;
   svg {
     display: block;
@@ -12,13 +15,36 @@
     padding-bottom: 4rem;
   }
   .floating-box {
+    width: 980px;
+    @include media("<980px") {
+      width: 100%;
+    }
+    margin: 0 auto;
     position: relative;
     z-index: 5;
     margin-top: -22rem;
-    padding: 4rem;
     background: white;
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.125), 0px 1px 10px rgba(0, 0, 0, 0.11);
+    box-shadow: 0px 20px 150px #d6dee4;
     min-height: 768px;
+    img {
+      display: block;
+      width: 100%;
+    }
+    .contents {
+      padding: 4rem;
+      @include media("<large") {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+      .MarkdownRender {
+        @include media("<large") {
+          font-size: 1rem;
+        }
+        @include media("<medium") {
+          font-size: 0.875rem;
+        }
+      }
+    }
     
 
     pre[class*="language-"] {
@@ -28,6 +54,15 @@
       margin-right: -4rem;
       margin-top: 2rem;
       margin-bottom: 2rem;
+
+      @include media("<large") {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+      }
     }
+
+    
   }
 }

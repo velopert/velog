@@ -3,10 +3,13 @@ import React from 'react';
 import Responsive from 'components/common/Responsive';
 import './PostHead.scss';
 
-type Props = { }
+type Props = {
+  title: string,
+  tags: string[]
+};
 
-const PostHead = (props: Props) => (
-  <Responsive className="PostHead">
+const PostHead = ({ title, tags }: Props) => (
+  <div className="PostHead">
     <div className="sub-info">
       <div className="thumbnail util flex-center">
         <img
@@ -23,14 +26,14 @@ const PostHead = (props: Props) => (
       </div>
     </div>
     <h1>
-      리액트 16.3 새로워진 Context API 파헤치기
+      {title}
     </h1>
     <div className="tags">
-      <span className="tag">React</span>
-      <span className="tag">JavaScript</span>
-      <span className="tag">Context</span>
+      {
+        tags.map(tag => (<span className="tag" key={tag}>{tag}</span>))
+      }
     </div>
-  </Responsive>
+  </div>
 );
 
 export default PostHead;

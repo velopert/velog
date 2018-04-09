@@ -26,3 +26,10 @@ export type UpdatePostPayload = {
 export const updatePost = ({ id, ...payload }: UpdatePostPayload) => axios.patch(
   `/posts/${id}`, payload,
 );
+
+export type ReadPostPayload = {
+  username: string,
+  urlSlug: string,
+};
+
+export const readPost = ({ username, urlSlug }: ReadPostPayload) => axios.get(`/posts/@${username}/${urlSlug}`);
