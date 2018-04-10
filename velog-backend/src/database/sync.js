@@ -13,6 +13,7 @@ import {
   FollowUser,
   FollowTag,
   PostHistory,
+  PostImage,
 } from './models';
 
 export function associate() {
@@ -28,6 +29,7 @@ export function associate() {
   FollowUser.associate();
   FollowTag.associate();
   PostHistory.associate();
+  PostImage.associate();
 }
 export default function sync() {
   associate();
@@ -46,5 +48,6 @@ export default function sync() {
   FollowUser.sync();
   FollowTag.sync();
   PostHistory.sync();
+  PostImage.sync();
 }
 
