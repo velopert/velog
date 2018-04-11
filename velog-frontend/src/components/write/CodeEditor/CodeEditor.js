@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import marked from 'marked';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
@@ -26,23 +26,24 @@ if (process.env.APP_ENV !== 'server') {
 
 type Props = {
   body: string,
-  onEditBody(value: string): any
-}
+  onEditBody(value: string): any,
+  imageButton: Node,
+};
 
 type State = {
-  cursor: any
+  cursor: any,
 };
 
 class CodeEditor extends Component<Props, State> {
-  codeMirror: any
-  editor: any
-  prevScrollTop: number
-  scrollBefore: number // changes only when active scroll line changes
-  prevOffsetTop: number
-  prevPreviewScrollTop: number
+  codeMirror: any;
+  editor: any;
+  prevScrollTop: number;
+  scrollBefore: number; // changes only when active scroll line changes
+  prevOffsetTop: number;
+  prevPreviewScrollTop: number;
   state = {
     cursor: null,
-  }
+  };
 
   onScroll = (e: any) => {
     // retrieve current scroll info and line number
@@ -55,12 +56,21 @@ class CodeEditor extends Component<Props, State> {
     this.prevScrollTop = scrollInfo.top;
 
     // content from line 0 -> lineNumber
-    const range = e.getRange({ line: 0, ch: null }, { line: lineNumber, ch: null });
+    const range = e.getRange(
+      {
+        line: 0,
+        ch: null,
+      },
+      {
+        line: lineNumber,
+        ch: null,
+      },
+    );
     const { top, clientHeight, height } = scrollInfo;
 
     // scroll to bottom
     if (height - clientHeight - top < 2) {
-      (preview :any).scroll({
+      (preview: any).scroll({
         behavior: 'smooth',
         top: preview.scrollHeight,
       });
@@ -77,14 +87,18 @@ class CodeEditor extends Component<Props, State> {
     const doc = parser.parseFromString(markdown, 'text/html');
     if (!doc.body) return;
     // count lines
-    const totalLines = doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
+    const totalLines = doc.body.querySelectorAll(
+      'p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table',
+    );
     const markdownRender = document.getElementById('markdown-render');
     if (!markdownRender || !preview) return;
     // select all lines
-    const elements = markdownRender.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
+    const elements = markdownRender.querySelectorAll(
+      'p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table',
+    );
     if (!elements) return;
     // retrieve scrollTop of rendered current line
-    const index = (totalLines.length > elements.length) ? elements.length : totalLines.length;
+    const index = totalLines.length > elements.length ? elements.length : totalLines.length;
     if (!elements[index - 1]) return;
     const { offsetTop } = elements[index - 1];
     console.log(totalLines[index - 1], elements[index - 1]);
@@ -98,12 +112,12 @@ class CodeEditor extends Component<Props, State> {
     if (previewScrollTop > this.prevPreviewScrollTop && !down) return;
     this.prevPreviewScrollTop = previewScrollTop;
     // actually scroll
-    (preview :any).scroll({
+    (preview: any).scroll({
       behavior: 'smooth',
       top: previewScrollTop,
     });
     // console.log(elements[index - 1]);
-  }
+  };
 
   initialize = () => {
     if (!CodeMirror) return;
@@ -118,7 +132,7 @@ class CodeEditor extends Component<Props, State> {
     this.codeMirror.on('change', this.onChange);
     this.codeMirror.on('scroll', this.onScroll);
     // TODO: load data (for updating)
-  }
+  };
 
   onChange = (doc: any) => {
     const cursor = doc.getCursor();
@@ -137,7 +151,7 @@ class CodeEditor extends Component<Props, State> {
       if (!preview) return;
       preview.scrollTop = preview.scrollHeight;
     }
-  }
+  };
 
   componentDidMount() {
     this.initialize();
@@ -147,9 +161,7 @@ class CodeEditor extends Component<Props, State> {
     // const { codeMirror } = this;
     // const { cursor } = this.state;
     // const { body } = this.props;
-
     // if (!codeMirror) return;
-
     // // diff cursor
     // if (prevState.cursor !== cursor) {
     //   codeMirror.setCursor(cursor);
@@ -171,10 +183,18 @@ class CodeEditor extends Component<Props, State> {
   }
 
   render() {
+    const { imageButton } = this.props;
+
     return (
       <div className="CodeEditor material">
-        <div className="editor" ref={(ref) => { this.editor = ref; }} />
-        {/* <textarea ref={(ref) => { this.textarea = ref; }} /> */ }
+        <div
+          className="editor"
+          ref={(ref) => {
+            this.editor = ref;
+          }}
+        />
+        {imageButton}
+        {/* <textarea ref={(ref) => { this.textarea = ref; }} /> */}
       </div>
     );
   }

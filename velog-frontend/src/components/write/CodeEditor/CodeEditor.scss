@@ -1,6 +1,7 @@
-@import 'utils';
+@import "utils";
 
 .CodeEditor {
+  position: relative;
   display: flex;
   flex: 1;
   min-width: 0;
@@ -13,19 +14,18 @@
     flex: 1;
     display: flex;
     .CodeMirror {
-      
       .CodeMirror-lines {
-        padding-right: 1rem;
+        padding-right: 2rem;
       }
       flex: 1;
       height: auto;
       // font-family: 'D2 coding';
-      font-family: 'D2 Coding', sans-serif;
+      font-family: "Inconsolata", "D2 Coding", sans-serif;
       font-size: 1.125rem;
       line-height: 1.5em;
 
       .cm-header {
-        font-family: 'Noto Sans KR';
+        font-family: "Noto Sans KR";
       }
 
       .cm-header-1 {
@@ -40,7 +40,7 @@
         font-size: 2rem;
         line-height: 3rem;
       }
-      .cm-header-4 { 
+      .cm-header-4 {
         font-size: 1.75rem;
         line-height: 2.5rem;
       }
@@ -49,7 +49,7 @@
         .cm-header {
           color: $oc-gray-9;
           font-weight: 600;
-          &.cm-comment  {
+          &.cm-comment {
             color: $oc-gray-7;
           }
         }
@@ -60,7 +60,7 @@
         }
         .cm-header {
           color: white;
-          &.cm-comment  {
+          &.cm-comment {
             color: $oc-gray-6;
           }
         }

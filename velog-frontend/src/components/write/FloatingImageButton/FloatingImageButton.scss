@@ -1,0 +1,24 @@
+@import "utils";
+
+.FloatingImageButton {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: #475869;
+  transition: all ease-in 0.15s;
+  @include material-shadow(3, 0.25);
+  @include hover() {
+    background: lighten(#475869, 5%);
+  }
+  &:active {
+    background: darken(#475869, 2.5%);
+  }
+  color: white;
+  height: 3.5rem;
+  width: 3.5rem;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
