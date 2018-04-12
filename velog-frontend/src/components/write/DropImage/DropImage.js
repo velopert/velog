@@ -8,6 +8,7 @@ type Props = {};
 class DropImage extends Component<Props> {
   componentDidMount() {
     this.applyListeners();
+    const str = 'a';
   }
 
   applyListeners = () => {
