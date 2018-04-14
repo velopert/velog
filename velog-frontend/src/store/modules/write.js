@@ -5,7 +5,6 @@ import * as MeAPI from 'lib/api/me';
 import * as PostsAPI from 'lib/api/posts';
 import { applyPenders } from 'lib/common';
 
-
 /* ACTION TYPE */
 const EDIT_FIELD = 'write/EDIT_FIELD';
 const OPEN_SUBMIT_BOX = 'write/OPEN_SUBMIT_BOX';
@@ -28,7 +27,7 @@ const REORDER_CATEGORY = 'write/REORDER_CATEGORY';
 const REORDER_CATEGORIES = 'write/REORDER_CATEGORIES';
 const UPDATE_POST = 'write/UPDATE_POST';
 const RESET = 'write/RESET';
-
+const TEMP_SAVE = 'write/TEMP_SAVE';
 
 let tempCategoryId = 0;
 
@@ -39,27 +38,28 @@ type ReorderCategoryPayload = { from: number, to: number };
 
 /* ACTION CREATORS INTERFACE */
 export interface WriteActionCreators {
-  editField(payload: EditFieldPayload): any,
-  openSubmitBox(): any,
-  closeSubmitBox(): any,
-  listCategories(): any,
-  toggleCategory(id: string): any,
-  insertTag(tag: string): any,
-  removeTag(tag: string): any,
-  writePost(payload: PostsAPI.WritePostPayload): any,
-  openCategoryModal(): any,
-  closeCategoryModal(): any,
-  createTempCategory(): any,
-  toggleEditCategory(id: string): any,
-  changeCategoryName(payload: ChangeCategoryNamePayload): any,
-  hideCategory(id: string): any,
-  createCategory(name: string, id: string): any,
-  deleteCategory(id: string): any,
-  updateCategory(payload: MeAPI.UpdateCategoryPayload): any,
-  reorderCategory(payload: ReorderCategoryPayload): any,
-  reorderCategories(categoryOrders: MeAPI.ReorderCategoryPayload): any,
-  updatePost(payload: PostsAPI.UpdatePostPayload): any,
-  reset(): any,
+  editField(payload: EditFieldPayload): any;
+  openSubmitBox(): any;
+  closeSubmitBox(): any;
+  listCategories(): any;
+  toggleCategory(id: string): any;
+  insertTag(tag: string): any;
+  removeTag(tag: string): any;
+  writePost(payload: PostsAPI.WritePostPayload): any;
+  openCategoryModal(): any;
+  closeCategoryModal(): any;
+  createTempCategory(): any;
+  toggleEditCategory(id: string): any;
+  changeCategoryName(payload: ChangeCategoryNamePayload): any;
+  hideCategory(id: string): any;
+  createCategory(name: string, id: string): any;
+  deleteCategory(id: string): any;
+  updateCategory(payload: MeAPI.UpdateCategoryPayload): any;
+  reorderCategory(payload: ReorderCategoryPayload): any;
+  reorderCategories(categoryOrders: MeAPI.ReorderCategoryPayload): any;
+  updatePost(payload: PostsAPI.UpdatePostPayload): any;
+  reset(): any;
+  tempSave(payload: PostsAPI.TempSavePayload): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -77,7 +77,9 @@ export const actionCreators = {
   createTempCategory: createAction(CREATE_TEMP_CATEGORY),
   toggleEditCategory: createAction(TOGGLE_EDIT_CATEGORY, id => id),
   changeCategoryName: createAction(
-    CHANGE_CATEGORY_NAME, (payload: ChangeCategoryNamePayload) => payload),
+    CHANGE_CATEGORY_NAME,
+    (payload: ChangeCategoryNamePayload) => payload,
+  ),
   hideCategory: createAction(HIDE_CATEGORY, id => id),
   createCategory: createAction(CREATE_CATEGORY, MeAPI.createCategory, (name, id) => id),
   deleteCategory: createAction(DELETE_CATEGORY, MeAPI.deleteCategory),
@@ -86,6 +88,7 @@ export const actionCreators = {
   reorderCategories: createAction(REORDER_CATEGORIES, MeAPI.reorderCategories),
   updatePost: createAction(UPDATE_POST, PostsAPI.updatePost),
   reset: createAction(RESET),
+  tempSave: createAction(TEMP_SAVE, PostsAPI.tempSave),
 };
 
 /* ACTION FLOW TYPE */
@@ -111,17 +114,17 @@ export type Category = {
   edit?: boolean,
   hide?: boolean,
   edited?: boolean,
-}
+};
 export type Categories = Category[];
 export type SubmitBox = {
   open: boolean,
   tags: string[],
-  categories: ?Categories
+  categories: ?Categories,
 };
 export type CategoryModal = {
   open: boolean,
   categories: ?Categories,
-  ordered: boolean
+  ordered: boolean,
 };
 export type PostData = {
   id: string,
@@ -129,11 +132,12 @@ export type PostData = {
   body: string,
   thumbnail: string,
   is_markdown: boolean,
+  is_temp: boolean,
   created_at: string,
   updated_at: string,
   tags: string[],
   categories: { id: string, name: string }[],
-  url_slug: string
+  url_slug: string,
 };
 export type Write = {
   body: string,
@@ -159,122 +163,118 @@ const initialState: Write = {
   },
 };
 
-const reducer = handleActions({
-  [EDIT_FIELD]: (state, { payload }: EditFieldAction) => {
-    const { field, value } = payload;
-    return produce(state, (draft) => {
-      draft[field] = value;
-    });
-  },
-  [OPEN_SUBMIT_BOX]: (state) => {
-    return produce(state, (draft) => {
-      draft.submitBox.open = true;
-    });
-  },
-  [CLOSE_SUBMIT_BOX]: state => produce(state, (draft) => {
-    draft.submitBox.open = false;
-  }),
-  [TOGGLE_CATEGORY]: (state, { payload: id }: ToggleCategoryAction) => {
-    if (!state.submitBox.categories) return state;
-    const index = state.submitBox.categories.findIndex(
-      category => category.id === id,
-    );
-    return produce(state, (draft) => {
-      if (!draft.submitBox.categories) return;
-      draft.submitBox.categories[index].active = !draft.submitBox.categories[index].active;
-    });
-  },
-  [INSERT_TAG]: (state, { payload: tag }: InsertTagAction) => {
-    return produce(state, (draft) => {
-      draft.submitBox.tags.push(tag);
-    });
-  },
-  [REMOVE_TAG]: (state, { payload: tag }: RemovetagAction) => {
-    return produce(state, (draft) => {
-      draft.submitBox.tags = draft.submitBox.tags.filter(t => t !== tag);
-    });
-  },
-  [OPEN_CATEGORY_MODAL]: (state) => {
-    return produce(state, (draft) => {
-      draft.categoryModal.open = true;
-      draft.categoryModal.categories = state.submitBox.categories;
-      draft.categoryModal.ordered = false;
-    });
-  },
-  [CLOSE_CATEGORY_MODAL]: (state) => {
-    return produce(state, (draft) => {
-      draft.categoryModal.open = false;
-    });
-  },
-  [CREATE_TEMP_CATEGORY]: (state) => {
-    return produce(state, (draft) => {
-      tempCategoryId += 1;
-      const tempCategory: Category = {
-        id: tempCategoryId.toString(),
-        order: 0,
-        parent: '',
-        private: false,
-        name: '',
-        urlSlug: '',
-        active: false,
-        edit: true,
-        temp: true,
-        edited: false,
-        hide: false,
-      };
-      if (!draft.categoryModal.categories) return;
-      draft.categoryModal.categories.push(tempCategory);
-    });
-  },
-  [TOGGLE_EDIT_CATEGORY]: (state, { payload: id }: ToggleEditCategoryAction) => {
-    if (!state.categoryModal.categories) return state;
-    const index = state.categoryModal.categories.findIndex(
-      c => c.id === id,
-    );
-    return produce(state, (draft) => {
-      if (!draft.categoryModal.categories) return;
-      const category = draft.categoryModal.categories[index];
-      category.edit = !category.edit;
-      category.edited = true;
-    });
-  },
-  [CHANGE_CATEGORY_NAME]: (state, { payload: { id, name } }: ChangeCategoryNameAction) => {
-    if (!state.categoryModal.categories) return state;
-    const index = state.categoryModal.categories.findIndex(
-      c => c.id === id,
-    );
-    return produce(state, (draft) => {
-      if (!draft.categoryModal.categories) return;
-      draft.categoryModal.categories[index].name = name;
-    });
-  },
-  [HIDE_CATEGORY]: (state, { payload: id }: HideCategoryAction) => {
-    if (!state.categoryModal.categories) return state;
-    const index = state.categoryModal.categories.findIndex(
-      c => c.id === id,
-    );
-    return produce(state, (draft) => {
-      if (!draft.categoryModal.categories) return;
-      draft.categoryModal.categories[index].hide = true;
-    });
-  },
-  [REORDER_CATEGORY]: (state, { payload: { from, to } }: ReorderCategoryAction) => {
-    if (!state.categoryModal.categories) return state;
-    const fromItem = state.categoryModal.categories[from];
-    return produce(state, (draft) => {
-      if (!draft.categoryModal.categories) return;
-      draft.categoryModal.categories.splice(from, 1);
+const reducer = handleActions(
+  {
+    [EDIT_FIELD]: (state, { payload }: EditFieldAction) => {
+      const { field, value } = payload;
+      return produce(state, (draft) => {
+        draft[field] = value;
+      });
+    },
+    [OPEN_SUBMIT_BOX]: (state) => {
+      return produce(state, (draft) => {
+        draft.submitBox.open = true;
+      });
+    },
+    [CLOSE_SUBMIT_BOX]: state =>
+      produce(state, (draft) => {
+        draft.submitBox.open = false;
+      }),
+    [TOGGLE_CATEGORY]: (state, { payload: id }: ToggleCategoryAction) => {
+      if (!state.submitBox.categories) return state;
+      const index = state.submitBox.categories.findIndex(category => category.id === id);
+      return produce(state, (draft) => {
+        if (!draft.submitBox.categories) return;
+        draft.submitBox.categories[index].active = !draft.submitBox.categories[index].active;
+      });
+    },
+    [INSERT_TAG]: (state, { payload: tag }: InsertTagAction) => {
+      return produce(state, (draft) => {
+        draft.submitBox.tags.push(tag);
+      });
+    },
+    [REMOVE_TAG]: (state, { payload: tag }: RemovetagAction) => {
+      return produce(state, (draft) => {
+        draft.submitBox.tags = draft.submitBox.tags.filter(t => t !== tag);
+      });
+    },
+    [OPEN_CATEGORY_MODAL]: (state) => {
+      return produce(state, (draft) => {
+        draft.categoryModal.open = true;
+        draft.categoryModal.categories = state.submitBox.categories;
+        draft.categoryModal.ordered = false;
+      });
+    },
+    [CLOSE_CATEGORY_MODAL]: (state) => {
+      return produce(state, (draft) => {
+        draft.categoryModal.open = false;
+      });
+    },
+    [CREATE_TEMP_CATEGORY]: (state) => {
+      return produce(state, (draft) => {
+        tempCategoryId += 1;
+        const tempCategory: Category = {
+          id: tempCategoryId.toString(),
+          order: 0,
+          parent: '',
+          private: false,
+          name: '',
+          urlSlug: '',
+          active: false,
+          edit: true,
+          temp: true,
+          edited: false,
+          hide: false,
+        };
+        if (!draft.categoryModal.categories) return;
+        draft.categoryModal.categories.push(tempCategory);
+      });
+    },
+    [TOGGLE_EDIT_CATEGORY]: (state, { payload: id }: ToggleEditCategoryAction) => {
+      if (!state.categoryModal.categories) return state;
+      const index = state.categoryModal.categories.findIndex(c => c.id === id);
+      return produce(state, (draft) => {
+        if (!draft.categoryModal.categories) return;
+        const category = draft.categoryModal.categories[index];
+        category.edit = !category.edit;
+        category.edited = true;
+      });
+    },
+    [CHANGE_CATEGORY_NAME]: (state, { payload: { id, name } }: ChangeCategoryNameAction) => {
+      if (!state.categoryModal.categories) return state;
+      const index = state.categoryModal.categories.findIndex(c => c.id === id);
+      return produce(state, (draft) => {
+        if (!draft.categoryModal.categories) return;
+        draft.categoryModal.categories[index].name = name;
+      });
+    },
+    [HIDE_CATEGORY]: (state, { payload: id }: HideCategoryAction) => {
+      if (!state.categoryModal.categories) return state;
+      const index = state.categoryModal.categories.findIndex(c => c.id === id);
+      return produce(state, (draft) => {
+        if (!draft.categoryModal.categories) return;
+        draft.categoryModal.categories[index].hide = true;
+      });
+    },
+    [REORDER_CATEGORY]: (state, { payload: { from, to } }: ReorderCategoryAction) => {
+      if (!state.categoryModal.categories) return state;
+      const fromItem = state.categoryModal.categories[from];
+      return produce(state, (draft) => {
+        if (!draft.categoryModal.categories) return;
+        draft.categoryModal.categories.splice(from, 1);
 
-      if (!draft.categoryModal.categories) return;
-      draft.categoryModal.categories.splice(to, 0, fromItem);
-      draft.categoryModal.ordered = true;
-    });
+        if (!draft.categoryModal.categories) return;
+        draft.categoryModal.categories.splice(to, 0, fromItem);
+        draft.categoryModal.ordered = true;
+      });
+    },
+    [RESET]: (state, action) => {
+      // resets the state (when leaves write page)
+      return initialState;
+    },
   },
-  [RESET]: (state, action) => {
-    // resets the state (when leaves write page)
-    return initialState;
-  },
-}, initialState);
+  initialState,
+);
 
 export default applyPenders(reducer, [
   {
@@ -290,7 +290,7 @@ export default applyPenders(reducer, [
       }));
       return produce(state, (draft) => {
         draft.submitBox.categories = categories;
-        // turn on active categories
+        // turn on active categories (created post)
         if (state.postData) {
           const categoryIds = state.postData.categories.map(c => c.id);
           if (!draft.submitBox.categories) return;
@@ -298,6 +298,14 @@ export default applyPenders(reducer, [
             ...c,
             active: categoryIds.indexOf(c.id) !== -1,
           }));
+        }
+        // existing active categories
+        if (state.submitBox.categories && state.submitBox.categories.length > 0) {
+          const categoryIds = state.submitBox.categories.filter(c => c.active).map(c => c.id);
+          if (!draft.submitBox.categories) return;
+          draft.submitBox.categories = draft.submitBox.categories.map(
+            c => (categoryIds.indexOf(c.id) !== -1 ? { ...c, active: true } : c),
+          );
         }
       });
     },

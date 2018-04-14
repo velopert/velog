@@ -28,6 +28,7 @@ class DropImage extends Component<Props> {
       console.log(filesArray);
       const data = new FormData();
       data.append('image', files[0]);
+      data.append('post_id', 'ff04fa20-3f2b-11e8-adb7-5344ec582abb');
       axios.post('/files/upload', data, {
         onUploadProgress: (uploadEvent) => {
           console.log(`${uploadEvent.loaded}/${uploadEvent.total}`);
