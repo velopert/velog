@@ -7,7 +7,6 @@ import Post from 'database/models/Post';
 import PostImage from 'database/models/PostImage';
 import { isUUID } from 'lib/common';
 
-
 const s3 = new AWS.S3();
 
 export const upload: Middleware = async (ctx: Context) => {
@@ -62,6 +61,18 @@ export const upload: Middleware = async (ctx: Context) => {
   }
 
   const stats = fs.statSync(image.path);
+  if (!stats) {
+    ctx.throw(500, 'failed to load stats');
+    return;
+  }
+  if (stats.size > 1024 * 1024 * 8) {
+    ctx.status = 413;
+    ctx.body = {
+      name: 'FILE_SIZE_EXCEEDS',
+      payload: '8MB',
+    };
+    return;
+  }
   // if no prob, create data
   try {
     const postImage = PostImage.build({
@@ -72,12 +83,14 @@ export const upload: Middleware = async (ctx: Context) => {
     const imagePath = `post-images/${ctx.user.username}/${postImage.id}/${image.name}`;
     postImage.path = imagePath;
     const read = fs.createReadStream(image.path);
-    const response = await s3.upload({
-      Bucket: 's3.images.velog.io',
-      Key: imagePath,
-      Body: read,
-      ContentType: image.type,
-    }).promise();
+    const response = await s3
+      .upload({
+        Bucket: 's3.images.velog.io',
+        Key: imagePath,
+        Body: read,
+        ContentType: image.type,
+      })
+      .promise();
     if (!response || !response.ETag) {
       console.log(response);
       ctx.status = 418; // I AM A TEAPOT
