@@ -3,9 +3,27 @@
 import type { Context } from 'koa';
 import Joi from 'joi';
 import { validateSchema, filterUnique, generateSlugId, escapeForUrl } from 'lib/common';
-import { Category, Post, PostsCategories, PostsTags, Tag, User, UserProfile, Comment } from 'database/models';
+import {
+  Category,
+  Post,
+  PostsCategories,
+  PostsTags,
+  Tag,
+  User,
+  UserProfile,
+  Comment,
+} from 'database/models';
 import { serializePost, type PostModel } from 'database/models/Post';
 import Sequelize from 'sequelize';
+
+function createFeeds(postId: string): void {
+  // TODO:
+  // 1. USER FOLLOW
+  // 2. TAG FOLLOW (FOR EACH)
+  // 3. Remove Duplicate
+  // 4. Create Feeds
+  // 5. Short Polling
+}
 
 export const writePost = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -22,15 +40,24 @@ export const writePost = async (ctx: Context): Promise<*> => {
   };
 
   const schema = Joi.object().keys({
-    title: Joi.string().required().min(1).max(120),
-    body: Joi.string().required().min(1),
+    title: Joi.string()
+      .required()
+      .min(1)
+      .max(120),
+    body: Joi.string()
+      .required()
+      .min(1),
     shortDescription: Joi.string(),
     thumbnail: Joi.string(),
     isMarkdown: Joi.boolean().required(),
     isTemp: Joi.boolean().required(),
     meta: Joi.object(),
-    categories: Joi.array().items(Joi.string()).required(),
-    tags: Joi.array().items(Joi.string()).required(),
+    categories: Joi.array()
+      .items(Joi.string())
+      .required(),
+    tags: Joi.array()
+      .items(Joi.string())
+      .required(),
     urlSlug: Joi.string().max(130),
   });
 
@@ -39,8 +66,16 @@ export const writePost = async (ctx: Context): Promise<*> => {
   }
 
   const {
-    title, body, shortDescription, thumbnail,
-    isMarkdown, isTemp, meta, categories, tags, urlSlug,
+    title,
+    body,
+    shortDescription,
+    thumbnail,
+    isMarkdown,
+    isTemp,
+    meta,
+    categories,
+    tags,
+    urlSlug,
   }: BodySchema = (ctx.request.body: any);
 
   const generatedUrlSlug = `${title} ${generateSlugId()}`;
@@ -117,8 +152,16 @@ const serialize = (data) => {
   const tags = data.tags.map(t => t.name);
   const categories = data.categories.map(c => c.name);
   return {
-    id, title, body: body.slice(0, 250), thumbnail, is_markdown,
-    created_at, updated_at, tags, categories, url_slug,
+    id,
+    title,
+    body: body.slice(0, 250),
+    thumbnail,
+    is_markdown,
+    created_at,
+    updated_at,
+    tags,
+    categories,
+    url_slug,
   };
 };
 
@@ -132,7 +175,10 @@ export const listPosts = async (ctx: Context): Promise<*> => {
   }
 
   const query = {
-    username, categoryUrlSlug: category, tag, page: parseInt(page, 10),
+    username,
+    categoryUrlSlug: category,
+    tag,
+    page: parseInt(page, 10),
   };
 
   try {
@@ -143,7 +189,7 @@ export const listPosts = async (ctx: Context): Promise<*> => {
       return;
     }
     ctx.body = result.data.map(serializePost);
-    ctx.set('Count', (result.count).toString());
+    ctx.set('Count', result.count.toString());
     ctx.set('Page-Limit', Math.ceil(result.count / 10).toString());
   } catch (e) {
     ctx.throw(500, e);

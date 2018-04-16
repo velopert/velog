@@ -14,3 +14,4 @@ export { default as FollowUser } from './FollowUser';
 export { default as FollowTag } from './FollowTag';
 export { default as PostHistory } from './PostHistory';
 export { default as PostImage } from './PostImage';
+export { default as Feed } from './Feed';
