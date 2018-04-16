@@ -27,6 +27,8 @@ if (process.env.APP_ENV !== 'server') {
 type Props = {
   body: string,
   onEditBody(value: string): any,
+  onDragEnter(): void,
+  onDragLeave(): void,
   imageButton: Node,
 };
 
@@ -121,6 +123,7 @@ class CodeEditor extends Component<Props, State> {
 
   initialize = () => {
     if (!CodeMirror) return;
+    const { onDragEnter, onDragLeave } = this.props;
     this.codeMirror = CodeMirror(this.editor, {
       mode: 'markdown',
       theme: 'material',
@@ -131,6 +134,8 @@ class CodeEditor extends Component<Props, State> {
     });
     this.codeMirror.on('change', this.onChange);
     this.codeMirror.on('scroll', this.onScroll);
+    this.codeMirror.on('dragenter', onDragEnter);
+    this.codeMirror.on('dragleave', onDragLeave);
     // TODO: load data (for updating)
   };
 

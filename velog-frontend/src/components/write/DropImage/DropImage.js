@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 import axios from 'lib/defaultClient';
 import './DropImage.scss';
 
-type Props = {};
+type Props = {
+  onDragEnter(e: any): void,
+  onDragLeave(e: any): void,
+};
 
 class DropImage extends Component<Props> {
   componentDidMount() {
@@ -12,8 +15,19 @@ class DropImage extends Component<Props> {
   }
 
   applyListeners = () => {
-    if (!document || !document.body) return;
-    document.body.addEventListener('drop', this.onDrop);
+    const { onDragEnter, onDragLeave } = this.props;
+    if (window) {
+      window.addEventListener('drop', this.onDrop);
+      window.addEventListener('dragenter', onDragEnter);
+      window.addEventListener('dragleave', onDragLeave);
+      window.addEventListener(
+        'dragover',
+        (e) => {
+          e.preventDefault();
+        },
+        false,
+      );
+    }
   };
 
   removeListeners = () => {};

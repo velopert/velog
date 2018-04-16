@@ -28,6 +28,7 @@ const REORDER_CATEGORIES = 'write/REORDER_CATEGORIES';
 const UPDATE_POST = 'write/UPDATE_POST';
 const RESET = 'write/RESET';
 const TEMP_SAVE = 'write/TEMP_SAVE';
+const SET_UPLOAD_MASK = 'write/SET_UPLOAD_MASK';
 
 let tempCategoryId = 0;
 
@@ -60,6 +61,7 @@ export interface WriteActionCreators {
   updatePost(payload: PostsAPI.UpdatePostPayload): any;
   reset(): any;
   tempSave(payload: PostsAPI.TempSavePayload): any;
+  setUploadMask(visible: boolean): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -89,6 +91,7 @@ export const actionCreators = {
   updatePost: createAction(UPDATE_POST, PostsAPI.updatePost),
   reset: createAction(RESET),
   tempSave: createAction(TEMP_SAVE, PostsAPI.tempSave),
+  setUploadMask: createAction(SET_UPLOAD_MASK, (visible: boolean) => visible),
 };
 
 /* ACTION FLOW TYPE */
@@ -100,6 +103,7 @@ type ToggleEditCategoryAction = ActionType<typeof actionCreators.toggleEditCateg
 type ChangeCategoryNameAction = ActionType<typeof actionCreators.changeCategoryName>;
 type HideCategoryAction = ActionType<typeof actionCreators.hideCategory>;
 type ReorderCategoryAction = ActionType<typeof actionCreators.reorderCategory>;
+type SetUploadMaskAction = ActionType<typeof actionCreators.setUploadMask>;
 
 /* STATE TYPES */
 export type Category = {
@@ -145,6 +149,9 @@ export type Write = {
   submitBox: SubmitBox,
   postData: ?PostData,
   categoryModal: CategoryModal,
+  upload: {
+    mask: boolean,
+  },
 };
 
 const initialState: Write = {
@@ -160,6 +167,9 @@ const initialState: Write = {
     open: false,
     categories: null,
     ordered: false,
+  },
+  upload: {
+    mask: false,
   },
 };
 
@@ -268,9 +278,14 @@ const reducer = handleActions(
         draft.categoryModal.ordered = true;
       });
     },
-    [RESET]: (state, action) => {
+    [RESET]: () => {
       // resets the state (when leaves write page)
       return initialState;
+    },
+    [SET_UPLOAD_MASK]: (state, { payload: visible }: SetUploadMaskAction) => {
+      return produce(state, (draft) => {
+        draft.upload.mask = visible;
+      });
     },
   },
   initialState,

@@ -2,7 +2,8 @@ $z-layers: (
   "submit-box": 10,
   "write-header": 15,
   "modal": 100,
-  "modal-content": 110
+  "modal-content": 110,
+  "upload-mask": 120
 );
 
 @function z($layer) {

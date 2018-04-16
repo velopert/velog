@@ -7,9 +7,11 @@ import { connect } from 'react-redux';
 import type { State } from 'store';
 import { WriteActions } from 'store/actionCreators';
 import DropImage from 'components/write/DropImage';
+import WriteUploadMask from 'components/write/WriteUploadMask';
 
 type Props = {
   body: string,
+  mask: boolean,
 };
 
 class CodeEditorContainer extends Component<Props> {
@@ -31,22 +33,41 @@ class CodeEditorContainer extends Component<Props> {
     upload.click();
   };
 
+  onDragEnter = (e) => {
+    console.log(e && e.relatedTarget);
+    if (e && e.preventDefault) e.preventDefault();
+    setImmediate(() => {
+      console.log('enter');
+      WriteActions.setUploadMask(true);
+    });
+  };
+
+  onDragLeave = (e) => {
+    console.log(e && e.relatedTarget);
+    if (e && e.preventDefault) e.preventDefault();
+    console.log('leave');
+    WriteActions.setUploadMask(false);
+  };
+
   componentWillUnmount() {
     WriteActions.reset(); // reset Write Module on page leave
   }
 
   render() {
-    const { onEditBody } = this;
-    const { body } = this.props;
+    const { onEditBody, onDragEnter, onDragLeave } = this;
+    const { body, mask } = this.props;
 
     return (
       <Fragment>
         <CodeEditor
           onEditBody={onEditBody}
+          onDragEnter={onDragEnter}
+          onDragLeave={onDragLeave}
           body={body}
           imageButton={<FloatingImageButton onClick={this.onUploadClick} />}
         />
-        <DropImage />
+        <DropImage onDragEnter={onDragEnter} onDragLeave={onDragLeave} />
+        <WriteUploadMask visible={false} />
       </Fragment>
     );
   }
@@ -55,6 +76,7 @@ class CodeEditorContainer extends Component<Props> {
 export default connect(
   ({ write }: State) => ({
     body: write.body,
+    mask: write.upload.mask,
   }),
   () => ({}),
 )(CodeEditorContainer);
