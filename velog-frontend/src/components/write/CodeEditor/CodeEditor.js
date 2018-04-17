@@ -27,8 +27,8 @@ if (process.env.APP_ENV !== 'server') {
 type Props = {
   body: string,
   onEditBody(value: string): any,
-  onDragEnter(): void,
-  onDragLeave(): void,
+  onDragEnter(e: any): void,
+  onDragLeave(e: any): void,
   imageButton: Node,
 };
 
@@ -134,8 +134,8 @@ class CodeEditor extends Component<Props, State> {
     });
     this.codeMirror.on('change', this.onChange);
     this.codeMirror.on('scroll', this.onScroll);
-    this.codeMirror.on('dragenter', onDragEnter);
-    this.codeMirror.on('dragleave', onDragLeave);
+    this.codeMirror.on('dragenter', (event, e) => onDragEnter(e));
+    this.codeMirror.on('dragleave', (event, e) => onDragLeave(e));
     // TODO: load data (for updating)
   };
 

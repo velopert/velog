@@ -34,8 +34,7 @@ class CodeEditorContainer extends Component<Props> {
   };
 
   onDragEnter = (e) => {
-    console.log(e && e.relatedTarget);
-    if (e && e.preventDefault) e.preventDefault();
+    e.preventDefault();
     setImmediate(() => {
       console.log('enter');
       WriteActions.setUploadMask(true);
@@ -43,10 +42,9 @@ class CodeEditorContainer extends Component<Props> {
   };
 
   onDragLeave = (e) => {
-    console.log(e && e.relatedTarget);
-    if (e && e.preventDefault) e.preventDefault();
-    console.log('leave');
-    WriteActions.setUploadMask(false);
+    console.log(e.relatedTarget);
+    e.preventDefault();
+    if (!e.relatedTarget) WriteActions.setUploadMask(false);
   };
 
   componentWillUnmount() {
@@ -67,7 +65,7 @@ class CodeEditorContainer extends Component<Props> {
           imageButton={<FloatingImageButton onClick={this.onUploadClick} />}
         />
         <DropImage onDragEnter={onDragEnter} onDragLeave={onDragLeave} />
-        <WriteUploadMask visible={false} />
+        <WriteUploadMask visible={mask} />
       </Fragment>
     );
   }
