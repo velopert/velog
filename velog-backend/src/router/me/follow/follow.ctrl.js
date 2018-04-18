@@ -117,7 +117,6 @@ export const followUser: Middleware = async (ctx: Context) => {
   }
 };
 
-
 export const getFollowTagStatus: Middleware = async (ctx: Context) => {
   const { id: userId } = ctx.user;
   const tagId = ctx.params.id;
@@ -184,10 +183,6 @@ export const followTag: Middleware = async (ctx: Context) => {
   }
 };
 
-export const deleteFollowUser: Middleware = async (ctx: Context) => {
+export const deleteFollowUser: Middleware = async (ctx: Context) => {};
 
-};
-
-export const deleteFollowTag: Middleware = async (ctx: Context) => {
-
-};
+export const deleteFollowTag: Middleware = async (ctx: Context) => {};

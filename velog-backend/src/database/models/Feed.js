@@ -6,10 +6,12 @@ import { User, Post } from 'database/models';
 
 const Feed = db.define('feed', {
   id: primaryUUID,
-  reason_type: Sequelize.STRING,
-  reason_value: Sequelize.STRING,
   fk_post_id: Sequelize.UUID,
   fk_user_id: Sequelize.UUID,
+  score: {
+    type: Sequelize.INTEGER,
+    default: 1,
+  },
 });
 
 Feed.associate = function associate() {

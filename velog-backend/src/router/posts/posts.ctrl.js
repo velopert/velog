@@ -12,17 +12,68 @@ import {
   User,
   UserProfile,
   Comment,
+  FollowUser,
+  FollowTag,
 } from 'database/models';
+
 import { serializePost, type PostModel } from 'database/models/Post';
 import Sequelize from 'sequelize';
 
-function createFeeds(postId: string): void {
+type CreateFeedsParams = {
+  postId: string,
+  userId: string,
+  tags: { id: string, name: string }[],
+  username: string,
+};
+
+async function createFeeds({
+  postId, userId, tags, username,
+}: CreateFeedsParams): Promise<*> {
   // TODO:
+
+  const usersMap = new Map();
+
   // 1. USER FOLLOW
+  try {
+    const followers = await FollowUser.findAll({
+      attributes: ['fk_user_id'],
+      where: { fk_follow_user_id: userId },
+      raw: true,
+    });
+
+    followers.forEach(({ fk_user_id }) => {
+      usersMap.set(fk_user_id, [{ type: 'USER', value: username }]);
+    });
+  } catch (e) {
+    console.log(e);
+  }
   // 2. TAG FOLLOW (FOR EACH)
-  // 3. Remove Duplicate
-  // 4. Create Feeds
-  // 5. Short Polling
+  try {
+    const results = await Promise.all(tags.map(({ id }) => {
+      return FollowTag.findAll({
+        attributes: ['fk_user_id'],
+        where: { fk_tag_id: id },
+        raw: true,
+      });
+    }));
+    results.forEach((followers, i) => {
+      const tagName = tags[i].name;
+      followers.forEach(({ fk_user_id }) => {
+        const exists = usersMap.get(fk_user_id);
+        const reason = { type: 'TAG', value: tagName };
+        if (exists) {
+          exists.push(reason);
+        } else {
+          usersMap.set(fk_user_id, [reason]);
+        }
+      });
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  console.log(usersMap);
+  // 3. Create Feeds
+  // 4. Short Polling
 }
 
 export const writePost = async (ctx: Context): Promise<*> => {
@@ -125,6 +176,19 @@ export const writePost = async (ctx: Context): Promise<*> => {
     const serialized = serializePost(postData);
 
     ctx.body = serialized;
+
+    if (!isTemp) {
+      const tagData = tagIds.map((tagId, index) => ({
+        id: tagId,
+        name: uniqueTags[index],
+      }));
+      createFeeds({
+        postId,
+        userId: ctx.user.id,
+        username: ctx.user.username,
+        tags: tagData,
+      });
+    }
   } catch (e) {
     ctx.throw(500, e);
   }
