@@ -6,13 +6,13 @@ import EditIcon from 'react-icons/lib/md/edit';
 import './CategoryEditItem.scss';
 
 type Props = {
-  edit?: boolean;
-  name: string;
-  temp?: boolean;
-  onToggleEditCategory(): void;
-  onChange(e: SyntheticInputEvent<HTMLInputElement>): any;
-  onHide(): void;
-}
+  edit?: boolean,
+  name: string,
+  temp?: boolean,
+  onToggleEditCategory(): void,
+  onChange(e: SyntheticInputEvent<HTMLInputElement>): any,
+  onHide(): void,
+};
 
 const defaultProps = {
   edit: false,
@@ -25,8 +25,12 @@ const DefaultItem = ({ name, onHide, onToggleEditCategory }: Props) => {
     <Fragment>
       <div className="text">{name}</div>
       <div className="buttons">
-        <div className="button edit" onClick={onToggleEditCategory}><EditIcon /></div>
-        <div className="button remove" onClick={onHide}><RemoveIcon /></div>
+        <div className="button edit" onClick={onToggleEditCategory}>
+          <EditIcon />
+        </div>
+        <div className="button remove" onClick={onHide}>
+          <RemoveIcon />
+        </div>
       </div>
     </Fragment>
   );
@@ -53,11 +57,7 @@ class CategoryEditItem extends Component<Props> {
     const { edit, name } = this.props;
     return (
       <div className={cx('CategoryEditItem', { edit })}>
-        {
-          edit
-            ? <EditingItem {...this.props} />
-            : <DefaultItem {...this.props} />
-        }
+        {edit ? <EditingItem {...this.props} /> : <DefaultItem {...this.props} />}
       </div>
     );
   }

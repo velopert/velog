@@ -6,10 +6,7 @@ module.exports = {
   entry: slsw.lib.entries,
   target: 'node',
   resolve: {
-    modules: [
-      path.resolve('./src'),
-      'node_modules',
-    ],
+    modules: [path.resolve('./src'), 'node_modules'],
   },
   module: {
     loaders: [
@@ -26,9 +23,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           plugins: ['transform-object-rest-spread', 'transform-async-to-generator'],
-          presets: [
-            'flow',
-          ],
+          presets: ['flow'],
         },
       },
     ],
@@ -37,5 +32,8 @@ module.exports = {
     libraryTarget: 'commonjs',
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
+  },
+  externals: {
+    crypto: 'crypto',
   },
 };

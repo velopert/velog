@@ -14,6 +14,7 @@ import {
   Comment,
   FollowUser,
   FollowTag,
+  Feed,
 } from 'database/models';
 
 import { serializePost, type PostModel } from 'database/models/Post';
@@ -26,6 +27,13 @@ type CreateFeedsParams = {
   username: string,
 };
 
+function convertMapToObject(m: Map<string, *>): any {
+  const obj = {};
+  m.forEach((v, k) => {
+    obj[k] = v;
+  });
+  return obj;
+}
 async function createFeeds({
   postId, userId, tags, username,
 }: CreateFeedsParams): Promise<*> {
@@ -71,7 +79,14 @@ async function createFeeds({
   } catch (e) {
     console.log(e);
   }
-  console.log(usersMap);
+  // console.log(convertMapToObject(usersMap));
+  const userIds = [...usersMap.keys()];
+  const feeds = userIds.map(u => ({
+    fk_post_id: postId,
+    fk_user_id: userId,
+    reason: usersMap.get(u),
+  }));
+  await Feed.bulkCreate(feeds);
   // 3. Create Feeds
   // 4. Short Polling
 }

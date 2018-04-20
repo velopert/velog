@@ -8,9 +8,10 @@ const Feed = db.define('feed', {
   id: primaryUUID,
   fk_post_id: Sequelize.UUID,
   fk_user_id: Sequelize.UUID,
+  reason: Sequelize.JSONB,
   score: {
     type: Sequelize.INTEGER,
-    default: 1,
+    defaultValue: 1,
   },
 });
 

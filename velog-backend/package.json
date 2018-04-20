@@ -59,7 +59,7 @@
     "pg": "^7.4.1",
     "prettier-eslint": "^8.8.1",
     "sequelize": "^4.26.0",
-    "sequelize-cockroachdb": "^1.0.2",
+    "sequelize-cockroachdb": "^1.0.3",
     "serverless-http": "^1.5.2",
     "shortid": "^2.2.8",
     "slug": "^0.9.1",

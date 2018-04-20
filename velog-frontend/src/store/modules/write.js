@@ -1,5 +1,6 @@
 // @flow
 import { createAction, handleActions, type ActionType } from 'redux-actions';
+import moment from 'moment';
 import produce from 'immer';
 import * as MeAPI from 'lib/api/me';
 import * as PostsAPI from 'lib/api/posts';
@@ -29,6 +30,8 @@ const UPDATE_POST = 'write/UPDATE_POST';
 const RESET = 'write/RESET';
 const TEMP_SAVE = 'write/TEMP_SAVE';
 const SET_UPLOAD_MASK = 'write/SET_UPLOAD_MASK';
+const SET_TEMP_DATA = 'write/SET_TEMP_DATA';
+const SET_INSERT_TEXT = 'write/SET_INSERT_TEXT';
 
 let tempCategoryId = 0;
 
@@ -62,6 +65,8 @@ export interface WriteActionCreators {
   reset(): any;
   tempSave(payload: PostsAPI.TempSavePayload): any;
   setUploadMask(visible: boolean): any;
+  setTempData(): any;
+  setInsertText(text: ?string): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -92,6 +97,12 @@ export const actionCreators = {
   reset: createAction(RESET),
   tempSave: createAction(TEMP_SAVE, PostsAPI.tempSave),
   setUploadMask: createAction(SET_UPLOAD_MASK, (visible: boolean) => visible),
+  setTempData: createAction(SET_TEMP_DATA, () => {
+    const now = moment().format('LLL');
+    const tempText = `${now} 작성됨`;
+    return tempText;
+  }),
+  setInsertText: createAction(SET_INSERT_TEXT, (text: ?string) => text),
 };
 
 /* ACTION FLOW TYPE */
@@ -104,6 +115,7 @@ type ChangeCategoryNameAction = ActionType<typeof actionCreators.changeCategoryN
 type HideCategoryAction = ActionType<typeof actionCreators.hideCategory>;
 type ReorderCategoryAction = ActionType<typeof actionCreators.reorderCategory>;
 type SetUploadMaskAction = ActionType<typeof actionCreators.setUploadMask>;
+type SetTempDataAction = ActionType<typeof actionCreators.setTempData>;
 
 /* STATE TYPES */
 export type Category = {
@@ -152,6 +164,7 @@ export type Write = {
   upload: {
     mask: boolean,
   },
+  insertText: ?string,
 };
 
 const initialState: Write = {
@@ -171,6 +184,7 @@ const initialState: Write = {
   upload: {
     mask: false,
   },
+  insertText: null,
 };
 
 const reducer = handleActions(
@@ -285,6 +299,21 @@ const reducer = handleActions(
     [SET_UPLOAD_MASK]: (state, { payload: visible }: SetUploadMaskAction) => {
       return produce(state, (draft) => {
         draft.upload.mask = visible;
+      });
+    },
+    [SET_TEMP_DATA]: (state, action: SetTempDataAction) => {
+      return produce(state, (draft) => {
+        if (state.body === '') {
+          draft.body = action.payload;
+        }
+        if (state.title === '') {
+          draft.title = action.payload;
+        }
+      });
+    },
+    [SET_INSERT_TEXT]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.insertText = action.payload;
       });
     },
   },

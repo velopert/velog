@@ -29,7 +29,9 @@ type Props = {
   onEditBody(value: string): any,
   onDragEnter(e: any): void,
   onDragLeave(e: any): void,
+  onClearInsertText(): void,
   imageButton: Node,
+  insertText: ?string,
 };
 
 type State = {
@@ -45,6 +47,27 @@ class CodeEditor extends Component<Props, State> {
   prevPreviewScrollTop: number;
   state = {
     cursor: null,
+  };
+
+  insertText = () => {
+    const { insertText, onClearInsertText } = this.props;
+    const editor = this.codeMirror;
+    const selection = editor.getSelection();
+
+    if (selection.length > 0) {
+      editor.replaceSelection(insertText);
+    } else {
+      const doc = editor.getDoc();
+      const cursor = doc.getCursor();
+
+      const pos = {
+        line: cursor.line,
+        ch: cursor.ch,
+      };
+
+      doc.replaceRange(insertText, pos);
+    }
+    onClearInsertText();
   };
 
   onScroll = (e: any) => {
@@ -132,6 +155,7 @@ class CodeEditor extends Component<Props, State> {
       scrollbarStyle: 'overlay',
       placeholder: '당신의 이야기를 적어보세요...',
     });
+    window.cm = this.codeMirror; // for debugging use
     this.codeMirror.on('change', this.onChange);
     this.codeMirror.on('scroll', this.onScroll);
     this.codeMirror.on('dragenter', (event, e) => onDragEnter(e));
@@ -163,28 +187,31 @@ class CodeEditor extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    // const { codeMirror } = this;
-    // const { cursor } = this.state;
-    // const { body } = this.props;
-    // if (!codeMirror) return;
-    // // diff cursor
-    // if (prevState.cursor !== cursor) {
-    //   codeMirror.setCursor(cursor);
-    //   return;
-    // }
-    // if (prevProps.body !== body) {
-    //   const scrollInfo = codeMirror.getScrollInfo();
-    //   codeMirror.setValue(body);
-    //   if (!cursor) return;
-    //   codeMirror.setCursor(cursor);
-    //   codeMirror.scrollTo(scrollInfo.left, scrollInfo.top);
-    //   // if editing the last line
-    //   const { line } = cursor;
-    //   const last = codeMirror.lastLine();
-    //   if (line === last) {
-    //     codeMirror.scrollTo(0, codeMirror.cursorCoords().top);
-    //   }
-    // }
+    const { codeMirror } = this;
+    const { cursor } = this.state;
+    const { body } = this.props;
+    if (!codeMirror) return;
+    // diff cursor
+    if (prevState.cursor !== cursor) {
+      codeMirror.setCursor(cursor);
+      return;
+    }
+    if (prevProps.body !== body) {
+      const scrollInfo = codeMirror.getScrollInfo();
+      codeMirror.setValue(body);
+      if (!cursor) return;
+      codeMirror.setCursor(cursor);
+      codeMirror.scrollTo(scrollInfo.left, scrollInfo.top);
+      // if editing the last line
+      const { line } = cursor;
+      const last = codeMirror.lastLine();
+      if (line === last) {
+        codeMirror.scrollTo(0, codeMirror.cursorCoords().top);
+      }
+    }
+    if (!prevProps.insertText && this.props.insertText) {
+      this.insertText();
+    }
   }
 
   render() {
