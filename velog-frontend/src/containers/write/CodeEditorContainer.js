@@ -85,9 +85,12 @@ class CodeEditorContainer extends Component<Props> {
     data.append('post_id', id);
     data.append('image', file);
     try {
+      WriteActions.setUploadStatus(true);
       const response = await axios.post('/files/upload', data, {
         onUploadProgress: (e) => {
-          console.log(`${e.loaded}/${e.total}`);
+          if (window.nanobar) {
+            window.nanobar.go(e.loaded / e.total * 100);
+          }
         },
       });
       const sp = response.data.path.split('/');
@@ -95,7 +98,9 @@ class CodeEditorContainer extends Component<Props> {
         response.data.path
       })${'\n'}`;
       WriteActions.setInsertText(imageUrl);
+      WriteActions.setUploadStatus(false);
     } catch (e) {
+      WriteActions.setUploadStatus(false);
       console.log(e);
     }
   };

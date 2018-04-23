@@ -35,6 +35,7 @@
     "lodash": "^4.17.5",
     "marked": "^0.3.12",
     "moment": "^2.22.1",
+    "nanobar": "^0.4.2",
     "node-sass": "^4.7.2",
     "object-assign": "4.1.1",
     "open-color": "^1.6.1",

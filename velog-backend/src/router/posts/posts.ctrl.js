@@ -83,7 +83,7 @@ async function createFeeds({
   const userIds = [...usersMap.keys()];
   const feeds = userIds.map(u => ({
     fk_post_id: postId,
-    fk_user_id: userId,
+    fk_user_id: u,
     reason: usersMap.get(u),
   }));
   await Feed.bulkCreate(feeds);

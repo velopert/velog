@@ -32,6 +32,8 @@ const TEMP_SAVE = 'write/TEMP_SAVE';
 const SET_UPLOAD_MASK = 'write/SET_UPLOAD_MASK';
 const SET_TEMP_DATA = 'write/SET_TEMP_DATA';
 const SET_INSERT_TEXT = 'write/SET_INSERT_TEXT';
+const SET_UPLOAD_STATUS = 'write/SET_UPLOAD_STATUS';
+const SET_UPLOAD_PROGRESS = 'write/SET_UPLOAD_PROGRESS';
 
 let tempCategoryId = 0;
 
@@ -67,6 +69,8 @@ export interface WriteActionCreators {
   setUploadMask(visible: boolean): any;
   setTempData(): any;
   setInsertText(text: ?string): any;
+  setUploadStatus(uploading: boolean): any;
+  setUploadProgress(progress: number): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -103,6 +107,8 @@ export const actionCreators = {
     return tempText;
   }),
   setInsertText: createAction(SET_INSERT_TEXT, (text: ?string) => text),
+  setUploadStatus: createAction(SET_UPLOAD_STATUS, (uploading: boolean) => uploading),
+  setUploadProgress: createAction(SET_UPLOAD_PROGRESS, (progress: number) => progress),
 };
 
 /* ACTION FLOW TYPE */
@@ -155,15 +161,20 @@ export type PostData = {
   categories: { id: string, name: string }[],
   url_slug: string,
 };
+
+export type Upload = {
+  mask: boolean,
+  uploading: boolean,
+  progress: number,
+};
+
 export type Write = {
   body: string,
   title: string,
   submitBox: SubmitBox,
   postData: ?PostData,
   categoryModal: CategoryModal,
-  upload: {
-    mask: boolean,
-  },
+  upload: Upload,
   insertText: ?string,
 };
 
@@ -183,6 +194,8 @@ const initialState: Write = {
   },
   upload: {
     mask: false,
+    uploading: false,
+    progress: 0,
   },
   insertText: null,
 };
@@ -314,6 +327,16 @@ const reducer = handleActions(
     [SET_INSERT_TEXT]: (state, action) => {
       return produce(state, (draft) => {
         draft.insertText = action.payload;
+      });
+    },
+    [SET_UPLOAD_STATUS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.upload.uploading = action.payload;
+      });
+    },
+    [SET_UPLOAD_PROGRESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.upload.progress = action.payload;
       });
     },
   },

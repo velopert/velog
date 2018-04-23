@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import type { State } from 'store';
 import type { UserData } from 'store/modules/user';
 import storage from 'lib/storage';
+import NanoBar from 'components/common/NanoBar';
 import FullscreenLoaderContainer from './FullscreenLoaderContainer';
 
 type Props = {
-  user: ?UserData
+  user: ?UserData,
 };
 
 class Core extends Component<Props> {
@@ -24,20 +25,26 @@ class Core extends Component<Props> {
     } catch (e) {
       storage.remove('__velog__user__');
     }
-  }
+  };
 
   initialize = async () => {
     this.checkUser();
-  }
+  };
+
+  integrateAxiosProgressbar = () => {
+    // TODO
+  };
 
   componentDidMount() {
     this.initialize();
+    this.integrateAxiosProgressbar();
   }
 
   render() {
     return (
       <Fragment>
         <FullscreenLoaderContainer />
+        <NanoBar />
       </Fragment>
     );
   }
