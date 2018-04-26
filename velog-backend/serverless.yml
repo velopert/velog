@@ -4,6 +4,7 @@ service:
 # Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
+  - serverless-apigw-binary
 
 provider:
   name: aws
@@ -63,3 +64,9 @@ functions:
         - subnet-91481ef9
         - subnet-2c59dc60
         - subnet-4f59dc03
+
+custom:
+  apigwBinary:
+    types:           #list of mime-types
+      - 'multipart/form-data'
+      - 'application/x-www-form-urlencoded'

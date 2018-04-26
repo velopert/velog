@@ -1,12 +1,60 @@
-@import 'utils';
+@import "utils";
 
 .WriteTemplate {
-  .pane {
-    flex: 1;
-    display: flex;
-    min-width: 0;
-    &.right {
-      background: $oc-gray-0;
+  .rest {
+    position: responsive;
+    > .pane {
+      flex: 1;
+      display: flex;
+      min-width: 300px;
+      position: relative;
+      &.right {
+        background: $oc-gray-0;
+        .MarkdownPreview > h1 {
+          width: 980px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .MarkdownRender.atom-one {
+          width: 980px;
+          margin: 0 auto;
+        }
+      }
+
+      .separator {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        width: 16px;
+        transform: translateX(50%);
+        z-index: 10;
+        opacity: 0.5;
+        cursor: col-resize;
+      }
+    }
+
+    .reveal {
+      display: flex;
+      align-items: center;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: background 0.15s ease-in;
+      &:not(.right) {
+        background: darken($oc-gray-0, 3%);
+        color: $oc-gray-9;
+        &:hover {
+          background: darken($oc-gray-0, 5%);
+        }
+      }
+      &.right {
+        background: lighten(#263238, 3%);
+        color: white;
+        &:hover {
+          background: lighten(#263238, 5%);
+        }
+      }
     }
   }
 }

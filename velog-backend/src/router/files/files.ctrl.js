@@ -13,6 +13,7 @@ export const upload: Middleware = async (ctx: Context) => {
   const { files, fields } = (ctx.request.body: any);
   // check whether every parameter exists
   const { image } = files;
+  console.log(image);
   if (!image) {
     ctx.status = 400;
     ctx.body = {
@@ -61,6 +62,7 @@ export const upload: Middleware = async (ctx: Context) => {
   }
 
   const stats = fs.statSync(image.path);
+
   if (!stats) {
     ctx.throw(500, 'failed to load stats');
     return;

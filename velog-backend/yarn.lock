@@ -4429,6 +4429,10 @@ sequelize-cockroachdb@^1.0.3:
     validator "^9.1.0"
     wkx "^0.4.1"
 
+serverless-apigw-binary@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/serverless-apigw-binary/-/serverless-apigw-binary-0.4.4.tgz#f3cffd8365322a2a1d8bde5fd94b306b7a64d4fb"
+
 serverless-dotenv@^1.0.0-beta.2:
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/serverless-dotenv/-/serverless-dotenv-1.0.0-beta.2.tgz#83885efde6c1b06f23eec08ace2ff34543b7a941"

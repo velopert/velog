@@ -160,6 +160,12 @@ class CodeEditor extends Component<Props, State> {
     this.codeMirror.on('scroll', this.onScroll);
     this.codeMirror.on('dragenter', (event, e) => onDragEnter(e));
     this.codeMirror.on('dragleave', (event, e) => onDragLeave(e));
+    this.codeMirror.on('paste', (event, e) => {
+      const { items } = e.clipboardData || e.originalEvent.clipboardData;
+      if (items.length !== 2) return;
+      if (items[1].kind !== 'file') return;
+      e.preventDefault();
+    });
     // TODO: load data (for updating)
   };
 

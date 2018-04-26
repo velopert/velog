@@ -25,7 +25,24 @@ const Feed = db.define(
   },
 );
 
-Feed.findFeedsOf = ({ userId, cursor }) => {
+Feed.findFeedsOf = async ({ userId, cursor }) => {
+  let cursorData = null;
+  try {
+    if (cursor) {
+      cursorData = await Feed.findOne({
+        where: {
+          id: cursor,
+        },
+      });
+      if (!cursorData) {
+        const e = new Error('Cursor data is not found');
+        e.name = 'CURSOR_NOT_FOUND';
+        throw e;
+      }
+    }
+  } catch (e) {
+    throw e;
+  }
   const feeds = Feed.findAll({
     include: [
       {
@@ -42,7 +59,15 @@ Feed.findFeedsOf = ({ userId, cursor }) => {
     ],
     where: {
       fk_user_id: userId,
+      ...(cursor
+        ? {
+          id: { $not: cursor },
+          created_at: { $lte: cursorData && cursorData.created_at },
+        }
+        : {}),
     },
+    order: [['created_at', 'DESC']],
+    limit: 20,
   });
 
   return feeds;

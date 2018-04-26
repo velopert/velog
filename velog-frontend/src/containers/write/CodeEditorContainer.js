@@ -36,7 +36,7 @@ class CodeEditorContainer extends Component<Props> {
     upload.onchange = (e) => {
       if (!upload.files) return;
       const file = upload.files[0];
-      console.log(file);
+      this.uploadImage(file);
     };
     upload.click();
   };
@@ -44,15 +44,18 @@ class CodeEditorContainer extends Component<Props> {
   onDragEnter = (e) => {
     e.preventDefault();
     setImmediate(() => {
-      console.log('enter');
       WriteActions.setUploadMask(true);
     });
   };
 
   onDragLeave = (e) => {
-    console.log(e.relatedTarget);
     e.preventDefault();
     if (!e.relatedTarget) WriteActions.setUploadMask(false);
+  };
+
+  onPasteImage = (file) => {
+    if (!file) return;
+    this.uploadImage(file);
   };
 
   uploadImage = async (file: any) => {
@@ -132,7 +135,7 @@ class CodeEditorContainer extends Component<Props> {
   }
 
   render() {
-    const { onEditBody, onDragEnter, onDragLeave, onDrop, onClearInsertText } = this;
+    const { onEditBody, onDragEnter, onDragLeave, onDrop, onClearInsertText, onPasteImage } = this;
     const { body, mask, insertText } = this.props;
 
     return (
@@ -146,7 +149,12 @@ class CodeEditorContainer extends Component<Props> {
           insertText={insertText}
           imageButton={<FloatingImageButton onClick={this.onUploadClick} />}
         />
-        <DropImage onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop} />
+        <DropImage
+          onDragEnter={onDragEnter}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+          onPaste={onPasteImage}
+        />
         <WriteUploadMask visible={mask} />
       </Fragment>
     );

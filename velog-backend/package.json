@@ -27,6 +27,7 @@
     "flow-bin": "^0.60.1",
     "pg-hstore": "^2.3.2",
     "pg-native": "^2.2.0",
+    "serverless-apigw-binary": "^0.4.4",
     "serverless-dotenv": "^1.0.0-beta.2",
     "serverless-webpack": "^3.1.1",
     "shebang-loader": "^0.0.1",
