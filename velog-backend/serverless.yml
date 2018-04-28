@@ -33,30 +33,30 @@ functions:
           path: /
           method: ANY
           cors:
-            origin: '*'
+            origin: 'https://velog.io'
             headers:
+              - Cookie
               - Content-Type
               - X-Amz-Date
               - Authorization
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-              - LAFTEL
-            allowCredentials: false
+            allowCredentials: true
       - http:
           path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
           method: ANY
           cors:
-            origin: '*'
+            origin: 'https://velog.io'
             headers:
+              - Cookie
               - Content-Type
               - X-Amz-Date
               - Authorization
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-              - LAFTEL
-            allowCredentials: false
+            allowCredentials: true
     vpc:
       securityGroupIds:
         - sg-5bc57830

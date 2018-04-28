@@ -12,11 +12,13 @@
         background: $oc-gray-0;
         .MarkdownPreview > h1 {
           width: 980px;
+          max-width: 100%;
           margin-left: auto;
           margin-right: auto;
         }
         .MarkdownRender.atom-one {
           width: 980px;
+          max-width: 100%;
           margin: 0 auto;
         }
       }

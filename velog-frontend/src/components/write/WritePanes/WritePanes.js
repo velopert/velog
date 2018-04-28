@@ -27,8 +27,10 @@ class WritePanes extends Component<Props, State> {
     const ratio = e.clientX / window.innerWidth;
     const right = window.innerWidth - e.clientX;
 
+    const half = ratio > 0.49 && ratio < 0.51;
+
     this.setState({
-      ratio,
+      ratio: half ? 0.5 : ratio,
     });
 
     if (e.clientX < 150) {

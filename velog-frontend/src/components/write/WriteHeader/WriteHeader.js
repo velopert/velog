@@ -2,6 +2,9 @@
 import React from 'react';
 import BackIcon from 'react-icons/lib/md/arrow-back';
 import MoreIcon from 'react-icons/lib/md/more-vert';
+import EditorLeftPaneIcon from 'components/icons/EditorLeftPaneIcon';
+import EditorRightPaneIcon from 'components/icons/EditorRightPaneIcon';
+import EditorBothPanesIcon from 'components/icons/EditorBothPanesIcon';
 import cx from 'classnames';
 import './WriteHeader.scss';
 
