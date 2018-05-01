@@ -378,6 +378,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
   const { id, thumbnail, email } = profile;
   const { displayName, username, shortBio } = form;
   const socialId = id.toString();
+  
 
   try {
     const [emailExists, usernameExists] = await Promise.all([

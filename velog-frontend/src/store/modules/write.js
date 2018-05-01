@@ -34,6 +34,7 @@ const SET_TEMP_DATA = 'write/SET_TEMP_DATA';
 const SET_INSERT_TEXT = 'write/SET_INSERT_TEXT';
 const SET_UPLOAD_STATUS = 'write/SET_UPLOAD_STATUS';
 const SET_UPLOAD_PROGRESS = 'write/SET_UPLOAD_PROGRESS';
+const CREATE_UPLOAD_URL = 'write/CREATE_UPLOAD_URL';
 
 let tempCategoryId = 0;
 
@@ -71,6 +72,7 @@ export interface WriteActionCreators {
   setInsertText(text: ?string): any;
   setUploadStatus(uploading: boolean): any;
   setUploadProgress(progress: number): any;
+  createUploadUrl(payload: PostsAPI.CreateUploadUrlPayload): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -109,6 +111,7 @@ export const actionCreators = {
   setInsertText: createAction(SET_INSERT_TEXT, (text: ?string) => text),
   setUploadStatus: createAction(SET_UPLOAD_STATUS, (uploading: boolean) => uploading),
   setUploadProgress: createAction(SET_UPLOAD_PROGRESS, (progress: number) => progress),
+  createUploadUrl: createAction(CREATE_UPLOAD_URL, PostsAPI.createUploadUrl),
 };
 
 /* ACTION FLOW TYPE */
@@ -166,6 +169,9 @@ export type Upload = {
   mask: boolean,
   uploading: boolean,
   progress: number,
+  uploadUrl: ?string,
+  id: ?string,
+  imagePath: ?string,
 };
 
 export type Write = {
@@ -196,6 +202,9 @@ const initialState: Write = {
     mask: false,
     uploading: false,
     progress: 0,
+    uploadUrl: null,
+    imagePath: null,
+    id: null,
   },
   insertText: null,
 };
@@ -402,6 +411,16 @@ export default applyPenders(reducer, [
     onSuccess: (state: Write, { payload: { data } }) => {
       return produce(state, (draft) => {
         draft.postData = data;
+      });
+    },
+  },
+  {
+    type: CREATE_UPLOAD_URL,
+    onSuccess: (state: Write, { payload: { data } }) => {
+      return produce(state, (draft) => {
+        draft.upload.uploadUrl = data.url;
+        draft.upload.imagePath = data.imagePath;
+        draft.upload.id = data.id;
       });
     },
   },

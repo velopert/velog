@@ -7,7 +7,69 @@ import Post from 'database/models/Post';
 import PostImage from 'database/models/PostImage';
 import { isUUID } from 'lib/common';
 
-const s3 = new AWS.S3();
+const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
+
+export const createSignedUrl: Middleware = async (ctx: Context) => {
+  const { post_id, filename } = (ctx.request.body: any);
+  if (!post_id) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'POST_ID_NOT_GIVEN',
+    };
+    return;
+  }
+
+  // CHECK UUID
+  if (!isUUID(post_id)) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'NOT_UUID',
+    };
+  }
+
+  // check whether post exists
+  try {
+    const post = await Post.findById(post_id);
+    if (!post) {
+      ctx.status = 404;
+      ctx.body = {
+        name: 'POST_NOT_FOUND',
+      };
+      return;
+    }
+    // check whether user owns the post
+    if (post.fk_user_id !== ctx.user.id) {
+      ctx.body = {
+        name: 'NOT_OWN_POST',
+      };
+      ctx.status = 403;
+      return;
+    }
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  try {
+    const postImage = PostImage.build({
+      fk_post_id: post_id,
+      fk_user_id: ctx.user.id,
+    });
+    const imagePath = `post-images/${ctx.user.username}/${postImage.id}/${filename}`;
+    postImage.path = imagePath;
+    await postImage.save();
+    const url = await s3.getSignedUrl('putObject', {
+      Bucket: 's3.images.velog.io',
+      Key: imagePath,
+    });
+    ctx.body = {
+      url,
+      imagePath,
+      id: postImage.id,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 export const upload: Middleware = async (ctx: Context) => {
   const { files, fields } = (ctx.request.body: any);
@@ -83,6 +145,7 @@ export const upload: Middleware = async (ctx: Context) => {
       filesize: stats.size,
     });
     const imagePath = `post-images/${ctx.user.username}/${postImage.id}/${image.name}`;
+    console.log(imagePath);
     postImage.path = imagePath;
     const read = fs.createReadStream(image.path);
     const response = await s3

@@ -6,6 +6,7 @@ import * as filesCtrl from './files.ctrl';
 
 const files: Router = new Router();
 
+files.post('/create-url', filesCtrl.createSignedUrl);
 files.post('/upload', needsAuth, filesCtrl.upload);
 
 export default files;

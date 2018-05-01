@@ -11,22 +11,14 @@ import SelectCategory from 'components/write/SelectCategory';
 import SubmitBoxContainer from 'containers/write/SubmitBoxContainer';
 import CategoryEditModal from 'components/write/CategoryEditModal';
 import CategoryEditModalContainer from 'containers/write/CategoryEditModalContainer';
-
+import WriteExtraContainer from 'containers/write/WriteExtraContainer';
 
 const Write = () => {
   return (
-    <WriteTemplate
-      header={<WriteHeaderContainer />}
-    >
+    <WriteTemplate header={<WriteHeaderContainer />}>
       <SubmitBoxContainer />
-      <WritePanes
-        left={
-          <CodeEditorContainer />
-        }
-        right={
-          <MarkdownPreviewContainer />
-        }
-      />
+      <WriteExtraContainer />
+      <WritePanes left={<CodeEditorContainer />} right={<MarkdownPreviewContainer />} />
       <CategoryEditModalContainer />
     </WriteTemplate>
   );

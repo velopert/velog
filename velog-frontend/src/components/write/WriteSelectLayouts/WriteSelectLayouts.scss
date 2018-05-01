@@ -1,0 +1,38 @@
+@import "utils";
+
+.WriteSelectLayouts {
+  display: flex;
+  .layout-button {
+    flex: 1;
+    background: $oc-gray-8;
+    border-radius: 2px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    transition: 0.25s all ease-in;
+    .text {
+      margin-top: 0.25rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    @include material-shadow(2, 0.15);
+    &:hover {
+      background: lighten($oc-gray-8, 2.5%);
+    }
+    &:not(.active) {
+      opacity: 0.8;
+      transform: scale(0.95, 0.95);
+    }
+    &.active {
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+    & + .layout-button {
+      margin-left: 0.5rem;
+    }
+  }
+}

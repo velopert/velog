@@ -20,6 +20,9 @@ type Props = {
   categories: ?(Category[]),
   postData: ?PostData,
   insertText: ?string,
+  uploadUrl: ?string,
+  imagePath: ?string,
+  uploadId: ?string,
 };
 
 class CodeEditorContainer extends Component<Props> {
@@ -85,20 +88,23 @@ class CodeEditorContainer extends Component<Props> {
     if (!this.props.postData) return;
     const { id } = this.props.postData;
     const data = new FormData();
-    data.append('post_id', id);
-    data.append('image', file);
+
+    await WriteActions.createUploadUrl({ postId: id, filename: file.name });
     try {
       WriteActions.setUploadStatus(true);
-      const response = await axios.post('/files/upload', data, {
+      if (!this.props.uploadUrl) return;
+      const response = await axios.put(this.props.uploadUrl, file, {
+        withCredentials: false,
         onUploadProgress: (e) => {
           if (window.nanobar) {
             window.nanobar.go(e.loaded / e.total * 100);
           }
         },
       });
-      const sp = response.data.path.split('/');
-      const imageUrl = `${'\n'}![${sp[sp.length - 1]}](https://images.velog.io/${
-        response.data.path
+      console.log(this.props.imagePath);
+      if (!this.props.imagePath) return;
+      const imageUrl = `${'\n'}![${file.name}](https://images.velog.io/${
+        this.props.imagePath
       })${'\n'}`;
       WriteActions.setInsertText(imageUrl);
       WriteActions.setUploadStatus(false);
@@ -170,6 +176,9 @@ export default connect(
     tags: write.submitBox.tags,
     mask: write.upload.mask,
     insertText: write.insertText,
+    uploadUrl: write.upload.uploadUrl,
+    imagePath: write.upload.imagePath,
+    uploadId: write.upload.id,
   }),
   () => ({}),
 )(CodeEditorContainer);

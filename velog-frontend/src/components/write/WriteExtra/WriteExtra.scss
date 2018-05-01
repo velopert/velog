@@ -1,0 +1,31 @@
+@import "utils";
+
+.WriteExtra {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 16rem;
+  height: 100%;
+  background: $oc-gray-7;
+  z-index: 5;
+  @include material-shadow(4, 1);
+  padding: 1rem;
+  .close-button {
+    display: flex;
+    justify-content: flex-end;
+    color: $oc-gray-2;
+    font-size: 1.25rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    &:hover {
+      color: white;
+    }
+  }
+  section {
+    color: white;
+    h4 {
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+  }
+}
