@@ -1,13 +1,44 @@
 @import "utils";
 
+@keyframes writeExtraAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(25%);
+  }
+  100% {
+    opacity: 1;
+    trasnform: translateX(0px);
+  }
+}
+
+@keyframes writeExtraDisappear {
+  0% {
+    opacity: 1;
+    trasnform: translateX(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(25%);
+  }
+}
+
 .WriteExtra {
+  &.appear {
+    animation: writeExtraAppear 0.15s cubic-bezier(0.49, 0.01, 0.14, 0.86);
+    animation-fill-mode: forwards;
+  }
+  &.disappear {
+    animation: writeExtraDisappear 0.15s cubic-bezier(0.49, 0.01, 0.14, 0.86);
+    animation-fill-mode: forwards;
+  }
+
   position: absolute;
   right: 0;
   top: 0;
   width: 16rem;
   height: 100%;
   background: $oc-gray-7;
-  z-index: 5;
+  z-index: z("write-extra");
   @include material-shadow(4, 1);
   padding: 1rem;
   .close-button {

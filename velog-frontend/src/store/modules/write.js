@@ -36,6 +36,10 @@ const SET_UPLOAD_STATUS = 'write/SET_UPLOAD_STATUS';
 const SET_UPLOAD_PROGRESS = 'write/SET_UPLOAD_PROGRESS';
 const CREATE_UPLOAD_URL = 'write/CREATE_UPLOAD_URL';
 
+const SHOW_WRITE_EXTRA = 'write/SHOW_WRITE_EXTRA';
+const HIDE_WRITE_EXTRA = 'write/HIDE_WRITE_EXTRA';
+const SET_LAYOUT_MODE = 'write/SET_LAYOUT_MODE';
+
 let tempCategoryId = 0;
 
 /* ACTION CREATOR */
@@ -73,6 +77,9 @@ export interface WriteActionCreators {
   setUploadStatus(uploading: boolean): any;
   setUploadProgress(progress: number): any;
   createUploadUrl(payload: PostsAPI.CreateUploadUrlPayload): any;
+  showWriteExtra(): any;
+  hideWriteExtra(): any;
+  setLayoutMode(mode: string): any,
 }
 
 /* EXPORT ACTION CREATORS */
@@ -112,6 +119,9 @@ export const actionCreators = {
   setUploadStatus: createAction(SET_UPLOAD_STATUS, (uploading: boolean) => uploading),
   setUploadProgress: createAction(SET_UPLOAD_PROGRESS, (progress: number) => progress),
   createUploadUrl: createAction(CREATE_UPLOAD_URL, PostsAPI.createUploadUrl),
+  showWriteExtra: createAction(SHOW_WRITE_EXTRA),
+  hideWriteExtra: createAction(HIDE_WRITE_EXTRA),
+  setLayoutMode: createAction(SET_LAYOUT_MODE),
 };
 
 /* ACTION FLOW TYPE */
@@ -174,6 +184,13 @@ export type Upload = {
   imagePath: ?string,
 };
 
+export type LayoutMode = 'editor' | 'both' | 'preview';
+
+export type WriteExtra = {
+  visible: boolean,
+  layoutMode: LayoutMode,
+};
+
 export type Write = {
   body: string,
   title: string,
@@ -182,6 +199,7 @@ export type Write = {
   categoryModal: CategoryModal,
   upload: Upload,
   insertText: ?string,
+  writeExtra: WriteExtra
 };
 
 const initialState: Write = {
@@ -205,6 +223,10 @@ const initialState: Write = {
     uploadUrl: null,
     imagePath: null,
     id: null,
+  },
+  writeExtra: {
+    visible: false,
+    layoutMode: 'both',
   },
   insertText: null,
 };
@@ -346,6 +368,21 @@ const reducer = handleActions(
     [SET_UPLOAD_PROGRESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.upload.progress = action.payload;
+      });
+    },
+    [SHOW_WRITE_EXTRA]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.writeExtra.visible = true;
+      });
+    },
+    [HIDE_WRITE_EXTRA]: (state) => {
+      return produce(state, (draft) => {
+        draft.writeExtra.visible = false;
+      });
+    },
+    [SET_LAYOUT_MODE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.writeExtra.layoutMode = action.payload;
       });
     },
   },

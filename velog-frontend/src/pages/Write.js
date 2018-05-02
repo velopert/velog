@@ -12,6 +12,7 @@ import SubmitBoxContainer from 'containers/write/SubmitBoxContainer';
 import CategoryEditModal from 'components/write/CategoryEditModal';
 import CategoryEditModalContainer from 'containers/write/CategoryEditModalContainer';
 import WriteExtraContainer from 'containers/write/WriteExtraContainer';
+import DisablePanesContainer from 'containers/write/DisablePanesContainer';
 
 const Write = () => {
   return (
@@ -19,6 +20,7 @@ const Write = () => {
       <SubmitBoxContainer />
       <WriteExtraContainer />
       <WritePanes left={<CodeEditorContainer />} right={<MarkdownPreviewContainer />} />
+      <DisablePanesContainer />
       <CategoryEditModalContainer />
     </WriteTemplate>
   );

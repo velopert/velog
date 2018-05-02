@@ -5,6 +5,7 @@ import MoreIcon from 'react-icons/lib/md/more-vert';
 import EditorLeftPaneIcon from 'components/icons/EditorLeftPaneIcon';
 import EditorRightPaneIcon from 'components/icons/EditorRightPaneIcon';
 import EditorBothPanesIcon from 'components/icons/EditorBothPanesIcon';
+import CloseIcon from 'react-icons/lib/md/close';
 import cx from 'classnames';
 import './WriteHeader.scss';
 
@@ -12,10 +13,22 @@ type Props = {
   onChangeTitle(e: any): void,
   onTempSave(): void,
   onOpenSubmitBox(): void,
+  onShowWriteExtra(): void,
+  onHideWriteExtra(): void,
+  writeExtraOpen: boolean,
   title: string,
   isEdit: boolean,
 };
-const WriteHeader = ({ onChangeTitle, onOpenSubmitBox, onTempSave, title, isEdit }: Props) => {
+const WriteHeader = ({
+  onChangeTitle,
+  onOpenSubmitBox,
+  onTempSave,
+  onShowWriteExtra,
+  onHideWriteExtra,
+  writeExtraOpen,
+  title,
+  isEdit,
+}: Props) => {
   return (
     <div className="WriteHeader">
       <BackIcon className="back-icon" />
@@ -29,9 +42,16 @@ const WriteHeader = ({ onChangeTitle, onOpenSubmitBox, onTempSave, title, isEdit
         <div className={cx('button', isEdit ? 'edit' : 'submit')} onClick={onOpenSubmitBox}>
           {isEdit ? '업데이트' : '작성하기'}
         </div>
-        <div className="more util flex-center">
-          <MoreIcon />
-        </div>
+        {writeExtraOpen && (
+          <div className="more util flex-center" onClick={onHideWriteExtra}>
+            <CloseIcon />
+          </div>
+        )}
+        {!writeExtraOpen && (
+          <div className="more util flex-center" onClick={onShowWriteExtra}>
+            <MoreIcon />
+          </div>
+        )}
       </div>
     </div>
   );
