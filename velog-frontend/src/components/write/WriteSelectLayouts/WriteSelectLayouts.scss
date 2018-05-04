@@ -3,6 +3,7 @@
 .WriteSelectLayouts {
   display: flex;
   .layout-button {
+    @include unstyle-button();
     flex: 1;
     background: $oc-gray-8;
     border-radius: 2px;
@@ -13,8 +14,8 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    border: 2px solid transparent;
     cursor: pointer;
-    transition: 0.25s all ease-in;
     .text {
       margin-top: 0.25rem;
       font-size: 0.7rem;
@@ -26,10 +27,9 @@
     }
     &:not(.active) {
       opacity: 0.8;
-      transform: scale(0.95, 0.95);
     }
     &.active {
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.9);
     }
     & + .layout-button {
       margin-left: 0.5rem;

@@ -7,6 +7,7 @@ import WriteSelectLayouts from '../WriteSelectLayouts';
 
 type Props = {
   visible: boolean,
+  mode: string,
   onSelectLayoutMode(mode: string): void,
 };
 type State = {
@@ -43,7 +44,7 @@ class WriteExtra extends Component<Props, State> {
 
   render() {
     const { animating } = this.state;
-    const { visible } = this.props;
+    const { visible, mode } = this.props;
 
     if (!visible && !animating) return null;
 
@@ -51,7 +52,7 @@ class WriteExtra extends Component<Props, State> {
       <div className={cx('WriteExtra', visible ? 'appear' : 'disappear')}>
         <section>
           <h4>레이아웃 설정</h4>
-          <WriteSelectLayouts onSelect={this.onSelectLayoutMode} />
+          <WriteSelectLayouts onSelect={this.onSelectLayoutMode} mode={mode} />
         </section>
       </div>
     );

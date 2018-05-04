@@ -8,6 +8,7 @@ import './WritePanes.scss';
 type Props = {
   left: Node,
   right: Node,
+  mode: string,
 };
 
 type State = {
@@ -73,6 +74,34 @@ class WritePanes extends Component<Props, State> {
       ratio: (window.innerWidth - 150) / window.innerWidth,
     });
   };
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (this.props.mode !== prevProps.mode) {
+      console.log(this.props.mode);
+      switch (this.props.mode) {
+        case 'editor':
+          this.setState({
+            hideLeft: false,
+            hideRight: true,
+          });
+          break;
+        case 'preview':
+          this.setState({
+            hideRight: false,
+            hideLeft: true,
+          });
+          break;
+        case 'both':
+          this.setState({
+            hideLeft: false,
+            hideRight: false,
+            ratio: 0.5,
+          });
+          break;
+        default:
+      }
+    }
+  }
 
   render() {
     const { left, right } = this.props;

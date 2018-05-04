@@ -73,6 +73,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
+    "format:watch": "onchange '**/*.js' -- prettier-eslint --write {{changed}}",
     "deploy": "aws s3 sync ./build s3://cdn.velog.io/",
     "invalidate": "aws cloudfront create-invalidation --distribution-id E1M9D68QZ0CD1F --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
   },
@@ -122,7 +123,10 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
     "flow-bin": "^0.68.0",
-    "prettier-eslint": "^8.8.1"
+    "onchange": "^3.3.0",
+    "prettier": "^1.12.1",
+    "prettier-eslint": "^8.8.1",
+    "prettier-eslint-cli": "^4.7.1"
   },
   "proxy": "http://localhost:4000/"
 }

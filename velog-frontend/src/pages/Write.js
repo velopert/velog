@@ -13,13 +13,14 @@ import CategoryEditModal from 'components/write/CategoryEditModal';
 import CategoryEditModalContainer from 'containers/write/CategoryEditModalContainer';
 import WriteExtraContainer from 'containers/write/WriteExtraContainer';
 import DisablePanesContainer from 'containers/write/DisablePanesContainer';
+import WritePanesContainer from 'containers/write/WritePanesContainer';
 
 const Write = () => {
   return (
     <WriteTemplate header={<WriteHeaderContainer />}>
       <SubmitBoxContainer />
       <WriteExtraContainer />
-      <WritePanes left={<CodeEditorContainer />} right={<MarkdownPreviewContainer />} />
+      <WritePanesContainer />
       <DisablePanesContainer />
       <CategoryEditModalContainer />
     </WriteTemplate>

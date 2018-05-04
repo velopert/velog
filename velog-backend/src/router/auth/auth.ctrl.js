@@ -428,7 +428,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
         console.log(uploadResult);
         throw new Error('upload has failed');
       }
-      uploadedThumbnail = tempPath;
+      uploadedThumbnail = `https://images.velog.io/${tempPath}`;
     } catch (e) {
       console.log(e);
       console.log('image sync failed');
@@ -464,7 +464,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
         id: user.id,
         username: user.username,
         displayName,
-        thumbnail,
+        thumbnail: uploadedThumbnail,
       },
       token,
     };

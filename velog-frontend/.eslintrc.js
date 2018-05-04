@@ -35,6 +35,7 @@ module.exports = {
     'no-param-reassign': 0,
     'prefer-const': 1,
     'no-mixed-operators': 0,
+    'react/no-did-update-set-state': 0,
   },
   overrides: {
     files: ['src/*.js'],
