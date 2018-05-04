@@ -2,6 +2,7 @@
 import Router from 'koa-router';
 import type { Context } from 'koa';
 import needsAuth from 'lib/middlewares/needsAuth';
+import downloadImage from 'lib/downloadImage';
 import auth from './auth';
 import posts from './posts';
 import files from './files';
@@ -19,6 +20,10 @@ router.get('/check', (ctx: Context) => {
   ctx.body = {
     version: '1.0.0-alpha.0',
   };
+});
+
+router.get('/test', async (ctx: Context) => {
+  ctx.body = await downloadImage();
 });
 
 export default router;

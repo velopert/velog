@@ -13,6 +13,10 @@ import getSocialProfile, { type Profile } from 'lib/getSocialProfile';
 import type { UserModel } from 'database/models/User';
 import type { UserProfileModel } from 'database/models/UserProfile';
 import type { EmailAuthModel } from 'database/models/EmailAuth';
+import downloadImage from 'lib/downloadImage';
+import AWS from 'aws-sdk';
+
+const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
 export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -295,6 +299,7 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
 
   try {
     profile = await getSocialProfile(provider, accessToken);
+    console.log(profile);
   } catch (e) {
     ctx.status = 401;
     ctx.body = {
@@ -378,7 +383,6 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
   const { id, thumbnail, email } = profile;
   const { displayName, username, shortBio } = form;
   const socialId = id.toString();
-  
 
   try {
     const [emailExists, usernameExists] = await Promise.all([
@@ -410,11 +414,31 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
       email: email || fallbackEmail,
     }).save();
 
+    let uploadedThumbnail = null;
+    try {
+      const imageData = await downloadImage(thumbnail);
+      const tempPath = `profiles/${username}/thumbnails/${new Date().getTime() / 1000}.${imageData.extension}`;
+      const uploadResult = await s3.upload({
+        Bucket: 's3.images.velog.io',
+        Key: tempPath,
+        Body: imageData.stream,
+        ContentType: imageData.contentType,
+      }).promise();
+      if (!uploadResult || !uploadResult.ETag) {
+        console.log(uploadResult);
+        throw new Error('upload has failed');
+      }
+      uploadedThumbnail = tempPath;
+    } catch (e) {
+      console.log(e);
+      console.log('image sync failed');
+    }
+
     await UserProfile.build({
       fk_user_id: user.id,
       display_name: displayName,
       short_bio: shortBio,
-      thumbnail,
+      thumbnail: uploadedThumbnail,
     }).save();
 
     // create SocialAccount row;
