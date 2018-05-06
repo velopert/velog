@@ -23,7 +23,7 @@ router.get('/check', (ctx: Context) => {
 });
 
 router.get('/test', async (ctx: Context) => {
-  ctx.body = await downloadImage();
+  ctx.body = await downloadImage('https://velopert.com/wp-content/uploads/2018/04/prettier.png');
 });
 
 export default router;

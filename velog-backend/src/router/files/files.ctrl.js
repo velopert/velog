@@ -6,6 +6,8 @@ import filesize from 'filesize';
 import Post from 'database/models/Post';
 import PostImage from 'database/models/PostImage';
 import { isUUID } from 'lib/common';
+import downloadImage from 'lib/downloadImage';
+import mimeTypes from 'mime-types';
 
 const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
@@ -50,6 +52,7 @@ export const createSignedUrl: Middleware = async (ctx: Context) => {
   }
 
   try {
+    const contentType = mimeTypes.contentType(filename);
     const postImage = PostImage.build({
       fk_post_id: post_id,
       fk_user_id: ctx.user.id,
@@ -60,6 +63,7 @@ export const createSignedUrl: Middleware = async (ctx: Context) => {
     const url = await s3.getSignedUrl('putObject', {
       Bucket: 's3.images.velog.io',
       Key: imagePath,
+      ContentType: contentType,
     });
     ctx.body = {
       url,
@@ -69,6 +73,27 @@ export const createSignedUrl: Middleware = async (ctx: Context) => {
   } catch (e) {
     ctx.throw(500, e);
   }
+};
+
+export const retrieveSize: Middleware = async (ctx: Context) => {
+  // find file row from db
+  try {
+    const fileInfo = await PostImage.findById(ctx.params.id);
+    console.log(fileInfo);
+    console.log(`https://images.velog.io/${fileInfo.path}`);
+    const downloaded = await downloadImage(`https://images.velog.io/${fileInfo.path}`);
+    fileInfo.filesize = downloaded.stats.size;
+    await fileInfo.save();
+    ctx.body = {
+      filesize: downloaded.stats.size,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+  // download file
+  // get filesize
+  // update filesize
+  // return result
 };
 
 export const upload: Middleware = async (ctx: Context) => {

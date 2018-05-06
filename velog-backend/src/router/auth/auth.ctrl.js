@@ -20,11 +20,13 @@ const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
 export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   type BodySchema = {
-    email: string
+    email: string,
   };
 
   const schema = Joi.object().keys({
-    email: Joi.string().email().required(),
+    email: Joi.string()
+      .email()
+      .required(),
   });
 
   const result: any = Joi.validate(ctx.request.body, schema);
@@ -39,17 +41,19 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   }
 
   try {
-    const { email } : BodySchema = (ctx.request.body: any);
+    const { email }: BodySchema = (ctx.request.body: any);
 
     // TODO: check email existancy
     const user = await User.findUser('email', email);
-    const emailKeywords = user ? {
-      type: 'email-login',
-      text: '로그인',
-    } : {
-      type: 'register',
-      text: '회원가입',
-    };
+    const emailKeywords = user
+      ? {
+        type: 'email-login',
+        text: '로그인',
+      }
+      : {
+        type: 'register',
+        text: '회원가입',
+      };
 
     const verification: EmailAuthModel = await EmailAuth.build({
       email,
@@ -61,12 +65,20 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
       from: 'Velog <verification@velog.io>',
       body: `<a href="https://velog.io"><img src="https://i.imgur.com/xtxnddg.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
       <div style="max-width: 100%; width: 400px; margin: 0 auto; padding: 1rem; text-align: justify; background: #f8f9fa; border: 1px solid #dee2e6; box-sizing: border-box; border-radius: 4px; color: #868e96; margin-top: 0.5rem; box-sizing: border-box;">
-        <b style="black">안녕하세요! </b>${emailKeywords.text}을 계속하시려면 하단의 링크를 클릭하세요. 만약에 실수로 요청하셨거나, 본인이 요청하지 않았다면, 이 메일을 무시하세요.
+        <b style="black">안녕하세요! </b>${
+  emailKeywords.text
+}을 계속하시려면 하단의 링크를 클릭하세요. 만약에 실수로 요청하셨거나, 본인이 요청하지 않았다면, 이 메일을 무시하세요.
       </div>
       
-      <a href="https://velog.io/${emailKeywords.type}?code=${verification.code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">계속하기</a>
+      <a href="https://velog.io/${emailKeywords.type}?code=${
+  verification.code
+}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">계속하기</a>
       
-      <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>위 버튼을 클릭하시거나, 다음 링크를 열으세요: <br/> <a style="color: #b197fc;" href="https://velog.io/${emailKeywords.type}?code=${verification.code}">https://velog.io/${emailKeywords.type}?code=${verification.code}</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
+      <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>위 버튼을 클릭하시거나, 다음 링크를 열으세요: <br/> <a style="color: #b197fc;" href="https://velog.io/${
+  emailKeywords.type
+}?code=${verification.code}">https://velog.io/${emailKeywords.type}?code=${
+  verification.code
+}</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
     });
     ctx.body = {
       isUser: !!user,
@@ -102,7 +114,7 @@ export const getCode = async (ctx: Context): Promise<*> => {
 
 export const codeLogin = async (ctx: Context): Promise<*> => {
   type BodySchema = {
-    code: string
+    code: string,
   };
 
   const { code }: BodySchema = (ctx.request.body: any);
@@ -156,18 +168,25 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
     form: {
       displayName: string,
       username: string,
-      shortBio: string
-    }
+      shortBio: string,
+    },
   };
 
   const schema = Joi.object().keys({
     registerToken: Joi.string().required(),
-    form: Joi.object().keys({
-      displayName: Joi.string().min(1).max(40),
-      username: Joi.string().alphanum().min(3).max(16)
-        .required(),
-      shortBio: Joi.string().max(140),
-    }).required(),
+    form: Joi.object()
+      .keys({
+        displayName: Joi.string()
+          .min(1)
+          .max(40),
+        username: Joi.string()
+          .alphanum()
+          .min(3)
+          .max(16)
+          .required(),
+        shortBio: Joi.string().max(140),
+      })
+      .required(),
   });
 
   const result: any = Joi.validate(ctx.request.body, schema);
@@ -183,11 +202,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
 
   const {
     registerToken,
-    form: {
-      username,
-      shortBio,
-      displayName,
-    },
+    form: { username, shortBio, displayName },
   }: BodySchema = (ctx.request.body: any);
 
   let decoded = null;
@@ -223,7 +238,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
   }
 
   try {
-    const user:User = await User.build({
+    const user: User = await User.build({
       username,
       email,
     }).save();
@@ -289,7 +304,7 @@ export const logout = (ctx: Context) => {
 
 export const verifySocial = async (ctx: Context): Promise<*> => {
   type BodySchema = {
-    accessToken: string
+    accessToken: string,
   };
 
   const { accessToken }: BodySchema = (ctx.request.body: any);
@@ -339,19 +354,26 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
     form: {
       displayName: string,
       username: string,
-      shortBio: string
-    }
+      shortBio: string,
+    },
   };
 
   const schema = Joi.object().keys({
     fallbackEmail: Joi.string(),
     accessToken: Joi.string().required(),
-    form: Joi.object().keys({
-      displayName: Joi.string().min(1).max(40),
-      username: Joi.string().alphanum().min(3).max(16)
-        .required(),
-      shortBio: Joi.string().max(140),
-    }).required(),
+    form: Joi.object()
+      .keys({
+        displayName: Joi.string()
+          .min(1)
+          .max(40),
+        username: Joi.string()
+          .alphanum()
+          .min(3)
+          .max(16)
+          .required(),
+        shortBio: Joi.string().max(140),
+      })
+      .required(),
   });
 
   const result: any = Joi.validate(ctx.request.body, schema);
@@ -409,7 +431,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
       return;
     }
 
-    const user:UserModel = await User.build({
+    const user: UserModel = await User.build({
       username,
       email: email || fallbackEmail,
     }).save();
@@ -417,13 +439,18 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
     let uploadedThumbnail = null;
     try {
       const imageData = await downloadImage(thumbnail);
-      const tempPath = `profiles/${username}/thumbnails/${new Date().getTime() / 1000}.${imageData.extension}`;
-      const uploadResult = await s3.upload({
-        Bucket: 's3.images.velog.io',
-        Key: tempPath,
-        Body: imageData.stream,
-        ContentType: imageData.contentType,
-      }).promise();
+      console.log(imageData);
+      const tempPath = `profiles/${username}/thumbnails/${new Date().getTime() / 1000}.${
+        imageData.extension
+      }`;
+      const uploadResult = await s3
+        .upload({
+          Bucket: 's3.images.velog.io',
+          Key: tempPath,
+          Body: imageData.stream,
+          ContentType: imageData.contentType,
+        })
+        .promise();
       if (!uploadResult || !uploadResult.ETag) {
         console.log(uploadResult);
         throw new Error('upload has failed');
@@ -475,7 +502,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
 
 export const socialLogin = async (ctx: Context): Promise<*> => {
   type BodySchema = {
-    accessToken: string
+    accessToken: string,
   };
 
   const { accessToken }: BodySchema = (ctx.request.body: any);

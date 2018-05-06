@@ -166,6 +166,9 @@ class CodeEditor extends Component<Props, State> {
       if (items[1].kind !== 'file') return;
       e.preventDefault();
     });
+    if (this.props.body) {
+      this.codeMirror.setValue(this.props.body);
+    }
     // TODO: load data (for updating)
   };
 

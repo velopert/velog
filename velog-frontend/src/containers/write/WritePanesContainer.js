@@ -12,12 +12,19 @@ type Props = {
 };
 
 class WritePanesContainer extends Component<Props> {
+  componentWillUnmount() {
+    WriteActions.reset(); // reset Write Module on page leave
+  }
+  onSetLayoutMode = (mode) => {
+    WriteActions.setLayoutMode(mode);
+  };
   render() {
     return (
       <WritePanes
         left={<CodeEditorContainer />}
         right={<MarkdownPreviewContainer />}
         mode={this.props.mode}
+        onSetLayoutMode={this.onSetLayoutMode}
       />
     );
   }

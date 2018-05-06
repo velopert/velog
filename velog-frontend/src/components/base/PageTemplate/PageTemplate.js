@@ -5,16 +5,14 @@ import './PageTemplate.scss';
 
 type Props = {
   header: Node,
-  children: Node
-}
+  children: Node,
+};
 
-const PageTemplate = ({ header, children } : Props) => {
+const PageTemplate = ({ header, children }: Props) => {
   return (
-    <div className="page-template">
+    <div className="PageTemplate">
       {header}
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
     </div>
   );
 };

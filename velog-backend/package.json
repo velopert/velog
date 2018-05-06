@@ -7,7 +7,8 @@
     "dev": "NODE_PATH=src APP_ENV=local nodemon --inspect src/local --exec babel-node --plugins transform-es2015-modules-commonjs,transform-object-rest-spread,transform-async-to-generator --presets flow",
     "migrate": "NODE_PATH=src babel-node src/scripts/migrate --plugins transform-es2015-modules-commonjs,transform-object-rest-spread,transform-async-to-generator --presets flow",
     "deploy:dev": "sls deploy --stage dev",
-    "deploy": "sls deploy --stage prod"
+    "deploy": "sls deploy --stage prod",
+    "prettier:watch": "onchange '**/*.js' -- prettier-eslint --write {{changed}}"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -25,8 +26,10 @@
     "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-import": "^2.8.0",
     "flow-bin": "^0.60.1",
+    "onchange": "^3.3.0",
     "pg-hstore": "^2.3.2",
     "pg-native": "^2.2.0",
+    "prettier-eslint-cli": "^4.7.1",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-dotenv": "^1.0.0-beta.2",
     "serverless-webpack": "^3.1.1",

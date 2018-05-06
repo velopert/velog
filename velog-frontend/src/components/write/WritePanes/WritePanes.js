@@ -9,6 +9,7 @@ type Props = {
   left: Node,
   right: Node,
   mode: string,
+  onSetLayoutMode(mode: string): void,
 };
 
 type State = {
@@ -35,6 +36,7 @@ class WritePanes extends Component<Props, State> {
     });
 
     if (e.clientX < 150) {
+      this.props.onSetLayoutMode('preview');
       this.setState({
         hideLeft: true,
       });
@@ -42,6 +44,7 @@ class WritePanes extends Component<Props, State> {
     }
 
     if (right < 150) {
+      this.props.onSetLayoutMode('editor');
       this.setState({
         hideRight: true,
       });
@@ -62,6 +65,7 @@ class WritePanes extends Component<Props, State> {
   };
 
   onUnhideLeft = () => {
+    this.props.onSetLayoutMode('both');
     this.setState({
       hideLeft: false,
       ratio: 150 / window.innerWidth,
@@ -69,6 +73,7 @@ class WritePanes extends Component<Props, State> {
   };
 
   onUnhideRight = () => {
+    this.props.onSetLayoutMode('both');
     this.setState({
       hideRight: false,
       ratio: (window.innerWidth - 150) / window.innerWidth,
@@ -77,7 +82,6 @@ class WritePanes extends Component<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.props.mode !== prevProps.mode) {
-      console.log(this.props.mode);
       switch (this.props.mode) {
         case 'editor':
           this.setState({

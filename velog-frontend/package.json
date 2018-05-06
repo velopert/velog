@@ -73,7 +73,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "format:watch": "onchange '**/*.js' -- prettier-eslint --write {{changed}}",
+    "prettier:watch": "onchange '**/*.js' -- prettier-eslint --write {{changed}}",
     "deploy": "aws s3 sync ./build s3://cdn.velog.io/",
     "invalidate": "aws cloudfront create-invalidation --distribution-id E1M9D68QZ0CD1F --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
   },

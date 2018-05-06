@@ -94,6 +94,9 @@ class CodeEditorContainer extends Component<Props> {
       WriteActions.setUploadStatus(true);
       if (!this.props.uploadUrl) return;
       const response = await axios.put(this.props.uploadUrl, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
         withCredentials: false,
         onUploadProgress: (e) => {
           if (window.nanobar) {
@@ -136,9 +139,7 @@ class CodeEditorContainer extends Component<Props> {
     // }
   };
 
-  componentWillUnmount() {
-    WriteActions.reset(); // reset Write Module on page leave
-  }
+  componentWillUnmount() {}
 
   render() {
     const { onEditBody, onDragEnter, onDragLeave, onDrop, onClearInsertText, onPasteImage } = this;

@@ -8,7 +8,7 @@ const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
 async function downloadImage(url) {
   try {
-    const response = await axios.get(url, {
+    const response = await axios.get(encodeURI(url), {
       responseType: 'stream',
     });
     const contentType = response.headers['content-type'];
@@ -16,12 +16,21 @@ async function downloadImage(url) {
     const fileName = `(${new Date().getTime()}.${extension}`;
     const imagePath = `profiles/username/${fileName}`;
     const tmpObject = tmp.fileSync();
-    response.data.pipe(fs.createWriteStream(tmpObject.name));
+    const ws = fs.createWriteStream(tmpObject.name);
+    response.data.pipe(ws);
+    await new Promise(resolve =>
+      ws.on('finish', () => {
+        resolve();
+      }));
+
     const stream = fs.createReadStream(tmpObject.name);
+    const stats = fs.statSync(tmpObject.name);
+    // tmpObject.removeCallback();
     return {
       stream,
       extension,
       contentType,
+      stats,
     };
   } catch (e) {
     throw e;

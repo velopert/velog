@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import CloseIcon from 'react-icons/lib/io/close';
 import cx from 'classnames';
+import withClickOutside from 'react-onclickoutside';
 import './WriteExtra.scss';
 import WriteSelectLayouts from '../WriteSelectLayouts';
 
@@ -59,4 +60,8 @@ class WriteExtra extends Component<Props, State> {
   }
 }
 
-export default WriteExtra;
+export default withClickOutside(WriteExtra, {
+  handleClickOutside(instance) {
+    return instance.props.onClickOutside;
+  },
+});

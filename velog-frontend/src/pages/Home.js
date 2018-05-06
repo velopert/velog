@@ -7,10 +7,8 @@ import Main from 'containers/main/Main';
 
 const Home = () => {
   return (
-    <PageTemplate header={<HeaderContainer />}>
-      <LandingTemplateContainer
-        form={<AuthFormContainer />}
-      />
+    <PageTemplate>
+      <LandingTemplateContainer form={<AuthFormContainer />} />
       <Main />
     </PageTemplate>
   );
