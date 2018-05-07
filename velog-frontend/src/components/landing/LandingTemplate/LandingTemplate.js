@@ -5,9 +5,24 @@ import './LandingTemplate.scss';
 const LandingTemplate = ({ form }) => {
   return (
     <div className="LandingTemplate">
-      <Responsive className="block">
-        <h1>졸리다</h1>
-      </Responsive>
+      <div className="left">
+        <div>
+          <div className="logo">velog</div>
+          <h2>개발자들은 대체 글을 어디서 써야 할까....?</h2>
+          <p>마크다운, 코드 하이라이팅 등...
+            <br />개발자들의 취향저격하는 글쓰기 플랫폼이 바로 여기에,
+            <br />고민하지 말고 지금 시작하자.
+          </p>
+        </div>
+      </div>
+      <div className="right">
+        <div className="wrapper">
+          <h2>지금, 벨로그를 시작하세요.</h2>
+          <div className="auth-form">
+            {form}
+          </div>
+        </div>
+      </div>
       {/* <Responsive className="block">
         <div className="left-text">
           <div>

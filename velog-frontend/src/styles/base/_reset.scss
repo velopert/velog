@@ -29,3 +29,7 @@ html, body {
 #root {
   position: relative;
 }
+
+button {
+  @include unstyle-button();
+}

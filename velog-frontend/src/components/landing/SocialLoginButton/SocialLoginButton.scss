@@ -2,16 +2,24 @@
 
 .social-login-button {
   padding: 1rem;
+  @include media("<wide") {
+    padding: 0.75rem;
+  }
   display: flex;
   border-radius: 2px;
   align-items: center;
   transition: all .15s ease-in;
   cursor: pointer;
+  color: white;
+  font-size: 1rem;
+  @include media("<wide") {
+    font-size: 0.85rem;
+  }
   svg {
-    font-size: 2rem;
+    font-size: 2em;
   }
   .text {
-    font-size: 1.15rem;
+    font-size: 1.15em;
     font-weight: 600;
     margin-left: 1rem;
     &:first-letter {
@@ -22,6 +30,7 @@
     }
   }
   &.github {
+    border: 1px solid $oc-gray-4;
     background: $oc-gray-2;
     color: $oc-gray-9;
     @include hover() {
@@ -33,6 +42,7 @@
   }
   &.facebook {
     background: $oc-blue-8;
+    border: 1px solid $oc-blue-9;
     @include hover() {
       background: $oc-blue-7;
     }
@@ -41,7 +51,8 @@
     }
   }
   &.google {
-    background: $oc-red-9;
+    border: 1px solid darken($oc-red-8, 5%);
+    background:  $oc-red-9;
     @include hover() {
       background: $oc-red-8;
     }

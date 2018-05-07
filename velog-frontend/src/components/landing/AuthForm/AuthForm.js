@@ -29,7 +29,7 @@ const AuthForm = ({
   onSocialLogin,
 }: Props) => {
   return (
-    <div className="auth-form">
+    <div className="AuthForm">
       {
         sentEmail
           ? (

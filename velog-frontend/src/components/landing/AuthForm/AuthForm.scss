@@ -1,9 +1,10 @@
 @import 'utils';
 
-.auth-form {
-  margin-top: 2rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+.AuthForm {
+  font-size: 1rem;
+  @include media("<wide") {
+    font-size: 0.85rem;
+  }
   .sent-email {
     display: flex;
     align-items: center;
@@ -11,10 +12,11 @@
     color: $oc-green-9;
     padding: 1rem;
     svg {
-      font-size: 1.5rem;
+      font-size: 1.5em;
     }
     .text {
-      margin-left: 0.5rem;
+      margin-left: 1rem;
+      font-weight: 500;
     }
   }
   .input-with-button {
@@ -25,9 +27,14 @@
       display: block;
       flex: 1;
       outline: none;
-      border: none;
+      border: 1px solid $oc-gray-3;
+      border-right: none;
       padding: 1rem;
-      font-size: 1.2rem;
+      font-size: 1.2em;
+      min-width: 0;
+      @include media("<wide") {
+        padding: 0.75rem;
+      }
     }
     .button {
       border-top-right-radius: 4px;
@@ -36,10 +43,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1.2em;
       font-weight: 600;
       transition: background 0.15s ease-in;
       background: $oc-violet-6;
+      color: white;
       cursor: pointer;
       user-select: none;
       @include hover() {
@@ -47,6 +55,9 @@
       }
       &:active {
         background: $oc-violet-7;
+      }
+      @include media("<wide") {
+        padding: 0.75rem;
       }
     }
     transition: opacity 0.3s ease-in;
@@ -60,7 +71,7 @@
   .separator {
     height: 1px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0,0,0,0.25);
     margin-top: 2rem;
     margin-bottom: 2rem;
     position: relative;
@@ -68,12 +79,12 @@
       position: absolute;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: $oc-gray-8;
+      background: white;
       padding-left: 0.5rem;
       padding-right: 0.5rem;
-      font-size: 0.85rem;
+      font-size: 0.85em;
       font-weight: 600;
-      color: rgba(255,255,255,0.75);
+      color: $oc-gray-9;
     }
   }
 }
