@@ -71,7 +71,7 @@
   .separator {
     height: 1px;
     width: 100%;
-    background: rgba(0,0,0,0.25);
+    background: $oc-gray-4;
     margin-top: 2rem;
     margin-bottom: 2rem;
     position: relative;
@@ -85,6 +85,20 @@
       font-size: 0.85em;
       font-weight: 600;
       color: $oc-gray-9;
+    }
+  }
+  .explore-wrapper {
+    margin-top: 1.5rem;
+    border-top: 1px solid $oc-gray-4;
+    padding-top: 0.75rem;
+    text-align: right;
+    .explore {
+      font-weight: 500;
+      color: $oc-violet-5;
+      cursor: pointer;
+      &:hover {
+        color: $oc-violet-4;
+      }
     }
   }
 }

@@ -23,6 +23,7 @@ export interface BaseActionCreators {
   showUserMenu(): any;
   hideUserMenu(): any;
   setFullscreenLoader(visibility: boolean): any;
+  exitLanding(): any;
 }
 
 export const actionCreators: BaseActionCreators = {

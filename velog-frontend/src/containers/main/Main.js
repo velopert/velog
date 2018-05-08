@@ -4,6 +4,7 @@ import MainTemplate from 'components/main/MainTemplate';
 import MainTab from 'components/main/MainTab';
 import { connect } from 'react-redux';
 import type { State } from 'store';
+import MainSidebarContainer from './MainSidebarContainer';
 
 type Props = {
   landing: boolean,
@@ -12,7 +13,7 @@ type Props = {
 class MainContainer extends Component<Props> {
   render() {
     if (this.props.landing) return null;
-    return <MainTemplate tab={<MainTab />}>작은 물고기가뭐지</MainTemplate>;
+    return <MainTemplate sidebar={<MainSidebarContainer />}>작은 물고기가뭐지</MainTemplate>;
   }
 }
 

@@ -1,6 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react';
-import { UserActions } from 'store/actionCreators';
+import { UserActions, BaseActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import type { UserData } from 'store/modules/user';
@@ -19,6 +19,7 @@ class Core extends Component<Props> {
       UserActions.processUser();
       return;
     }
+    BaseActions.exitLanding();
     UserActions.setUser(storedUser);
     try {
       await UserActions.checkUser();

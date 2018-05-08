@@ -11,7 +11,6 @@
     flex-direction: column;
     .left, .right {
       width: 100%;
-      flex: auto;
       padding-top: 2rem;
       padding-bottom: 2rem;
       padding-left: 1rem;
@@ -24,16 +23,34 @@
     flex-direction: column;
     .left, .right {
       width: 100%;
-      flex: auto;
       padding-top: 2rem;
       padding-bottom: 2rem;
       padding-left: 1rem;
       padding-right: 1rem;
     }
   }
+  .left {
+    padding-left: 8rem;
+    padding-right: 8rem;
+    @include media("<huge") {
+      padding-left: 6rem;
+      padding-right: 6rem;
+    }
+    @include media("<big") {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
   .left, .right {
-    flex: 1;
     height: 100%;
+  }
+  .right {
+    flex: 1;
+  }
+  @include media("<wide") {
+    .left {
+      flex: initial;
+    }
   }
   .left {
     color: white;
@@ -48,6 +65,7 @@
       font-size: 3.5rem;
       line-height: 3.5rem;
       font-weight: 600;
+      font-family: 'Inconsolata';
     }
     h2 {
       margin: 0;
@@ -64,7 +82,10 @@
       font-size: 1.5rem;
       margin-top: 1rem;
       line-height: 2rem;
-      margin-bottom: 0;
+      margin-bottom: 5rem;
+      @include media("<wide") {
+        margin-bottom: 0;
+      }
     }
     @include media("<big") {
       .logo {
@@ -80,6 +101,7 @@
         line-height: 1.75rem;
       }
     }
+
     @include media("<medium") {
       .logo {
         font-size: 2.5rem;
@@ -119,6 +141,7 @@
     justify-content: center;
     background: $oc-gray-1;
     @include media("<wide") {
+      align-items: flex-start;
       & > .wrapper {
         width: 100%;
       }
@@ -131,9 +154,16 @@
       @include media("<big") {
         font-size: 1.75rem;
       }
+      @include media("<wide") {
+        font-size: 1.5rem;
+      }
+      @include media("<large") {
+        font-size: 1.25rem;
+      }
     }
     .auth-form {
       padding: 3rem;
+      padding-bottom: 2rem;
       background: white;
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.125), 0px 0px 10px rgba(0, 0, 0, 0.11);
       width: 600px;

@@ -63,6 +63,9 @@ const AuthForm = ({
         <SocialLoginButton type="google" onSocialLogin={onSocialLogin} />
         <SocialLoginButton type="facebook" onSocialLogin={onSocialLogin} />
       </div>
+      <div className="explore-wrapper">
+        <a className="explore">로그인 하지 않고 둘러보기</a>
+      </div>
     </div>
   );
 };
