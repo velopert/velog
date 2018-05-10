@@ -5,6 +5,7 @@ import produce from 'immer';
 const SHOW_USER_MENU = 'base/SHOW_USER_MENU';
 const HIDE_USER_MENU = 'base/HIDE_USER_MENU';
 const SET_FULLSCREEN_LOADER = 'base/SET_FULLSCREEN_LOADER';
+const ENTER_LANDING = 'base/ENTER_LANDING';
 const EXIT_LANDING = 'base/EXIT_LANDING';
 
 const showUserMenu = createAction(SHOW_USER_MENU);
@@ -14,6 +15,7 @@ const setFullscreenLoader = createAction(
   (visibility: boolean) => visibility,
 );
 const exitLanding = createAction(EXIT_LANDING);
+const enterLanding = createAction(ENTER_LANDING);
 
 type ShowUserMenuAction = ActionType<typeof showUserMenu>;
 type HideUserMenuAction = ActionType<typeof hideUserMenu>;
@@ -24,6 +26,7 @@ export interface BaseActionCreators {
   hideUserMenu(): any;
   setFullscreenLoader(visibility: boolean): any;
   exitLanding(): any;
+  enterLanding(): any;
 }
 
 export const actionCreators: BaseActionCreators = {
@@ -31,6 +34,7 @@ export const actionCreators: BaseActionCreators = {
   hideUserMenu,
   setFullscreenLoader,
   exitLanding,
+  enterLanding,
 };
 
 export type Base = {
@@ -63,6 +67,11 @@ export default handleActions(
     [EXIT_LANDING]: (state) => {
       return produce(state, (draft) => {
         draft.landing = false;
+      });
+    },
+    [ENTER_LANDING]: (state) => {
+      return produce(state, (draft) => {
+        draft.landing = true;
       });
     },
   },

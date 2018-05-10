@@ -25,12 +25,12 @@ class AuthFormContainer extends Component<Props> {
 
   onEnterKeyPress = pressedEnter(() => {
     this.onSendVerification();
-  })
+  });
 
   onChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { value } = e.target;
     AuthActions.setEmailInput(value);
-  }
+  };
 
   onSendVerification = async (): Promise<*> => {
     const { email } = this.props;
@@ -39,7 +39,7 @@ class AuthFormContainer extends Component<Props> {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   onSocialLogin = async (provider: string) => {
     BaseActions.setFullscreenLoader(true);
@@ -62,14 +62,16 @@ class AuthFormContainer extends Component<Props> {
       if (!verifySocialResult) return;
       const { exists } = verifySocialResult;
 
-      if (exists) { // exists -> login
+      if (exists) {
+        // exists -> login
         await AuthActions.socialVelogLogin({ accessToken, provider });
         const { authResult } = this.props;
         if (!authResult) return;
         const { user } = authResult;
         UserActions.setUser(user);
         storage.set(keys.user, user);
-      } else { // does not exist -> enroute to register, auto complete
+      } else {
+        // does not exist -> enroute to register, auto complete
         const { email, name } = verifySocialResult;
         if (!email || !name) {
           console.log('?');
@@ -83,10 +85,14 @@ class AuthFormContainer extends Component<Props> {
       // TODO: verify error
     }
     BaseActions.setFullscreenLoader(false);
-  }
+  };
+
+  onExitLanding = () => {
+    BaseActions.exitLanding();
+  };
 
   render() {
-    const { onChange, onSendVerification, onEnterKeyPress, onSocialLogin } = this;
+    const { onChange, onSendVerification, onEnterKeyPress, onSocialLogin, onExitLanding } = this;
     const { email, sentEmail, sending, isUser } = this.props;
 
     return (
@@ -99,6 +105,7 @@ class AuthFormContainer extends Component<Props> {
         onSendVerification={onSendVerification}
         onEnterKeyPress={onEnterKeyPress}
         onSocialLogin={onSocialLogin}
+        onExitLanding={onExitLanding}
       />
     );
   }

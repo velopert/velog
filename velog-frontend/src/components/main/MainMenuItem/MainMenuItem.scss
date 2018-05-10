@@ -1,0 +1,31 @@
+@import 'utils';
+
+.MainMenuItem {
+  color: $oc-gray-7;
+  cursor: pointer;
+  a {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 1.125rem;
+    padding-left: 1.75rem;
+    display: flex;
+    align-items: center;
+    svg {
+      font-size: 1.5rem;
+    }
+    .text {
+      font-weight: 400;
+      margin-left: 1rem;
+    }
+  }
+  &:hover {
+    background: $oc-gray-0;
+  }
+  &.active {
+    color: $oc-violet-5;
+    border-right: 2px solid $oc-violet-4;
+    .text {
+      font-weight: 500;
+    }
+  }
+}

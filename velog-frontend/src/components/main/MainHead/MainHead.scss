@@ -1,0 +1,14 @@
+@import "utils";
+
+.MainHead {
+  padding: 1.75rem;
+  display: flex;
+  align-items: center;
+  .button-area {
+  }
+  .spacer {
+    flex: 1;
+  }
+  .user-area {
+  }
+}

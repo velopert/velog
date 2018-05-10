@@ -1,7 +1,7 @@
 {
   "generate-react-component.componentTemplatePath":
     "/Users/velopert/workspace/velog/velog-frontend/.templates/",
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "javascript.format.enable": false,
   "prettier.eslintIntegration": true
 }

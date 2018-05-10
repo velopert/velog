@@ -12,6 +12,7 @@ type Props = {
   onSendVerification(): Promise<*>,
   onEnterKeyPress(e: KeyboardEvent): void,
   onSocialLogin(provider: string): Promise<*>,
+  onExitLanding(): void,
   email: string,
   sentEmail: boolean,
   sending: boolean,
@@ -27,34 +28,32 @@ const AuthForm = ({
   sending,
   isUser,
   onSocialLogin,
+  onExitLanding,
 }: Props) => {
   return (
     <div className="AuthForm">
-      {
-        sentEmail
-          ? (
-            <div className="sent-email">
-              <CheckIcon />
-              <div className="text">
-                {isUser ? '로그인' : '회원가입'} 링크가 이메일로 전송되었습니다.<br />
-                이메일의 링크를 통하여 {isUser ? '로그인' : '회원가입'}을 계속하세요.
-              </div>
-            </div>
-          ) : (
-            <div className={cx('input-with-button', { sending })}>
-              <input
-                placeholder="이메일을 입력해주세요"
-                value={email}
-                onChange={onChange}
-                disabled={sending}
-                onKeyPress={onEnterKeyPress}
-              />
-              <div className="button" onClick={onSendVerification}>
-                {sending ? <Spinner size="3rem" /> : '시작하기'}
-              </div>
-            </div>
-        )
-      }
+      {sentEmail ? (
+        <div className="sent-email">
+          <CheckIcon />
+          <div className="text">
+            {isUser ? '로그인' : '회원가입'} 링크가 이메일로 전송되었습니다.<br />
+            이메일의 링크를 통하여 {isUser ? '로그인' : '회원가입'}을 계속하세요.
+          </div>
+        </div>
+      ) : (
+        <div className={cx('input-with-button', { sending })}>
+          <input
+            placeholder="이메일을 입력해주세요"
+            value={email}
+            onChange={onChange}
+            disabled={sending}
+            onKeyPress={onEnterKeyPress}
+          />
+          <div className="button" onClick={onSendVerification}>
+            {sending ? <Spinner size="3rem" /> : '시작하기'}
+          </div>
+        </div>
+      )}
       <div className="separator">
         <div className="or">OR</div>
       </div>
@@ -64,7 +63,9 @@ const AuthForm = ({
         <SocialLoginButton type="facebook" onSocialLogin={onSocialLogin} />
       </div>
       <div className="explore-wrapper">
-        <a className="explore">로그인 하지 않고 둘러보기</a>
+        <a className="explore" onClick={onExitLanding}>
+          로그인 하지 않고 둘러보기
+        </a>
       </div>
     </div>
   );

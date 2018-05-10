@@ -7,17 +7,17 @@
   height: 100%;
   top: 0;
   left: 0;
-  box-shadow: 0px 20px 150px #d6dee4;
-  padding: 2.5rem;
+  box-shadow: -6px 0px 12px 0px #d6dee4;
   .logo {
-    text-align: center;
+    padding: 1.75rem 2rem;
     font-size: 2rem;
     line-height: 2rem;
-    font-weight: 700;
     font-family: 'Inconsolata';
     color: $oc-gray-9;
   }
-  section {
-
+  .menu {
+    margin-top: 1rem;
+    list-style: none;
+    padding-left: 0;
   }
 }

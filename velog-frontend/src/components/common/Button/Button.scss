@@ -1,0 +1,35 @@
+@import "utils";
+
+.Button {
+  display: flex-inline;
+  font-weight: 600;
+  padding: 0.5rem 0.875rem;
+  line-height: 0.875rem;
+  font-size: 0.875rem;
+  &.default {
+    background: $oc-violet-5;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background ease-in 0.125s;
+    &:hover {
+      background: $oc-violet-4;
+    }
+    &:active {
+      background: $oc-violet-5;
+    }
+  }
+  &.outline {
+    border-radius: 4px;
+    border: 1px solid $oc-gray-7;
+    color: $oc-gray-7;
+    background: white;
+    font-weight: 400;
+    transition: all ease-in 0.125s;
+    &:hover {
+      border: 1px solid $oc-violet-4;
+      color: $oc-violet-5;
+      cursor: pointer;
+    }
+  }
+}
