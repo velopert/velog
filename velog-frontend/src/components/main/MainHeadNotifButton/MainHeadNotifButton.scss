@@ -1,0 +1,40 @@
+@import "utils";
+
+.MainHeadNotifButton {
+  font-size: 1.5rem;
+  color: $oc-gray-7;
+  margin-right: 1rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0.1rem;
+  position: relative;
+  cursor: pointer;
+  &.active {
+    color: $oc-gray-6;
+  }
+  &:hover {
+    color: $oc-violet-5;
+  }
+  .count {
+    background: $oc-red-5;
+    color: white;
+    padding-top: 0.1rem;
+    font-size: 0.75rem;
+    line-height: 0.75rem;
+    font-weight: 800;
+    position: absolute;
+    top: 0rem;
+    right: 0rem;
+    padding-left: 0.15rem;
+    padding-right: 0.15rem;
+    height: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+}

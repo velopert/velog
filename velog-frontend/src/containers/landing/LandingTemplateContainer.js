@@ -7,7 +7,7 @@ import type { State } from 'store';
 import { connect } from 'react-redux';
 
 const LandingTemplateContainer = (props) => {
-  if (props.user || props.hidden) return null;
+  if (/* props.user || */ props.hidden) return null;
 
   return <LandingTemplate {...props} />;
 };
