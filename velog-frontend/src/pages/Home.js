@@ -5,7 +5,7 @@ import HeaderContainer from 'containers/base/HeaderContainer';
 import AuthFormContainer from 'containers/landing/AuthFormContainer';
 import Main from 'containers/main/Main';
 
-const Home = () => {
+const Home = ({ match }) => {
   return (
     <PageTemplate>
       <LandingTemplateContainer form={<AuthFormContainer />} />

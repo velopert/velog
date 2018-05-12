@@ -8,6 +8,7 @@ const App = () => (
   <React.Fragment>
     <Switch>
       <Route exact path="/" component={Home} />
+      <Route path="/(trending|recent|collections|tags|stored)" component={Home} />
       <Route path="/register" component={Register} />
       <Route path="/email-login" component={EmailLogin} />
       <Route path="/write" component={Write} />

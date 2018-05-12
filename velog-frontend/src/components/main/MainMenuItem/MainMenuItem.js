@@ -1,22 +1,23 @@
 // @flow
 import React, { type Node } from 'react';
+import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import './MainMenuItem.scss';
 
 type Props = {
   icon: Node,
   text: string,
-  to?: string,
+  to: string,
   active?: boolean,
 };
 
 const MainMenuItem = ({ icon, text, to, active }: Props) => {
   return (
     <li className={cx('MainMenuItem', { active })}>
-      <a>
+      <Link to={to}>
         {icon}
         <div className="text">{text}</div>
-      </a>
+      </Link>
     </li>
   );
 };
