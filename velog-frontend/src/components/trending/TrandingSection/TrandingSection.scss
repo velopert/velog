@@ -1,0 +1,11 @@
+@import "utils";
+
+.TrandingSection {
+  h2 {
+    color: $oc-gray-9;
+  }
+}
+
+.TrandingSection + .TrandingSection {
+  margin-top: 8rem;
+}

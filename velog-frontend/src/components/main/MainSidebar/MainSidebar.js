@@ -18,6 +18,9 @@ type Props = {
 
 class MainSidebar extends Component<Props> {
   render() {
+    const { url } = this.props;
+    console.log(url);
+
     return (
       <aside className="MainSidebar">
         <div className="logo">velog</div>
@@ -25,13 +28,33 @@ class MainSidebar extends Component<Props> {
           <MainMenuItem
             icon={<TrendingIcon />}
             text="트렌딩"
-            active={['/', '/trending'].indexOf(this.props.url) > -1}
+            active={['/', '/trending'].indexOf(url) > -1}
             to="/trending"
           />
-          <MainMenuItem icon={<RecentIcon />} text="최신 포스트" to="/recent" />
-          <MainMenuItem icon={<CollectionIcon />} text="컬렉션" to="/collections" />
-          <MainMenuItem icon={<TagIcon />} text="태그 목록" to="tags" />
-          <MainMenuItem icon={<StoredIcon />} text="보관함" to="stored" />
+          <MainMenuItem
+            active={url === '/recent'}
+            icon={<RecentIcon />}
+            text="최신 포스트"
+            to="/recent"
+          />
+          <MainMenuItem
+            active={/^\/collections/.test(url)}
+            icon={<CollectionIcon />}
+            text="컬렉션"
+            to="/collections"
+          />
+          <MainMenuItem
+            active={/^\/tags/.test(url)}
+            icon={<TagIcon />}
+            text="태그 목록"
+            to="tags"
+          />
+          <MainMenuItem
+            active={/^\/stored/.test(url)}
+            icon={<StoredIcon />}
+            text="보관함"
+            to="stored"
+          />
         </ul>
       </aside>
     );

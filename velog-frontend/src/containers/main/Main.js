@@ -5,6 +5,7 @@ import MainTab from 'components/main/MainTab';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import Posts from 'pages/Posts';
+import Trending from 'pages/Trending';
 import MainHead from 'components/main/MainHead';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
@@ -22,7 +23,7 @@ class MainContainer extends Component<Props> {
       <MainTemplate sidebar={<MainSidebarContainer />}>
         <MainHeadContainer />
         <Switch>
-          <Route path="/" component={Posts} />
+          <Route exact path="/(|trending)" component={Trending} />
         </Switch>
       </MainTemplate>
     );

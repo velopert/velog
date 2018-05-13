@@ -1,0 +1,9 @@
+@import "utils";
+
+.PostCardList {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  margin-left: -0.875rem;
+  margin-right: -0.875rem;
+}
