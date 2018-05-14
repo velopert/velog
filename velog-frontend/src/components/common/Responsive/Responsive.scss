@@ -9,7 +9,7 @@
   @include media("<wide") {
     width: $x-large-w;
   }
-  @include media("<xlarge") {
+  @include media("<x-large") {
     width: $large-w;
   }
   @include media("<large") {

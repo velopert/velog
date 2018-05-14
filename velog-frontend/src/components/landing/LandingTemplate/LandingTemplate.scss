@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
 
-  @include media("<xlarge") {
+  @include media("<x-large") {
     height: auto;
     min-height: 100%;
     flex-direction: column;
@@ -38,7 +38,7 @@
       padding-left: 6rem;
       padding-right: 6rem;
     }
-    @include media("<xxlarge") {
+    @include media("<xx-large") {
       padding-left: 4rem;
       padding-right: 4rem;
     }
@@ -50,7 +50,7 @@
   .right {
     flex: 1;
   }
-  @include media("<xlarge") {
+  @include media("<x-large") {
     .left {
       flex: initial;
     }
@@ -61,7 +61,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    @include media("<xlarge") {
+    @include media("<x-large") {
       justify-content: flex-start;
     }
     .logo {
@@ -76,7 +76,7 @@
       font-weight: 300;
       font-size: 2rem;
       line-height: 2rem;
-      @include media("<xlarge") {
+      @include media("<x-large") {
         margin-top: 1.5rem;
       }
     }
@@ -86,11 +86,11 @@
       margin-top: 1rem;
       line-height: 2rem;
       margin-bottom: 5rem;
-      @include media("<xlarge") {
+      @include media("<x-large") {
         margin-bottom: 0;
       }
     }
-    @include media("<xxlarge") {
+    @include media("<xx-large") {
       .logo {
         font-size: 3rem;
         line-height: 3rem;
@@ -143,7 +143,7 @@
     align-items: center;
     justify-content: center;
     background: $oc-gray-1;
-    @include media("<xlarge") {
+    @include media("<x-large") {
       align-items: flex-start;
       & > .wrapper {
         width: 100%;
@@ -154,10 +154,10 @@
       font-weight: 500;
       font-size: 2rem;
       margin-bottom: 1rem;
-      @include media("<xxlarge") {
+      @include media("<xx-large") {
         font-size: 1.75rem;
       }
-      @include media("<xlarge") {
+      @include media("<x-large") {
         font-size: 1.5rem;
       }
       @include media("<large") {
@@ -172,10 +172,10 @@
       border: 1px solid $oc-gray-2;
       // box-shadow: 0 15px 30px rgba(0, 0, 0, 0.125), 0px 0px 10px rgba(0, 0, 0, 0.11);
       width: 600px;
-      @include media("<xxlarge") {
+      @include media("<xx-large") {
         width: 500px;
       }
-      @include media("<xlarge") {
+      @include media("<x-large") {
         width: 100%;
         padding: 2rem;
       }

@@ -1,8 +1,11 @@
-@import 'utils';
+@import "utils";
 
 .MainSidebar {
   position: fixed;
   width: 18rem;
+  @include media("<x-wide") {
+    width: 15rem;
+  }
   background: white;
   height: 100%;
   top: 0;
@@ -12,7 +15,7 @@
     padding: 1.75rem 2rem;
     font-size: 2rem;
     line-height: 2rem;
-    font-family: 'Inconsolata';
+    font-family: "Inconsolata";
     color: $oc-gray-9;
   }
   .menu {

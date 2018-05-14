@@ -2,7 +2,7 @@
 
 .social-login-button {
   padding: 1rem;
-  @include media("<xlarge") {
+  @include media("<x-large") {
     padding: 0.75rem;
   }
   display: flex;
@@ -12,7 +12,7 @@
   cursor: pointer;
   color: white;
   font-size: 1rem;
-  @include media("<xlarge") {
+  @include media("<x-large") {
     font-size: 0.85rem;
   }
   svg {
