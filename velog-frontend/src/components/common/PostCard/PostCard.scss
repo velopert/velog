@@ -5,6 +5,18 @@
   width: calc((100% - 8.75rem) / 5);
   position: relative;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05);
+  @include media("<x-wide") {
+    width: calc(25% - 1.75rem);
+  }
+  @include media("<wide") {
+    width: calc(33.333% - 1.75rem);
+  }
+  @include media("<x-large") {
+    width: calc(50% - 1.75rem);
+  }
+  @include media("<large") {
+    width: calc(100% - 1.75rem);
+  }
   & > .thumbnail-wrapper {
     width: 100%;
     padding-top: 52.63%;
@@ -78,6 +90,7 @@
         line-height: 2rem;
         height: 4rem;
         font-weight: 600;
+        overflow: hidden;
       }
       .subinfo {
         font-size: 0.875rem;
