@@ -1,8 +1,8 @@
-@import 'utils';
+@import "utils";
 
 .AuthForm {
   font-size: 1rem;
-  @include media("<wide") {
+  @include media("<xlarge") {
     font-size: 0.85rem;
   }
   .sent-email {
@@ -32,7 +32,7 @@
       padding: 1rem;
       font-size: 1.2em;
       min-width: 0;
-      @include media("<wide") {
+      @include media("<xlarge") {
         padding: 0.75rem;
       }
     }
@@ -56,7 +56,7 @@
       &:active {
         background: $oc-violet-7;
       }
-      @include media("<wide") {
+      @include media("<xlarge") {
         padding: 0.75rem;
       }
     }

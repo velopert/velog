@@ -1,15 +1,16 @@
-@import 'utils';
+@import "utils";
 
 .LandingTemplate {
   height: 100%;
   display: flex;
   align-items: center;
 
-  @include media("<wide") {
+  @include media("<xlarge") {
     height: auto;
     min-height: 100%;
     flex-direction: column;
-    .left, .right {
+    .left,
+    .right {
       width: 100%;
       padding-top: 2rem;
       padding-bottom: 2rem;
@@ -21,7 +22,8 @@
     height: auto;
     min-height: 100%;
     flex-direction: column;
-    .left, .right {
+    .left,
+    .right {
       width: 100%;
       padding-top: 2rem;
       padding-bottom: 2rem;
@@ -32,22 +34,23 @@
   .left {
     padding-left: 8rem;
     padding-right: 8rem;
-    @include media("<huge") {
+    @include media("<wide") {
       padding-left: 6rem;
       padding-right: 6rem;
     }
-    @include media("<big") {
+    @include media("<xxlarge") {
       padding-left: 4rem;
       padding-right: 4rem;
     }
   }
-  .left, .right {
+  .left,
+  .right {
     height: 100%;
   }
   .right {
     flex: 1;
   }
-  @include media("<wide") {
+  @include media("<xlarge") {
     .left {
       flex: initial;
     }
@@ -58,14 +61,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    @include media("<wide") {
+    @include media("<xlarge") {
       justify-content: flex-start;
     }
     .logo {
       font-size: 3.5rem;
       line-height: 3.5rem;
       font-weight: 600;
-      font-family: 'Inconsolata';
+      font-family: "Inconsolata";
     }
     h2 {
       margin: 0;
@@ -73,7 +76,7 @@
       font-weight: 300;
       font-size: 2rem;
       line-height: 2rem;
-      @include media("<wide") {
+      @include media("<xlarge") {
         margin-top: 1.5rem;
       }
     }
@@ -83,11 +86,11 @@
       margin-top: 1rem;
       line-height: 2rem;
       margin-bottom: 5rem;
-      @include media("<wide") {
+      @include media("<xlarge") {
         margin-bottom: 0;
       }
     }
-    @include media("<big") {
+    @include media("<xxlarge") {
       .logo {
         font-size: 3rem;
         line-height: 3rem;
@@ -140,7 +143,7 @@
     align-items: center;
     justify-content: center;
     background: $oc-gray-1;
-    @include media("<wide") {
+    @include media("<xlarge") {
       align-items: flex-start;
       & > .wrapper {
         width: 100%;
@@ -151,10 +154,10 @@
       font-weight: 500;
       font-size: 2rem;
       margin-bottom: 1rem;
-      @include media("<big") {
+      @include media("<xxlarge") {
         font-size: 1.75rem;
       }
-      @include media("<wide") {
+      @include media("<xlarge") {
         font-size: 1.5rem;
       }
       @include media("<large") {
@@ -169,10 +172,10 @@
       border: 1px solid $oc-gray-2;
       // box-shadow: 0 15px 30px rgba(0, 0, 0, 0.125), 0px 0px 10px rgba(0, 0, 0, 0.11);
       width: 600px;
-      @include media("<big") {
+      @include media("<xxlarge") {
         width: 500px;
       }
-      @include media("<wide") {
+      @include media("<xlarge") {
         width: 100%;
         padding: 2rem;
       }
@@ -203,7 +206,7 @@
   //     font-size: 2.5rem;
   //     font-weight: 500;
   //     line-height: 1.2em;
-  //     @include media("<huge") {
+  //     @include media("<wide") {
   //       font-size: 2.85rem;
   //     }
   //     @include media("<medium") {
@@ -213,7 +216,7 @@
   //   p {
   //     font-weight: 300;
   //     font-size: 1.25rem;
-  //     @include media("<huge") {
+  //     @include media("<wide") {
   //       font-size: 1rem;
   //     }
   //     @include media("<medium") {
@@ -277,7 +280,7 @@
   //     border: 2px solid transparent;
   //     user-select: none;
   //     @include material-shadow(1, 1);
-  //     @include hover(){ 
+  //     @include hover(){
   //       @include material-shadow(3, 1);
   //     }
   //     &:active {

@@ -30,6 +30,8 @@
     }
   }
   .card-content {
+    box-shadow: 0 -8px 4px rgba(0, 0, 0, 0.08);
+    position: relative;
     border-bottom-left-radius: 4px;
     background: white;
     border-bottom-right-radius: 4px;
@@ -38,21 +40,49 @@
     padding-left: 1rem;
     padding-right: 1rem;
     color: $oc-gray-8;
+    .user-thumbnail-wrapper {
+      position: absolute;
+      right: 1rem;
+      top: 0;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: white;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 -8px 4px rgba(0, 0, 0, 0.08);
+      img {
+        display: block;
+        width: 2.75rem;
+        height: 2.75rem;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
     .content-head {
       padding-bottom: 1.5rem;
       border-bottom: 1px solid $oc-gray-2;
+      .username {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: $oc-violet-5;
+      }
       h3 {
         display: block;
         margin: 0;
         font-family: "Noto Sans KR";
         font-size: 1.25rem;
         line-height: 2rem;
+        height: 4rem;
         font-weight: 600;
       }
       .subinfo {
         font-size: 0.875rem;
         margin-top: 0.5rem;
-        color: $oc-gray-7;
+        color: #8aa6c1;
         span + span::before {
           color: $oc-gray-5;
           padding-left: 0.25rem;
@@ -66,6 +96,7 @@
       line-height: 1.5rem;
       height: 4.5rem;
       overflow-y: hidden;
+      color: #4c657d;
     }
   }
 }

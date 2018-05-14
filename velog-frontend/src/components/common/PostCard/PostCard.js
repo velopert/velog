@@ -8,16 +8,20 @@ type Props = {};
 const PostCard = (props: Props) => (
   <div className="PostCard">
     <div className="thumbnail-wrapper">
-      {/* <img
+      <img
         src="https://velopert.com/wp-content/uploads/2018/04/shovel-copy-450x237.png"
         alt="thumbnail"
-      /> */}
-      <div className="image-placeholder">
+      />
+      {/* <div className="image-placeholder">
         <ImageIcon />
-      </div>
+      </div> */}
     </div>
     <div className="card-content">
+      <div className="user-thumbnail-wrapper">
+        <img src="https://avatars0.githubusercontent.com/u/17202261?s=460&v=4" alt="thumbnail" />
+      </div>
       <div className="content-head">
+        <div className="username">velopert</div>
         <h3>제목입니다. 제목인데 제목이 길면 그냥 그 다음줄로 가게 하자..</h3>
         <div className="subinfo">
           <span>5월 10일</span>

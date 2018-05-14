@@ -1,18 +1,18 @@
-@import 'utils';
+@import "utils";
 
 .social-login-button {
   padding: 1rem;
-  @include media("<wide") {
+  @include media("<xlarge") {
     padding: 0.75rem;
   }
   display: flex;
   border-radius: 2px;
   align-items: center;
-  transition: all .15s ease-in;
+  transition: all 0.15s ease-in;
   cursor: pointer;
   color: white;
   font-size: 1rem;
-  @include media("<wide") {
+  @include media("<xlarge") {
     font-size: 0.85rem;
   }
   svg {
@@ -52,7 +52,7 @@
   }
   &.google {
     border: 1px solid darken($oc-red-8, 5%);
-    background:  $oc-red-9;
+    background: $oc-red-9;
     @include hover() {
       background: $oc-red-8;
     }
