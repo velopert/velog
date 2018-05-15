@@ -2,6 +2,8 @@
 import Sequelize from 'sequelize';
 import db from 'database/db';
 import { User, Tag, Category } from 'database/models';
+import moment from 'moment';
+
 
 const { Op } = Sequelize;
 
@@ -119,13 +121,27 @@ type PostsQueryInfo = {
   username: ?string,
   tag: ?string,
   categoryUrlSlug: ?string,
-  page: ?number,
+  cursor: ?string,
 };
 
 Post.listPosts = async function ({
-  username, categoryUrlSlug, tag, page,
+  username, categoryUrlSlug, tag, cursor,
 }: PostsQueryInfo) {
+  // find post with cursor
+  let cursorData = null;
+  if (cursor) {
+    cursorData = await Post.findById(cursor);
+    if (!cursorData) {
+      const e = new Error('Cursor data is not found');
+      e.name = 'CURSOR_NOT_FOUND';
+      throw e;
+    }
+  }
+  const cursorDate = cursorData && cursorData.created_at;
+  const time = cursorDate && moment(cursorDate).format('YYYY-MM-DD HH:mm:ss.SSS');
+
   // reusable query for COUNT & SELECT
+  // ⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑ vulnerable !!!!!!!
   const query = `
     ${username ? 'JOIN users u ON p.fk_user_id = u.id' : ''}
     ${
@@ -144,6 +160,10 @@ Post.listPosts = async function ({
     ${username ? 'AND u.username = $username' : ''}
     ${tag ? 'AND t.name = $tag' : ''}
     ${categoryUrlSlug ? 'AND c.url_slug = $category' : ''}
+    ${cursor ? `
+      AND id != '${cursor}'
+      AND created_at <= '${time || ''}'
+    ` : ''}
   `;
 
   try {
@@ -160,12 +180,11 @@ Post.listPosts = async function ({
       ${query}
       ORDER BY created_at DESC
       LIMIT 10
-      OFFSET ${((page || 1) - 1) * 10}
     `,
       { bind: { tag, username, category: categoryUrlSlug }, type: Sequelize.QueryTypes.SELECT },
     );
 
-    if (rows.length === 0) return { count: 0, data: null };
+    if (rows.length === 0) return { count, data: null };
     const postIds = rows.map(({ id }) => id);
 
     const fullPosts = await Post.findAll({
@@ -175,6 +194,7 @@ Post.listPosts = async function ({
           $or: postIds,
         },
       },
+      order: [['created_at', 'DESC']],
     });
     // posts = await Promise.all();
     return {
@@ -280,7 +300,7 @@ export const serializePost = (data: any) => {
   } = data;
   const tags = data.tags.map(tag => tag.name);
   const categories = data.categories.map(category => ({ id: category.id, name: category.name }));
-  console.log(is_temp);
+  // console.log(is_temp);
   return {
     id,
     title,

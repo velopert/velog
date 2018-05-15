@@ -37,12 +37,12 @@ class MainSidebar extends Component<Props> {
             text="최신 포스트"
             to="/recent"
           />
-          <MainMenuItem
+          {/* <MainMenuItem
             active={/^\/collections/.test(url)}
             icon={<CollectionIcon />}
             text="컬렉션"
             to="/collections"
-          />
+          /> */}
           <MainMenuItem
             active={/^\/tags/.test(url)}
             icon={<TagIcon />}
