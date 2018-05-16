@@ -1,9 +1,9 @@
 // @flow
 import Sequelize from 'sequelize';
 import db from 'database/db';
-import { User, Tag, Category } from 'database/models';
+import { User, Tag, Category, UserProfile } from 'database/models';
 import moment from 'moment';
-
+import pick from 'lodash/pick';
 
 const { Op } = Sequelize;
 
@@ -141,7 +141,6 @@ Post.listPosts = async function ({
   const time = cursorDate && moment(cursorDate).format('YYYY-MM-DD HH:mm:ss.SSS');
 
   // reusable query for COUNT & SELECT
-  // ⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑⛑ vulnerable !!!!!!!
   const query = `
     ${username ? 'JOIN users u ON p.fk_user_id = u.id' : ''}
     ${
@@ -161,15 +160,18 @@ Post.listPosts = async function ({
     ${tag ? 'AND t.name = $tag' : ''}
     ${categoryUrlSlug ? 'AND c.url_slug = $category' : ''}
     ${cursor ? `
-      AND id != '${cursor}'
-      AND created_at <= '${time || ''}'
+      AND id != $cursor
+      AND created_at <= $time
     ` : ''}
   `;
 
+  const bindVariables = {
+    tag, username, category: categoryUrlSlug, cursor, time,
+  };
   try {
     const countResult = await db.query(
       `SELECT COUNT(DISTINCT p.id) as count FROM posts p ${query}`,
-      { bind: { tag, username, category: categoryUrlSlug }, type: Sequelize.QueryTypes.SELECT },
+      { bind: bindVariables, type: Sequelize.QueryTypes.SELECT },
     );
     const { count } = countResult[0];
 
@@ -181,14 +183,17 @@ Post.listPosts = async function ({
       ORDER BY created_at DESC
       LIMIT 10
     `,
-      { bind: { tag, username, category: categoryUrlSlug }, type: Sequelize.QueryTypes.SELECT },
+      { bind: bindVariables, type: Sequelize.QueryTypes.SELECT },
     );
 
     if (rows.length === 0) return { count, data: null };
     const postIds = rows.map(({ id }) => id);
 
     const fullPosts = await Post.findAll({
-      include: [User, Tag, Category],
+      include: [{
+        model: User,
+        include: [UserProfile],
+      }, Tag, Category],
       where: {
         id: {
           $or: postIds,
@@ -197,6 +202,7 @@ Post.listPosts = async function ({
       order: [['created_at', 'DESC']],
     });
     // posts = await Promise.all();
+    console.log(fullPosts);
     return {
       count,
       data: fullPosts,
@@ -297,6 +303,7 @@ export const serializePost = (data: any) => {
     likes,
     comments_count,
     is_temp,
+    user,
   } = data;
   const tags = data.tags.map(tag => tag.name);
   const categories = data.categories.map(category => ({ id: category.id, name: category.name }));
@@ -315,6 +322,10 @@ export const serializePost = (data: any) => {
     likes,
     comments_count,
     is_temp,
+    user: {
+      ...pick(user, ['id', 'username']),
+      ...pick(user.user_profile, ['display_name', 'short_bio', 'thumbnail']),
+    },
   };
 };
 

@@ -270,8 +270,8 @@ export const listPosts = async (ctx: Context): Promise<*> => {
       return;
     }
     ctx.body = result.data.map(serializePost);
-    const link = `<${ctx.path}?cursor=${result.data[result.data.length - 1].id}>; rel="next";`;
-    ctx.set('Link', link)
+    // const link = `<${ctx.path}?cursor=${result.data[result.data.length - 1].id}>; rel="next";`;
+    // ctx.set('Link', link)
     ctx.set('Count', result.count.toString());
   } catch (e) {
     ctx.throw(500, e);

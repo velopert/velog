@@ -3,7 +3,7 @@ import SequelizeCockroach from 'sequelize-cockroachdb';
 import type Sequelize from 'sequelize';
 import pg from 'pg';
 
-pg.defaults.parseInt8 = true; // fixes issue: umbers returning as string.
+(pg: any).defaults.parseInt8 = true; // fixes issue: umbers returning as string.
 
 
 const { COCKROACHDB_HOST, COCKROACHDB_PW } = process.env;
