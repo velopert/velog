@@ -12,7 +12,7 @@ const MainHeadUserButton = ({ onClick, thumbnail }: Props) => {
   return (
     <div className="MainHeadUserButton">
       <div className="thumbnail" onClick={onClick}>
-        <img src={thumbnail} alt="thumbnail" />
+        <img src={thumbnail || defaultThumbnail} alt="thumbnail" />
       </div>
     </div>
   );

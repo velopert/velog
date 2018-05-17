@@ -26,7 +26,7 @@ SocialAccount.findUserBySocialId = function findUserBySocialId(socialId: string)
   }).then(data => (data ? data.user : null));
 };
 SocialAccount.associate = function associate() {
-  SocialAccount.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  SocialAccount.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
 };
 
 export default SocialAccount;

@@ -6,7 +6,7 @@ import RegisterForm from 'components/register/RegisterForm';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import type { AuthResult, SocialAuthResult } from 'store/modules/auth';
-import { AuthActions, UserActions } from 'store/actionCreators';
+import { AuthActions, UserActions, BaseActions } from 'store/actionCreators';
 import storage, { keys } from 'lib/storage';
 import queryString from 'query-string';
 
@@ -89,7 +89,7 @@ class RegisterFormContainer extends Component<Props> {
 
       UserActions.setUser(user);
       storage.set(keys.user, user);
-
+      BaseActions.exitLanding();
       history.push('/');
     } catch (e) {
       console.log(e);

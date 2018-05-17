@@ -6,7 +6,7 @@ import './UserButton.scss';
 type Props = {
   onClick(): void,
   thumbnail: string,
-}
+};
 
 const UserButton = ({ onClick, thumbnail }: Props) => {
   return (
