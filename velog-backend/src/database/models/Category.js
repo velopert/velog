@@ -40,7 +40,7 @@ const Category = db.define('category', {
 });
 
 Category.associate = function associate() {
-  Category.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  Category.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
 };
 
 Category.countRootCategories = function countRootCategories(userId: string) {

@@ -19,9 +19,9 @@ const FollowTag = db.define('follow_tag', {
 });
 
 FollowTag.associate = function associate() {
-  FollowTag.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  FollowTag.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
   // set to belongsTo rather than hasOne, because it expects fk_tag_id from Tag (dkw)
-  FollowTag.belongsTo(Tag, { foreignKey: 'fk_tag_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  FollowTag.belongsTo(Tag, { foreignKey: 'fk_tag_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
 };
 
 FollowTag.getListOfUser = function getListOfUser(userId) {

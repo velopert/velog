@@ -13,7 +13,7 @@ const PostsTags = db.define('posts_tags', {
 
 PostsTags.associate = function associate() {
   Post.belongsToMany(Tag, {
-    onDelete: 'restrict',
+    onDelete: 'CASCADE',
     onUpdate: 'restrict',
     through: {
       model: PostsTags,
@@ -21,7 +21,7 @@ PostsTags.associate = function associate() {
     foreignKey: 'fk_post_id',
   });
   Tag.belongsToMany(Post, {
-    onDelete: 'restrict',
+    onDelete: 'CASCADE',
     onUpdate: 'restrict',
     through: {
       model: PostsTags,

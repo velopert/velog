@@ -74,8 +74,8 @@ Feed.findFeedsOf = async ({ userId, cursor }) => {
 };
 
 Feed.associate = function associate() {
-  Feed.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
-  Feed.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  Feed.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
+  Feed.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
 };
 
 export default Feed;

@@ -11,8 +11,8 @@ const PostLike = db.define('post_like', {
 });
 
 PostLike.associate = function associate() {
-  PostLike.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
-  PostLike.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  PostLike.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
+  PostLike.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
 };
 
 PostLike.checkExists = function ({ userId, postId }) {

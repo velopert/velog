@@ -19,8 +19,8 @@ const FollowUser = db.define('follow_user', {
 });
 
 FollowUser.associate = function associate() {
-  FollowUser.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
-  FollowUser.belongsTo(User, { foreignKey: 'fk_follow_user_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  FollowUser.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
+  FollowUser.belongsTo(User, { foreignKey: 'fk_follow_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
 };
 
 FollowUser.getListOfUser = function getListOfUser(userId) {

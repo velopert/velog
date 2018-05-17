@@ -37,10 +37,10 @@ export function associate() {
 }
 export default function sync() {
   associate();
-  db.sync({ force: true });
+  db.sync();
   // // sync Models
-  // UserProfile.sync();
   // User.sync();
+  // UserProfile.sync();
   // SocialAccount.sync();
   // EmailAuth.sync();
   // Tag.sync();

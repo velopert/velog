@@ -53,8 +53,7 @@ const Post = db.define(
 Post.associate = function associate() {
   Post.belongsTo(User, {
     foreignKey: 'fk_user_id',
-
-    onDelete: 'restrict',
+    onDelete: 'CASCADE',
     onUpdate: 'restrict',
   });
 };

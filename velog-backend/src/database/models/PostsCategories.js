@@ -16,7 +16,7 @@ const PostsCategories = db.define('posts_categories', {
 
 PostsCategories.associate = function associate() {
   Post.belongsToMany(Category, {
-    onDelete: 'restrict',
+    onDelete: 'CASCADE',
     onUpdate: 'restrict',
     through: {
       model: PostsCategories,
@@ -24,7 +24,7 @@ PostsCategories.associate = function associate() {
     foreignKey: 'fk_post_id',
   });
   Category.belongsToMany(Post, {
-    onDelete: 'restrict',
+    onDelete: 'CASCADE',
     onUpdate: 'restrict',
     through: {
       model: PostsCategories,

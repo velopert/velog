@@ -23,7 +23,7 @@ const PostHistory = db.define('post_history', {
 });
 
 PostHistory.associate = function associate() {
-  PostHistory.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'restrict', onUpdate: 'restrict' });
+  PostHistory.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
 };
 
 PostHistory.list = function list(postId, page = 1) {
