@@ -5906,9 +5906,9 @@ redux-actions@^2.2.1:
     lodash-es "^4.17.4"
     reduce-reducers "^0.1.0"
 
-redux-pender@^1.1.15:
-  version "1.1.15"
-  resolved "https://registry.yarnpkg.com/redux-pender/-/redux-pender-1.1.15.tgz#fd6950a0482bd5c4e7c95fe85da074b869967cdd"
+redux-pender@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/redux-pender/-/redux-pender-1.2.1.tgz#e77202845b1bb25cb0476fc3439fbfd42a1efb3d"
   dependencies:
     eventemitter3 "^2.0.3"
     path-to-regexp "^2.0.0"

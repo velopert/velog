@@ -6,6 +6,7 @@ import type { Base } from './modules/base';
 import type { Write } from './modules/write';
 import type { Posts } from './modules/posts';
 import type { Sample } from './modules/sample';
+import type { Listing } from './modules/listing';
 
 const store = configure();
 
@@ -18,9 +19,10 @@ export type State = {
   write: Write,
   posts: Posts,
   sample: Sample,
+  listing: Listing,
   pender: {
     pending: any,
     success: any,
-    failure: any
-  }
+    failure: any,
+  },
 };

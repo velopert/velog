@@ -9,6 +9,7 @@ import Trending from 'pages/Trending';
 import MainHead from 'components/main/MainHead';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import Recent from 'pages/Recent';
 import MainSidebarContainer from './MainSidebarContainer';
 import MainHeadContainer from './MainHeadContainer';
 
@@ -24,6 +25,7 @@ class MainContainer extends Component<Props> {
         <MainHeadContainer />
         <Switch>
           <Route exact path="/(|trending)" component={Trending} />
+          <Route path="/recent" component={Recent} />
         </Switch>
       </MainTemplate>
     );

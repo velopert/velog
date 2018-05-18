@@ -59,7 +59,7 @@
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
-    "redux-pender": "^1.1.15",
+    "redux-pender": "^1.2.1",
     "sass-loader": "^6.0.6",
     "sortablejs": "^1.7.0",
     "style-loader": "0.19.0",
