@@ -42,7 +42,7 @@
     }
   }
   .card-content {
-    box-shadow: 0 -8px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px -4px 16px rgba(0, 0, 0, 0.05);
     position: relative;
     border-bottom-left-radius: 4px;
     background: white;
@@ -64,7 +64,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      box-shadow: 0 -8px 4px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
       img {
         display: block;
         width: 2.75rem;
@@ -74,6 +74,7 @@
       }
     }
     .content-head {
+      height: 8.5rem;
       padding-bottom: 1.5rem;
       border-bottom: 1px solid $oc-gray-2;
       .username {
@@ -88,7 +89,7 @@
         font-family: "Noto Sans KR";
         font-size: 1.25rem;
         line-height: 2rem;
-        height: 4rem;
+        max-height: 4rem;
         font-weight: 600;
         overflow: hidden;
       }

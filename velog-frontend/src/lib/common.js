@@ -11,22 +11,21 @@ export const pressedEnter = (fn: () => void) => (e: KeyboardEvent) => {
 
 type Reducer = (state: any, action: any) => any;
 
-export function applyPenders<T: Reducer>(
-  reducer: T,
-  penders: any[],
-): T {
+export function applyPenders<T: Reducer>(reducer: T, penders: any[]): T {
   const updaters = Object.assign({}, ...penders.map(pender));
-  return (((state, action) => {
+  return ((state, action) => {
     if (updaters[action.type]) {
       return updaters[action.type](state, action);
     }
     return reducer(state, action);
-  }): any);
+  }: any);
 }
 
 export type ResponseAction = {
   type: string,
   payload: $AxiosXHR<*>,
-  error: $AxiosError<*>
+  error: $AxiosError<*>,
 };
 
+type Return_<R, F: (...args: Array<any>) => R> = R;
+export type Return<T> = Return_<*, T>;

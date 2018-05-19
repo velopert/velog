@@ -1,13 +1,13 @@
 // @flow
 import React, { type Node } from 'react';
-import './TrendingTemplate.scss';
+import './RecentTemplate.scss';
 
 type Props = {
   children: Node,
 };
 
-const TrendingTemplate = ({ children }: Props) => (
-  <div className="TrendingTemplate">{children}</div>
+const RecentTemplate = ({ children }: Props) => (
+  <div className="RecentTemplate">{children}</div>
 );
 
-export default TrendingTemplate;
+export default RecentTemplate;
