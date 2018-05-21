@@ -1,0 +1,16 @@
+@import "utils";
+.FakePostCard {
+  .gray-box {
+    height: 1em;
+    display: inline-block;
+    background: $oc-gray-1;
+    border-radius: 4px;
+    margin-right: 0.5em;
+  }
+  .thumbnail-wrapper {
+    opacity: 0.3;
+  }
+  .card-content .user-thumbnail-wrapper {
+    background: $oc-gray-2;
+  }
+}

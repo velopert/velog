@@ -64,7 +64,7 @@ const reducer = handleActions(
     [REVEAL_PREFETCHED]: (state, action: RevealPrefetchedAction) => {
       return produce(state, (draft) => {
         if (!action) return;
-        if (action.type === 'recent' && state.recentPosts && state.prefetchedRecentPosts) {
+        if (action.payload === 'recent' && state.recentPosts && state.prefetchedRecentPosts) {
           draft.recentPosts = state.recentPosts.concat(state.prefetchedRecentPosts);
           draft.prefetchedRecentPosts = null;
         }
@@ -74,7 +74,6 @@ const reducer = handleActions(
   initialState,
 );
 
-console.log(applyPenders);
 export default applyPenders(reducer, [
   {
     type: GET_RECENT_POSTS,
@@ -86,7 +85,7 @@ export default applyPenders(reducer, [
     },
   },
   {
-    type: REVEAL_PREFETCHED,
+    type: PREFETCH_RECENT_POSTS,
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       return produce(state, (draft) => {
         draft.prefetchedRecentPosts = action.payload.data;

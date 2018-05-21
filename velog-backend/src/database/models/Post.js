@@ -137,7 +137,7 @@ Post.listPosts = async function ({
     }
   }
   const cursorDate = cursorData && cursorData.created_at;
-  const time = cursorDate && moment(cursorDate).format('YYYY-MM-DD HH:mm:ss.SSS');
+  const time = cursorDate && new Date(cursorDate).toISOString();
 
   // reusable query for COUNT & SELECT
   const query = `
@@ -167,6 +167,7 @@ Post.listPosts = async function ({
   const bindVariables = {
     tag, username, category: categoryUrlSlug, cursor, time,
   };
+  console.log(bindVariables);
   try {
     const countResult = await db.query(
       `SELECT COUNT(DISTINCT p.id) as count FROM posts p ${query}`,
@@ -180,10 +181,12 @@ Post.listPosts = async function ({
       `SELECT DISTINCT p.id, p.created_at FROM posts p
       ${query}
       ORDER BY created_at DESC
-      LIMIT 10
+      LIMIT 20
     `,
       { bind: bindVariables, type: Sequelize.QueryTypes.SELECT },
     );
+
+    console.log(rows);
 
     if (rows.length === 0) return { count, data: null };
     const postIds = rows.map(({ id }) => id);
@@ -201,7 +204,6 @@ Post.listPosts = async function ({
       order: [['created_at', 'DESC']],
     });
     // posts = await Promise.all();
-    console.log(fullPosts);
     return {
       count,
       data: fullPosts,
@@ -227,7 +229,7 @@ Post.checkUrlSlugExistancy = function ({ userId, urlSlug }) {
 };
 
 Post.listPublicPosts = function ({ tag, page, option }: PublicPostsQueryInfo) {
-  const limit = 10;
+  const limit = 20;
   return Post.findAndCountAll({
     distinct: 'id',
     order: [['created_at', 'DESC']],

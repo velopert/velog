@@ -269,6 +269,8 @@ export const listPosts = async (ctx: Context): Promise<*> => {
       ctx.body = [];
       return;
     }
+    // Fake Delay
+    // await new Promise((resolve) => { setTimeout(resolve, 2000); });
     ctx.body = result.data.map(serializePost);
     // const link = `<${ctx.path}?cursor=${result.data[result.data.length - 1].id}>; rel="next";`;
     // ctx.set('Link', link)
