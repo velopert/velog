@@ -36,6 +36,7 @@ export type PostItem = {
 };
 
 export type Listing = {
+  recentEnd: boolean,
   recentPosts: ?(PostItem[]),
   prefetchedRecentPosts: ?(PostItem[]),
 };
@@ -55,6 +56,7 @@ export interface ListingActionCreators {
 }
 
 const initialState: Listing = {
+  recentEnd: false,
   recentPosts: null,
   prefetchedRecentPosts: null,
 };
@@ -89,6 +91,9 @@ export default applyPenders(reducer, [
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       return produce(state, (draft) => {
         draft.prefetchedRecentPosts = action.payload.data;
+        if (action.payload.data && action.payload.data.length === 0) {
+          draft.recentEnd = true;
+        }
       });
     },
   },

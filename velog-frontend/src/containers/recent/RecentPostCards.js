@@ -13,6 +13,8 @@ type Props = {
   prefetched: ?(PostItem[]),
   prefetching: boolean,
   loading: boolean,
+  width: number,
+  hasEnded: boolean,
 };
 
 class RecentPostCards extends Component<Props> {
@@ -69,15 +71,25 @@ class RecentPostCards extends Component<Props> {
   }
 
   render() {
-    return <PostCardList posts={this.props.posts} loading={this.props.loading} />;
+    return (
+      <PostCardList
+        posts={this.props.posts}
+        loading={this.props.loading}
+        prefetching={!!this.props.prefetched || this.props.prefetching}
+        width={this.props.width}
+        hasEnded={this.props.hasEnded}
+      />
+    );
   }
 }
 
-const mapStateToProps = ({ listing, pender }: State) => ({
+const mapStateToProps = ({ listing, pender, base }: State) => ({
   posts: listing.recentPosts,
   prefetched: listing.prefetchedRecentPosts,
   prefetching: pender.pending['listing/PREFETCH'],
   loading: pender.pending['listing/GET_RECENT_POSTS'],
+  width: base.windowWidth,
+  hasEnded: listing.recentEnd,
 });
 
 export default connect(mapStateToProps, () => ({}))(RecentPostCards);

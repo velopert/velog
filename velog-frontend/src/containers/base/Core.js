@@ -6,6 +6,7 @@ import type { State } from 'store';
 import type { UserData } from 'store/modules/user';
 import storage from 'lib/storage';
 import NanoBar from 'components/common/NanoBar';
+import throttle from 'lodash/throttle';
 import FullscreenLoaderContainer from './FullscreenLoaderContainer';
 
 type Props = {
@@ -28,8 +29,23 @@ class Core extends Component<Props> {
     }
   };
 
+  constructor(props) {
+    super(props);
+    this.setWidth();
+  }
+
+  setWidth = () => {
+    if (typeof window === 'undefined') return;
+    BaseActions.setWidth(window.outerWidth);
+  };
+
+  onResize = throttle(() => {
+    this.setWidth();
+  }, 250);
+
   initialize = async () => {
     this.checkUser();
+    window.addEventListener('resize', this.onResize);
   };
 
   integrateAxiosProgressbar = () => {
