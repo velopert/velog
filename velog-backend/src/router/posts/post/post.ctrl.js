@@ -113,7 +113,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   };
 
   Object.keys(updateQuery).forEach((key) => {
-    if (!updateQuery[key]) {
+    if (updateQuery[key] === undefined) {
       delete updateQuery[key];
     }
   });

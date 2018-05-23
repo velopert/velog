@@ -4,11 +4,11 @@ import React, { Component } from 'react';
 import SubmitBox from 'components/write/SubmitBox';
 import SelectCategory from 'components/write/SelectCategory';
 import InputTags from 'components/write/InputTags';
+import WriteConfigureThumbnail from 'components/write/WriteConfigureThumbnail';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { WriteActions, UserActions } from 'store/actionCreators';
 import type { Categories, PostData } from 'store/modules/write';
-import type { List } from 'immutable';
 
 type Props = {
   open: boolean,
@@ -100,6 +100,7 @@ class SubmitBoxContainer extends Component<Props> {
         onEditCategoryClick={onEditCategoryClick}
         selectCategory={<SelectCategory categories={categories} onToggle={onToggleCategory} />}
         inputTags={<InputTags tags={tags} onInsert={onInsertTag} onRemove={onRemoveTag} />}
+        configureThumbnail={<WriteConfigureThumbnail />}
         visible={open}
         onClose={onClose}
         onSubmit={onSubmit}

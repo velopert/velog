@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import onClickOutside from 'react-onclickoutside';
 import SettingsIcon from 'react-icons/lib/md/settings';
 import cx from 'classnames';
@@ -10,6 +10,7 @@ type Props = {
   isEditing: boolean,
   selectCategory: any,
   inputTags: any,
+  configureThumbnail: Node,
   visible: boolean,
   isEdit: boolean,
   onClose(): void,
@@ -26,17 +27,17 @@ class SubmitBox extends Component<Props, State> {
 
   static defaultProps = {
     isEditing: false,
-  }
+  };
 
   state = {
     animating: false,
-  }
+  };
 
   handleClickOutside = () => {
     const { onClose, visible } = this.props;
     if (!visible) return;
     onClose();
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (this.props.visible && !nextProps.visible) {
@@ -58,12 +59,17 @@ class SubmitBox extends Component<Props, State> {
         animating: false,
       });
     }, 150);
-  }
+  };
 
   render() {
     const {
-      isEdit, selectCategory, inputTags,
-      visible, onSubmit, onEditCategoryClick,
+      isEdit,
+      selectCategory,
+      inputTags,
+      visible,
+      onSubmit,
+      onEditCategoryClick,
+      configureThumbnail,
     } = this.props;
     const { animating } = this.state;
 
@@ -87,10 +93,12 @@ class SubmitBox extends Component<Props, State> {
             {selectCategory}
           </section>
           <section>
-            <div className="section-title">
-              태그 설정
-            </div>
+            <div className="section-title">태그 설정</div>
             {inputTags}
+          </section>
+          <section>
+            <div className="section-title">썸네일 지정</div>
+            {configureThumbnail}
           </section>
         </div>
         <div className="footer">
@@ -101,7 +109,7 @@ class SubmitBox extends Component<Props, State> {
             className={cx('submit-button', 'util', 'flex-center', { edit: isEdit })}
             onClick={onSubmit}
           >
-            { isEdit ? '업데이트' : '작성하기' }
+            {isEdit ? '업데이트' : '작성하기'}
           </div>
         </div>
       </div>

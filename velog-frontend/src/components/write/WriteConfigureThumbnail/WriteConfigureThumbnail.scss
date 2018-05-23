@@ -1,0 +1,44 @@
+@import 'utils';
+.WriteConfigureThumbnail {
+  display: flex;
+  .thumbnail-area {
+    width: 100%;
+    padding-top: 52.63%;
+    position: relative;
+    @include material-shadow(2, 0.75);
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .overlay {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: all 0.125s ease-in;
+      background: rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      svg {
+        font-size: 3rem;
+      }
+      .text {
+        margin-top: 0.5rem;
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+      &:hover {
+        background: rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+}
