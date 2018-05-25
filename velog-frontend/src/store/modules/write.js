@@ -8,6 +8,7 @@ import { applyPenders } from 'lib/common';
 
 /* ACTION TYPE */
 const EDIT_FIELD = 'write/EDIT_FIELD';
+const SET_THUMBNAIL = 'write/SET_THUMBNAIL';
 const OPEN_SUBMIT_BOX = 'write/OPEN_SUBMIT_BOX';
 const CLOSE_SUBMIT_BOX = 'write/CLOSE_SUBMIT_BOX';
 const LIST_CATEGORIES = 'write/LIST_CATEGORIES';
@@ -50,6 +51,7 @@ type ReorderCategoryPayload = { from: number, to: number };
 /* ACTION CREATORS INTERFACE */
 export interface WriteActionCreators {
   editField(payload: EditFieldPayload): any;
+  setThumbnail(url: ?string): any;
   openSubmitBox(): any;
   closeSubmitBox(): any;
   listCategories(): any;
@@ -85,6 +87,7 @@ export interface WriteActionCreators {
 /* EXPORT ACTION CREATORS */
 export const actionCreators = {
   editField: createAction(EDIT_FIELD, (payload: EditFieldPayload) => payload),
+  setThumbnail: createAction(SET_THUMBNAIL, (payload: ?string) => payload),
   openSubmitBox: createAction(OPEN_SUBMIT_BOX),
   closeSubmitBox: createAction(CLOSE_SUBMIT_BOX),
   listCategories: createAction(LIST_CATEGORIES, MeAPI.listCategories),
@@ -126,6 +129,7 @@ export const actionCreators = {
 
 /* ACTION FLOW TYPE */
 type EditFieldAction = ActionType<typeof actionCreators.editField>;
+type SetThumbnailAction = ActionType<typeof actionCreators.setThumbnail>;
 type ToggleCategoryAction = ActionType<typeof actionCreators.toggleCategory>;
 type InsertTagAction = ActionType<typeof actionCreators.insertTag>;
 type RemovetagAction = ActionType<typeof actionCreators.removeTag>;
@@ -194,6 +198,7 @@ export type WriteExtra = {
 export type Write = {
   body: string,
   title: string,
+  thumbnail: ?string,
   submitBox: SubmitBox,
   postData: ?PostData,
   categoryModal: CategoryModal,
@@ -204,6 +209,7 @@ export type Write = {
 
 const initialState: Write = {
   body: '',
+  thumbnail: null,
   title: '',
   submitBox: {
     open: false,
@@ -237,6 +243,11 @@ const reducer = handleActions(
       const { field, value } = payload;
       return produce(state, (draft) => {
         draft[field] = value;
+      });
+    },
+    [SET_THUMBNAIL]: (state, { payload }: SetThumbnailAction) => {
+      return produce(state, (draft) => {
+        draft.thumbnail = payload;
       });
     },
     [OPEN_SUBMIT_BOX]: (state) => {

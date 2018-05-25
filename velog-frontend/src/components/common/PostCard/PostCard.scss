@@ -22,6 +22,7 @@
     position: relative;
     img,
     .image-placeholder {
+      object-fit: cover;
       display: block;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;

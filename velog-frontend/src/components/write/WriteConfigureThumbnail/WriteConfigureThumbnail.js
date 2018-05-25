@@ -1,22 +1,40 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import ChangeIcon from 'react-icons/lib/md/sync';
+import UploadIcon from 'react-icons/lib/md/file-upload';
 import './WriteConfigureThumbnail.scss';
 
-type Props = {};
+type Props = {
+  thumbnail: ?string,
+  onUploadClick: () => void,
+  onClearThumbnail: () => void,
+};
 
-const WriteConfigureThumbnail = (props: Props) => (
+const WriteConfigureThumbnail = ({ thumbnail, onUploadClick, onClearThumbnail }: Props) => (
   <div className="WriteConfigureThumbnail">
-    <div className="thumbnail-area">
-      <img
-        src="https://images.velog.io/post-images/velopert/0700dc90-5ea2-11e8-b245-3fe0979a15ae/스크린샷 2018-04-25 오전 12.42.05.png"
-        alt="post-thumbnail"
-      />
-      <div className="overlay">
-        <ChangeIcon />
-        <div className="text">변경</div>
-      </div>
-    </div>
+    {thumbnail ? (
+      <Fragment>
+        <div className="remove-wrapper">
+          <button className="remove" onClick={onClearThumbnail}>
+            제거
+          </button>
+        </div>
+        <div className="thumbnail-area">
+          <img className="full" src={thumbnail} alt="post-thumbnail" />
+          <div className="overlay full">
+            <button className="white-button" onClick={onUploadClick}>
+              <ChangeIcon />
+              <div className="text">변경</div>
+            </button>
+          </div>
+        </div>
+      </Fragment>
+    ) : (
+      <button className="white-button fullwidth" onClick={onUploadClick}>
+        <UploadIcon />
+        <div className="text">업로드</div>
+      </button>
+    )}
   </div>
 );
 
