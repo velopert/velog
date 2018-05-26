@@ -45,7 +45,7 @@ class SubmitBoxContainer extends Component<Props> {
     // temp save post if not released
     if (!this.props.postData) {
       await WriteActions.setTempData(); // nextTick
-      const { title, body, tags, categories } = this.props;
+      const { title, body, tags, categories, thumbnail } = this.props;
       const activeCategories = (() => {
         if (!categories || categories.length === 0) return [];
         return categories.filter(c => c.active).map(c => c.id);
@@ -57,6 +57,7 @@ class SubmitBoxContainer extends Component<Props> {
           tags,
           isMarkdown: true,
           isTemp: true,
+          thumbnail,
           categories: activeCategories,
         });
       } catch (e) {

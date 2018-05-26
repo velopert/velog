@@ -5,21 +5,17 @@ import './UserButton.scss';
 
 type Props = {
   onClick(): void,
-  thumbnail: ?string,
+  thumbnail: string,
 };
 
 const UserButton = ({ onClick, thumbnail }: Props) => {
   return (
-    <div className="UserButton">
+    <div className="user-button">
       <div className="thumbnail" onClick={onClick}>
         <img src={thumbnail || defaultThumbnail} alt="thumbnail" />
       </div>
     </div>
   );
-};
-
-UserButton.defaultProps = {
-  thumbnail: defaultThumbnail,
 };
 
 export default UserButton;

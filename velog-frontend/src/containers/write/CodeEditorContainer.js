@@ -23,6 +23,7 @@ type Props = {
   uploadUrl: ?string,
   imagePath: ?string,
   uploadId: ?string,
+  thumbnail: ?string,
 };
 
 class CodeEditorContainer extends Component<Props> {
@@ -67,7 +68,7 @@ class CodeEditorContainer extends Component<Props> {
     // uploading needs postId
     if (!this.props.postData) {
       await WriteActions.setTempData();
-      const { title, body, tags, categories } = this.props;
+      const { title, body, tags, categories, thumbnail } = this.props;
       const activeCategories = (() => {
         if (!categories || categories.length === 0) return [];
         return categories.filter(c => c.active).map(c => c.id);
@@ -80,6 +81,7 @@ class CodeEditorContainer extends Component<Props> {
           isMarkdown: true,
           isTemp: true,
           categories: activeCategories,
+          thumbnail,
         });
       } catch (e) {
         console.log(e);
@@ -180,6 +182,7 @@ export default connect(
     uploadUrl: write.upload.uploadUrl,
     imagePath: write.upload.imagePath,
     uploadId: write.upload.id,
+    thumbnail: write.thumbnail,
   }),
   () => ({}),
 )(CodeEditorContainer);

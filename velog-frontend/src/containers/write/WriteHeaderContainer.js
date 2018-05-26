@@ -13,6 +13,7 @@ type Props = {
   categories: ?(Category[]),
   postData: ?PostData,
   writeExtraOpen: boolean,
+  thumbnail: ?string,
 };
 
 class WriteHeaderContainer extends Component<Props> {
@@ -33,7 +34,7 @@ class WriteHeaderContainer extends Component<Props> {
   };
 
   onTempSave = () => {
-    const { postData, title, body, tags, categories } = this.props;
+    const { postData, title, body, tags, categories, thumbnail } = this.props;
 
     const activeCategories = (() => {
       if (!categories || categories.length === 0) return [];
@@ -47,6 +48,7 @@ class WriteHeaderContainer extends Component<Props> {
         tags,
         isMarkdown: true,
         isTemp: true,
+        thumbnail,
         categories: activeCategories,
       });
       return;
@@ -58,6 +60,7 @@ class WriteHeaderContainer extends Component<Props> {
         body,
         tags,
         is_temp: false,
+        thumbnail,
         categories: activeCategories,
       });
       return;
@@ -99,6 +102,7 @@ export default connect(
     categories: write.submitBox.categories,
     tags: write.submitBox.tags,
     writeExtraOpen: write.writeExtra.visible,
+    thumbnail: write.thumbnail,
   }),
   () => ({}),
 )(WriteHeaderContainer);

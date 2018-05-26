@@ -7,19 +7,12 @@ import { type Match } from 'react-router-dom';
 
 type Props = {
   match: Match,
-}
+};
 
 const Post = ({ match }: Props) => {
   const { username, urlSlug } = match.params;
 
-  return (
-    <PageTemplate header={<HeaderContainer />}>
-      <PostViewer
-        username={username}
-        urlSlug={urlSlug}
-      />
-    </PageTemplate>
-  );
+  return <PostViewer username={username} urlSlug={urlSlug} />;
 };
 
 export default Post;
