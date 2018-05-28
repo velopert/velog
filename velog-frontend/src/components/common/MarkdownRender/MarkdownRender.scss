@@ -1,5 +1,4 @@
 @import "utils";
-
 .MarkdownRender {
   text-align: justify;
   font-size: 1.3125rem;
@@ -7,21 +6,17 @@
   word-wrap: break-word;
   font-family: "Noto Sans KR";
   color: $oc-gray-8;
-
   p {
     line-height: 1.75em;
     font-weight: 400;
   }
-
   strong,
   b {
     font-weight: 600;
   }
-
-  p + p {
+  p+p {
     margin-top: 2em;
   }
-
   h1,
   h2,
   h3,
@@ -31,11 +26,13 @@
     font-weight: 500;
     margin-top: 1em;
     margin-bottom: 1em;
+    & code {
+      font-weight: 600;
+    }
   }
   &.atom-one {
     @import "./prism-atom-one";
   }
-
   h1,
   h2,
   h3,
@@ -60,7 +57,6 @@
   pre {
     margin: 15px 0;
   }
-
   blockquote {
     margin-top: 2em;
     margin-bottom: 2em;
@@ -73,8 +69,7 @@
     overflow: auto;
     background: #282c34;
     code {
-      font-family: "D2 Coding", Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
-        monospace;
+      font-family: "D2 Coding", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
       color: $oc-gray-2;
       font-size: 0.81em;
     }
@@ -88,7 +83,7 @@
   ul {
     padding-left: 30px;
     line-height: 1.25em;
-    li + li {
+    li+li {
       margin-top: 0.75em;
     }
   }
@@ -104,22 +99,22 @@
     margin: 15px 0;
     padding: 0;
   }
-  & > h2:first-child {
+  &>h2:first-child {
     margin-top: 0;
     padding-top: 0;
   }
-  & > h1:first-child {
+  &>h1:first-child {
     margin-top: 0;
     padding-top: 0;
   }
-  & > h1:first-child + h2 {
+  &>h1:first-child+h2 {
     margin-top: 0;
     padding-top: 0;
   }
-  & > h3:first-child,
-  & > h4:first-child,
-  & > h5:first-child,
-  & > h6:first-child {
+  &>h3:first-child,
+  &>h4:first-child,
+  &>h5:first-child,
+  &>h6:first-child {
     margin-top: 0;
     padding-top: 0;
   }
@@ -132,14 +127,14 @@
     margin-top: 0;
     padding-top: 0;
   }
-  h1 + p,
-  h2 + p,
-  h3 + p,
-  h4 + p,
-  h5 + p,
-  h6 + p,
-  ul li > :first-child,
-  ol li > :first-child {
+  h1+p,
+  h2+p,
+  h3+p,
+  h4+p,
+  h5+p,
+  h6+p,
+  ul li> :first-child,
+  ol li> :first-child {
     margin-top: 0;
   }
   dl {
@@ -155,20 +150,20 @@
   dl dt:first-child {
     padding: 0;
   }
-  dl dt > :first-child {
+  dl dt> :first-child {
     margin-top: 0;
   }
-  dl dt > :last-child {
+  dl dt> :last-child {
     margin-bottom: 0;
   }
   dl dd {
     margin: 0 0 15px;
     padding: 0 15px;
   }
-  dl dd > :first-child {
+  dl dd> :first-child {
     margin-top: 0;
   }
-  dl dd > :last-child {
+  dl dd> :last-child {
     margin-bottom: 0;
   }
   blockquote {
@@ -176,10 +171,10 @@
     padding: 0 15px;
     color: #777;
   }
-  blockquote > :first-child {
+  blockquote> :first-child {
     margin-top: 0;
   }
-  blockquote > :last-child {
+  blockquote> :last-child {
     margin-bottom: 0;
   }
   table {

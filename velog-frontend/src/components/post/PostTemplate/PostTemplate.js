@@ -1,12 +1,17 @@
 // @flow
-import React from 'react';
+import React, { type Node } from 'react';
+import ViewerHead from 'components/base/ViewerHead';
 import './PostTemplate.scss';
 
-type Props = { }
+type Props = {
+  header: Node,
+  children: Node,
+};
 
-const PostTemplate = (props: Props) => (
+const PostTemplate = ({ children, header }: Props) => (
   <div className="PostTemplate">
-    PostTemplate
+    <div className="header-area">{header}</div>
+    <div className="post-area">{children}</div>
   </div>
 );
 

@@ -1,5 +1,28 @@
 @import 'utils';
+.PostContent {
+  .post-thumbnail {
+    img {
+      width: 100%;
+      height: auto;
+    }
+    margin-bottom: 3rem;
+  }
+  .contents {
+    pre[class*="language-"] {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      margin-left: calc(-1 * (100vw - 768px)/2);
+      margin-right: calc(-1 * (100vw - 768px)/2);
+      padding-left: calc((100vw - 768px - 4rem)/2);
+      padding-right: calc((100vw - 768px - 4rem)/2);
+    }
+    /*
 
+    */
+  }
+}
+
+/*
 .PostContent {
   margin-top: 10rem;
   @include media("<large") {
@@ -47,22 +70,9 @@
     }
     
 
-    pre[class*="language-"] {
-      padding-left: 4rem;
-      padding-right: 4rem;
-      margin-left: -4rem;
-      margin-right: -4rem;
-      margin-top: 2rem;
-      margin-bottom: 2rem;
 
-      @include media("<large") {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-        margin-left: -1.5rem;
-        margin-right: -1.5rem;
-      }
-    }
 
     
   }
 }
+*/

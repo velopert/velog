@@ -12,7 +12,7 @@ const App = () => (
       <Route path="/register" component={Register} />
       <Route path="/email-login" component={EmailLogin} />
       <Route path="/write" component={Write} />
-      <Route path="/posts/@:username/:urlSlug" component={Post} />
+      <Route path="/@:username/:urlSlug" component={Post} />
       <Route path="/posts/preview/:id" component={Post} />
     </Switch>
     <Core />

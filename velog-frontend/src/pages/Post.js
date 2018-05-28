@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
-import PageTemplate from 'components/base/PageTemplate';
+import PostTemplate from 'components/post/PostTemplate';
 import HeaderContainer from 'containers/base/HeaderContainer';
 import PostViewer from 'containers/post/PostViewer';
 import { type Match } from 'react-router-dom';
+import ViewerHead from 'components/base/ViewerHead';
+import RightCorner from 'containers/base/RightCorner';
 
 type Props = {
   match: Match,
@@ -12,7 +14,11 @@ type Props = {
 const Post = ({ match }: Props) => {
   const { username, urlSlug } = match.params;
 
-  return <PostViewer username={username} urlSlug={urlSlug} />;
+  return (
+    <PostTemplate header={<ViewerHead rightCorner={<RightCorner />} />}>
+      <PostViewer username={username} urlSlug={urlSlug} />
+    </PostTemplate>
+  );
 };
 
 export default Post;

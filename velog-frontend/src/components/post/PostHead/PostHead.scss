@@ -1,68 +1,57 @@
 @import 'utils';
-
 .PostHead {
-  width: 980px;
-  margin: 0 auto;
-  @include media("<980px") {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    width: 100%;
+  margin-top: 2rem;
+  font-size: 1rem;
+  .category {
+    font-size: 1.125em;
+    color: $oc-violet-6;
+    margin: 0;
+    font-weight: 600;
   }
-
-  margin-top: 5rem;
-  @include media("<980px") {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    margin-top: 2.5rem;
-  }
-  padding-bottom: 2rem;
-  .sub-info {
-    display: flex;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid $oc-gray-2;
-    margin-bottom: 1rem;
-    .thumbnail {
-      img {
-        display: block;
-        width: 4rem;
-        height: 4rem;
-        object-fit: cover;
-        border-radius: 50%;
-        @include material-shadow(1, 0.5);
-      }
-    }
-    .information {
-      display: flex;
-      align-items: center;
-      margin-left: 1rem;
-      font-size: 0.85rem;
-      color: $oc-gray-7;
-      font-weight: 300;
-      .username {
-        color: black;
-        font-weight: 500;
-      }
-    }
-  }
-
   h1 {
     margin: 0;
-    font-weight: 500;
-    font-size: 2.75rem;
-    @include media("<large") {
-      font-size: 2rem;
+    font-size: 2.5em;
+    line-height: 3.2rem;
+    margin-top: 0.75em;
+  }
+  .date {
+    font-size: 1.125em;
+    margin-top: 0.75em;
+    color: $oc-gray-6;
+  }
+  .userinfo {
+    display: flex;
+    margin-top: 1em;
+    align-items: center;
+    .user-thumbnail {
+      width: 4em;
+      height: 4em;
+      position: relative;
+      img {
+        border-radius: 50%;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .info {
+      margin-left: 1em;
+      font-size: 0.875em;
+      line-height: 1.5em;
+      .username {
+        font-weight: 500;
+        color: $oc-gray-9;
+      }
+      .description {
+        color: $oc-gray-6;
+      }
     }
   }
-  .tags { 
-    margin-top: 1rem;
-    .tag {
-      padding: 0.5rem;
-      background: $oc-gray-1;
-      border: 1px solid $oc-gray-2;
-      border-radius: 4px;
-      font-family: 'Inconsolata', 'D2 Coding';
-      margin-right: 0.5rem;
-      font-size: 0.9rem;
-    }
+  .separator {
+    width: 25em;
+    height: 3px;
+    background: $oc-violet-5;
+    margin-top: 2em;
+    margin-bottom: 4em;
   }
 }

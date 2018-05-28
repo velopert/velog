@@ -1,0 +1,19 @@
+@import 'utils';
+.ViewerHead {
+  height: 7rem;
+  display: flex;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  .logo-area {
+    font-size: 2rem;
+    line-height: 2rem;
+    font-family: "Inconsolata";
+    color: $oc-gray-9;
+  }
+  .right-corner {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+}
