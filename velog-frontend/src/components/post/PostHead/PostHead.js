@@ -1,18 +1,25 @@
 // @flow
 import React from 'react';
 import Responsive from 'components/common/Responsive';
+import type { Categories } from 'store/modules/posts';
 import './PostHead.scss';
 
 type Props = {
   title: string,
-  categoryName: string,
+  categories: Categories,
   user: any,
 };
 
-const PostHead = ({ title, user }: Props) => {
+const PostHead = ({ title, categories, user }: Props) => {
   return (
     <div className="PostHead">
-      <h4 className="category">프론트엔드 개발</h4>
+      <h4 className="category">
+        {categories.map(c => (
+          <span className="category-name" key={c.id}>
+            {c.name}
+          </span>
+        ))}
+      </h4>
       <div className="userinfo">
         <div className="user-thumbnail">
           <img src="https://avatars0.githubusercontent.com/u/17202261?v=4" alt="user-thumbnail" />

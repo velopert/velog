@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import PostHead from 'components/post/PostHead';
 import PostContent from 'components/post/PostContent';
+import PostTags from 'components/post/PostTags';
 import { PostsActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import type { State } from 'store';
@@ -25,7 +26,7 @@ class PostViewer extends Component<Props> {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   componentDidMount() {
     this.initialize();
@@ -41,10 +42,11 @@ class PostViewer extends Component<Props> {
         <PostHead
           title={post.title}
           tags={post.tags}
+          categories={post.categories}
+          user={post.user}
         />
-        <PostContent
-          body={post.body}
-        />
+        <PostContent body={post.body} />
+        <PostTags tags={post.tags} />
       </Fragment>
     );
   }

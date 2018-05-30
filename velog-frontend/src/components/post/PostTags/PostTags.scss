@@ -1,0 +1,23 @@
+@import 'utils';
+.PostTags {
+  padding-bottom: 2rem;
+  a {
+    margin-bottom: 0.75rem;
+    display: inline-flex;
+    background: $oc-gray-0;
+    border: 1px solid $oc-gray-3;
+    color: $oc-gray-7;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 0.75rem;
+    border-radius: 4px;
+    &+a {
+      margin-left: 0.75rem;
+    }
+    &:hover {
+      cursor: pointer;
+      background: $oc-gray-1;
+    }
+  }
+}

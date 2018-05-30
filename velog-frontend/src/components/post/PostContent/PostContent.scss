@@ -11,10 +11,12 @@
     pre[class*="language-"] {
       margin-top: 2rem;
       margin-bottom: 2rem;
+      /*
       margin-left: calc(-1 * (100vw - 768px)/2);
       margin-right: calc(-1 * (100vw - 768px)/2);
-      padding-left: calc((100vw - 768px - 4rem)/2);
+      padding-left: calc((100vw - 768px)/2);
       padding-right: calc((100vw - 768px - 4rem)/2);
+      */
     }
     /*
 

@@ -1,16 +1,22 @@
 @import "utils";
-
 .WriteTemplate {
   .rest {
     position: responsive;
-    > .pane {
+    >.pane {
+      * {
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+      }
       flex: 1;
       display: flex;
       min-width: 300px;
       position: relative;
       &.right {
         background: $oc-gray-0;
-        .MarkdownPreview > h1 {
+        .MarkdownPreview>h1 {
           width: 980px;
           max-width: 100%;
           margin-left: auto;
@@ -22,7 +28,6 @@
           margin: 0 auto;
         }
       }
-
       .separator {
         position: absolute;
         right: 0;
@@ -34,7 +39,6 @@
         cursor: col-resize;
       }
     }
-
     .reveal {
       display: flex;
       align-items: center;

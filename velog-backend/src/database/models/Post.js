@@ -158,14 +158,22 @@ Post.listPosts = async function ({
     ${username ? 'AND u.username = $username' : ''}
     ${tag ? 'AND t.name = $tag' : ''}
     ${categoryUrlSlug ? 'AND c.url_slug = $category' : ''}
-    ${cursor ? `
+    ${
+  cursor
+    ? `
       AND id != $cursor
       AND created_at <= $time
-    ` : ''}
+    `
+    : ''
+}
   `;
 
   const bindVariables = {
-    tag, username, category: categoryUrlSlug, cursor, time,
+    tag,
+    username,
+    category: categoryUrlSlug,
+    cursor,
+    time,
   };
   console.log(bindVariables);
   try {
@@ -192,10 +200,14 @@ Post.listPosts = async function ({
     const postIds = rows.map(({ id }) => id);
 
     const fullPosts = await Post.findAll({
-      include: [{
-        model: User,
-        include: [UserProfile],
-      }, Tag, Category],
+      include: [
+        {
+          model: User,
+          include: [UserProfile],
+        },
+        Tag,
+        Category,
+      ],
       where: {
         id: {
           $or: postIds,
@@ -307,7 +319,11 @@ export const serializePost = (data: any) => {
     user,
   } = data;
   const tags = data.tags.map(tag => tag.name);
-  const categories = data.categories.map(category => ({ id: category.id, name: category.name }));
+  const categories = data.categories.map(category => ({
+    id: category.id,
+    name: category.name,
+    url_slug: category.url_slug,
+  }));
   // console.log(is_temp);
   return {
     id,

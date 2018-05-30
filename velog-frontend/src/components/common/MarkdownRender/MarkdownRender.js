@@ -1,5 +1,6 @@
 // @flow
 import marked from 'marked';
+
 import React, { Component } from 'react';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-bash.min';
@@ -10,11 +11,11 @@ import 'prismjs/components/prism-css.min';
 import './MarkdownRender.scss';
 
 type Props = {
-  body: string
+  body: string,
 };
 
 type State = {
-  html: string
+  html: string,
 };
 
 marked.setOptions({
@@ -29,14 +30,14 @@ marked.setOptions({
   xhtml: false,
 });
 
-
 class MarkdownRender extends Component<Props, State> {
   state = {
     html: '',
-  }
+  };
 
   renderMarkdown() {
     const rendered = marked(this.props.body);
+
     this.setState({
       html: rendered,
     });
@@ -65,7 +66,11 @@ class MarkdownRender extends Component<Props, State> {
     const markup = { __html: html };
 
     return (
-      <div className="MarkdownRender atom-one" dangerouslySetInnerHTML={markup} id="markdown-render" />
+      <div
+        className="MarkdownRender atom-one"
+        dangerouslySetInnerHTML={markup}
+        id="markdown-render"
+      />
     );
   }
 }

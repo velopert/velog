@@ -8,12 +8,14 @@ import { applyPenders, type ResponseAction } from 'lib/common';
 const READ_POST = 'posts/READ_POST';
 
 export interface PostsActionCreators {
-  readPost(payload: PostsAPI.ReadPostPayload): any,
+  readPost(payload: PostsAPI.ReadPostPayload): any;
 }
 
 export const actionCreators = {
   readPost: createAction(READ_POST, PostsAPI.readPost),
 };
+
+export type Categories = { id: string, name: string, url_slug: string }[];
 
 export type PostData = {
   id: string,
@@ -24,16 +26,19 @@ export type PostData = {
   created_at: string,
   updated_at: string,
   tags: string[],
-  categories: { id: string, name: string }[],
+  categories: Categories,
   url_slug: string,
   likes: number,
-  comments_count: 0
-}
-
+  comments_count: 0,
+  user: {
+    username: string,
+    id: string,
+  },
+};
 
 export type Posts = {
-  post: ?PostData
-}
+  post: ?PostData,
+};
 
 const initialState: Posts = {
   post: null,

@@ -6,6 +6,13 @@
   word-wrap: break-word;
   font-family: "Noto Sans KR";
   color: $oc-gray-8;
+  a {
+    color: $oc-violet-5;
+    text-decoration: underline;
+    &:hover {
+      color: $oc-violet-4;
+    }
+  }
   p {
     line-height: 1.75em;
     font-weight: 400;
@@ -41,6 +48,7 @@
   h6,
   p {
     code {
+      font-size: 1.25em;
       padding-left: 0.25em;
       padding-right: 0.25em;
       padding-top: 0.1em;
@@ -69,7 +77,7 @@
     overflow: auto;
     background: #282c34;
     code {
-      font-family: "D2 Coding", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+      font-family: "Inconsolata", "D2 Coding", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
       color: $oc-gray-2;
       font-size: 0.81em;
     }
