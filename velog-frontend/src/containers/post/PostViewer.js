@@ -6,12 +6,14 @@ import PostTags from 'components/post/PostTags';
 import { PostsActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import type { State } from 'store';
-import type { PostData } from 'store/modules/posts';
+import type { PostData, TocItem } from 'store/modules/posts';
+import PostToc from 'components/post/PostToc';
 
 type Props = {
   username: ?string,
   urlSlug: ?string,
   post: ?PostData,
+  toc: ?(TocItem[]),
 };
 
 class PostViewer extends Component<Props> {
@@ -28,24 +30,29 @@ class PostViewer extends Component<Props> {
     }
   };
 
+  onSetToc = (toc: ?(TocItem[])) => {
+    PostsActions.setToc(toc);
+  };
+
   componentDidMount() {
     this.initialize();
   }
 
   render() {
-    const { post } = this.props;
-
+    const { post, toc } = this.props;
+    const { onSetToc } = this;
     if (!post) return null;
 
     return (
       <Fragment>
+        <PostToc toc={toc} />
         <PostHead
           title={post.title}
           tags={post.tags}
           categories={post.categories}
           user={post.user}
         />
-        <PostContent body={post.body} />
+        <PostContent body={post.body} onSetToc={onSetToc} />
         <PostTags tags={post.tags} />
       </Fragment>
     );
@@ -55,6 +62,7 @@ class PostViewer extends Component<Props> {
 export default connect(
   ({ posts }: State) => ({
     post: posts.post,
+    toc: posts.toc,
   }),
   () => ({}),
 )(PostViewer);

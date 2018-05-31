@@ -4,16 +4,27 @@ import produce from 'immer';
 import * as PostsAPI from 'lib/api/posts';
 import { applyPenders, type ResponseAction } from 'lib/common';
 
+export type TocItem = {
+  anchor: string,
+  level: number,
+  text: string,
+};
+
 /* ACTION TYPE */
 const READ_POST = 'posts/READ_POST';
+const SET_TOC = 'posts/SET_TOC';
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
+  setToc(payload: ?(TocItem[])): any;
 }
 
 export const actionCreators = {
   readPost: createAction(READ_POST, PostsAPI.readPost),
+  setToc: createAction(SET_TOC, (toc: ?(TocItem[])) => toc),
 };
+
+type SetTocAction = ActionType<typeof actionCreators.setToc>;
 
 export type Categories = { id: string, name: string, url_slug: string }[];
 
@@ -38,13 +49,24 @@ export type PostData = {
 
 export type Posts = {
   post: ?PostData,
+  toc: ?(TocItem[]),
 };
 
 const initialState: Posts = {
   post: null,
+  toc: null,
 };
 
-const reducer = handleActions({}, initialState);
+const reducer = handleActions(
+  {
+    [SET_TOC]: (state, action: SetTocAction) => {
+      return produce(state, (draft) => {
+        draft.toc = action.payload;
+      });
+    },
+  },
+  initialState,
+);
 
 export default applyPenders(reducer, [
   {

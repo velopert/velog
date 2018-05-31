@@ -1,8 +1,9 @@
 // @flow
-import marked from 'marked';
 
+import marked from 'marked';
 import React, { Component } from 'react';
 import Prism from 'prismjs';
+import { escapeForUrl } from 'lib/common';
 import 'prismjs/components/prism-bash.min';
 import 'prismjs/components/prism-typescript.min';
 import 'prismjs/components/prism-javascript.min';
@@ -12,14 +13,31 @@ import './MarkdownRender.scss';
 
 type Props = {
   body: string,
+  onSetToc?: (toc: any) => void,
 };
 
 type State = {
   html: string,
 };
 
+const toc = [];
+const renderer = (() => {
+  const tocRenderer = new marked.Renderer();
+  tocRenderer.heading = function heading(text, level, raw) {
+    if (!raw) return '';
+    const anchor = this.options.headerPrefix + escapeForUrl(raw.toLowerCase());
+    toc.push({
+      anchor,
+      level,
+      text,
+    });
+    return `<h${level} id="${anchor}">${text}</h${level}>`;
+  };
+  return tocRenderer;
+})();
+
 marked.setOptions({
-  renderer: new marked.Renderer(),
+  renderer,
   gfm: true,
   tables: true,
   breaks: true,
@@ -36,8 +54,11 @@ class MarkdownRender extends Component<Props, State> {
   };
 
   renderMarkdown() {
+    toc.length = 0;
     const rendered = marked(this.props.body);
-
+    if (this.props.onSetToc) {
+      this.props.onSetToc(toc);
+    }
     this.setState({
       html: rendered,
     });

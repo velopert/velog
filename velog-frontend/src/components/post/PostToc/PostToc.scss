@@ -1,0 +1,25 @@
+@import 'utils';
+.PostToc {
+  position: absolute;
+  top: 0;
+  right: -15rem;
+  color: $oc-gray-6;
+  .wrapper {
+    position: fixed;
+  }
+  ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style: none;
+    padding-left: 0;
+    li {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      &:hover {
+        color: $oc-gray-8;
+      }
+    }
+  }
+}
