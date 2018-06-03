@@ -18,6 +18,11 @@
       padding-right: calc((100vw - 768px - 4rem)/2);
       */
     }
+    @include media("<medium") {
+      .MarkdownRender {
+        font-size: 1rem;
+      }
+    }
     /*
 
     */

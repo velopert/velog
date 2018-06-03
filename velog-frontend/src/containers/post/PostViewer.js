@@ -14,6 +14,7 @@ type Props = {
   urlSlug: ?string,
   post: ?PostData,
   toc: ?(TocItem[]),
+  activeHeading: ?string,
 };
 
 class PostViewer extends Component<Props> {
@@ -34,25 +35,29 @@ class PostViewer extends Component<Props> {
     PostsActions.setToc(toc);
   };
 
+  onActivateHeading = (headingId: string) => {
+    PostsActions.activateHeading(headingId);
+  };
+
   componentDidMount() {
     this.initialize();
   }
 
   render() {
-    const { post, toc } = this.props;
-    const { onSetToc } = this;
+    const { post, toc, activeHeading } = this.props;
+    const { onSetToc, onActivateHeading } = this;
     if (!post) return null;
 
     return (
       <Fragment>
-        <PostToc toc={toc} />
+        <PostToc toc={toc} activeHeading={activeHeading} />
         <PostHead
           title={post.title}
           tags={post.tags}
           categories={post.categories}
           user={post.user}
         />
-        <PostContent body={post.body} onSetToc={onSetToc} />
+        <PostContent body={post.body} onSetToc={onSetToc} onActivateHeading={onActivateHeading} />
         <PostTags tags={post.tags} />
       </Fragment>
     );
@@ -63,6 +68,7 @@ export default connect(
   ({ posts }: State) => ({
     post: posts.post,
     toc: posts.toc,
+    activeHeading: posts.activeHeading,
   }),
   () => ({}),
 )(PostViewer);

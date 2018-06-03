@@ -13,18 +13,22 @@ export type TocItem = {
 /* ACTION TYPE */
 const READ_POST = 'posts/READ_POST';
 const SET_TOC = 'posts/SET_TOC';
+const ACTIVATE_HEADING = 'posts/ACTIVATE_HEADING';
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
   setToc(payload: ?(TocItem[])): any;
+  activateHeading(payload: string): any;
 }
 
 export const actionCreators = {
   readPost: createAction(READ_POST, PostsAPI.readPost),
   setToc: createAction(SET_TOC, (toc: ?(TocItem[])) => toc),
+  activateHeading: createAction(ACTIVATE_HEADING, (headingId: string) => headingId),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
+type ActivateHeadingAction = ActionType<typeof actionCreators.activateHeading>;
 
 export type Categories = { id: string, name: string, url_slug: string }[];
 
@@ -50,11 +54,13 @@ export type PostData = {
 export type Posts = {
   post: ?PostData,
   toc: ?(TocItem[]),
+  activeHeading: ?string,
 };
 
 const initialState: Posts = {
   post: null,
   toc: null,
+  activeHeading: null,
 };
 
 const reducer = handleActions(
@@ -62,6 +68,11 @@ const reducer = handleActions(
     [SET_TOC]: (state, action: SetTocAction) => {
       return produce(state, (draft) => {
         draft.toc = action.payload;
+      });
+    },
+    [ACTIVATE_HEADING]: (state, action: ActivateHeadingAction) => {
+      return produce(state, (draft) => {
+        draft.activeHeading = action.payload;
       });
     },
   },

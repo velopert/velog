@@ -4,5 +4,12 @@
     margin: 0 auto;
     width: 768px;
     position: relative;
+    @include media("<medium") {
+      width: 100%;
+    }
+  }
+  @include media("<medium") {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }
