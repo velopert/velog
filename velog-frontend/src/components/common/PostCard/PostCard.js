@@ -2,6 +2,9 @@
 import React from 'react';
 import ImageIcon from 'react-icons/lib/io/image';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
+import defaultThumbnail from 'static/images/default_thumbnail.png';
+
 import 'moment/locale/ko';
 import './PostCard.scss';
 
@@ -11,11 +14,13 @@ type Props = {
   title: string,
   body: string,
   date: string,
+  urlSlug: string,
+  userThumbnail: string,
 };
 
 moment.locale('ko');
 
-const PostCard = ({ thumbnail, username, title, body, date }: Props) => {
+const PostCard = ({ thumbnail, username, title, body, date, urlSlug, userThumbnail }: Props) => {
   const now = new Date();
   const d = new Date(date);
   const m = moment(date);
@@ -27,24 +32,29 @@ const PostCard = ({ thumbnail, username, title, body, date }: Props) => {
     }
     return m.fromNow();
   })();
+
+  const link = `/@${username}/${urlSlug}`;
   return (
     <div className="PostCard">
-      <div className="thumbnail-wrapper">
+      <Link to={link} className="thumbnail-wrapper">
         {thumbnail ? (
-          <img src={thumbnail} alt="thumbnail" />
+          <img src={thumbnail} alt={title} />
         ) : (
           <div className="image-placeholder">
             <ImageIcon />
           </div>
         )}
-      </div>
+        <div className="white-mask" />
+      </Link>
       <div className="card-content">
         <div className="user-thumbnail-wrapper">
-          <img src="https://avatars0.githubusercontent.com/u/17202261?s=460&v=4" alt="thumbnail" />
+          <img src={userThumbnail || defaultThumbnail} alt={username} />
         </div>
         <div className="content-head">
           <div className="username">{username}</div>
-          <h3>{title}</h3>
+          <h3>
+            <Link to={`/@${username}/${urlSlug}`}>{title}</Link>
+          </h3>
           <div className="subinfo">
             <span>{formattedDate}</span>
             <span>8개의 댓글</span>

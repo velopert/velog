@@ -45,9 +45,11 @@ const PostCardList = ({ posts, loading, prefetching, width, hasEnded }: Props) =
       key={post.id}
       thumbnail={post.thumbnail}
       username={post.user.username}
+      userThumbnail={post.user.thumbnail}
       title={post.title}
       body={post.body}
       date={post.created_at}
+      urlSlug={post.url_slug}
     />
   ));
   return (
