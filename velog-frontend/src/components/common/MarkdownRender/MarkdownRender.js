@@ -27,7 +27,8 @@ function stripHtml(text: string): string {
   return text.replace(regex, '');
 }
 
-const toc = [];
+let toc = [];
+
 const renderer = (() => {
   const tocRenderer = new marked.Renderer();
   tocRenderer.heading = function heading(text, level, raw) {
@@ -38,11 +39,13 @@ const renderer = (() => {
     const suffix = hasDuplicate && filtered.length === 0 ? '' : `-${filtered.length + 1}`;
 
     const suffixed = `${anchor}${suffix}`;
-    toc.push({
-      anchor: suffixed,
-      level,
-      text: stripHtml(text),
-    });
+    if (level <= 3) {
+      toc.push({
+        anchor: suffixed,
+        level,
+        text: stripHtml(text),
+      });
+    }
     return `<h${level} id="${suffixed}">${text}</h${level}>`;
   };
   return tocRenderer;
@@ -70,7 +73,7 @@ class MarkdownRender extends Component<Props, State> {
 
   renderMarkdown() {
     if (toc) {
-      toc.length = 0;
+      toc = [];
     }
     const rendered = marked(this.props.body);
     if (this.props.onSetToc) {
@@ -98,7 +101,7 @@ class MarkdownRender extends Component<Props, State> {
   onScroll = throttle(() => {
     const scrollTop = getScrollTop();
     if (!document.body) return;
-    if (!this.positions) return;
+    if (!this.positions || this.positions.length === 0) return;
     for (let i = this.positions.length - 1; i > -1; i -= 1) {
       const pos = this.positions[i];
       if (pos.top < scrollTop + 32) {
@@ -149,7 +152,7 @@ class MarkdownRender extends Component<Props, State> {
 
     return (
       <div
-        className="MarkdownRender atom-one"
+        className="MarkdownRender duotone-light"
         dangerouslySetInnerHTML={markup}
         id="markdown-render"
       />

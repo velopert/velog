@@ -1,0 +1,22 @@
+@import 'utils';
+.SubmitBoxAdditional {
+  textarea {
+    resize: none;
+    border: none;
+    background: white;
+    outline: none;
+    width: 100%;
+    @include material-shadow(2, 0.75);
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+  .description {
+    font-size: 0.75rem;
+    color: $oc-gray-4;
+    line-height: 1rem;
+  }
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

@@ -41,6 +41,8 @@ const SHOW_WRITE_EXTRA = 'write/SHOW_WRITE_EXTRA';
 const HIDE_WRITE_EXTRA = 'write/HIDE_WRITE_EXTRA';
 const SET_LAYOUT_MODE = 'write/SET_LAYOUT_MODE';
 
+const TOGGLE_ADDITIONAL_CONFIG = 'write/TOGGLE_ADDITIONAL_CONFIG';
+
 let tempCategoryId = 0;
 
 /* ACTION CREATOR */
@@ -82,6 +84,7 @@ export interface WriteActionCreators {
   showWriteExtra(): any;
   hideWriteExtra(): any;
   setLayoutMode(mode: string): any,
+  toggleAdditionalConfig(): any,
 }
 
 /* EXPORT ACTION CREATORS */
@@ -125,6 +128,7 @@ export const actionCreators = {
   showWriteExtra: createAction(SHOW_WRITE_EXTRA),
   hideWriteExtra: createAction(HIDE_WRITE_EXTRA),
   setLayoutMode: createAction(SET_LAYOUT_MODE),
+  toggleAdditionalConfig: createAction(TOGGLE_ADDITIONAL_CONFIG),
 };
 
 /* ACTION FLOW TYPE */
@@ -159,6 +163,7 @@ export type SubmitBox = {
   open: boolean,
   tags: string[],
   categories: ?Categories,
+  additional: boolean,
 };
 export type CategoryModal = {
   open: boolean,
@@ -215,6 +220,7 @@ const initialState: Write = {
     open: false,
     categories: null,
     tags: [],
+    additional: false,
   },
   postData: null,
   categoryModal: {
@@ -253,6 +259,7 @@ const reducer = handleActions(
     [OPEN_SUBMIT_BOX]: (state) => {
       return produce(state, (draft) => {
         draft.submitBox.open = true;
+        draft.submitBox.additional = false;
       });
     },
     [CLOSE_SUBMIT_BOX]: state =>
@@ -394,6 +401,11 @@ const reducer = handleActions(
     [SET_LAYOUT_MODE]: (state, action) => {
       return produce(state, (draft) => {
         draft.writeExtra.layoutMode = action.payload;
+      });
+    },
+    [TOGGLE_ADDITIONAL_CONFIG]: (state) => {
+      return produce(state, (draft) => {
+        draft.submitBox.additional = !state.submitBox.additional;
       });
     },
   },

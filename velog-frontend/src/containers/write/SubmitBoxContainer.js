@@ -5,6 +5,7 @@ import SubmitBox from 'components/write/SubmitBox';
 import SelectCategory from 'components/write/SelectCategory';
 import InputTags from 'components/write/InputTags';
 import WriteConfigureThumbnail from 'components/write/WriteConfigureThumbnail';
+import SubmitBoxAdditional from 'components/write/SubmitBoxAdditional/SubmitBoxAdditional';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { WriteActions, UserActions } from 'store/actionCreators';
@@ -22,6 +23,7 @@ type Props = {
   imagePath: ?string,
   uploadId: ?string,
   thumbnail: ?string,
+  additional: boolean,
 };
 
 class SubmitBoxContainer extends Component<Props> {
@@ -153,6 +155,9 @@ class SubmitBoxContainer extends Component<Props> {
       console.log(e);
     }
   };
+  onToggleAdditionalConfig = () => {
+    WriteActions.toggleAdditionalConfig();
+  };
 
   render() {
     const {
@@ -164,8 +169,9 @@ class SubmitBoxContainer extends Component<Props> {
       onEditCategoryClick,
       onUploadClick,
       onClearThumbnail,
+      onToggleAdditionalConfig,
     } = this;
-    const { open, categories, tags, postData, thumbnail } = this.props;
+    const { open, categories, tags, postData, thumbnail, additional } = this.props;
     return (
       <SubmitBox
         onEditCategoryClick={onEditCategoryClick}
@@ -182,6 +188,8 @@ class SubmitBoxContainer extends Component<Props> {
         onClose={onClose}
         onSubmit={onSubmit}
         isEdit={!!postData && !postData.is_temp}
+        onToggleAdditionalConfig={onToggleAdditionalConfig}
+        additional={additional && <SubmitBoxAdditional />}
       />
     );
   }
@@ -199,6 +207,7 @@ export default connect(
     imagePath: write.upload.imagePath,
     uploadId: write.upload.id,
     thumbnail: write.thumbnail,
+    additional: write.submitBox.additional,
   }),
   () => ({}),
 )(SubmitBoxContainer);

@@ -1,10 +1,11 @@
 // @flow
-import React, { Component, type Node } from 'react';
+import React, { Fragment, Component, type Node } from 'react';
 import onClickOutside from 'react-onclickoutside';
 import SettingsIcon from 'react-icons/lib/md/settings';
 import cx from 'classnames';
 
 import './SubmitBox.scss';
+import SubmitBoxAdditional from '../SubmitBoxAdditional';
 
 type Props = {
   isEditing: boolean,
@@ -16,6 +17,8 @@ type Props = {
   onClose(): void,
   onSubmit(): void,
   onEditCategoryClick(): void,
+  onToggleAdditionalConfig(): void,
+  additional: Node | false,
 };
 
 type State = {
@@ -70,6 +73,8 @@ class SubmitBox extends Component<Props, State> {
       onSubmit,
       onEditCategoryClick,
       configureThumbnail,
+      onToggleAdditionalConfig,
+      additional,
     } = this.props;
     const { animating } = this.state;
 
@@ -81,37 +86,41 @@ class SubmitBox extends Component<Props, State> {
           <div className="text">{isEdit ? '글 수정하기' : '새 글 작성하기'}</div>
           {isEdit && <div className="view">글 보기</div>}
         </div>
-        <div className="sections">
-          <section>
-            <div className="section-title category" onClick={onEditCategoryClick}>
-              카테고리 선택
-              <div className="edit util flex-center">
-                <SettingsIcon />
-                <div>수정</div>
+        {additional || (
+          <Fragment>
+            <div className="sections">
+              <section>
+                <div className="section-title category" onClick={onEditCategoryClick}>
+                  카테고리 선택
+                  <div className="edit util flex-center">
+                    <SettingsIcon />
+                    <div>수정</div>
+                  </div>
+                </div>
+                {selectCategory}
+              </section>
+              <section>
+                <div className="section-title">태그 설정</div>
+                {inputTags}
+              </section>
+              <section>
+                <div className="section-title">썸네일 지정</div>
+                {configureThumbnail}
+              </section>
+            </div>
+            <div className="footer">
+              <a className="open-options" onClick={onToggleAdditionalConfig}>
+                <span>추가설정</span>
+              </a>
+              <div
+                className={cx('submit-button', 'util', 'flex-center', { edit: isEdit })}
+                onClick={onSubmit}
+              >
+                {isEdit ? '업데이트' : '작성하기'}
               </div>
             </div>
-            {selectCategory}
-          </section>
-          <section>
-            <div className="section-title">태그 설정</div>
-            {inputTags}
-          </section>
-          <section>
-            <div className="section-title">썸네일 지정</div>
-            {configureThumbnail}
-          </section>
-        </div>
-        <div className="footer">
-          <div className="open-options">
-            <span>추가설정</span>
-          </div>
-          <div
-            className={cx('submit-button', 'util', 'flex-center', { edit: isEdit })}
-            onClick={onSubmit}
-          >
-            {isEdit ? '업데이트' : '작성하기'}
-          </div>
-        </div>
+          </Fragment>
+        )}
       </div>
     );
   }

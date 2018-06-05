@@ -1,5 +1,4 @@
 @import "utils";
-
 .Button {
   display: flex-inline;
   font-weight: 600;
@@ -32,4 +31,22 @@
       cursor: pointer;
     }
   }
+  &.paper {
+    @include common-button-style();
+    @include material-shadow(2, 0.3);
+    background: white;
+    transition: all 0.1s ease-in;
+    color: $oc-gray-8;
+    &.violetFont {
+      color: $oc-violet-5;
+    }
+    &:hover {
+      background: $oc-gray-0;
+      @include material-shadow(2, 0.75);
+    }
+  }
+}
+
+.Button+.Button {
+  margin-left: 0.5rem;
 }

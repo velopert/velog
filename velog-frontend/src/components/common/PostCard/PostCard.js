@@ -15,7 +15,7 @@ type Props = {
   body: string,
   date: string,
   urlSlug: string,
-  userThumbnail: string,
+  userThumbnail: ?string,
 };
 
 moment.locale('ko');
