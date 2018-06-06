@@ -39,7 +39,7 @@ const SubmitBoxAdditional = (props: Props) => (
       </section>
       <section>
         <div className="section-title">코드블록 테마</div>
-        <SelectBox options={codeThemes} />
+        <SelectBox options={codeThemes} className="select-theme" />
       </section>
     </div>
     <div className="buttons">

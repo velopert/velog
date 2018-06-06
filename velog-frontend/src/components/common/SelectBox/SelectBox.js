@@ -1,5 +1,7 @@
 // @flow
 import React, { Component } from 'react';
+import cx from 'classnames';
+import UnfoldIcon from 'react-icons/lib/md/unfold-more';
 import './SelectBox.scss';
 
 type Option = {
@@ -9,9 +11,14 @@ type Option = {
 
 type Props = {
   options: Option[],
+  className?: string,
 };
 
 class SelectBox extends Component<Props> {
+  static defaultProps = {
+    className: '',
+  };
+
   renderOptionList() {
     return this.props.options.map(({ id, text }) => (
       <option value={id} key={id}>
@@ -21,9 +28,11 @@ class SelectBox extends Component<Props> {
   }
 
   render() {
+    const { className, ...rest } = this.props;
     return (
-      <div className="SelectBox">
-        <select>{this.renderOptionList()}</select>
+      <div className={cx('SelectBox', className)}>
+        <select {...rest}>{this.renderOptionList()}</select>
+        <UnfoldIcon />
       </div>
     );
   }

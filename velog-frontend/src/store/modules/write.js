@@ -170,6 +170,11 @@ export type CategoryModal = {
   categories: ?Categories,
   ordered: boolean,
 };
+
+export type Meta = {
+  code_theme?: string,
+  short_description?: string,
+}
 export type PostData = {
   id: string,
   title: string,
@@ -182,6 +187,7 @@ export type PostData = {
   tags: string[],
   categories: { id: string, name: string }[],
   url_slug: string,
+  meta: Meta,
 };
 
 export type Upload = {
@@ -204,6 +210,7 @@ export type Write = {
   body: string,
   title: string,
   thumbnail: ?string,
+  meta: Meta,
   submitBox: SubmitBox,
   postData: ?PostData,
   categoryModal: CategoryModal,
@@ -216,6 +223,7 @@ const initialState: Write = {
   body: '',
   thumbnail: null,
   title: '',
+  meta: {},
   submitBox: {
     open: false,
     categories: null,

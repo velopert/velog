@@ -1,5 +1,29 @@
 @import 'utils';
-
 .SelectBox {
-
+  position: relative;
+  width: auto;
+  display: inline-flex;
+  select {
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-radius: 0;
+    border: none;
+    background: white;
+    padding: 0.5rem;
+    padding-right: 2rem;
+    font-size: 1rem;
+    outline: none;
+    @include material-shadow(2, 0.75);
+  }
+  select::-ms-expand {
+    display: none;
+  }
+  svg {
+    top: 50%;
+    transform: translateY(-50%);
+    color: $oc-gray-9;
+    position: absolute;
+    right: 0.5rem;
+  }
 }

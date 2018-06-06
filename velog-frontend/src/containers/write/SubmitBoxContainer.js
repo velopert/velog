@@ -9,7 +9,7 @@ import SubmitBoxAdditional from 'components/write/SubmitBoxAdditional/SubmitBoxA
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { WriteActions, UserActions } from 'store/actionCreators';
-import type { Categories, PostData } from 'store/modules/write';
+import type { Categories, PostData, Meta } from 'store/modules/write';
 import axios from 'axios';
 
 type Props = {
@@ -24,6 +24,7 @@ type Props = {
   uploadId: ?string,
   thumbnail: ?string,
   additional: boolean,
+  meta: Meta,
 };
 
 class SubmitBoxContainer extends Component<Props> {
@@ -171,7 +172,7 @@ class SubmitBoxContainer extends Component<Props> {
       onClearThumbnail,
       onToggleAdditionalConfig,
     } = this;
-    const { open, categories, tags, postData, thumbnail, additional } = this.props;
+    const { open, categories, tags, postData, thumbnail, additional, meta } = this.props;
     return (
       <SubmitBox
         onEditCategoryClick={onEditCategoryClick}
@@ -189,7 +190,9 @@ class SubmitBoxContainer extends Component<Props> {
         onSubmit={onSubmit}
         isEdit={!!postData && !postData.is_temp}
         onToggleAdditionalConfig={onToggleAdditionalConfig}
-        additional={additional && <SubmitBoxAdditional />}
+        additional={
+          additional && <SubmitBoxAdditional meta={meta} realMeta={postData && postData.meta} />
+        }
       />
     );
   }
@@ -208,6 +211,7 @@ export default connect(
     uploadId: write.upload.id,
     thumbnail: write.thumbnail,
     additional: write.submitBox.additional,
+    meta: write.meta,
   }),
   () => ({}),
 )(SubmitBoxContainer);

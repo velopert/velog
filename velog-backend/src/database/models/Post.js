@@ -15,7 +15,7 @@ export type PostModel = {
   thumbnail: string,
   is_markdown: boolean,
   is_temp: boolean,
-  meta_json: string,
+  meta: any
 };
 
 const Post = db.define(
@@ -32,13 +32,16 @@ const Post = db.define(
     thumbnail: Sequelize.STRING,
     is_markdown: Sequelize.BOOLEAN,
     is_temp: Sequelize.BOOLEAN,
-    meta_json: Sequelize.TEXT,
     fk_user_id: Sequelize.UUID,
     original_post_id: Sequelize.UUID,
     url_slug: Sequelize.STRING,
     likes: {
       defaultValue: 0,
       type: Sequelize.INTEGER,
+    },
+    meta: {
+      type: Sequelize.JSONB,
+      defaultValue: {},
     },
   },
   {
@@ -70,6 +73,7 @@ Post.readPost = function (username: string, urlSlug: string) {
       'updated_at',
       'url_slug',
       'likes',
+      'meta',
     ],
     include: [
       {
@@ -101,6 +105,7 @@ Post.readPostById = function (id) {
       'url_slug',
       'likes',
       'is_temp',
+      'meta',
     ],
     include: [
       {
@@ -317,6 +322,7 @@ export const serializePost = (data: any) => {
     comments_count,
     is_temp,
     user,
+    meta,
   } = data;
   const tags = data.tags.map(tag => tag.name);
   const categories = data.categories.map(category => ({
@@ -343,6 +349,7 @@ export const serializePost = (data: any) => {
       ...pick(user, ['id', 'username']),
       ...pick(user.user_profile, ['display_name', 'short_bio', 'thumbnail']),
     },
+    meta,
   };
 };
 
