@@ -59,7 +59,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   const schema = Joi.object().keys({
     title: Joi.string().min(1).max(120),
     body: Joi.string().min(1),
-    thumbnail: Joi.string(),
+    thumbnail: Joi.string().uri().allow(null),
     is_temp: Joi.boolean(),
     categories: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string()),

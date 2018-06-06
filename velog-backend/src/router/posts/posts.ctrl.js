@@ -179,8 +179,8 @@ export const writePost = async (ctx: Context): Promise<*> => {
       is_markdown: isMarkdown,
       is_temp: isTemp,
       fk_user_id: ctx.user.id,
-      meta_json: JSON.stringify(meta),
       url_slug: escapedUrlSlug,
+      meta,
     }).save();
 
     const postId = post.id;
