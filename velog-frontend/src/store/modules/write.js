@@ -42,6 +42,8 @@ const HIDE_WRITE_EXTRA = 'write/HIDE_WRITE_EXTRA';
 const SET_LAYOUT_MODE = 'write/SET_LAYOUT_MODE';
 
 const TOGGLE_ADDITIONAL_CONFIG = 'write/TOGGLE_ADDITIONAL_CONFIG';
+const SET_META_VALUE = 'write/SET_META_VALUE';
+const RESET_META = 'write/RESET_META';
 
 let tempCategoryId = 0;
 
@@ -49,7 +51,7 @@ let tempCategoryId = 0;
 type EditFieldPayload = { field: string, value: string };
 type ChangeCategoryNamePayload = { id: string, name: string };
 type ReorderCategoryPayload = { from: number, to: number };
-
+type SetMetaValuePayload = { name: string, value: string };
 /* ACTION CREATORS INTERFACE */
 export interface WriteActionCreators {
   editField(payload: EditFieldPayload): any;
@@ -85,6 +87,8 @@ export interface WriteActionCreators {
   hideWriteExtra(): any;
   setLayoutMode(mode: string): any,
   toggleAdditionalConfig(): any,
+  setMetaValue(payload: SetMetaValuePayload): any,
+  resetMeta(): any,
 }
 
 /* EXPORT ACTION CREATORS */
@@ -129,6 +133,8 @@ export const actionCreators = {
   hideWriteExtra: createAction(HIDE_WRITE_EXTRA),
   setLayoutMode: createAction(SET_LAYOUT_MODE),
   toggleAdditionalConfig: createAction(TOGGLE_ADDITIONAL_CONFIG),
+  setMetaValue: createAction(SET_META_VALUE, (payload: SetMetaValuePayload) => payload),
+  resetMeta: createAction(RESET_META),
 };
 
 /* ACTION FLOW TYPE */
@@ -143,7 +149,7 @@ type HideCategoryAction = ActionType<typeof actionCreators.hideCategory>;
 type ReorderCategoryAction = ActionType<typeof actionCreators.reorderCategory>;
 type SetUploadMaskAction = ActionType<typeof actionCreators.setUploadMask>;
 type SetTempDataAction = ActionType<typeof actionCreators.setTempData>;
-
+type SetMetaValueAction = ActionType<typeof actionCreators.setMetaValue>;
 /* STATE TYPES */
 export type Category = {
   id: string,
@@ -173,7 +179,7 @@ export type CategoryModal = {
 
 export type Meta = {
   code_theme?: string,
-  short_description?: string,
+  short_description?: ?string,
 }
 export type PostData = {
   id: string,
@@ -223,7 +229,10 @@ const initialState: Write = {
   body: '',
   thumbnail: null,
   title: '',
-  meta: {},
+  meta: {
+    code_theme: '',
+    short_description: null,
+  },
   submitBox: {
     open: false,
     categories: null,
@@ -415,6 +424,17 @@ const reducer = handleActions(
       return produce(state, (draft) => {
         draft.submitBox.additional = !state.submitBox.additional;
       });
+    },
+    [SET_META_VALUE]: (state, { payload }: SetMetaValueAction) => {
+      return produce(state, (draft) => {
+        draft.meta[payload.name] = payload.value;
+      });
+    },
+    [RESET_META]: (state) => {
+      return {
+        ...state,
+        meta: initialState.meta,
+      };
     },
   },
   initialState,

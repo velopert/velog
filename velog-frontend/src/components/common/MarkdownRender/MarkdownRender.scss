@@ -227,4 +227,7 @@
     margin-bottom: 3em;
     pointer-events: none;
   }
+  pre[class*="language-"] {
+    font-size: 1.125em;
+  }
 }

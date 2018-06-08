@@ -4,6 +4,7 @@ import marked from 'marked';
 import React, { Component } from 'react';
 import throttle from 'lodash/throttle';
 import Prism from 'prismjs';
+import cx from 'classnames';
 import { escapeForUrl, getScrollTop } from 'lib/common';
 import 'prismjs/components/prism-bash.min';
 import 'prismjs/components/prism-typescript.min';
@@ -14,6 +15,7 @@ import './MarkdownRender.scss';
 
 type Props = {
   body: string,
+  theme?: string,
   onSetToc?: (toc: any) => void,
   onActivateHeading?: (headingId: string) => void,
 };
@@ -69,6 +71,10 @@ class MarkdownRender extends Component<Props, State> {
 
   state = {
     html: '',
+  };
+
+  static defaultProps = {
+    theme: 'atom-one',
   };
 
   renderMarkdown() {
@@ -149,10 +155,10 @@ class MarkdownRender extends Component<Props, State> {
   render() {
     const { html } = this.state;
     const markup = { __html: html };
-
+    const { theme } = this.props;
     return (
       <div
-        className="MarkdownRender duotone-light"
+        className={cx('MarkdownRender', theme || 'atom-one')}
         dangerouslySetInnerHTML={markup}
         id="markdown-render"
       />

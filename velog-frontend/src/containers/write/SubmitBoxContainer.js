@@ -118,6 +118,7 @@ class SubmitBoxContainer extends Component<Props> {
   };
   onClose = () => {
     WriteActions.closeSubmitBox();
+    // WriteActions.resetMeta();
   };
   onToggleCategory = (id) => {
     WriteActions.toggleCategory(id);
@@ -127,7 +128,7 @@ class SubmitBoxContainer extends Component<Props> {
     WriteActions.closeSubmitBox();
   };
   onSubmit = async () => {
-    const { categories, tags, body, title, postData, thumbnail } = this.props;
+    const { categories, tags, body, title, postData, thumbnail, meta } = this.props;
 
     try {
       if (postData) {
@@ -140,6 +141,7 @@ class SubmitBoxContainer extends Component<Props> {
           tags,
           is_temp: false,
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
+          meta,
         });
       } else {
         await WriteActions.writePost({
@@ -150,6 +152,7 @@ class SubmitBoxContainer extends Component<Props> {
           isMarkdown: true,
           isTemp: false,
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
+          meta,
         });
       }
     } catch (e) {
@@ -157,6 +160,19 @@ class SubmitBoxContainer extends Component<Props> {
     }
   };
   onToggleAdditionalConfig = () => {
+    WriteActions.toggleAdditionalConfig();
+  };
+  onCancelAdditionalConfig = () => {
+    WriteActions.toggleAdditionalConfig();
+    WriteActions.resetMeta();
+  };
+  onChangeShortDescription = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    WriteActions.setMetaValue({ name: 'short_description', value: e.target.value });
+  };
+  onChangeCodeTheme = (e: SyntheticInputEvent<HTMLSelectElement>) => {
+    WriteActions.setMetaValue({ name: 'code_theme', value: e.target.value });
+  };
+  onConfirmAdditionalConfig = () => {
     WriteActions.toggleAdditionalConfig();
   };
 
@@ -171,8 +187,12 @@ class SubmitBoxContainer extends Component<Props> {
       onUploadClick,
       onClearThumbnail,
       onToggleAdditionalConfig,
+      onChangeShortDescription,
+      onChangeCodeTheme,
+      onCancelAdditionalConfig,
+      onConfirmAdditionalConfig,
     } = this;
-    const { open, categories, tags, postData, thumbnail, additional, meta } = this.props;
+    const { body, open, categories, tags, postData, thumbnail, additional, meta } = this.props;
     return (
       <SubmitBox
         onEditCategoryClick={onEditCategoryClick}
@@ -191,7 +211,17 @@ class SubmitBoxContainer extends Component<Props> {
         isEdit={!!postData && !postData.is_temp}
         onToggleAdditionalConfig={onToggleAdditionalConfig}
         additional={
-          additional && <SubmitBoxAdditional meta={meta} realMeta={postData && postData.meta} />
+          additional && (
+            <SubmitBoxAdditional
+              body={body}
+              meta={meta}
+              realMeta={postData && postData.meta}
+              onChangeCodeTheme={onChangeCodeTheme}
+              onChangeShortDescription={onChangeShortDescription}
+              onCancel={onCancelAdditionalConfig}
+              onConfirm={onConfirmAdditionalConfig}
+            />
+          )
         }
       />
     );
