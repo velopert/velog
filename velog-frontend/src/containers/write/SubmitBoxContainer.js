@@ -11,6 +11,7 @@ import type { State } from 'store';
 import { WriteActions, UserActions } from 'store/actionCreators';
 import type { Categories, PostData, Meta } from 'store/modules/write';
 import axios from 'axios';
+import storage from 'lib/storage';
 
 type Props = {
   open: boolean,
@@ -37,6 +38,11 @@ class SubmitBoxContainer extends Component<Props> {
   };
   componentDidMount() {
     this.initialize();
+    const savedCodeTheme = storage.get('codeTheme');
+
+    if (savedCodeTheme) {
+      WriteActions.setMetaValue({ name: 'code_theme', value: savedCodeTheme });
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     if (!prevProps.open && this.props.open) {
@@ -174,6 +180,8 @@ class SubmitBoxContainer extends Component<Props> {
   };
   onConfirmAdditionalConfig = () => {
     WriteActions.toggleAdditionalConfig();
+    console.log(this.props.meta.code_theme);
+    storage.set('codeTheme', this.props.meta.code_theme);
   };
 
   render() {

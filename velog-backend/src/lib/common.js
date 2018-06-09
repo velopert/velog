@@ -2,6 +2,7 @@
 import Sequelize from 'sequelize';
 import Joi from 'joi';
 import type { Middleware } from 'koa';
+import removeMd from 'remove-markdown';
 
 export const primaryUUID = {
   type: Sequelize.UUID,
@@ -63,3 +64,8 @@ export const extractKeys = (object: any, params: Array<string>): any => {
   });
   return converted;
 };
+
+export function formatShortDescription(markdown: string): string {
+  const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
+  return removeMd(replaced).slice(0, 100).replace(/#/g, '');
+}

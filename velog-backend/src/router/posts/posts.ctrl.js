@@ -2,7 +2,7 @@
 
 import type { Context } from 'koa';
 import Joi from 'joi';
-import { validateSchema, filterUnique, generateSlugId, escapeForUrl, isUUID } from 'lib/common';
+import { validateSchema, filterUnique, generateSlugId, escapeForUrl, isUUID, formatShortDescription } from 'lib/common';
 import {
   Category,
   Post,
@@ -226,26 +226,6 @@ export const readPost = async (ctx: Context): Promise<*> => {
   }
 };
 
-const serialize = (data) => {
-  const {
-    id, title, body, thumbnail, is_markdown, created_at, updated_at, url_slug,
-  } = data;
-  const tags = data.tags.map(t => t.name);
-  const categories = data.categories.map(c => c.name);
-  return {
-    id,
-    title,
-    body: removeMd(body).slice(0, 250),
-    thumbnail,
-    is_markdown,
-    created_at,
-    updated_at,
-    tags,
-    categories,
-    url_slug,
-  };
-};
-
 export const listPosts = async (ctx: Context): Promise<*> => {
   const { username } = ctx.params;
   const { category, tag, cursor } = ctx.query;
@@ -274,7 +254,7 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     // Fake Delay
     // await new Promise((resolve) => { setTimeout(resolve, 2000); });
     ctx.body = result.data.map(serializePost)
-      .map(post => ({ ...post, body: removeMd(post.body).slice(0, 250) }));
+      .map(post => ({ ...post, body: formatShortDescription(post.body) }));
     // const link = `<${ctx.path}?cursor=${result.data[result.data.length - 1].id}>; rel="next";`;
     // ctx.set('Link', link)
     ctx.set('Count', result.count.toString());

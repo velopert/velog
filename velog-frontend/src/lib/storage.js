@@ -1,11 +1,11 @@
 // @flow
 
-const st = ((typeof localStorage) === 'object' ? localStorage : { });
+const st = typeof localStorage === 'object' ? localStorage : {};
 
 type Storage = {
   set(key: string, value: any): void,
   get(key: string): ?any,
-  remove(key: string): void
+  remove(key: string): void,
 };
 
 export const keys = {

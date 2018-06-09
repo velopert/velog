@@ -42,7 +42,7 @@ const codeThemes = [
 
 function convertToPlainText(markdown: string): string {
   const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
-  return removeMd(replaced).slice(0, 100);
+  return removeMd(replaced).slice(0, 100).replace(/#/g, '');
 }
 
 const SubmitBoxAdditional = ({
