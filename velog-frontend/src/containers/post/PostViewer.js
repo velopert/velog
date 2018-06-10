@@ -57,7 +57,12 @@ class PostViewer extends Component<Props> {
           categories={post.categories}
           user={post.user}
         />
-        <PostContent body={post.body} onSetToc={onSetToc} onActivateHeading={onActivateHeading} />
+        <PostContent
+          thumbnail={post.thumbnail}
+          body={post.body}
+          onSetToc={onSetToc}
+          onActivateHeading={onActivateHeading}
+        />
         <PostTags tags={post.tags} />
       </Fragment>
     );

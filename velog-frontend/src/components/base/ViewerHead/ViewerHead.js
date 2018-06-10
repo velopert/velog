@@ -1,5 +1,6 @@
 // @flow
 import React, { type Node } from 'react';
+import { Link } from 'react-router-dom';
 import './ViewerHead.scss';
 
 type Props = {
@@ -8,7 +9,9 @@ type Props = {
 
 const ViewerHead = ({ rightCorner }: Props) => (
   <div className="ViewerHead">
-    <div className="logo-area">velog</div>
+    <Link to="/" className="logo-area">
+      velog
+    </Link>
     <div className="right-corner">{rightCorner}</div>
   </div>
 );

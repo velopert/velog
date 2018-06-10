@@ -6,14 +6,15 @@ import './PostContent.scss';
 
 type Props = {
   body: string,
+  thumbnail: ?string,
   onSetToc: (toc: any) => void,
   onActivateHeading: (headingId: string) => void,
 };
 
-const PostContent = ({ body, onSetToc, onActivateHeading }: Props) => (
+const PostContent = ({ body, onSetToc, onActivateHeading, thumbnail }: Props) => (
   <div className="PostContent">
     <div className="post-thumbnail">
-      <img src="https://velopert.com/wp-content/uploads/2018/02/blog-images.003.png" alt="" />
+      <img src={thumbnail} alt="" />
     </div>
     <div className="contents">
       <MarkdownRender body={body} onSetToc={onSetToc} onActivateHeading={onActivateHeading} />

@@ -6,7 +6,7 @@ import RecentIcon from 'react-icons/lib/md/access-time';
 import CollectionIcon from 'react-icons/lib/md/collections-bookmark';
 import TagIcon from 'react-icons/lib/md/label-outline';
 import StoredIcon from 'react-icons/lib/md/play-for-work';
-import { withRouter, type Match } from 'react-router-dom';
+import { Link, withRouter, type Match } from 'react-router-dom';
 
 import MainMenuItem from 'components/main/MainMenuItem';
 
@@ -23,7 +23,9 @@ class MainSidebar extends Component<Props> {
 
     return (
       <aside className="MainSidebar">
-        <div className="logo">velog</div>
+        <Link to="/" className="logo">
+          velog
+        </Link>
         <ul className="menu">
           <MainMenuItem
             icon={<TrendingIcon />}

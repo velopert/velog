@@ -1,5 +1,4 @@
 @import "utils";
-
 .MainSidebar {
   position: fixed;
   width: 18rem;
@@ -17,6 +16,7 @@
     line-height: 2rem;
     font-family: "Inconsolata";
     color: $oc-gray-9;
+    display: block;
   }
   .menu {
     margin-top: 1rem;
