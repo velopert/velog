@@ -130,8 +130,13 @@ Comment.listComments = async function ({
     await fetchChildren(comments);
     */
     for (let i = 0; i < comments.length; i++) {
-      if (!comments[i].has_replies) continue;
+      if (!comments[i].has_replies) {
+        comments[i].replies_count = 0;
+        delete comments[i].has_replies;
+        continue;
+      }
       comments[i].replies_count = await Comment.countChildrenOf(comments[i].id);
+      delete comments[i].has_replies;
     }
     return {
       data: comments,
