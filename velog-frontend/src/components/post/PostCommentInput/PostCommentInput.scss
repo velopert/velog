@@ -2,5 +2,19 @@
 .PostCommentInput {
   textarea {
     width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 1rem;
+    border: 1px solid $oc-gray-2;
+    border-radius: 4px;
+    resize: none;
+    color: $oc-gray-9;
+    display: block;
+  }
+  .button-wrapper {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
   }
 }

@@ -2,49 +2,5 @@
 .PostComments {
   .comment-list {
     margin-top: 2rem;
-    .comment {
-      padding-top: 2rem;
-      padding-bottom: 2rem;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      .comment-head {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-        img {
-          width: 3rem;
-          height: 3rem;
-          border-radius: 50%;
-        }
-        .text-block {
-          font-size: 0.875rem;
-          margin-left: 0.5rem;
-          .username {
-            font-weight: 600;
-            color: $oc-gray-9;
-          }
-          .date {
-            margin-top: 0.25rem;
-            color: $oc-gray-7;
-          }
-        }
-      }
-      .comment-body {
-        margin-top: 1rem;
-        line-height: 1.5rem;
-      }
-      .replies-count {
-        font-weight: 600;
-        font-size: 0.875rem;
-        padding-top: 1rem;
-        color: $oc-violet-6;
-        svg {
-          margin-right: 0.5rem;
-        }
-      }
-    }
-    .comment+.comment {
-      border-top: 1px solid $oc-gray-2;
-    }
   }
 }

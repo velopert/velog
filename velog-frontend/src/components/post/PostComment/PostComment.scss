@@ -1,0 +1,86 @@
+@import 'utils';
+.PostComment {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  .comment-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
+    .text-block {
+      font-size: 0.875rem;
+      margin-left: 0.5rem;
+      .username {
+        font-weight: 600;
+        color: $oc-gray-9;
+      }
+      .date {
+        margin-top: 0.125rem;
+        color: $oc-gray-6;
+      }
+    }
+  }
+  .comment-body {
+    color: $oc-gray-9;
+    margin-top: 1rem;
+    line-height: 1.5rem;
+  }
+  .replies-button {
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.875rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: $oc-violet-6;
+    border-radius: 2px;
+    cursor: pointer;
+    svg {
+      margin-right: 0.5rem;
+    }
+    &:hover {
+      background: $oc-gray-0;
+    }
+  }
+  .replies {
+    margin-left: 1rem;
+    background: rgba(0, 0, 0, 0.025);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 4px;
+    .show-input-button {
+      margin-top: 1rem;
+      border-radius: 2px;
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 0.875rem;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      border: 1px solid $oc-violet-4;
+      font-weight: 600;
+      color: $oc-violet-4;
+      background: white;
+      cursor: pointer;
+      &:hover {
+        background: $oc-violet-4;
+        color: white;
+      }
+    }
+  }
+}
+
+.PostComment+.PostComment {
+  border-top: 1px solid $oc-gray-2;
+}

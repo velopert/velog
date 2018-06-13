@@ -48,6 +48,7 @@
     "query-string": "^5.0.1",
     "raf": "3.4.0",
     "react": "^16.3.2",
+    "react-autosize-textarea": "^3.0.3",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.3.2",
     "react-icon-base": "^2.1.2",

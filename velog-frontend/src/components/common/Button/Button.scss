@@ -17,6 +17,16 @@
     &:active {
       background: $oc-violet-5;
     }
+    &.cancel {
+      background: $oc-gray-7;
+      color: white;
+      &:hover {
+        background: $oc-gray-6;
+      }
+      &:active {
+        background: $oc-gray-7;
+      }
+    }
   }
   &.outline {
     border-radius: 4px;
@@ -44,6 +54,9 @@
       background: $oc-gray-0;
       @include material-shadow(2, 0.75);
     }
+  }
+  &.fullWidth {
+    width: 100%;
   }
 }
 
