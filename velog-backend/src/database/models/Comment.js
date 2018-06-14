@@ -2,7 +2,7 @@
 import Sequelize from 'sequelize';
 import db from 'database/db';
 import { primaryUUID, extractKeys } from 'lib/common';
-import { Post, User } from 'database/models';
+import { Post, User, UserProfile } from 'database/models';
 
 
 const Comment = db.define('comment', {
@@ -63,6 +63,10 @@ Comment.readComment = async function (commentId: string) {
       include: [{
         model: User,
         attributes: ['username'],
+        include: [{
+          model: UserProfile,
+          attributes: ['thumbnail'],
+        }],
       }],
       where: {
         id: commentId,
@@ -102,7 +106,14 @@ Comment.listComments = async function ({
   console.log(offset);
   try {
     const { rows: data, count } = await Comment.findAndCountAll({
-      include: [{ model: User, attributes: ['username'] }],
+      include: [{
+        model: User,
+        attributes: ['username'],
+        include: [{
+          model: UserProfile,
+          attributes: ['thumbnail'],
+        }],
+      }],
       where: {
         fk_post_id: postId,
         ...(replyTo ? { reply_to: replyTo } : { level: 0 }),
@@ -164,11 +175,15 @@ Comment.write = function ({
 };
 
 Comment.serialize = (data: any) => {
+  console.log(data.user);
   return Object.assign(extractKeys(data, [
     'id', 'text', 'likes', 'meta_json', 'reply_to',
     'actual_reply_to', 'level', 'created_at', 'updated_at',
   ]), {
-    username: data.user.username,
+    user: {
+      username: data.user.username,
+      thumbnail: data.user.user_profile.thumbnail,
+    },
   });
 };
 

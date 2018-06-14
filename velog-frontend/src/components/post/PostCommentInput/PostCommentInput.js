@@ -7,10 +7,12 @@ import './PostCommentInput.scss';
 type Props = {
   showCancel?: boolean,
   onCancel?: () => any,
+  onWriteComment: (text: string, replyTo: ?string) => Promise<*>,
 };
 type State = {
   input: string,
   focused: boolean,
+  waiting: boolean,
 };
 
 class PostCommentInput extends Component<Props, State> {
@@ -22,6 +24,7 @@ class PostCommentInput extends Component<Props, State> {
   state = {
     input: '',
     focused: false,
+    waiting: false,
   };
 
   onFocus = () => {
@@ -42,9 +45,22 @@ class PostCommentInput extends Component<Props, State> {
     });
   };
 
+  onWriteButtonClick = async () => {
+    const { onWriteComment } = this.props;
+    const { input } = this.state;
+    try {
+      this.setState({
+        input: '',
+      });
+      await onWriteComment(input);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   render() {
     const { showCancel, onCancel } = this.props;
-    const { focused, input } = this.state;
+    const { focused, input, waiting } = this.state;
 
     return (
       <div className="PostCommentInput">
@@ -57,7 +73,9 @@ class PostCommentInput extends Component<Props, State> {
           value={input}
         />
         <div className="button-wrapper">
-          <Button>댓글 작성</Button>
+          <Button disabled={waiting} onClick={this.onWriteButtonClick}>
+            댓글 작성
+          </Button>
           {showCancel && (
             <Button cancel onClick={onCancel}>
               취소

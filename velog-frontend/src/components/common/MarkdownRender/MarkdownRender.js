@@ -146,7 +146,7 @@ class MarkdownRender extends Component<Props, State> {
     if (prevProps.body !== this.props.body) {
       this.renderMarkdown();
     }
-    if (prevProps.html !== this.state.html) {
+    if (prevState.html !== this.state.html) {
       this.renderPrism();
       this.updatePositions();
     }

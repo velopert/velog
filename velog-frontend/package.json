@@ -60,7 +60,7 @@
     "react-tooltip": "^3.4.3",
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
-    "redux-actions": "^2.2.1",
+    "redux-actions": "^2.4.0",
     "redux-pender": "^1.2.1",
     "remarkable": "^1.7.1",
     "remove-markdown": "^0.3.0",

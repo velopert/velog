@@ -29,27 +29,22 @@ type Props = {
 };
 
 const SelectCategory = ({ categories, onToggle }: Props) => {
-  if (!categories || categories.size === 0) {
+  if (!categories || categories.length === 0) {
     // Category is Empty
     // TODO: Show something when empty.
     return null;
   }
 
-  const categoryList = categories.map(
-    category => (
-      <Category
-        onToggle={onToggle}
-        key={category.id}
-        name={category.name}
-        id={category.id}
-        active={category.active}
-      />
-    ));
-  return (
-    <div className="SelectCategory">
-      {categoryList}
-    </div>
-  );
+  const categoryList = categories.map(category => (
+    <Category
+      onToggle={onToggle}
+      key={category.id}
+      name={category.name}
+      id={category.id}
+      active={category.active}
+    />
+  ));
+  return <div className="SelectCategory">{categoryList}</div>;
 };
 
 export default SelectCategory;
