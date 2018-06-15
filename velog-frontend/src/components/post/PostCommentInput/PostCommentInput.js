@@ -6,6 +6,7 @@ import './PostCommentInput.scss';
 
 type Props = {
   showCancel?: boolean,
+  replyTo?: ?string,
   onCancel?: () => any,
   onWriteComment: (text: string, replyTo: ?string) => Promise<*>,
 };
@@ -46,13 +47,13 @@ class PostCommentInput extends Component<Props, State> {
   };
 
   onWriteButtonClick = async () => {
-    const { onWriteComment } = this.props;
+    const { onWriteComment, replyTo } = this.props;
     const { input } = this.state;
     try {
       this.setState({
         input: '',
       });
-      await onWriteComment(input);
+      await onWriteComment(input, replyTo);
     } catch (e) {
       console.log(e);
     }

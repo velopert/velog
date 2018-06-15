@@ -13,6 +13,8 @@ type Props = {
   comment: string,
   repliesCount: number,
   level: number,
+  id: string,
+  onReply: (text: string, replyTo: ?string) => Promise<*>,
 };
 
 type State = {
@@ -57,7 +59,7 @@ class PostComment extends Component<Props, State> {
   };
 
   render() {
-    const { username, thumbnail, comment, repliesCount, level } = this.props;
+    const { username, thumbnail, comment, repliesCount, level, id, onReply } = this.props;
     const { open, showInput } = this.state;
     return (
       <div className="PostComment">
@@ -83,26 +85,13 @@ class PostComment extends Component<Props, State> {
           ))}
         {open && (
           <section className="replies">
-            <PostComment
-              username="velopert"
-              thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-              comment="덧글내용이 이래 막"
-              level={level + 1}
-            />
-            <PostComment
-              username="velopert"
-              thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-              comment="덧글내용이 이래 막"
-              level={level + 1}
-            />
-            <PostComment
-              username="velopert"
-              thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-              comment="덧글내용이 이래 막"
-              level={level + 1}
-            />
             {showInput ? (
-              <PostCommentInput showCancel onCancel={this.onHideInput} />
+              <PostCommentInput
+                showCancel
+                onCancel={this.onHideInput}
+                onWriteComment={onReply}
+                replyTo={id}
+              />
             ) : (
               <button className="show-input-button" onClick={this.onShowInput}>
                 답글 작성하기

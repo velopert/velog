@@ -16,12 +16,14 @@ const READ_POST = 'posts/READ_POST';
 const SET_TOC = 'posts/SET_TOC';
 const ACTIVATE_HEADING = 'posts/ACTIVATE_HEADING';
 const WRITE_COMMENT = 'posts/WRITE_COMMENT';
+const READ_COMMENTS = 'posts/READ_COMMENTS';
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
   setToc(payload: ?(TocItem[])): any;
   activateHeading(payload: string): any;
   writeComment(payload: CommentsAPI.WriteCommentPayload): any;
+  readComments(payload: CommentsAPI.ReadCommentsPayload): any;
 }
 
 export const actionCreators = {
@@ -29,13 +31,26 @@ export const actionCreators = {
   setToc: createAction(SET_TOC, (toc: ?(TocItem[])) => toc),
   activateHeading: createAction(ACTIVATE_HEADING, (headingId: string) => headingId),
   writeComment: createAction(WRITE_COMMENT, CommentsAPI.writeComment),
+  readComments: createAction(READ_COMMENTS, CommentsAPI.readComments),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
 type ActivateHeadingAction = ActionType<typeof actionCreators.activateHeading>;
 
 export type Categories = { id: string, name: string, url_slug: string }[];
-
+export type Comment = {
+  id: string,
+  text: string,
+  reply_to: string,
+  level: number,
+  created_at: string,
+  updated_at: string,
+  user: {
+    username: string,
+    thumbnail: ?string,
+  },
+  replies_count: number,
+};
 export type PostData = {
   id: string,
   title: string,
@@ -59,12 +74,18 @@ export type Posts = {
   post: ?PostData,
   toc: ?(TocItem[]),
   activeHeading: ?string,
+  comments: ?(Comment[]),
+  repliesMap: {
+    [string]: Comment[],
+  },
 };
 
 const initialState: Posts = {
   post: null,
   toc: null,
   activeHeading: null,
+  comments: null,
+  repliesMap: {},
 };
 
 const reducer = handleActions(
@@ -96,8 +117,22 @@ export default applyPenders(reducer, [
   {
     type: WRITE_COMMENT,
     onSuccess: (state: Posts, action: ResponseAction) => {
-      console.log(action);
-      return state;
+      return produce(state, (draft) => {
+        if (draft.comments) {
+          draft.comments.push(action.payload.data);
+          return;
+        }
+        draft.comments = [action.payload.data];
+      });
+    },
+  },
+  {
+    type: READ_COMMENTS,
+    onSuccess: (state: Posts, action: ResponseAction) => {
+      return {
+        ...state,
+        comments: action.payload.data,
+      };
     },
   },
 ]);

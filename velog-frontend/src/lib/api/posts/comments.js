@@ -12,3 +12,10 @@ export const writeComment = ({ postId, text, replyTo }: WriteCommentPayload) =>
     text,
     reply_to: replyTo,
   });
+
+export type ReadCommentsPayload = {
+  postId: string,
+};
+
+export const readComments = ({ postId }: ReadCommentsPayload) =>
+  axios.get(`/posts/${postId}/comments`);

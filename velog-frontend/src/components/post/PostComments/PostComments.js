@@ -1,54 +1,35 @@
 // @flow
 import React, { type Node } from 'react';
 import PostComment from 'components/post/PostComment';
+import type { Comment } from 'store/modules/posts';
 
 import './PostComments.scss';
 
 type Props = {
   commentInput: Node,
+  comments: ?(Comment[]),
+  onReply: (text: string, replyTo: ?string) => Promise<*>,
 };
 
-const PostComments = ({ commentInput }: Props) => (
+const PostComments = ({ commentInput, comments, onReply }: Props) => (
   <div className="PostComments">
-    <h4>0개의 댓글</h4>
+    <h4>{comments ? comments.length : 0}개의 댓글</h4>
     <div className="comment-input">{commentInput}</div>
     <div className="comment-list">
-      <PostComment
-        username="velopert"
-        thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-        comment="덧글내용이 이래 막"
-        repliesCount={5}
-      />
-      <PostComment
-        username="velopert"
-        thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-        comment="덧글내용이 이래 막 덧글내용이 이래 막 덧글내용이 이래 막 덧글내용이 이래 막 덧글내용이 이래 막 덧글내용이 이래 막 덧글내용이 이래 막 "
-      />
-      <PostComment
-        username="velopert"
-        thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-        comment="덧글내용이 이래 막"
-      />
-      <PostComment
-        username="velopert"
-        thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-        comment="덧글내용이 이래 막"
-      />
-      <PostComment
-        username="velopert"
-        thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-        comment="덧글내용이 이래 막"
-      />
-      <PostComment
-        username="velopert"
-        thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-        comment="덧글내용이 이래 막"
-      />
-      <PostComment
-        username="velopert"
-        thumbnail="https://avatars0.githubusercontent.com/u/17202261?v=4"
-        comment="덧글내용이 이래 막"
-      />
+      {comments &&
+        comments.map((comment) => {
+          return (
+            <PostComment
+              key={comment.id}
+              id={comment.id}
+              username={comment.user.username}
+              thumbnail={comment.user.thumbnail}
+              comment={comment.text}
+              repliesCount={comment.replies_count}
+              onReply={onReply}
+            />
+          );
+        })}
     </div>
   </div>
 );

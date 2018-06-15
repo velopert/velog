@@ -119,14 +119,14 @@ Comment.listComments = async function ({
         ...(replyTo ? { reply_to: replyTo } : { level: 0 }),
       },
       order: [
-        ['created_at', 'DESC'],
+        ['created_at', 'ASC'],
       ],
-      limit: 20,
+      // limit: 20,
       offset,
     });
     if (!data) return [];
     // TODO: Pagination
-    const comments = data.map(c => c.toJSON());
+    const comments = data.map(c => c.toJSON()).map(Comment.serialize);
     /*
     const fetchChildren = async (list: any[], level = 0) => {
       for (let i = 0; i < list.length; i++) {
@@ -184,6 +184,7 @@ Comment.serialize = (data: any) => {
       username: data.user.username,
       thumbnail: data.user.user_profile.thumbnail,
     },
+    replies_count: data.replies_count || 0,
   });
 };
 
