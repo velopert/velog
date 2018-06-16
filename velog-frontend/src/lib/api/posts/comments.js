@@ -19,3 +19,11 @@ export type ReadCommentsPayload = {
 
 export const readComments = ({ postId }: ReadCommentsPayload) =>
   axios.get(`/posts/${postId}/comments`);
+
+export type ReadSubcommentsPayload = {
+  postId: string,
+  commentId: string,
+};
+
+export const readSubcomments = ({ postId, commentId }: ReadSubcommentsPayload) =>
+  axios.get(`/posts/${postId}/comments/${commentId}/replies`);

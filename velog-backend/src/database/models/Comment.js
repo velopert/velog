@@ -103,7 +103,6 @@ Comment.listComments = async function ({
   offset = 0,
   order,
 }) {
-  console.log(offset);
   try {
     const { rows: data, count } = await Comment.findAndCountAll({
       include: [{
@@ -126,7 +125,7 @@ Comment.listComments = async function ({
     });
     if (!data) return [];
     // TODO: Pagination
-    const comments = data.map(c => c.toJSON()).map(Comment.serialize);
+    const comments = data.map(c => c.toJSON());
     /*
     const fetchChildren = async (list: any[], level = 0) => {
       for (let i = 0; i < list.length; i++) {
@@ -141,16 +140,16 @@ Comment.listComments = async function ({
     await fetchChildren(comments);
     */
     for (let i = 0; i < comments.length; i++) {
+      console.log(comments[i]);
       if (!comments[i].has_replies) {
         comments[i].replies_count = 0;
-        delete comments[i].has_replies;
         continue;
       }
+      // TODO: optimization needed
       comments[i].replies_count = await Comment.countChildrenOf(comments[i].id);
-      delete comments[i].has_replies;
     }
     return {
-      data: comments,
+      data: comments.map(Comment.serialize),
       count,
     };
   } catch (e) {
@@ -175,7 +174,6 @@ Comment.write = function ({
 };
 
 Comment.serialize = (data: any) => {
-  console.log(data.user);
   return Object.assign(extractKeys(data, [
     'id', 'text', 'likes', 'meta_json', 'reply_to',
     'actual_reply_to', 'level', 'created_at', 'updated_at',

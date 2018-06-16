@@ -4,6 +4,7 @@ import PlusIcon from 'react-icons/lib/fa/plus-square-o';
 import MinusIcon from 'react-icons/lib/fa/minus-square-o';
 import PostCommentInput from 'components/post/PostCommentInput/PostCommentInput';
 import Button from 'components/common/Button';
+import type { Comment, SubcommentsMap } from 'store/modules/posts';
 
 import './PostComment.scss';
 
@@ -14,7 +15,10 @@ type Props = {
   repliesCount: number,
   level: number,
   id: string,
+  replies: ?(Comment[]),
+  subcommentsMap: SubcommentsMap,
   onReply: (text: string, replyTo: ?string) => Promise<*>,
+  onReadReplies: (commentId: string) => Promise<*>,
 };
 
 type State = {
@@ -34,6 +38,7 @@ class PostComment extends Component<Props, State> {
   };
 
   onOpen = () => {
+    this.readReplies();
     this.setState({
       open: true,
       showInput: false,
@@ -58,8 +63,37 @@ class PostComment extends Component<Props, State> {
     });
   };
 
+  readReplies = () => {
+    const { onReadReplies, id } = this.props;
+    onReadReplies(id);
+  };
+
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    const compare = (key) => {
+      return nextProps[key] !== this.props[key];
+    };
+
+    return (
+      this.state !== nextState ||
+      compare('replies') ||
+      compare('comment') ||
+      compare('repliesCount')
+    );
+  }
+
   render() {
-    const { username, thumbnail, comment, repliesCount, level, id, onReply } = this.props;
+    const {
+      username,
+      thumbnail,
+      comment,
+      repliesCount,
+      level,
+      id,
+      onReply,
+      replies,
+      subcommentsMap,
+      onReadReplies,
+    } = this.props;
     const { open, showInput } = this.state;
     return (
       <div className="PostComment">
@@ -85,6 +119,24 @@ class PostComment extends Component<Props, State> {
           ))}
         {open && (
           <section className="replies">
+            {replies &&
+              replies.map((reply) => {
+                return (
+                  <PostComment
+                    key={reply.id}
+                    id={reply.id}
+                    username={reply.user.username}
+                    thumbnail={reply.user.thumbnail}
+                    comment={reply.text}
+                    replies={subcommentsMap[reply.id]}
+                    repliesCount={reply.replies_count}
+                    subcommentsMap={subcommentsMap}
+                    onReadReplies={onReadReplies}
+                    onReply={onReply}
+                    level={level + 1}
+                  />
+                );
+              })}
             {showInput ? (
               <PostCommentInput
                 showCancel

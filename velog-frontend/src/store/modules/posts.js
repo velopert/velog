@@ -17,6 +17,7 @@ const SET_TOC = 'posts/SET_TOC';
 const ACTIVATE_HEADING = 'posts/ACTIVATE_HEADING';
 const WRITE_COMMENT = 'posts/WRITE_COMMENT';
 const READ_COMMENTS = 'posts/READ_COMMENTS';
+const READ_SUBCOMMENTS = 'posts/READ_SUBCOMMENTS';
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
@@ -24,6 +25,7 @@ export interface PostsActionCreators {
   activateHeading(payload: string): any;
   writeComment(payload: CommentsAPI.WriteCommentPayload): any;
   readComments(payload: CommentsAPI.ReadCommentsPayload): any;
+  readSubcomments(payload: CommentsAPI.ReadSubcommentsPayload): any;
 }
 
 export const actionCreators = {
@@ -32,6 +34,7 @@ export const actionCreators = {
   activateHeading: createAction(ACTIVATE_HEADING, (headingId: string) => headingId),
   writeComment: createAction(WRITE_COMMENT, CommentsAPI.writeComment),
   readComments: createAction(READ_COMMENTS, CommentsAPI.readComments),
+  readSubcomments: createAction(READ_SUBCOMMENTS, CommentsAPI.readSubcomments, meta => meta),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
@@ -70,14 +73,16 @@ export type PostData = {
   },
 };
 
+
+export type SubcommentsMap = {
+  [string]: Comment[],
+};
 export type Posts = {
   post: ?PostData,
   toc: ?(TocItem[]),
   activeHeading: ?string,
   comments: ?(Comment[]),
-  repliesMap: {
-    [string]: Comment[],
-  },
+  subcommentsMap: SubcommentsMap,
 };
 
 const initialState: Posts = {
@@ -85,7 +90,7 @@ const initialState: Posts = {
   toc: null,
   activeHeading: null,
   comments: null,
-  repliesMap: {},
+  subcommentsMap: {},
 };
 
 const reducer = handleActions(
@@ -133,6 +138,14 @@ export default applyPenders(reducer, [
         ...state,
         comments: action.payload.data,
       };
+    },
+  },
+  {
+    type: READ_SUBCOMMENTS,
+    onSuccess: (state: Posts, action: ResponseAction) => {
+      return produce(state, (draft) => {
+        draft.subcommentsMap[action.meta.commentId] = action.payload.data;
+      });
     },
   },
 ]);

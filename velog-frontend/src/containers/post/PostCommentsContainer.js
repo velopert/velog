@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import PostComments from 'components/post/PostComments/PostComments';
 import PostCommentInput from 'components/post/PostCommentInput/PostCommentInput';
 import { PostsActions } from 'store/actionCreators';
-import type { Comment } from 'store/modules/posts';
+import type { Comment, SubcommentsMap } from 'store/modules/posts';
 
 type Props = {
   postId: ?string,
   comments: ?(Comment[]),
+  subcommentsMap: SubcommentsMap,
 };
 
 class PostCommentsContainer extends Component<Props> {
@@ -24,7 +25,7 @@ class PostCommentsContainer extends Component<Props> {
         replyTo,
       });
       if (replyTo) {
-        console.log('laodd...');
+        await this.onReadReplies(replyTo);
       } else {
         await PostsActions.readComments({ postId });
       }
@@ -54,14 +55,25 @@ class PostCommentsContainer extends Component<Props> {
     }
   }
 
+  onReadReplies = (commentId: string) => {
+    const { postId } = this.props;
+    if (!postId) return Promise.resolve(null);
+    return PostsActions.readSubcomments({
+      postId,
+      commentId,
+    });
+  };
+
   render() {
-    const { comments } = this.props;
+    const { comments, subcommentsMap } = this.props;
 
     return (
       <PostComments
         commentInput={<PostCommentInput onWriteComment={this.onWriteComment} />}
         comments={comments}
+        subcommentsMap={subcommentsMap}
         onReply={this.onWriteComment}
+        onReadReplies={this.onReadReplies}
       />
     );
   }
@@ -71,6 +83,7 @@ export default connect(
   (state: State) => ({
     postId: state.posts.post && state.posts.post.id,
     comments: state.posts.comments,
+    subcommentsMap: state.posts.subcommentsMap,
   }),
   () => ({}),
 )(PostCommentsContainer);

@@ -78,8 +78,6 @@ export const writeComment: Middleware = async (ctx: Context) => {
 export const getCommentList: Middleware = async (ctx: Context) => {
   const postId = ctx.post.id;
   const { offset = 0 } = ctx.query;
-
-  console.log(offset);
   try {
     const { data, count } = await Comment.listComments({
       postId,

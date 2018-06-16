@@ -53,6 +53,9 @@ class PostCommentInput extends Component<Props, State> {
       this.setState({
         input: '',
       });
+      if (this.props.onCancel) {
+        this.props.onCancel();
+      }
       await onWriteComment(input, replyTo);
     } catch (e) {
       console.log(e);
@@ -78,7 +81,7 @@ class PostCommentInput extends Component<Props, State> {
             댓글 작성
           </Button>
           {showCancel && (
-            <Button cancel onClick={onCancel}>
+            <Button cancel onMouseDown={onCancel}>
               취소
             </Button>
           )}

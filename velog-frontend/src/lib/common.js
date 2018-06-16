@@ -25,6 +25,7 @@ export type ResponseAction = {
   type: string,
   payload: $AxiosXHR<*>,
   error: $AxiosError<*>,
+  meta: any,
 };
 
 type Return_<R, F: (...args: Array<any>) => R> = R;
