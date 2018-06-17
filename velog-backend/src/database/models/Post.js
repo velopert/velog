@@ -318,6 +318,7 @@ export const serializePost = (data: any) => {
     created_at,
     updated_at,
     url_slug,
+    liked,
     likes,
     comments_count,
     is_temp,
@@ -350,6 +351,7 @@ export const serializePost = (data: any) => {
       ...pick(user.user_profile, ['display_name', 'short_bio', 'thumbnail']),
     },
     meta,
+    liked,
   };
 };
 

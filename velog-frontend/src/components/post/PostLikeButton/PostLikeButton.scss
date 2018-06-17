@@ -1,0 +1,27 @@
+@import 'utils';
+.PostLikeButton {
+  padding: 0.5rem 0.875rem;
+  display: flex;
+  align-items: center;
+  border: 1px solid $oc-violet-5;
+  color: $oc-violet-5;
+  border-radius: 1.0625rem;
+  svg {
+    line-height: 1.125rem;
+    font-size: 1.125rem;
+  }
+  .count {
+    font-size: 0.75rem;
+    margin-left: 0.75rem;
+    font-weight: 500;
+  }
+  &:not(.active) {
+    &:hover {
+      background: $oc-violet-5;
+      color: white;
+    }
+    &:active {
+      background: $oc-violet-6;
+    }
+  }
+}

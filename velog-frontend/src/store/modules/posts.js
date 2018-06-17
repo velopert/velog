@@ -3,6 +3,7 @@ import { createAction, handleActions, type ActionType } from 'redux-actions';
 import produce from 'immer';
 import * as PostsAPI from 'lib/api/posts';
 import * as CommentsAPI from 'lib/api/posts/comments';
+import * as LikesAPI from 'lib/api/posts/likes';
 import { applyPenders, type ResponseAction } from 'lib/common';
 
 export type TocItem = {
@@ -18,6 +19,9 @@ const ACTIVATE_HEADING = 'posts/ACTIVATE_HEADING';
 const WRITE_COMMENT = 'posts/WRITE_COMMENT';
 const READ_COMMENTS = 'posts/READ_COMMENTS';
 const READ_SUBCOMMENTS = 'posts/READ_SUBCOMMENTS';
+const LIKE = 'posts/LIKE';
+const UNLIKE = 'posts/UNLIKE';
+const GET_LIKES_COUNT = 'posts/GET_LIKES_COUNT';
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
@@ -26,6 +30,9 @@ export interface PostsActionCreators {
   writeComment(payload: CommentsAPI.WriteCommentPayload): any;
   readComments(payload: CommentsAPI.ReadCommentsPayload): any;
   readSubcomments(payload: CommentsAPI.ReadSubcommentsPayload): any;
+  like(postId: string): any;
+  unlike(postId: string): any;
+  getLikesCount(postId: string): any;
 }
 
 export const actionCreators = {
@@ -35,6 +42,9 @@ export const actionCreators = {
   writeComment: createAction(WRITE_COMMENT, CommentsAPI.writeComment),
   readComments: createAction(READ_COMMENTS, CommentsAPI.readComments),
   readSubcomments: createAction(READ_SUBCOMMENTS, CommentsAPI.readSubcomments, meta => meta),
+  like: createAction(LIKE, LikesAPI.like),
+  unlike: createAction(UNLIKE, LikesAPI.unlike),
+  getLikesCount: createAction(GET_LIKES_COUNT, LikesAPI.getLikesCount),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
@@ -66,13 +76,13 @@ export type PostData = {
   categories: Categories,
   url_slug: string,
   likes: number,
+  liked: boolean,
   comments_count: 0,
   user: {
     username: string,
     id: string,
   },
 };
-
 
 export type SubcommentsMap = {
   [string]: Comment[],
@@ -146,6 +156,26 @@ export default applyPenders(reducer, [
       return produce(state, (draft) => {
         draft.subcommentsMap[action.meta.commentId] = action.payload.data;
       });
+    },
+  },
+  {
+    type: LIKE,
+    onSuccess: (state: Posts, action: ResponseAction) => {
+      return {
+        ...state,
+        likes: action.payload.data && action.payload.data.likes,
+        liked: true,
+      };
+    },
+  },
+  {
+    type: UNLIKE,
+    onSuccess: (state: Posts, action: ResponseAction) => {
+      return {
+        ...state,
+        likes: action.payload.data && action.payload.data.likes,
+        liked: false,
+      };
     },
   },
 ]);

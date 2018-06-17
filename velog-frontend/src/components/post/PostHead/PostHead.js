@@ -2,6 +2,7 @@
 import React from 'react';
 import Responsive from 'components/common/Responsive';
 import type { Categories } from 'store/modules/posts';
+import PostLikeButton from 'components/post/PostLikeButton';
 import './PostHead.scss';
 
 type Props = {
@@ -30,7 +31,11 @@ const PostHead = ({ title, categories, user }: Props) => {
         </div>
       </div>
       <h1>{title}</h1>
-      <div className="date">2018년 5월 25일</div>
+      <div className="date-and-likes">
+        <div className="date">2018년 5월 25일</div>
+        <div className="placeholder" />
+        <PostLikeButton />
+      </div>
       <div className="separator" />
     </div>
   );
