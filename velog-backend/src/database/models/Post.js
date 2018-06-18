@@ -266,7 +266,7 @@ Post.prototype.like = async function like(): Promise<*> {
   return this.increment('likes', { by: 1 });
 };
 
-Post.prototype.unlike = async function like(): Promise<*> {
+Post.prototype.unlike = async function unlike(): Promise<*> {
   return this.decrement('likes', { by: 1 });
 };
 

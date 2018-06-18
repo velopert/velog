@@ -1,5 +1,6 @@
 @import 'utils';
 .PostLikeButton {
+  cursor: pointer;
   padding: 0.5rem 0.875rem;
   display: flex;
   align-items: center;
@@ -15,7 +16,18 @@
     margin-left: 0.75rem;
     font-weight: 500;
   }
-  &:not(.active) {
+  &.liked {
+    background: $oc-violet-5;
+    color: white;
+    &:hover {
+      background: $oc-violet-4;
+    }
+    &:active {
+      background: white;
+      color: $oc-violet-5;
+    }
+  }
+  &:not(.liked) {
     &:hover {
       background: $oc-violet-5;
       color: white;

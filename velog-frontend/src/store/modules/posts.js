@@ -3,7 +3,7 @@ import { createAction, handleActions, type ActionType } from 'redux-actions';
 import produce from 'immer';
 import * as PostsAPI from 'lib/api/posts';
 import * as CommentsAPI from 'lib/api/posts/comments';
-import * as LikesAPI from 'lib/api/posts/likes';
+import * as LikesAPI from 'lib/api/posts/like';
 import { applyPenders, type ResponseAction } from 'lib/common';
 
 export type TocItem = {
@@ -160,22 +160,56 @@ export default applyPenders(reducer, [
   },
   {
     type: LIKE,
+    onPending: (state: Posts) => {
+      return produce(state, (draft) => {
+        if (draft.post) {
+          draft.post.likes += 1;
+          draft.post.liked = true;
+        }
+      });
+    },
     onSuccess: (state: Posts, action: ResponseAction) => {
-      return {
-        ...state,
-        likes: action.payload.data && action.payload.data.likes,
-        liked: true,
-      };
+      return produce(state, (draft) => {
+        if (draft.post) {
+          draft.post.likes = action.payload.data && action.payload.data.likes;
+          draft.post.liked = true;
+        }
+      });
+    },
+    onFailure: (state: Posts) => {
+      return produce(state, (draft) => {
+        if (draft.post) {
+          draft.post.likes -= 1;
+          draft.post.liked = false;
+        }
+      });
     },
   },
   {
     type: UNLIKE,
+    onPending: (state: Posts) => {
+      return produce(state, (draft) => {
+        if (draft.post) {
+          draft.post.likes -= 1;
+          draft.post.liked = false;
+        }
+      });
+    },
     onSuccess: (state: Posts, action: ResponseAction) => {
-      return {
-        ...state,
-        likes: action.payload.data && action.payload.data.likes,
-        liked: false,
-      };
+      return produce(state, (draft) => {
+        if (draft.post) {
+          draft.post.likes = action.payload.data && action.payload.data.likes;
+          draft.post.liked = false;
+        }
+      });
+    },
+    onFailure: (state: Posts) => {
+      return produce(state, (draft) => {
+        if (draft.post) {
+          draft.post.likes += 1;
+          draft.post.liked = true;
+        }
+      });
     },
   },
 ]);

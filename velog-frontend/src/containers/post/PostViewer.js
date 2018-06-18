@@ -39,6 +39,16 @@ class PostViewer extends Component<Props> {
     PostsActions.activateHeading(headingId);
   };
 
+  onToggleLike = () => {
+    const { post } = this.props;
+    if (!post) return;
+    if (post.liked) {
+      PostsActions.unlike(post.id);
+    } else {
+      PostsActions.like(post.id);
+    }
+  };
+
   componentDidMount() {
     this.initialize();
   }
@@ -56,6 +66,9 @@ class PostViewer extends Component<Props> {
           tags={post.tags}
           categories={post.categories}
           user={post.user}
+          likes={post.likes}
+          liked={post.liked}
+          onToggleLike={this.onToggleLike}
         />
         <PostContent
           thumbnail={post.thumbnail}

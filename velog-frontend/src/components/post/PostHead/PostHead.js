@@ -9,9 +9,12 @@ type Props = {
   title: string,
   categories: Categories,
   user: any,
+  likes: number,
+  liked: boolean,
+  onToggleLike: () => void,
 };
 
-const PostHead = ({ title, categories, user }: Props) => {
+const PostHead = ({ title, categories, user, likes, liked, onToggleLike }: Props) => {
   return (
     <div className="PostHead">
       <h4 className="category">
@@ -34,7 +37,7 @@ const PostHead = ({ title, categories, user }: Props) => {
       <div className="date-and-likes">
         <div className="date">2018년 5월 25일</div>
         <div className="placeholder" />
-        <PostLikeButton />
+        <PostLikeButton onClick={onToggleLike} liked={liked} likes={likes} />
       </div>
       <div className="separator" />
     </div>

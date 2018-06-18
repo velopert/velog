@@ -1,6 +1,7 @@
 // @flow
 import type { Context } from 'koa';
 import { PostLike } from 'database/models';
+import db from 'database/db';
 
 export const getLike = async (ctx: Context): Promise<*> => {
   let liked = false;
@@ -19,6 +20,41 @@ export const getLike = async (ctx: Context): Promise<*> => {
 };
 
 export const likePost = async (ctx: Context): Promise<*> => {
+  const { id } = ctx.params;
+  const { id: userId } = ctx.user;
+  const { post } = ctx;
+  // $FlowFixMe
+  const result = await db.transaction((t) => {
+    return PostLike.checkExists({
+      userId,
+      postId: id,
+    }).then((exists) => {
+      if (exists) {
+        ctx.status = 409;
+        ctx.body = { name: 'ALREADY_LIKED' };
+      }
+      return PostLike.build({
+        fk_user_id: userId,
+        fk_post_id: id,
+      }, {
+        transaction: t,
+      }).save().then(() => {
+        return post.like(t)
+          .then(() => {
+            ctx.body = {
+              liked: true,
+              likes: post.likes,
+            };
+          });
+      });
+    });
+  });
+
+  ctx.body = {
+    liked: true,
+    likes: post.likes,
+  };
+/*
   const { id } = ctx.params;
   const { id: userId } = ctx.user;
 
@@ -47,9 +83,36 @@ export const likePost = async (ctx: Context): Promise<*> => {
   } catch (e) {
     ctx.throw(500, e);
   }
+*/
 };
 
 export const unlikePost = async (ctx: Context): Promise<*> => {
+  const { id } = ctx.params;
+  const { id: userId } = ctx.user;
+  const { post } = ctx;
+  // $FlowFixMe
+  const result = await db.transaction((t) => {
+    return PostLike.checkExists({
+      userId,
+      postId: id,
+    }).then((exists) => {
+      if (!exists) {
+        ctx.status = 409;
+        ctx.body = { name: 'NOT_LIKED' };
+      }
+      return exists.destroy({ transaction: t })
+        .then(() => {
+          return post.unlike(t);
+        })
+        .then(() => {
+          ctx.body = {
+            liked: false,
+            likes: post.likes,
+          };
+        });
+    });
+  });
+/*
   const { id } = ctx.params;
   const { id: userId } = ctx.user;
 
@@ -75,4 +138,5 @@ export const unlikePost = async (ctx: Context): Promise<*> => {
   } catch (e) {
     ctx.throw(500, e);
   }
+*/
 };
