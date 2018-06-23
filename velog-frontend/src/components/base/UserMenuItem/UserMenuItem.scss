@@ -1,10 +1,12 @@
 @import 'utils';
-
 .user-menu-item {
   padding: 0.5rem;
-  color: $oc-gray-6;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
+  color: $oc-gray-7;
+  display: block;
   &:hover {
-    color: black;
+    color: $oc-violet-6;
   }
 }

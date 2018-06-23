@@ -1,0 +1,28 @@
+@import 'utils';
+.UserSide {
+  color: $oc-gray-8;
+  font-size: 0.875rem;
+  section {
+    .section-title {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      font-weight: 500;
+      border-bottom: 1px solid $oc-gray-2;
+    }
+    ul {
+      margin: 0;
+      list-style: none;
+      padding-left: 0;
+      padding-top: 0.375rem;
+      padding-bottom: 0.375rem;
+      li {
+        padding-top: 0.375rem;
+        padding-bottom: 0.375rem;
+        font-size: 0.75rem;
+      }
+    }
+  }
+  section+section {
+    margin-top: 1.5rem;
+  }
+}

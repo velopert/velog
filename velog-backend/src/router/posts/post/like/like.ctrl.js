@@ -32,13 +32,14 @@ export const likePost = async (ctx: Context): Promise<*> => {
       if (exists) {
         ctx.status = 409;
         ctx.body = { name: 'ALREADY_LIKED' };
+        return;
       }
-      return PostLike.build({
+      return PostLike.create({
         fk_user_id: userId,
         fk_post_id: id,
       }, {
         transaction: t,
-      }).save().then(() => {
+      }).then(() => {
         return post.like(t)
           .then(() => {
             ctx.body = {
@@ -50,10 +51,6 @@ export const likePost = async (ctx: Context): Promise<*> => {
     });
   });
 
-  ctx.body = {
-    liked: true,
-    likes: post.likes,
-  };
 /*
   const { id } = ctx.params;
   const { id: userId } = ctx.user;
@@ -99,6 +96,7 @@ export const unlikePost = async (ctx: Context): Promise<*> => {
       if (!exists) {
         ctx.status = 409;
         ctx.body = { name: 'NOT_LIKED' };
+        return; // ⛑ VERY STUPID MISTAKE
       }
       return exists.destroy({ transaction: t })
         .then(() => {

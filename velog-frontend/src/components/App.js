@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home, Register, Write, Post } from 'pages';
+import { Home, Register, Write, Post, User } from 'pages';
 import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
 
@@ -12,6 +12,8 @@ const App = () => (
       <Route path="/register" component={Register} />
       <Route path="/email-login" component={EmailLogin} />
       <Route path="/write" component={Write} />
+      <Route exact path="/@:username/" component={User} />
+      <Route exact path="/@:username/:tab(collections|popular)" component={User} />
       <Route path="/@:username/:urlSlug" component={Post} />
       <Route path="/posts/preview/:id" component={Post} />
     </Switch>

@@ -1,30 +1,32 @@
 @import 'utils';
-
 .user-menu-wrapper {
   position: relative;
+  z-index: z('user-menu');
   .user-menu-positioner {
     position: absolute;
     right: 0;
-    top: calc(100% + 0.5rem);
+    top: 2.5rem;
+    .rotated-square {
+      z-index: 0;
+      position: absolute;
+      width: 1rem;
+      height: 1rem;
+      background: $oc-gray-5;
+      transform: rotate(45deg);
+      right: 16px;
+      z-index: 0;
+      top: -8px;
+    }
     .user-menu {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      z-index: 1;
+      position: relative;
+      font-size: 0.875rem;
+      background: white;
       min-width: 10rem;
-      @include material-shadow(2, 0.5);
-      .me {
-        padding: 0.5rem;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        background: $oc-gray-1;
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: $oc-gray-7;
-        cursor: pointer;
-        &:hover {
-          background: $oc-gray-0;
-        }
-      }
+      border: 1px solid $oc-gray-5;
       .menu-items {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
         .separator {
           width: 100%;
           height: 1px;

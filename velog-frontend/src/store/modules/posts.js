@@ -134,7 +134,7 @@ export default applyPenders(reducer, [
     onSuccess: (state: Posts, action: ResponseAction) => {
       return produce(state, (draft) => {
         if (draft.comments) {
-          draft.comments.push(action.payload.data);
+          // draft.comments.push(action.payload.data);
           return;
         }
         draft.comments = [action.payload.data];

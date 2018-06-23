@@ -1,0 +1,12 @@
+@import 'utils';
+.UserContent {
+  display: flex;
+  margin-top: 4rem;
+  .tab-wrapper {
+    flex: 1;
+  }
+  .side-wrapper {
+    width: 15rem;
+    margin-left: 2rem;
+  }
+}

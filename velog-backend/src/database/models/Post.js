@@ -262,12 +262,12 @@ Post.listPublicPosts = function ({ tag, page, option }: PublicPostsQueryInfo) {
   });
 };
 
-Post.prototype.like = async function like(): Promise<*> {
-  return this.increment('likes', { by: 1 });
+Post.prototype.like = async function like(transaction): Promise<*> {
+  return this.increment('likes', { by: 1, transaction });
 };
 
-Post.prototype.unlike = async function unlike(): Promise<*> {
-  return this.decrement('likes', { by: 1 });
+Post.prototype.unlike = async function unlike(transaction): Promise<*> {
+  return this.decrement('likes', { by: 1, transaction });
 };
 
 Post.prototype.getTagNames = async function (): Promise<*> {

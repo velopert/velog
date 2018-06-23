@@ -11,31 +11,20 @@ type Props = {
   username: string,
 };
 
-
 const UserMenu = ({ onClick, onLogout, username }: Props) => {
   return (
     <div className="user-menu-wrapper">
       <div className="user-menu-positioner">
+        <div className="rotated-square" />
         <div className="user-menu" onClick={onClick}>
-          <div className="me">
-            <div className="username">
-              @{username}
-            </div>
-          </div>
           <div className="menu-items">
-            <UserMenuItem to="/write">
-              새 글 작성
-            </UserMenuItem>
-            <UserMenuItem>
-              임시 글
-            </UserMenuItem>
+            <UserMenuItem to={`/@${username}`}>내 벨로그</UserMenuItem>
             <div className="separator" />
-            <UserMenuItem>
-              설정
-            </UserMenuItem>
-            <UserMenuItem onClick={onLogout}>
-              로그아웃
-            </UserMenuItem>
+            <UserMenuItem to="/write">새 글 작성</UserMenuItem>
+            <UserMenuItem>임시 글</UserMenuItem>
+            <div className="separator" />
+            <UserMenuItem>설정</UserMenuItem>
+            <UserMenuItem onClick={onLogout}>로그아웃</UserMenuItem>
           </div>
         </div>
       </div>

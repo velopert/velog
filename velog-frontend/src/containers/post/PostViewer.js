@@ -15,6 +15,7 @@ type Props = {
   post: ?PostData,
   toc: ?(TocItem[]),
   activeHeading: ?string,
+  likeInProcess: boolean,
 };
 
 class PostViewer extends Component<Props> {
@@ -40,7 +41,8 @@ class PostViewer extends Component<Props> {
   };
 
   onToggleLike = () => {
-    const { post } = this.props;
+    const { post, likeInProcess } = this.props;
+    if (likeInProcess) return;
     if (!post) return;
     if (post.liked) {
       PostsActions.unlike(post.id);
@@ -83,10 +85,11 @@ class PostViewer extends Component<Props> {
 }
 
 export default connect(
-  ({ posts }: State) => ({
+  ({ posts, pender }: State) => ({
     post: posts.post,
     toc: posts.toc,
     activeHeading: posts.activeHeading,
+    likeInProcess: pender.pending['posts/LIKE'] || pender.pending['posts/UNLIKE'],
   }),
   () => ({}),
 )(PostViewer);

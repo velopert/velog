@@ -7,11 +7,15 @@ import * as PostsAPI from 'lib/api/posts';
 const GET_RECENT_POSTS = 'listing/GET_RECENT_POSTS';
 const PREFETCH_RECENT_POSTS = 'listing/PREFETCH';
 const REVEAL_PREFETCHED = 'listing/REVEAL_PREFETCHED';
+const CLEAR_USER_POSTS = 'listing/CLEAR_USER_POSTS';
+const GET_USER_POSTS = 'listing/GET_USER_POSTS';
 
 export const actionCreators = {
   getRecentPosts: createAction(GET_RECENT_POSTS, PostsAPI.getPublicPosts),
   prefetchRecentPosts: createAction(PREFETCH_RECENT_POSTS, PostsAPI.getPublicPosts),
   revealPrefetched: createAction(REVEAL_PREFETCHED, (type: string) => type),
+  clearUserPosts: createAction(CLEAR_USER_POSTS),
+  getUserPosts: createAction(GET_USER_POSTS, PostsAPI.getUserPosts),
 };
 
 export type PostItem = {
@@ -39,6 +43,7 @@ export type Listing = {
   recentEnd: boolean,
   recentPosts: ?(PostItem[]),
   prefetchedRecentPosts: ?(PostItem[]),
+  userPosts: ?(PostItem[]),
 };
 
 type RevealPrefetchedAction = ActionType<typeof actionCreators.revealPrefetched>;
@@ -59,6 +64,7 @@ const initialState: Listing = {
   recentEnd: false,
   recentPosts: null,
   prefetchedRecentPosts: null,
+  userPosts: null,
 };
 
 const reducer = handleActions(
@@ -71,6 +77,12 @@ const reducer = handleActions(
           draft.prefetchedRecentPosts = null;
         }
       });
+    },
+    [CLEAR_USER_POSTS]: (state) => {
+      return {
+        ...state,
+        userPosts: null,
+      };
     },
   },
   initialState,
@@ -95,6 +107,15 @@ export default applyPenders(reducer, [
           draft.recentEnd = true;
         }
       });
+    },
+  },
+  {
+    type: GET_USER_POSTS,
+    onSuccess: (state: Listing, action: PostsResponseAction) => {
+      return {
+        ...state,
+        userPosts: action.payload.data,
+      };
     },
   },
 ]);

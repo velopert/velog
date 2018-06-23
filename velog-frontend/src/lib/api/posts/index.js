@@ -70,3 +70,13 @@ export const getPublicPosts = (cursor: ?string) => {
   const query = cursor ? `?cursor=${cursor}` : '';
   return axios.get(`/posts/public${query}`);
 };
+
+export type GetUserPostsPayload = {
+  username: string,
+  cursor?: string,
+};
+
+export const getUserPosts = ({ username, cursor }: GetUserPostsPayload) => {
+  const query = cursor ? `?cursor=${cursor}` : '';
+  return axios.get(`/posts/@${username}${query}`);
+};

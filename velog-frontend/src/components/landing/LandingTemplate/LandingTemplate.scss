@@ -1,10 +1,8 @@
 @import "utils";
-
 .LandingTemplate {
   height: 100%;
   display: flex;
   align-items: center;
-
   @include media("<x-large") {
     height: auto;
     min-height: 100%;
@@ -73,7 +71,7 @@
     h2 {
       margin: 0;
       margin-top: 4rem;
-      font-weight: 300;
+      font-weight: 400;
       font-size: 2rem;
       line-height: 2rem;
       @include media("<x-large") {
@@ -81,7 +79,7 @@
       }
     }
     p {
-      font-weight: 300;
+      font-weight: 400;
       font-size: 1.5rem;
       margin-top: 1rem;
       line-height: 2rem;
@@ -104,7 +102,6 @@
         line-height: 1.75rem;
       }
     }
-
     @include media("<medium") {
       .logo {
         font-size: 2.5rem;
@@ -133,7 +130,7 @@
           color: $oc-gray-9;
         }
       }
-      button + button {
+      button+button {
         margin-left: 1rem;
       }
     }
@@ -145,7 +142,7 @@
     background: $oc-gray-1;
     @include media("<x-large") {
       align-items: flex-start;
-      & > .wrapper {
+      &>.wrapper {
         width: 100%;
       }
     }
@@ -169,8 +166,7 @@
       padding-bottom: 2rem;
       background: white;
       border-radius: 4px;
-      border: 1px solid $oc-gray-2;
-      // box-shadow: 0 15px 30px rgba(0, 0, 0, 0.125), 0px 0px 10px rgba(0, 0, 0, 0.11);
+      border: 1px solid $oc-gray-2; // box-shadow: 0 15px 30px rgba(0, 0, 0, 0.125), 0px 0px 10px rgba(0, 0, 0, 0.11);
       width: 600px;
       @include media("<xx-large") {
         width: 500px;
@@ -183,8 +179,7 @@
         padding: 1rem;
       }
     }
-  }
-  // height: 100%;
+  } // height: 100%;
   // display: flex;
   // .block {
   //   display: flex;
@@ -225,7 +220,6 @@
   //         display: none;
   //       }
   //     }
-
   //   }
   // }
   // .right {
@@ -274,7 +268,6 @@
   //     justify-content: center;
   //     font-size: 1.5rem;
   //     border-radius: 4px;
-
   //     transition: box-shadow .15s ease-in;
   //     cursor: pointer;
   //     border: 2px solid transparent;

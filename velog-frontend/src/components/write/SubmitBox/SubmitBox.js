@@ -89,7 +89,7 @@ class SubmitBox extends Component<Props, State> {
         {additional || (
           <Fragment>
             <div className="sections">
-              <section>
+              {/* <section>
                 <div className="section-title category" onClick={onEditCategoryClick}>
                   카테고리 선택
                   <div className="edit util flex-center">
@@ -98,7 +98,7 @@ class SubmitBox extends Component<Props, State> {
                   </div>
                 </div>
                 {selectCategory}
-              </section>
+              </section> */}
               <section>
                 <div className="section-title">태그 설정</div>
                 {inputTags}

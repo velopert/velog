@@ -8,11 +8,12 @@ type Props = {
   confirm?: boolean,
   cancel?: boolean,
   violetFont?: boolean,
+  className?: string,
   children: Node,
 };
 
-const Button = ({ theme, children, confirm, cancel, violetFont, ...rest }: Props) => (
-  <button className={cx('Button', theme, { confirm, cancel, violetFont })} {...rest}>
+const Button = ({ theme, children, confirm, cancel, violetFont, className, ...rest }: Props) => (
+  <button className={cx('Button', theme, className, { confirm, cancel, violetFont })} {...rest}>
     {children}
   </button>
 );
@@ -22,6 +23,7 @@ Button.defaultProps = {
   confirm: false,
   cancel: false,
   violetFont: false,
+  className: '',
 };
 
 export default Button;

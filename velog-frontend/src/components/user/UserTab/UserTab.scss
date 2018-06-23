@@ -1,0 +1,14 @@
+@import 'utils';
+.UserTab {
+  .tab-selector {
+    font-size: 1.125rem;
+    color: $oc-gray-6;
+    a+a {
+      margin-left: 1rem;
+    }
+    .active {
+      font-weight: 500;
+      color: $oc-violet-5;
+    }
+  }
+}
