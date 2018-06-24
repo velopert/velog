@@ -16,6 +16,14 @@
   @include media("<=large") {
     width: calc(100% - 1.75rem);
   }
+  &.one-column {
+    box-shadow: none;
+    border: 1px solid $oc-gray-2;
+    width: calc(100% - 1.75rem);
+    &+& {
+      margin-top: 2.5rem;
+    }
+  }
   &>.thumbnail-wrapper {
     width: 100%;
     padding-top: 52.63%;

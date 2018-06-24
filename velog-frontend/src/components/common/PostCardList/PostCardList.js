@@ -9,8 +9,9 @@ type Props = {
   posts?: ?(PostItem[]),
   loading: boolean,
   prefetching: boolean,
-  width: number,
+  width?: number,
   hasEnded: boolean,
+  oneColumn?: boolean,
 };
 
 const createArray = length => Array.from(Array(length).keys());
@@ -20,6 +21,8 @@ const getColumnCount = (width) => {
   const xLarge = 1200;
   const large = 1024;
 
+  if (!width) return 1;
+
   if (width < large) return 1;
   if (width < xLarge) return 2;
   if (width < wide) return 3;
@@ -27,14 +30,16 @@ const getColumnCount = (width) => {
   return 5;
 };
 
-const PostCardList = ({ posts, loading, prefetching, width, hasEnded }: Props) => {
+const PostCardList = ({ posts, loading, prefetching, width, hasEnded, oneColumn }: Props) => {
   if (loading) {
     return (
-      <div className="PostCardList">{createArray(10).map(num => <FakePostCard key={num} />)}</div>
+      <div className="PostCardList">
+        {createArray(10).map(num => <FakePostCard key={num} oneColumn={oneColumn} />)}
+      </div>
     );
   }
 
-  const columnCount = getColumnCount(width);
+  const columnCount = oneColumn ? 1 : getColumnCount(width);
 
   if (!posts) return null;
   const postList = (hasEnded
@@ -50,13 +55,15 @@ const PostCardList = ({ posts, loading, prefetching, width, hasEnded }: Props) =
       body={post.body}
       date={post.created_at}
       urlSlug={post.url_slug}
+      oneColumn={oneColumn}
     />
   ));
   return (
     <Fragment>
       <div className="PostCardList">
         {postList}
-        {prefetching && createArray(columnCount).map(num => <FakePostCard key={num} />)}
+        {prefetching &&
+          createArray(columnCount).map(num => <FakePostCard key={num} oneColumn={oneColumn} />)}
       </div>
     </Fragment>
   );
@@ -64,6 +71,8 @@ const PostCardList = ({ posts, loading, prefetching, width, hasEnded }: Props) =
 
 PostCardList.defaultProps = {
   posts: [],
+  oneColumn: false,
+  width: 0,
 };
 
 export default PostCardList;

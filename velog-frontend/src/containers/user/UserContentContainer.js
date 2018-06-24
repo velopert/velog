@@ -5,7 +5,7 @@ import UserSide from 'components/user/UserSide';
 import UserTab from 'components/user/UserTab';
 import { withRouter, type Match, Route } from 'react-router-dom';
 
-import UserRecentPosts from './UserRecentPosts';
+import UserPosts from './UserPosts';
 
 type Props = {
   match: Match,
@@ -18,7 +18,11 @@ class UserContentContainer extends Component<Props> {
     return (
       <UserContent side={<UserSide />}>
         <UserTab username={username || ''}>
-          <Route exact path={`/@${username || ''}`} component={UserRecentPosts} />
+          <Route
+            exact
+            path={`/@${username || ''}`}
+            render={() => <UserPosts username={username || ''} />}
+          />
         </UserTab>
       </UserContent>
     );

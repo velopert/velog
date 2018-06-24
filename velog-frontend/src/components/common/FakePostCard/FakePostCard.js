@@ -2,6 +2,8 @@
 import React from 'react';
 import ImageIcon from 'react-icons/lib/io/image';
 import placeholder from 'static/images/post_placeholder.png';
+import cx from 'classnames';
+
 import './FakePostCard.scss';
 
 type GrayBoxProps = {
@@ -36,15 +38,18 @@ const GrayBoxes = ({ count, min, max }: GrayBoxesProps) => {
   const array = Array.from(Array(count).keys());
   return array.map(num => <GrayBox key={num} min={min} max={max} />);
 };
-type Props = {};
 
-const FakePostCard = (props: Props) => (
-  <div className="PostCard FakePostCard">
+type Props = {
+  oneColumn?: boolean,
+};
+
+const FakePostCard = ({ oneColumn }: Props) => (
+  <div className={cx('PostCard FakePostCard', { 'one-column': oneColumn })}>
     <div className="thumbnail-wrapper">
       <img src={placeholder} alt="thumbnail" />
     </div>
     <div className="card-content">
-      <div className="user-thumbnail-wrapper " />
+      {!oneColumn && <div className="user-thumbnail-wrapper " />}
       <div className="content-head">
         <div className="username">
           <GrayBox min={6} max={8} />
@@ -63,5 +68,9 @@ const FakePostCard = (props: Props) => (
     </div>
   </div>
 );
+
+FakePostCard.defaultProps = {
+  oneColumn: false,
+};
 
 export default FakePostCard;

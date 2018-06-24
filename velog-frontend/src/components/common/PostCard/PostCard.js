@@ -3,6 +3,7 @@ import React from 'react';
 import ImageIcon from 'react-icons/lib/io/image';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import cx from 'classnames';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
 
 import 'moment/locale/ko';
@@ -16,11 +17,21 @@ type Props = {
   date: string,
   urlSlug: string,
   userThumbnail: ?string,
+  oneColumn?: boolean,
 };
 
 moment.locale('ko');
 
-const PostCard = ({ thumbnail, username, title, body, date, urlSlug, userThumbnail }: Props) => {
+const PostCard = ({
+  thumbnail,
+  username,
+  title,
+  body,
+  date,
+  urlSlug,
+  userThumbnail,
+  oneColumn,
+}: Props) => {
   const now = new Date();
   const d = new Date(date);
   const m = moment(date);
@@ -35,21 +46,25 @@ const PostCard = ({ thumbnail, username, title, body, date, urlSlug, userThumbna
 
   const link = `/@${username}/${urlSlug}`;
   return (
-    <div className="PostCard">
-      <Link to={link} className="thumbnail-wrapper">
-        {thumbnail ? (
-          <img src={thumbnail} alt={title} />
-        ) : (
-          <div className="image-placeholder">
-            <ImageIcon />
+    <div className={cx('PostCard', { 'one-column': oneColumn })}>
+      {(!oneColumn || thumbnail) && (
+        <Link to={link} className="thumbnail-wrapper">
+          {thumbnail ? (
+            <img src={thumbnail} alt={title} />
+          ) : (
+            <div className="image-placeholder">
+              <ImageIcon />
+            </div>
+          )}
+          <div className="white-mask" />
+        </Link>
+      )}
+      <div className="card-content">
+        {!oneColumn && (
+          <div className="user-thumbnail-wrapper">
+            <img src={userThumbnail || defaultThumbnail} alt={username} />
           </div>
         )}
-        <div className="white-mask" />
-      </Link>
-      <div className="card-content">
-        <div className="user-thumbnail-wrapper">
-          <img src={userThumbnail || defaultThumbnail} alt={username} />
-        </div>
         <div className="content-head">
           <div className="username">{username}</div>
           <h3>
@@ -66,4 +81,7 @@ const PostCard = ({ thumbnail, username, title, body, date, urlSlug, userThumbna
   );
 };
 
+PostCard.defaultProps = {
+  oneColumn: false,
+};
 export default PostCard;
