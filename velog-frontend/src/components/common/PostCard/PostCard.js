@@ -5,11 +5,13 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
+import { shouldUpdate } from 'recompose';
 
 import 'moment/locale/ko';
 import './PostCard.scss';
 
 type Props = {
+  id: string,
   thumbnail: ?string,
   username: string,
   title: string,
@@ -84,4 +86,7 @@ const PostCard = ({
 PostCard.defaultProps = {
   oneColumn: false,
 };
-export default PostCard;
+
+export default shouldUpdate((props: Props, nextProps: Props) => {
+  return props.id !== nextProps.id;
+})(PostCard);

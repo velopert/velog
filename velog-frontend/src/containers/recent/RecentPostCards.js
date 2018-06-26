@@ -84,12 +84,12 @@ class RecentPostCards extends Component<Props> {
 }
 
 const mapStateToProps = ({ listing, pender, base }: State) => ({
-  posts: listing.recentPosts,
-  prefetched: listing.prefetchedRecentPosts,
+  posts: listing.recent.posts,
+  prefetched: listing.recent.prefetched,
   prefetching: pender.pending['listing/PREFETCH'],
   loading: pender.pending['listing/GET_RECENT_POSTS'],
   width: base.windowWidth,
-  hasEnded: listing.recentEnd,
+  hasEnded: listing.recent.end,
 });
 
 export default connect(mapStateToProps, () => ({}))(RecentPostCards);

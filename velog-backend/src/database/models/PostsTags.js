@@ -67,4 +67,33 @@ PostsTags.removeTagsFromPost = async function (postId: string, tags: Array<strin
   }
 };
 
+// retrieves user's postCount per tag
+type GetPostsCountParams = {
+  userId: string,
+};
+
+PostsTags.getPostsCount = async ({ userId }: GetPostsCountParams) => {
+  const query = `
+  SELECT COUNT(post_id) AS posts_count, tag_name FROM (
+    SELECT t.id AS tag_id, p.id AS post_id, t.name AS tag_name
+    FROM posts_tags AS pt
+    INNER JOIN tags AS t ON t.id = pt.fk_tag_id
+    INNER JOIN posts AS p ON p.id = pt.fk_post_id
+    WHERE p.fk_user_id = $userId
+  ) GROUP BY tag_name
+  ORDER BY posts_count DESC
+  `;
+  try {
+    const result = await db.query(query, {
+      bind: {
+        userId,
+      },
+      type: Sequelize.QueryTypes.SELECT,
+    });
+    return result;
+  } catch (e) {
+    throw e;
+  }
+};
+
 export default PostsTags;

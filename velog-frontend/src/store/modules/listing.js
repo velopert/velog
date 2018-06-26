@@ -41,13 +41,15 @@ export type PostItem = {
   },
 };
 
+export type ListingSet = {
+  posts: ?(PostItem[]),
+  prefetched: ?(PostItem[]),
+  end: boolean,
+};
+
 export type Listing = {
-  recentEnd: boolean,
-  recentPosts: ?(PostItem[]),
-  prefetchedRecentPosts: ?(PostItem[]),
-  userPosts: ?(PostItem[]),
-  prefetchedUserPosts: ?(PostItem[]),
-  userEnd: boolean,
+  recent: ListingSet,
+  user: ListingSet,
 };
 
 type RevealPrefetchedAction = ActionType<typeof actionCreators.revealPrefetched>;
@@ -66,43 +68,35 @@ export interface ListingActionCreators {
   prefetchUserPosts(payload: PostsAPI.GetUserPostsPayload): any;
 }
 
-// TODO: refactoring
-/* like
+const initialState: Listing = {
   recent: {
-    end: false,
     posts: null,
     prefetched: null,
+    end: false,
   },
-*/
-const initialState: Listing = {
-  recentEnd: false,
-  recentPosts: null,
-  prefetchedRecentPosts: null,
-  userPosts: null,
-  prefetchedUserPosts: null,
-  userEnd: false,
+  user: {
+    posts: null,
+    prefetched: null,
+    end: false,
+  },
 };
 
 const reducer = handleActions(
   {
     [REVEAL_PREFETCHED]: (state, action: RevealPrefetchedAction) => {
       return produce(state, (draft) => {
-        if (!action) return;
-        if (action.payload === 'recent' && state.recentPosts && state.prefetchedRecentPosts) {
-          draft.recentPosts = state.recentPosts.concat(state.prefetchedRecentPosts);
-          draft.prefetchedRecentPosts = null;
-        }
-        if (action.payload === 'user' && state.prefetchedUserPosts && state.userPosts) {
-          draft.userPosts = state.userPosts.concat(state.prefetchedUserPosts);
-          draft.prefetchedUserPosts = null;
+        const { payload } = action;
+        const { posts, prefetched } = draft[payload];
+        if (posts && prefetched) {
+          posts.push(...prefetched);
+          draft[payload].prefetched = null;
         }
       });
     },
     [CLEAR_USER_POSTS]: (state) => {
-      return {
-        ...state,
-        userPosts: null,
-      };
+      return produce(state, (draft) => {
+        draft.user.posts = null;
+      });
     },
   },
   initialState,
@@ -113,19 +107,22 @@ export default applyPenders(reducer, [
     type: GET_RECENT_POSTS,
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       return produce(state, (draft) => {
-        draft.recentEnd = false;
-        draft.recentPosts = action.payload.data;
-        draft.prefetchedRecentPosts = null;
+        draft.recent = {
+          end: false,
+          posts: action.payload.data,
+          prefetched: null,
+        };
       });
     },
   },
   {
     type: PREFETCH_RECENT_POSTS,
     onSuccess: (state: Listing, action: PostsResponseAction) => {
+      const { data } = action.payload;
       return produce(state, (draft) => {
-        draft.prefetchedRecentPosts = action.payload.data;
-        if (action.payload.data && action.payload.data.length === 0) {
-          draft.recentEnd = true;
+        draft.recent.prefetched = data;
+        if (data && data.length === 0) {
+          draft.recent.end = true;
         }
       });
     },
@@ -133,26 +130,27 @@ export default applyPenders(reducer, [
   {
     type: GET_USER_POSTS,
     onPending: (state: Listing) => {
-      return {
-        ...state,
-        userEnd: false,
-        prefetchedUserPosts: null,
-      };
+      return produce(state, (draft) => {
+        draft.user.end = false;
+        draft.user.prefetched = null;
+      });
     },
     onSuccess: (state: Listing, action: PostsResponseAction) => {
-      return {
-        ...state,
-        userPosts: action.payload.data,
-      };
+      return produce(state, (draft) => {
+        draft.user.posts = action.payload.data;
+      });
     },
   },
   {
     type: PREFETCH_USER_POSTS,
     onSuccess: (state: Listing, action: PostsResponseAction) => {
-      return {
-        ...state,
-        prefetchedUserPosts: action.payload.data,
-      };
+      const { data } = action.payload;
+      return produce(state, (draft) => {
+        draft.user.prefetched = data;
+        if (data && data.length === 0) {
+          draft.user.end = true;
+        }
+      });
     },
   },
 ]);

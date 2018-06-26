@@ -166,8 +166,8 @@ Post.listPosts = async function ({
     ${
   cursor
     ? `
-      AND id != $cursor
-      AND created_at <= $time
+      AND p.id != $cursor
+      AND p.created_at <= $time
     `
     : ''
 }
@@ -198,8 +198,6 @@ Post.listPosts = async function ({
     `,
       { bind: bindVariables, type: Sequelize.QueryTypes.SELECT },
     );
-
-    console.log(rows);
 
     if (rows.length === 0) return { count, data: null };
     const postIds = rows.map(({ id }) => id);

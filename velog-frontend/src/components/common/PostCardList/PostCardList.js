@@ -48,6 +48,7 @@ const PostCardList = ({ posts, loading, prefetching, width, hasEnded, oneColumn 
   ).map(post => (
     <PostCard
       key={post.id}
+      id={post.id}
       thumbnail={post.thumbnail}
       username={post.user.username}
       userThumbnail={post.user.thumbnail}

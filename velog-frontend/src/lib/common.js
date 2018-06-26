@@ -47,6 +47,8 @@ export const getScrollBottom = () => {
 };
 
 export const preventStickBottom = () => {
+  const scrollBottom = getScrollBottom();
+  if (scrollBottom !== 0) return;
   if (document.documentElement) {
     document.documentElement.scrollTop -= 1;
   } else {
