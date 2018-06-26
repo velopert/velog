@@ -73,6 +73,7 @@ type GetPostsCountParams = {
 };
 
 PostsTags.getPostsCount = async ({ userId }: GetPostsCountParams) => {
+  // TODO: ONLY VISIBLE POSTS!
   const query = `
   SELECT COUNT(post_id) AS posts_count, tag_name FROM (
     SELECT t.id AS tag_id, p.id AS post_id, t.name AS tag_name
