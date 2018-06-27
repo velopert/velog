@@ -1,7 +1,8 @@
 // @flow
 import type { Context } from 'koa';
 import db from 'database/db';
-import { User, PostsTags } from 'database/models';
+import { User, PostsTags, UserProfile } from 'database/models';
+import { pick } from 'lodash';
 
 export const getUser = async (ctx: Context, next: () => Promise<*>): Promise<*> => {
   const { username } = ctx.params;
@@ -22,6 +23,16 @@ export const getUser = async (ctx: Context, next: () => Promise<*>): Promise<*> 
   }
   return next();
 };
+
+export const getProfile = async (ctx: Context) => {
+  try {
+    const profile = await ctx.selectedUser.getProfile();
+    ctx.body = pick(profile, ['display_name', 'short_bio', 'thumbnail']);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
 
 export const getTags = async (ctx: Context) => {
   const { id } = ctx.selectedUser;

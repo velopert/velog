@@ -73,16 +73,17 @@ type GetPostsCountParams = {
 };
 
 PostsTags.getPostsCount = async ({ userId }: GetPostsCountParams) => {
-  // TODO: ONLY VISIBLE POSTS!
+  // TODO: IMPLEMENT IS_VISIBLE
   const query = `
-  SELECT COUNT(post_id) AS posts_count, tag_name FROM (
-    SELECT t.id AS tag_id, p.id AS post_id, t.name AS tag_name
+  SELECT COUNT(post_id) AS count, tag FROM (
+    SELECT t.id AS tag_id, p.id AS post_id, t.name AS tag
     FROM posts_tags AS pt
     INNER JOIN tags AS t ON t.id = pt.fk_tag_id
     INNER JOIN posts AS p ON p.id = pt.fk_post_id
     WHERE p.fk_user_id = $userId
-  ) GROUP BY tag_name
-  ORDER BY posts_count DESC
+    AND p.is_temp = FALSE
+  ) GROUP BY tag
+  ORDER BY count DESC
   `;
   try {
     const result = await db.query(query, {

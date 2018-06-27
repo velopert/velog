@@ -18,12 +18,12 @@ class UserTab extends Component<Props> {
           <NavLink exact activeClassName="active" to={`/@${username}`}>
             최신 포스트
           </NavLink>
-          <NavLink activeClassName="active" to={`/@${username}/popular`}>
+          {/* <NavLink activeClassName="active" to={`/@${username}/popular`}>
             인기 포스트
           </NavLink>
           <NavLink activeClassName="active" to={`/@${username}/collections`}>
             컬렉션
-          </NavLink>
+          </NavLink> */}
         </div>
         <section className="tab-contents">{children}</section>
       </div>

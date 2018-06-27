@@ -1,29 +1,26 @@
 // @flow
 import React from 'react';
+import { type TagCountInfo } from 'store/modules/profile';
 import './UserSide.scss';
 
-type Props = {};
+type Props = {
+  tagCounts: ?(TagCountInfo[]),
+};
 
-const UserSide = (props: Props) => (
+const UserSide = ({ tagCounts }: Props) => (
   <div className="UserSide">
     <section>
-      <div className="section-title">카테고리</div>
-      <ul>
-        <li>개발일지</li>
-        <li>튜토리얼</li>
-        <li>생각</li>
-      </ul>
-    </section>
-    <section>
       <div className="section-title">태그</div>
-      <ul>
-        <li>Golang</li>
-        <li>GraphQL</li>
-        <li>JavaScript</li>
-        <li>Node.js</li>
-        <li>React</li>
-        <li>Serverless</li>
-      </ul>
+      {tagCounts && (
+        <ul>
+          {tagCounts.map(t => (
+            <li key={t.tag}>
+              {t.tag}
+              <span className="count">({t.count})</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   </div>
 );
