@@ -8,6 +8,7 @@ import type { Posts } from './modules/posts';
 import type { Sample } from './modules/sample';
 import type { Listing } from './modules/listing';
 import type { ProfileState } from './modules/profile';
+import type { FollowState } from './modules/follow';
 
 const store = configure();
 
@@ -22,6 +23,7 @@ export type State = {
   sample: Sample,
   listing: Listing,
   profile: ProfileState,
+  follow: FollowState,
   pender: {
     pending: any,
     success: any,

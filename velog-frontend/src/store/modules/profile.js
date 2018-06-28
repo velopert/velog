@@ -18,6 +18,7 @@ export type TagCountInfo = {
 };
 
 export type Profile = {
+  user_id: string,
   display_name: string,
   thumbnail: ?string,
   short_bio: string,

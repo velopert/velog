@@ -1,3 +1,5 @@
+// @flow
+
 import axios, { type Axios } from 'axios';
 
 axios.defaults.withCredentials = true;

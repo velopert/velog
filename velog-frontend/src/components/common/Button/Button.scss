@@ -28,6 +28,17 @@
       }
     }
   }
+  &.gray {
+    border-radius: 4px;
+    background: $oc-gray-8;
+    color: white;
+    &:hover {
+      background: $oc-gray-7;
+    }
+    &:active {
+      background: $oc-gray-9;
+    }
+  }
   &.outline {
     border-radius: 4px;
     border: 1px solid $oc-gray-7;

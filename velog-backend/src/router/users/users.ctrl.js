@@ -27,7 +27,10 @@ export const getUser = async (ctx: Context, next: () => Promise<*>): Promise<*> 
 export const getProfile = async (ctx: Context) => {
   try {
     const profile = await ctx.selectedUser.getProfile();
-    ctx.body = pick(profile, ['display_name', 'short_bio', 'thumbnail']);
+    ctx.body = {
+      user_id: ctx.selectedUser.id,
+      ...pick(profile, ['display_name', 'short_bio', 'thumbnail'])
+    };
   } catch (e) {
     ctx.throw(500, e);
   }
