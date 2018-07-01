@@ -9,7 +9,7 @@ export interface EmailAuthModel {
   email: string,
   createdAt: string,
   logged: boolean,
-  static findCode(code: string): Promise<*>,
+  // static findCode(code: string): Promise<*>,
   use(): Promise<*>
 }
 

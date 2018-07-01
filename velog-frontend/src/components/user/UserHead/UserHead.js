@@ -6,31 +6,33 @@ import { type Profile } from 'store/modules/profile';
 import './UserHead.scss';
 
 type Props = {
+  username: string,
   profile: Profile,
   self: boolean,
-  following: boolean,
+  following: ?boolean,
   onToggleFollow: () => void,
 };
 
-const UserHead = ({ profile, self, following, onToggleFollow }: Props) => (
+const UserHead = ({ username, profile, self, following, onToggleFollow }: Props) => (
   <div className="UserHead">
     <img src={profile.thumbnail || defaultThumbnail} alt="thumbnail" />
     <div className="user-info">
       <section className="top">
-        {!self && (
-          <div className="subscribe-wrapper">
-            {following ? (
-              <Button className="subscribe" theme="gray" onClick={onToggleFollow}>
-                구독중
-              </Button>
-            ) : (
-              <Button className="subscribe" onClick={onToggleFollow}>
-                구독하기
-              </Button>
-            )}
-          </div>
-        )}
-        <div className="username">@velopert</div>
+        {!self &&
+          following !== undefined && (
+            <div className="subscribe-wrapper">
+              {following ? (
+                <Button className="subscribe" theme="gray" onClick={onToggleFollow}>
+                  구독중
+                </Button>
+              ) : (
+                <Button className="subscribe" onClick={onToggleFollow}>
+                  구독하기
+                </Button>
+              )}
+            </div>
+          )}
+        <div className="username">@{username}</div>
       </section>
       <section className="mini-profile">
         <h2>{profile.display_name}</h2>

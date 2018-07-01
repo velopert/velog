@@ -109,9 +109,33 @@ export const followUser: Middleware = async (ctx: Context) => {
       fk_follow_user_id: followUserId,
     }).save();
 
-    ctx.body = {
-      id: followUserData.id,
-    };
+    ctx.status = 204;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const unfollowUser: Middleware = async (ctx: Context) => {
+  const { id: userId } = ctx.user;
+  const followUserId = ctx.params.id;
+
+  try {
+    // check follow existancy
+    const follow = await FollowUser.findOne({
+      where: {
+        fk_user_id: userId,
+        fk_follow_user_id: followUserId,
+      },
+    });
+    if (!follow) {
+      ctx.body = {
+        name: 'NOT_FOLLOWING',
+      };
+      ctx.status = 409;
+      return;
+    }
+    await follow.destroy();
+    ctx.status = 204;
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -175,14 +199,10 @@ export const followTag: Middleware = async (ctx: Context) => {
       fk_tag_id: tagId,
     }).save();
 
-    ctx.body = {
-      id: followTagData.id,
-    };
+    ctx.status = 204;
   } catch (e) {
     ctx.throw(500, e);
   }
 };
-
-export const deleteFollowUser: Middleware = async (ctx: Context) => {};
 
 export const deleteFollowTag: Middleware = async (ctx: Context) => {};

@@ -15,6 +15,7 @@ type Props = {
   onOpenSubmitBox(): void,
   onShowWriteExtra(): void,
   onHideWriteExtra(): void,
+  onGoBack(): void,
   writeExtraOpen: boolean,
   title: string,
   isEdit: boolean,
@@ -25,13 +26,14 @@ const WriteHeader = ({
   onTempSave,
   onShowWriteExtra,
   onHideWriteExtra,
+  onGoBack,
   writeExtraOpen,
   title,
   isEdit,
 }: Props) => {
   return (
     <div className="WriteHeader">
-      <BackIcon className="back-icon" />
+      <BackIcon className="back-icon" onClick={onGoBack} />
       <div className="title-area">
         <input placeholder="제목을 입력해주세요" autoFocus onChange={onChangeTitle} value={title} />
       </div>

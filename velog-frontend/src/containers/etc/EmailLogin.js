@@ -2,12 +2,11 @@
 import React, { Component } from 'react';
 import { type Location, type RouterHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import { AuthActions, UserActions } from 'store/actionCreators';
+import { AuthActions, UserActions, BaseActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import type { AuthResult } from 'store/modules/auth';
 import storage, { keys } from 'lib/storage';
-
 
 type Props = {
   location: Location,
@@ -28,19 +27,18 @@ class EmailLogin extends Component<Props> {
 
       UserActions.setUser(user);
       storage.set(keys.user, user);
+      BaseActions.exitLanding();
     } catch (e) {
       console.log(e);
     }
     const { history } = this.props;
     history.push('/');
-  }
+  };
   componentDidMount() {
     this.initialize();
   }
   render() {
-    return (
-      null
-    );
+    return null;
   }
 }
 

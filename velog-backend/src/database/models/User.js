@@ -8,7 +8,7 @@ export interface UserModel {
   id: string,
   username: string,
   email: string,
-  static findUser(type: 'email' | 'username', value: string): Promise<*>,
+  // static findUser(type: 'email' | 'username', value: string): Promise<*>,
   generateToken(): string,
   validatePassword(password: string): Promise<boolean>,
   getProfile(): Promise<UserProfileModel>

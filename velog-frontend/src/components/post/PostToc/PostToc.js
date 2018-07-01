@@ -52,7 +52,6 @@ class PostToc extends Component<Props, State> {
   };
 
   registerEvent = () => {
-    console.log('뿡뿡');
     window.addEventListener('scroll', this.onScroll);
   };
 

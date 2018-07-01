@@ -2,7 +2,15 @@
 
 import type { Context } from 'koa';
 import Joi from 'joi';
-import { validateSchema, filterUnique, generateSlugId, escapeForUrl, isUUID, formatShortDescription } from 'lib/common';
+import {
+  validateSchema,
+  filterUnique,
+  generateSlugId,
+  escapeForUrl,
+  isUUID,
+  formatShortDescription,
+  generalHash,
+} from 'lib/common';
 import {
   Category,
   Post,
@@ -16,12 +24,15 @@ import {
   FollowTag,
   Feed,
   PostLike,
+  PostScore,
+  PostRead,
 } from 'database/models';
 
 import { serializePost, type PostModel } from 'database/models/Post';
 import Sequelize from 'sequelize';
 import removeMd from 'remove-markdown';
 
+const { Op } = Sequelize;
 
 type CreateFeedsParams = {
   postId: string,
@@ -117,7 +128,9 @@ export const writePost = async (ctx: Context): Promise<*> => {
       .required()
       .min(1),
     shortDescription: Joi.string(),
-    thumbnail: Joi.string().uri().allow(null),
+    thumbnail: Joi.string()
+      .uri()
+      .allow(null),
     isMarkdown: Joi.boolean().required(),
     isTemp: Joi.boolean().required(),
     meta: Joi.object(),
@@ -232,6 +245,30 @@ export const readPost = async (ctx: Context): Promise<*> => {
     }
 
     ctx.body = serializePost({ ...post.toJSON(), comments_count: commentsCount, liked });
+    const hash = generalHash(ctx.request.ip);
+    const userId = ctx.user ? ctx.user.id : null;
+
+    // check post read existancy
+    const postRead = await PostRead.findOne({
+      where: {
+        ip_hash: hash,
+        fk_post_id: post.id,
+        created_at: {
+          // $FlowFixMe
+          [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000),
+        },
+      },
+    });
+
+    if (postRead) {
+      return;
+    }
+
+    await PostRead.create({
+      ip_hash: hash,
+      fk_post_id: post.id,
+      fk_user_id: userId,
+    });
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -264,7 +301,8 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     }
     // Fake Delay
     // await new Promise((resolve) => { setTimeout(resolve, 2000); });
-    ctx.body = result.data.map(serializePost)
+    ctx.body = result.data
+      .map(serializePost)
       .map(post => ({ ...post, body: formatShortDescription(post.body) }));
     // const link = `<${ctx.path}?cursor=${result.data[result.data.length - 1].id}>; rel="next";`;
     // ctx.set('Link', link)

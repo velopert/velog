@@ -51,12 +51,12 @@ class MainSidebar extends Component<Props> {
             text="태그 목록"
             to="tags"
           />
-          <MainMenuItem
+          { /* <MainMenuItem
             active={/^\/stored/.test(url)}
             icon={<StoredIcon />}
             text="보관함"
             to="stored"
-          />
+          /> */ }
         </ul>
       </aside>
     );

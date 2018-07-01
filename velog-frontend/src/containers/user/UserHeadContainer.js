@@ -19,6 +19,22 @@ type Props = OwnProps & {
 };
 
 class UserHeadContainer extends Component<Props> {
+  initialize = () => {
+    const { profile } = this.props;
+    if (!profile) return;
+    FollowActions.getUserFollow(profile.user_id);
+  };
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.profile !== this.props.profile) {
+      this.initialize();
+    }
+  }
+
+  componentDidMount() {
+    this.initialize();
+  }
+
   onToggleFollow = () => {
     const { profile, followingUsers, followLoading } = this.props;
     if (!profile || followLoading) return;
@@ -33,13 +49,15 @@ class UserHeadContainer extends Component<Props> {
     FollowActions.followUser(user_id);
   };
   render() {
-    const { profile, self, followingUsers } = this.props;
-    if (!profile) return null;
+    const { profile, self, followingUsers, username } = this.props;
+    if (!profile || !username) return null;
 
     const following = followingUsers[profile.user_id];
 
+    console.log('state', following);
     return (
       <UserHead
+        username={username}
         profile={profile}
         self={self}
         following={following}

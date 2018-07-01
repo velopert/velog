@@ -81,6 +81,8 @@ export type PostData = {
   user: {
     username: string,
     id: string,
+    thumbnail: ?string,
+    short_bio: ?string,
   },
 };
 

@@ -3,27 +3,38 @@ import React from 'react';
 import Responsive from 'components/common/Responsive';
 import type { Categories } from 'store/modules/posts';
 import PostLikeButton from 'components/post/PostLikeButton';
+import { Link } from 'react-router-dom';
+import defaultThumbnail from 'static/images/default_thumbnail.png';
 import './PostHead.scss';
 
 type Props = {
   title: string,
   categories: Categories,
-  user: any,
+  user: {
+    username: string,
+    id: string,
+    thumbnail: ?string,
+    short_bio: ?string,
+  },
   likes: number,
   liked: boolean,
   onToggleLike: () => void,
 };
 
 const PostHead = ({ title, categories, user, likes, liked, onToggleLike }: Props) => {
+  const userLink = `/@${user.username}`;
+
   return (
     <div className="PostHead">
       <div className="userinfo">
-        <div className="user-thumbnail">
-          <img src="https://avatars0.githubusercontent.com/u/17202261?v=4" alt="user-thumbnail" />
-        </div>
+        <Link to={userLink} className="user-thumbnail">
+          <img src={user.thumbnail || defaultThumbnail} alt="user-thumbnail" />
+        </Link>
         <div className="info">
-          <div className="username">@velopert</div>
-          <div className="description">Frontend Engineer at Laftel</div>
+          <Link to={userLink} className="username">
+            @{user.username}
+          </Link>
+          <div className="description">{user.short_bio}</div>
         </div>
       </div>
       <h1>{title}</h1>

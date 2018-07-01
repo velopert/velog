@@ -78,7 +78,8 @@ Post.readPost = function (username: string, urlSlug: string) {
     include: [
       {
         model: User,
-        attributes: ['username'],
+        include: [UserProfile],
+        attributes: ['username', 'id'],
         where: {
           username,
         },

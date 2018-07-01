@@ -5,6 +5,8 @@ import type { State } from 'store';
 import { WriteActions } from 'store/actionCreators';
 import WriteHeader from 'components/write/WriteHeader/WriteHeader';
 import type { PostData, Category } from 'store/modules/write';
+import { withRouter, type ContextRouter } from 'react-router-dom';
+import { compose } from 'redux';
 
 type Props = {
   title: string,
@@ -14,7 +16,7 @@ type Props = {
   postData: ?PostData,
   writeExtraOpen: boolean,
   thumbnail: ?string,
-};
+} & ContextRouter;
 
 class WriteHeaderContainer extends Component<Props> {
   onChangeTitle = (e) => {
@@ -68,6 +70,10 @@ class WriteHeaderContainer extends Component<Props> {
     WriteActions.tempSave({ title, body, postId: postData.id });
   };
 
+  onGoBack = () => {
+    this.props.history.goBack();
+  };
+
   onShowWriteExtra = () => {
     WriteActions.showWriteExtra();
   };
@@ -89,20 +95,24 @@ class WriteHeaderContainer extends Component<Props> {
         title={title}
         isEdit={!!postData && !postData.is_temp}
         writeExtraOpen={writeExtraOpen}
+        onGoBack={this.onGoBack}
       />
     );
   }
 }
 
-export default connect(
-  ({ write }: State) => ({
-    title: write.title,
-    body: write.body,
-    postData: write.postData,
-    categories: write.submitBox.categories,
-    tags: write.submitBox.tags,
-    writeExtraOpen: write.writeExtra.visible,
-    thumbnail: write.thumbnail,
-  }),
-  () => ({}),
+export default compose(
+  withRouter,
+  connect(
+    ({ write }: State) => ({
+      title: write.title,
+      body: write.body,
+      postData: write.postData,
+      categories: write.submitBox.categories,
+      tags: write.submitBox.tags,
+      writeExtraOpen: write.writeExtra.visible,
+      thumbnail: write.thumbnail,
+    }),
+    () => ({}),
+  ),
 )(WriteHeaderContainer);

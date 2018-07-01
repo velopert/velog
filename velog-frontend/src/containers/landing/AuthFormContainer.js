@@ -70,6 +70,7 @@ class AuthFormContainer extends Component<Props> {
         const { user } = authResult;
         UserActions.setUser(user);
         storage.set(keys.user, user);
+        BaseActions.exitLanding();
       } else {
         // does not exist -> enroute to register, auto complete
         const { email, name } = verifySocialResult;

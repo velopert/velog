@@ -23,7 +23,7 @@ type FollowUser = {
 type GetUserFollow = {
   type: string,
   payload: {
-    following: boolean,
+    data: { following: boolean },
   },
   meta: string,
 };
@@ -61,7 +61,7 @@ export default applyPenders(reducer, [
     type: GET_USER_FOLLOW,
     onSuccess: (state: FollowState, action: GetUserFollow) => {
       return produce(state, (draft) => {
-        draft.users[action.meta] = action.payload.following;
+        draft.users[action.meta] = action.payload.data.following;
       });
     },
   },

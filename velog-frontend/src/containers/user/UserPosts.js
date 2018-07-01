@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { ListingActions } from 'store/actionCreators';
 import type { State } from 'store';
 import type { PostItem } from 'store/modules/listing';
-import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import { getScrollBottom, preventStickBottom } from 'lib/common';
 
 type Props = {
@@ -54,11 +54,11 @@ class UserPosts extends Component<Props> {
     }
   };
 
-  onScroll = debounce(() => {
+  onScroll = throttle(() => {
     const scrollBottom = getScrollBottom();
     if (scrollBottom > 1000) return;
     this.prefetch();
-  }, 250);
+  }, 100);
 
   listenScroll = () => {
     window.addEventListener('scroll', this.onScroll);
@@ -69,13 +69,13 @@ class UserPosts extends Component<Props> {
   };
 
   render() {
-    const { posts, loading } = this.props;
+    const { posts, loading, prefetching } = this.props;
     return (
       <PostCardList
         posts={posts}
         oneColumn
         loading={loading}
-        prefetching={false}
+        prefetching={prefetching}
         hasEnded={false}
       />
     );

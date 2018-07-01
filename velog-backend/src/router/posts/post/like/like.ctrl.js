@@ -1,7 +1,8 @@
 // @flow
 import type { Context } from 'koa';
-import { PostLike } from 'database/models';
+import { PostLike, PostScore } from 'database/models';
 import db from 'database/db';
+import { TYPES } from 'database/models/PostScore';
 
 export const getLike = async (ctx: Context): Promise<*> => {
   let liked = false;
@@ -23,118 +24,84 @@ export const likePost = async (ctx: Context): Promise<*> => {
   const { id } = ctx.params;
   const { id: userId } = ctx.user;
   const { post } = ctx;
-  // $FlowFixMe
-  const result = await db.transaction((t) => {
-    return PostLike.checkExists({
-      userId,
-      postId: id,
-    }).then((exists) => {
+  try {
+    // $FlowFixMe
+    await db.transaction(async (t) => {
+      const exists = await PostLike.checkExists({
+        userId,
+        postId: id,
+      });
       if (exists) {
         ctx.status = 409;
         ctx.body = { name: 'ALREADY_LIKED' };
         return;
       }
-      return PostLike.create({
-        fk_user_id: userId,
-        fk_post_id: id,
-      }, {
-        transaction: t,
-      }).then(() => {
-        return post.like(t)
-          .then(() => {
-            ctx.body = {
-              liked: true,
-              likes: post.likes,
-            };
-          });
-      });
+      await PostLike.create(
+        {
+          fk_user_id: userId,
+          fk_post_id: id,
+        },
+        {
+          transaction: t,
+        },
+      );
+      await post.like(t);
+      await PostScore.create(
+        {
+          type: TYPES.LIKE,
+          fk_user_id: userId,
+          fk_post_id: id,
+          score: 5,
+        },
+        {
+          transaction: t,
+        },
+      );
+      ctx.body = {
+        liked: true,
+        likes: post.likes,
+      };
     });
-  });
-
-/*
-  const { id } = ctx.params;
-  const { id: userId } = ctx.user;
-
-  try {
-    const exists = await PostLike.checkExists({
-      userId,
-      postId: id,
-    });
-
-    if (exists) {
-      ctx.status = 409;
-      ctx.body = { name: 'ALREADY_LIKED' };
-      return;
-    }
-
-    await PostLike.build({
-      fk_user_id: userId,
-      fk_post_id: id,
-    }).save();
-    const { post } = ctx;
-    await post.like();
-    ctx.body = {
-      likes: post.likes,
-      liked: true,
-    };
   } catch (e) {
     ctx.throw(500, e);
   }
-*/
 };
 
 export const unlikePost = async (ctx: Context): Promise<*> => {
   const { id } = ctx.params;
   const { id: userId } = ctx.user;
   const { post } = ctx;
-  // $FlowFixMe
-  const result = await db.transaction((t) => {
-    return PostLike.checkExists({
-      userId,
-      postId: id,
-    }).then((exists) => {
+  try {
+    // $FlowFixMe
+    await db.transaction(async (t) => {
+      const exists = await PostLike.checkExists({
+        userId,
+        postId: id,
+      });
       if (!exists) {
         ctx.status = 409;
         ctx.body = { name: 'NOT_LIKED' };
         return; // ⛑ VERY STUPID MISTAKE
       }
-      return exists.destroy({ transaction: t })
-        .then(() => {
-          return post.unlike(t);
-        })
-        .then(() => {
-          ctx.body = {
-            liked: false,
-            likes: post.likes,
-          };
-        });
+
+      await exists.destroy({ transaction: t });
+      await post.unlike(t);
+      ctx.body = {
+        liked: false,
+        likes: post.likes,
+      };
+      const postScore = await PostScore.findOne({
+        where: {
+          type: TYPES.LIKE,
+          fk_user_id: userId,
+          fk_post_id: id,
+        },
+      });
+      if (postScore) {
+        await postScore.destroy();
+      }
     });
-  });
-/*
-  const { id } = ctx.params;
-  const { id: userId } = ctx.user;
-
-  try {
-    const exists = await PostLike.checkExists({
-      userId,
-      postId: id,
-    });
-
-    if (!exists) {
-      ctx.status = 409;
-      ctx.body = { name: 'NOT_LIKED' };
-      return;
-    }
-
-    await exists.destroy();
-    const { post } = ctx;
-    await post.unlike();
-    ctx.body = {
-      likes: post.likes,
-      liked: false,
-    };
   } catch (e) {
     ctx.throw(500, e);
   }
-*/
 };

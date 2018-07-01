@@ -16,6 +16,8 @@ import {
   PostHistory,
   PostImage,
   Feed,
+  PostScore,
+  PostRead,
 } from './models';
 
 export function associate() {
@@ -34,6 +36,8 @@ export function associate() {
   PostHistory.associate();
   PostImage.associate();
   Feed.associate();
+  PostScore.associate();
+  PostRead.associate();
 }
 export default function sync() {
   associate();

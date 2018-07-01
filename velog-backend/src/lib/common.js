@@ -3,6 +3,7 @@ import Sequelize from 'sequelize';
 import Joi from 'joi';
 import type { Middleware } from 'koa';
 import removeMd from 'remove-markdown';
+import crypto from 'crypto';
 
 export const primaryUUID = {
   type: Sequelize.UUID,
@@ -47,15 +48,18 @@ export const checkUUID: Middleware = (ctx, next) => {
 };
 
 export const generateSlugId = (): string => {
-  return `${Math.floor(36 + (Math.random() * 1259)).toString(36)}${Date.now().toString(36)}`;
+  return `${Math.floor(36 + Math.random() * 1259).toString(36)}${Date.now().toString(36)}`;
 };
 
 export const escapeForUrl = (text: string): string => {
-  return text.replace(/[^0-9a-zA-Zㄱ-힣\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf ]/g, ' ')
+  return text
+    .replace(
+      /[^0-9a-zA-Zㄱ-힣\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf ]/g,
+      ' ',
+    )
     .replace(/ /g, '-')
     .replace(/--+/g, '-');
 };
-
 
 export const extractKeys = (object: any, params: Array<string>): any => {
   const converted = {};
@@ -67,5 +71,17 @@ export const extractKeys = (object: any, params: Array<string>): any => {
 
 export function formatShortDescription(markdown: string): string {
   const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
-  return removeMd(replaced).slice(0, 100).replace(/#/g, '');
+  return removeMd(replaced)
+    .slice(0, 100)
+    .replace(/#/g, '');
+}
+
+export function generalHash(text: string) {
+  const hashKey = process.env.HASH_KEY;
+  if (!hashKey) return null;
+  const hash = crypto
+    .createHmac('sha256', hashKey)
+    .update(text)
+    .digest('hex');
+  return hash;
 }
