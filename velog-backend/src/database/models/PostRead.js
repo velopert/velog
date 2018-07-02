@@ -37,4 +37,17 @@ PostRead.associate = () => {
   });
 };
 
+PostRead.countByPostId = (postId: string, transaction: any) => {
+  return PostRead.count(
+    {
+      where: {
+        fk_post_id: postId,
+      },
+    },
+    {
+      transaction,
+    },
+  );
+};
+
 export default PostRead;

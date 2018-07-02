@@ -31,6 +31,8 @@ import {
 import { serializePost, type PostModel } from 'database/models/Post';
 import Sequelize from 'sequelize';
 import removeMd from 'remove-markdown';
+import { TYPES } from 'database/models/PostScore';
+import db from 'database/db';
 
 const { Op } = Sequelize;
 
@@ -248,6 +250,8 @@ export const readPost = async (ctx: Context): Promise<*> => {
     const hash = generalHash(ctx.request.ip);
     const userId = ctx.user ? ctx.user.id : null;
 
+    // THIS CODE IS NOT PERFECT!
+    // TODO: FIX THE CODE BY MAKING A POST READ QUEUE
     // check post read existancy
     const postRead = await PostRead.findOne({
       where: {
@@ -269,6 +273,17 @@ export const readPost = async (ctx: Context): Promise<*> => {
       fk_post_id: post.id,
       fk_user_id: userId,
     });
+
+    const count = await PostRead.countByPostId(post.id);
+    console.log('조횟수', count);
+    if (count % 10 === 0) {
+      await PostScore.create({
+        type: TYPES.READ,
+        fk_user_id: null,
+        fk_post_id: post.id,
+        score: 0.125,
+      });
+    }
   } catch (e) {
     ctx.throw(500, e);
   }

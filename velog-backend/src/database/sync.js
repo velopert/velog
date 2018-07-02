@@ -19,6 +19,7 @@ import {
   PostScore,
   PostRead,
 } from './models';
+import * as views from './views';
 
 export function associate() {
   // configure relations
