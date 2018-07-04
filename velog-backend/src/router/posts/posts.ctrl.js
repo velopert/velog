@@ -250,9 +250,6 @@ export const readPost = async (ctx: Context): Promise<*> => {
     const hash = generalHash(ctx.request.ip);
     const userId = ctx.user ? ctx.user.id : null;
 
-    // THIS CODE IS NOT PERFECT!
-    // TODO: FIX THE CODE BY MAKING A POST READ QUEUE
-    // check post read existancy
     const postRead = await PostRead.findOne({
       where: {
         ip_hash: hash,
@@ -274,9 +271,9 @@ export const readPost = async (ctx: Context): Promise<*> => {
       fk_user_id: userId,
     });
 
-    const count = await PostRead.countByPostId(post.id);
-    console.log('조횟수', count);
-    if (count % 10 === 0) {
+
+    await post.increment('views', { by: 1 });
+    if (post.views % 10 === 0) {
       await PostScore.create({
         type: TYPES.READ,
         fk_user_id: null,

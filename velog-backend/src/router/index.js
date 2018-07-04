@@ -5,12 +5,14 @@ import needsAuth from 'lib/middlewares/needsAuth';
 import downloadImage from 'lib/downloadImage';
 import crypto from 'crypto';
 import { PostReadcounts } from 'database/views';
+import { getTrendingPosts, getTrendingPostScore } from 'database/rawQuery/trending';
 import auth from './auth';
 import posts from './posts';
 import files from './files';
 import me from './me';
 import feeds from './feeds';
 import users from './users';
+import Post from '../database/models/Post';
 
 const router: Router = new Router();
 
@@ -28,8 +30,13 @@ router.get('/check', (ctx: Context) => {
 });
 
 router.get('/test', async (ctx: Context) => {
-  const data = await PostReadcounts.findAll();
-  ctx.body = data;
+  const data = await getTrendingPosts({
+    id: '128281a0-6f36-11e8-9009-6f50dbed49aa',
+    score: 5,
+  });
+  const fullposts = await Post.readPostsByIds(data.map(r => r.post_id));
+  // const data = await getTrendingPostScore('128281a0-6f36-11e8-9009-6f50dbed49aa');
+  ctx.body = fullposts;
 });
 
 export default router;

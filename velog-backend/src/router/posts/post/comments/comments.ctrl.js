@@ -4,16 +4,19 @@ import type { Context, Middleware } from 'koa';
 import db from 'database/db';
 import Comment, { type WriteParams } from 'database/models/Comment';
 import { validateSchema } from 'lib/common';
-
+import PostScore, { TYPES } from 'database/models/PostScore';
 
 export const writeComment: Middleware = async (ctx: Context) => {
   type BodySchema = {
     text: string,
-    reply_to: string
+    reply_to: string,
   };
 
   const schema = Joi.object().keys({
-    text: Joi.string().min(1).max(1000).required(),
+    text: Joi.string()
+      .min(1)
+      .max(1000)
+      .required(),
     reply_to: Joi.string().uuid(),
   });
 
@@ -21,10 +24,7 @@ export const writeComment: Middleware = async (ctx: Context) => {
     return;
   }
 
-  const {
-    text,
-    reply_to: replyTo,
-  }: BodySchema = (ctx.request.body: any);
+  const { text, reply_to: replyTo }: BodySchema = (ctx.request.body: any);
 
   // if user is replying to another comment,
   let level = 0;
@@ -61,7 +61,11 @@ export const writeComment: Middleware = async (ctx: Context) => {
 
   try {
     const comment = await Comment.write({
-      postId, userId, text, replyTo: processedReplyTo, level,
+      postId,
+      userId,
+      text,
+      replyTo: processedReplyTo,
+      level,
     });
     if (!comment) {
       ctx.status = 500;
@@ -69,11 +73,17 @@ export const writeComment: Middleware = async (ctx: Context) => {
     }
     const commentWithUsername = await Comment.readComment(comment.id);
     ctx.body = commentWithUsername;
+
+    await PostScore.create({
+      type: TYPES.COMMENT,
+      fk_user_id: userId,
+      fk_post_id: postId,
+      score: 0.375,
+    });
   } catch (e) {
     ctx.throw(e);
   }
 };
-
 
 export const getCommentList: Middleware = async (ctx: Context) => {
   const postId = ctx.post.id;
@@ -93,7 +103,6 @@ export const getCommentList: Middleware = async (ctx: Context) => {
   }
 };
 
-
 export const getReplies: Middleware = async (ctx: Context) => {
   const postId = ctx.post.id;
   const { commentId } = ctx.params;
@@ -109,3 +118,5 @@ export const getReplies: Middleware = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+// TODO: REMOVE COMMENT!

@@ -15,7 +15,7 @@ export type PostModel = {
   thumbnail: string,
   is_markdown: boolean,
   is_temp: boolean,
-  meta: any
+  meta: any,
 };
 
 const Post = db.define(
@@ -42,6 +42,10 @@ const Post = db.define(
     meta: {
       type: Sequelize.JSONB,
       defaultValue: {},
+    },
+    views: {
+      defaultValue: 0,
+      type: Sequelize.INTEGER,
     },
   },
   {
@@ -242,6 +246,31 @@ Post.checkUrlSlugExistancy = function ({ userId, urlSlug }) {
       url_slug: urlSlug,
     },
   });
+};
+
+Post.readPostsByIds = async (postIds) => {
+  const fullPosts = await Post.findAll({
+    include: [
+      {
+        model: User,
+        include: [UserProfile],
+      },
+      Tag,
+      Category,
+    ],
+    where: {
+      id: {
+        $or: postIds,
+      },
+    },
+    order: [['created_at', 'DESC']],
+  });
+
+  const flatData = {};
+  fullPosts.forEach((p) => {
+    flatData[p.id] = p;
+  });
+  return postIds.map(postId => flatData[postId]);
 };
 
 Post.listPublicPosts = function ({ tag, page, option }: PublicPostsQueryInfo) {
