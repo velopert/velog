@@ -33,6 +33,7 @@ import Sequelize from 'sequelize';
 import removeMd from 'remove-markdown';
 import { TYPES } from 'database/models/PostScore';
 import db from 'database/db';
+import { getTrendingPostScore, getTrendingPosts } from 'database/rawQuery/trending';
 
 const { Op } = Sequelize;
 
@@ -271,7 +272,6 @@ export const readPost = async (ctx: Context): Promise<*> => {
       fk_user_id: userId,
     });
 
-
     await post.increment('views', { by: 1 });
     if (post.views % 10 === 0) {
       await PostScore.create({
@@ -319,6 +319,45 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     // const link = `<${ctx.path}?cursor=${result.data[result.data.length - 1].id}>; rel="next";`;
     // ctx.set('Link', link)
     ctx.set('Count', result.count.toString());
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const listTrendingPosts = async (ctx: Context) => {
+  const { option, cursor } = ctx.query;
+  // check cursor
+  try {
+    let score = 0;
+    if (cursor) {
+      if (!isUUID(cursor)) {
+        ctx.body = 'NOT_UUID';
+        ctx.status = 400;
+        return;
+      }
+      score = await getTrendingPostScore(cursor);
+      if (!score) {
+        ctx.body = {
+          type: 'INVALID_CURSOR_ID',
+        };
+        ctx.status = 400;
+        return;
+      }
+    }
+    const postIds = await getTrendingPosts(cursor
+      ? {
+        id: cursor,
+        score,
+      }
+      : null);
+    if (!postIds || postIds.length === 0) {
+      ctx.body = [];
+      return;
+    }
+    const posts = await Post.readPostsByIds(postIds.map(postId => postId.post_id));
+    ctx.body = posts
+      .map(serializePost)
+      .map(post => ({ ...post, body: formatShortDescription(post.body) }));
   } catch (e) {
     ctx.throw(500, e);
   }

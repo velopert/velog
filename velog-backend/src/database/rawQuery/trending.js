@@ -20,7 +20,7 @@ export const getTrendingPosts = async (cursor: ?CursorPayload): Promise<Trending
   GROUP BY fk_post_id
   ${cursor ? 'HAVING SUM(score) <= $score' : ''}
   ORDER BY score DESC, fk_post_id ASC
-  LIMIT 8`;
+  LIMIT 20`;
 
   try {
     const rows = await db.query(query, {
@@ -33,16 +33,16 @@ export const getTrendingPosts = async (cursor: ?CursorPayload): Promise<Trending
   }
 };
 
-export const getTrendingPostScore = async (postId: string) => {
+export const getTrendingPostScore = async (postId: string, days: number = 14) => {
   const query = `
   SELECT fk_post_id AS post_id, SUM(score) AS score FROM post_scores
-  WHERE created_at > now()::DATE - 14
+  WHERE created_at > now()::DATE - ${days}
   AND fk_post_id = $postId
   GROUP BY fk_post_id`;
 
   try {
     const rows = await db.query(query, {
-      bind: { postId },
+      bind: { postId, days: 14 },
       type: Sequelize.QueryTypes.SELECT,
     });
 

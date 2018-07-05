@@ -5,7 +5,7 @@ import type { State } from 'store';
 import { ListingActions } from 'store/actionCreators';
 import type { PostItem } from 'store/modules/listing';
 import { connect } from 'react-redux';
-import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import { getScrollBottom, preventStickBottom } from 'lib/common';
 
 type Props = {
@@ -48,7 +48,7 @@ class RecentPostCards extends Component<Props> {
     }
   };
 
-  onScroll = debounce(() => {
+  onScroll = throttle(() => {
     const scrollBottom = getScrollBottom();
     if (scrollBottom > 1000) return;
     this.prefetch();

@@ -1,5 +1,5 @@
 import React from 'react';
-import RecentPostCards from 'containers/recent/RecentPostCards';
+import RecentPostCards from 'containers/list/RecentPostCards';
 import RecentTemplate from 'components/recent/RecentTemplate/RecentTemplate';
 
 type Props = {};

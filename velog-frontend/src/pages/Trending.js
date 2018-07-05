@@ -11,9 +11,6 @@ const Trending = (props: Props) => {
       <TrandingSection title="지금 뜨고 있는 포스트">
         <PostCardList />
       </TrandingSection>
-      <TrandingSection title="벨로그의 인기 포스트">
-        <PostCardList />
-      </TrandingSection>
     </TrendingTemplate>
   );
 };
