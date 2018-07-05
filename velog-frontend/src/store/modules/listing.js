@@ -10,7 +10,10 @@ const REVEAL_PREFETCHED = 'listing/REVEAL_PREFETCHED';
 const CLEAR_USER_POSTS = 'listing/CLEAR_USER_POSTS';
 const GET_USER_POSTS = 'listing/GET_USER_POSTS';
 const PREFETCH_USER_POSTS = 'listing/PREFETCH_USER_POSTS';
+const GET_TRENDING_POSTS = 'listing/GET_TRENDING_POSTS';
+const PREFETCH_TRENDING_POSTS = 'listing/PREFETCH_TRENDING_POSTS';
 
+// potential improvement :: remove duplicates
 export const actionCreators = {
   getRecentPosts: createAction(GET_RECENT_POSTS, PostsAPI.getPublicPosts),
   prefetchRecentPosts: createAction(PREFETCH_RECENT_POSTS, PostsAPI.getPublicPosts),
@@ -18,6 +21,8 @@ export const actionCreators = {
   clearUserPosts: createAction(CLEAR_USER_POSTS),
   getUserPosts: createAction(GET_USER_POSTS, PostsAPI.getUserPosts),
   prefetchUserPosts: createAction(PREFETCH_USER_POSTS, PostsAPI.getUserPosts),
+  getTrendingPosts: createAction(GET_TRENDING_POSTS, PostsAPI.getTrendingPosts),
+  prefetchTrendingPosts: createAction(PREFETCH_TRENDING_POSTS, PostsAPI.getTrendingPosts),
 };
 
 export type PostItem = {
@@ -48,6 +53,7 @@ export type ListingSet = {
 };
 
 export type Listing = {
+  trending: ListingSet,
   recent: ListingSet,
   user: ListingSet,
 };
@@ -66,9 +72,16 @@ export interface ListingActionCreators {
   revealPrefetched(type: string): any;
   getUserPosts(payload: PostsAPI.GetUserPostsPayload): any;
   prefetchUserPosts(payload: PostsAPI.GetUserPostsPayload): any;
+  getTrendingPosts(): any;
+  prefetchTrendingPosts(cursor: string): any;
 }
 
 const initialState: Listing = {
+  trending: {
+    posts: null,
+    prefetched: null,
+    end: false,
+  },
   recent: {
     posts: null,
     prefetched: null,
@@ -123,6 +136,30 @@ export default applyPenders(reducer, [
         draft.recent.prefetched = data;
         if (data && data.length === 0) {
           draft.recent.end = true;
+        }
+      });
+    },
+  },
+  {
+    type: GET_TRENDING_POSTS,
+    onSuccess: (state: Listing, action: PostsResponseAction) => {
+      return produce(state, (draft) => {
+        draft.trending = {
+          end: false,
+          posts: action.payload.data,
+          prefetched: null,
+        };
+      });
+    },
+  },
+  {
+    type: PREFETCH_TRENDING_POSTS,
+    onSuccess: (state: Listing, action: PostsResponseAction) => {
+      const { data } = action.payload;
+      return produce(state, (draft) => {
+        draft.trending.prefetched = data;
+        if (data && data.length === 0) {
+          draft.trending.end = true;
         }
       });
     },

@@ -25,13 +25,13 @@ class TrendingPostCards extends Component<Props> {
     if (!posts || posts.length === 0 || prefetching || loading) return;
     const lastId = posts[posts.length - 1].id;
     if (this.props.prefetched) {
-      ListingActions.revealPrefetched('recent');
+      ListingActions.revealPrefetched('trending');
       await Promise.resolve(); // next tick
     }
     if (lastId === this.prevCursor) return;
     this.prevCursor = lastId;
     try {
-      await ListingActions.prefetchRecentPosts(lastId);
+      await ListingActions.prefetchTrendingPosts(lastId);
     } catch (e) {
       console.log(e);
     }
@@ -41,7 +41,7 @@ class TrendingPostCards extends Component<Props> {
 
   initialize = async () => {
     try {
-      await ListingActions.getRecentPosts();
+      await ListingActions.getTrendingPosts();
       this.prefetch();
     } catch (e) {
       console.log(e);
@@ -84,12 +84,12 @@ class TrendingPostCards extends Component<Props> {
 }
 
 const mapStateToProps = ({ listing, pender, base }: State) => ({
-  posts: listing.recent.posts,
-  prefetched: listing.recent.prefetched,
-  prefetching: pender.pending['listing/PREFETCH'],
-  loading: pender.pending['listing/GET_RECENT_POSTS'],
+  posts: listing.trending.posts,
+  prefetched: listing.trending.prefetched,
+  prefetching: pender.pending['listing/PREFETCH_TRENDING_POSTS'],
+  loading: pender.pending['listing/GET_TRENDING_POSTS'],
   width: base.windowWidth,
-  hasEnded: listing.recent.end,
+  hasEnded: listing.trending.end,
 });
 
 export default connect(mapStateToProps, () => ({}))(TrendingPostCards);

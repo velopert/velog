@@ -71,6 +71,11 @@ export const getPublicPosts = (cursor: ?string) => {
   return axios.get(`/posts/public${query}`);
 };
 
+export const getTrendingPosts = (cursor: ?string) => {
+  const query = cursor ? `?cursor=${cursor}` : '';
+  return axios.get(`/posts/trending${query}`);
+};
+
 export type GetUserPostsPayload = {
   username: string,
   cursor?: string,

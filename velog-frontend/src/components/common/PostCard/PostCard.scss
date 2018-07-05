@@ -18,10 +18,13 @@
   }
   &.one-column {
     box-shadow: none;
-    border: 1px solid $oc-gray-2;
+    border: 1px solid $oc-gray-3;
     width: calc(100% - 1.75rem);
     &+& {
       margin-top: 2.5rem;
+    }
+    .card-content {
+      box-shadow: none;
     }
   }
   &>.thumbnail-wrapper {
