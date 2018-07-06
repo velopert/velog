@@ -1,0 +1,27 @@
+@import 'utils';
+.TagsTab {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: $oc-gray-6;
+  display: flex;
+  a {
+    display: block;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.125s ease-in;
+    svg {
+      margin-right: 0.25rem;
+    }
+    &.active {
+      font-weight: 600;
+      color: $oc-violet-5;
+      border-bottom: 2px solid $oc-violet-5;
+    }
+  }
+  a+a {
+    margin-left: 1rem;
+  }
+}

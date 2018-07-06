@@ -12,6 +12,7 @@ import { compose } from 'redux';
 import Recent from 'pages/Recent';
 import MainSidebarContainer from './MainSidebarContainer';
 import MainHeadContainer from './MainHeadContainer';
+import Tags from '../../pages/Tags';
 
 type Props = {
   landing: boolean,
@@ -26,6 +27,7 @@ class MainContainer extends Component<Props> {
         <Switch>
           <Route exact path="/(|trending)" component={Trending} />
           <Route path="/recent" component={Recent} />
+          <Route path="/tags" component={Tags} />
         </Switch>
       </MainTemplate>
     );

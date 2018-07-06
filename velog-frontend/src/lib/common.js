@@ -28,6 +28,12 @@ export type ResponseAction = {
   meta: any,
 };
 
+export type GenericResponseAction<P, M> = {
+  type: string,
+  payload: P,
+  meta: M,
+};
+
 type Return_<R, F: (...args: Array<any>) => R> = R;
 export type Return<T> = Return_<*, T>;
 
