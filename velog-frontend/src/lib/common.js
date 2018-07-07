@@ -28,9 +28,11 @@ export type ResponseAction = {
   meta: any,
 };
 
-export type GenericResponseAction<P, M> = {
+export type GenericResponseAction<D, M> = {
   type: string,
-  payload: P,
+  payload: {
+    data: D,
+  },
   meta: M,
 };
 

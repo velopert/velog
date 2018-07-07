@@ -3,8 +3,8 @@ import type { Middleware, Context } from 'koa';
 import { getTagsList } from '../../database/rawQuery/tags';
 
 export const getTags: Middleware = async (ctx) => {
-  const { sort = 'posts_count' } = ctx.query;
-  const availableSort = ['posts_count', 'name'];
+  const { sort = 'popular' } = ctx.query;
+  const availableSort = ['popular', 'name'];
 
   if (availableSort.indexOf(sort) === -1) {
     ctx.body = {

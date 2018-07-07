@@ -12,7 +12,7 @@ export const actionCreators = {
 
 export type TagData = {
   name: string,
-  post_counts: number,
+  posts_count: number,
 };
 
 type GetTagsResponseAction = GenericResponseAction<TagData[], string>;
@@ -37,7 +37,7 @@ export default applyPenders(reducer, [
     onSuccess: (state: CommonState, { payload }: GetTagsResponseAction) => {
       return produce(state, (draft) => {
         if (draft) {
-          draft.tags.data = payload;
+          draft.tags.data = payload.data;
         }
       });
     },

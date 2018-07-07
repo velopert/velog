@@ -2,11 +2,15 @@
 import React from 'react';
 import './TagItem.scss';
 
-type Props = { }
+type Props = {
+  name: string,
+  count: number,
+};
 
-const TagItem = (props: Props) => (
+const TagItem = ({ name, count }: Props) => (
   <div className="TagItem">
-    TagItem
+    <div className="name">{name}</div>
+    <div className="counts">{count}</div>
   </div>
 );
 

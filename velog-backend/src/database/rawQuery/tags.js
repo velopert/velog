@@ -14,7 +14,7 @@ export const getTagsList = async (sortBy: string): Promise<TagRow[]> => {
     GROUP BY fk_tag_id
   ) AS q
   INNER JOIN tags ON q.fk_tag_id = tags.id
-  ORDER BY ${sortBy === 'posts_count' ? 'posts_count DESC' : 'name ASC'}`;
+  ORDER BY ${sortBy === 'popular' ? 'posts_count DESC' : 'name ASC'}`;
 
   try {
     const rows = await db.query(query, {

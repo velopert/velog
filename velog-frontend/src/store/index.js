@@ -9,6 +9,7 @@ import type { Sample } from './modules/sample';
 import type { Listing } from './modules/listing';
 import type { ProfileState } from './modules/profile';
 import type { FollowState } from './modules/follow';
+import type { CommonState } from './modules/common';
 
 const store = configure();
 
@@ -24,6 +25,7 @@ export type State = {
   listing: Listing,
   profile: ProfileState,
   follow: FollowState,
+  common: CommonState,
   pender: {
     pending: any,
     success: any,
