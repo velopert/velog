@@ -27,7 +27,7 @@ class MainContainer extends Component<Props> {
         <Switch>
           <Route exact path="/(|trending)" component={Trending} />
           <Route path="/recent" component={Recent} />
-          <Route path="/tags/:name?" component={Tags} />
+          <Route path="/tags/:tag?" component={Tags} />
         </Switch>
       </MainTemplate>
     );

@@ -168,7 +168,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
   const replaceDashToSpace = text => text.replace(/-/g, ' ');
   // TODO: validate url slug
 
-  const uniqueTags: Array<string> = filterUnique(tags).map(replaceDashToSpace);
+  const uniqueTags: Array<string> = filterUnique(tags); // .map(replaceDashToSpace);
   const uniqueCategories: Array<string> = filterUnique(categories);
 
   try {

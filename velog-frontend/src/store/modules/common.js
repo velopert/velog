@@ -5,40 +5,70 @@ import * as CommonAPI from 'lib/api/common';
 import produce from 'immer';
 
 const GET_TAGS = 'common/GET_TAGS';
-
-export const actionCreators = {
-  getTags: createAction(GET_TAGS, CommonAPI.getTags),
-};
+const SET_TAG_INFO = 'common/SET_TAG_INFO';
+const GET_TAG_INFO = 'common/GET_TAG_INFO';
 
 export type TagData = {
   name: string,
   posts_count: number,
 };
 
+export const actionCreators = {
+  getTags: createAction(GET_TAGS, CommonAPI.getTags),
+  setTagInfo: createAction(SET_TAG_INFO, (info: ?TagData) => info),
+  getTagInfo: createAction(GET_TAG_INFO, CommonAPI.getTagInfo),
+};
+
 type GetTagsResponseAction = GenericResponseAction<TagData[], string>;
+type GetTagInfoResponseAction = GenericResponseAction<TagData, string>;
+type SetTagInfoAction = ActionType<typeof actionCreators.setTagInfo>;
 
 export type CommonState = {
   tags: {
     data: ?(TagData[]),
+    selected: ?TagData,
+    lastParam: ?string,
   },
 };
 
-const initialState = {
+const initialState: CommonState = {
   tags: {
     data: null,
+    selected: null,
+    lastParam: null,
   },
 };
 
-const reducer = handleActions({}, initialState);
+const reducer = handleActions(
+  {
+    [SET_TAG_INFO]: (state, { payload }: SetTagInfoAction) => {
+      return produce(state, (draft) => {
+        draft.tags.selected = payload;
+      });
+    },
+  },
+  initialState,
+);
 
 export default applyPenders(reducer, [
   {
     type: GET_TAGS,
     onSuccess: (state: CommonState, { payload }: GetTagsResponseAction) => {
       return produce(state, (draft) => {
-        if (draft) {
-          draft.tags.data = payload.data;
-        }
+        draft.tags.data = payload.data;
+      });
+    },
+  },
+  {
+    type: GET_TAG_INFO,
+    onPending: (state: CommonState, action) => {
+      return produce(state, (draft) => {
+        draft.tags.lastParam = action.meta;
+      });
+    },
+    onSuccess: (state: CommonState, { payload }: GetTagInfoResponseAction) => {
+      return produce(state, (draft) => {
+        draft.tags.selected = payload.data;
       });
     },
   },

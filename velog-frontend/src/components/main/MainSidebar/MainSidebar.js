@@ -19,7 +19,6 @@ type Props = {
 class MainSidebar extends Component<Props> {
   render() {
     const { url } = this.props;
-    console.log(url);
 
     return (
       <aside className="MainSidebar">
@@ -51,12 +50,12 @@ class MainSidebar extends Component<Props> {
             text="태그 목록"
             to="tags"
           />
-          { /* <MainMenuItem
+          {/* <MainMenuItem
             active={/^\/stored/.test(url)}
             icon={<StoredIcon />}
             text="보관함"
             to="stored"
-          /> */ }
+          /> */}
         </ul>
       </aside>
     );

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 type Props = {
-  color: string
+  color: string,
 };
 
 class BackgroundColor extends Component<Props> {
@@ -11,13 +11,13 @@ class BackgroundColor extends Component<Props> {
   setBgColor = (color: string): void => {
     if (!document.body) return;
     document.body.style.background = color;
-  }
+  };
 
   componentDidMount() {
     const { color } = this.props;
     if (!document.body) return;
     this.prevColor = document.body.style.background;
-    console.log(this.prevColor.toString());
+    // console.log(this.prevColor.toString());
     this.setBgColor(color);
   }
 
@@ -27,9 +27,7 @@ class BackgroundColor extends Component<Props> {
   }
 
   render() {
-    return (
-      <div></div>
-    );
+    return <div />;
   }
 }
 

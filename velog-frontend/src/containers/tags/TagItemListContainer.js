@@ -24,6 +24,11 @@ class TagItemListContainer extends Component<Props> {
     this.initialize();
   }
 
+  onSelectTag = (info: TagData) => {
+    console.log('what?');
+    CommonActions.setTagInfo(info);
+  };
+
   componentDidUpdate(prevProps) {
     if (prevProps.sort !== this.props.sort) {
       this.initialize();
@@ -32,7 +37,7 @@ class TagItemListContainer extends Component<Props> {
 
   render() {
     const { tags } = this.props;
-    return <TagItemList tags={tags} />;
+    return <TagItemList tags={tags} onSelectTag={this.onSelectTag} />;
   }
 }
 

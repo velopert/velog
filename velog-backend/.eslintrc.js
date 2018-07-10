@@ -23,6 +23,7 @@ module.exports = {
     'no-param-reassign': 0,
     camelcase: 0,
     'no-mixed-operators': 0,
+    'max-len': 0,
   },
   plugins: ['flowtype'],
 };

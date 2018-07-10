@@ -6,13 +6,13 @@ import './TagItemList.scss';
 
 type Props = {
   tags: ?(TagData[]),
+  onSelectTag: (info: any) => void,
 };
 
-const TagItemList = ({ tags }: Props) => {
+const TagItemList = ({ tags, onSelectTag }: Props) => {
   if (!tags) return null;
-  console.log(tags);
   const tagList = tags.map(({ name, posts_count: postsCount }) => (
-    <TagItem name={name} count={postsCount} key={name} />
+    <TagItem name={name} count={postsCount} key={name} onClick={onSelectTag} />
   ));
   return <div className="TagItemList">{tagList}</div>;
 };
