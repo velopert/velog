@@ -6,6 +6,7 @@ import { type ContextRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import TagItemListContainer from 'containers/tags/TagItemListContainer';
 import TagCurrentContainer from 'containers/tags/TagCurrentContainer';
+import TagPostCards from 'containers/list/TagPostCards';
 
 type Props = {} & ContextRouter;
 
@@ -16,7 +17,10 @@ const Tags = ({ location, match }: Props) => {
   return (
     <TagsTemplate>
       {tag ? (
-        <TagCurrentContainer tag={tag} />
+        <Fragment>
+          <TagCurrentContainer tag={tag} />
+          <TagPostCards />
+        </Fragment>
       ) : (
         <Fragment>
           <TagsTab sort={sort} />

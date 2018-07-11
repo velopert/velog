@@ -1,5 +1,4 @@
 @import "utils";
-
 .CodeEditor {
   position: relative;
   display: flex;
@@ -18,16 +17,15 @@
         padding-right: 2rem;
       }
       flex: 1;
-      height: auto;
-      // font-family: 'D2 coding';
-      font-family: "Inconsolata", "D2 Coding", sans-serif;
+      height: auto; // font-family: 'D2 coding';
+      font-family: "Inconsolata",
+      "D2 Coding",
+      sans-serif;
       font-size: 1.3125rem;
       line-height: 1.5em;
-
       .cm-header {
-        font-family: "Noto Sans KR";
+        font-family: initial;
       }
-
       .cm-header-1 {
         font-size: 3rem;
         line-height: 4rem;

@@ -59,6 +59,8 @@ const PostCardList = ({ posts, loading, prefetching, width, hasEnded, oneColumn 
       oneColumn={oneColumn}
     />
   ));
+
+  console.log(posts, postList);
   return (
     <Fragment>
       <div className="PostCardList">

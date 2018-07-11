@@ -12,6 +12,9 @@ const GET_USER_POSTS = 'listing/GET_USER_POSTS';
 const PREFETCH_USER_POSTS = 'listing/PREFETCH_USER_POSTS';
 const GET_TRENDING_POSTS = 'listing/GET_TRENDING_POSTS';
 const PREFETCH_TRENDING_POSTS = 'listing/PREFETCH_TRENDING_POSTS';
+const GET_TAG_POSTS = 'listing/GET_TAG_POSTS';
+const PREFETCH_TAG_POSTS = 'listing/PREFETCH_TAG_POSTS';
+const CLEAR_TAG_POSTS = 'listing/CLEAR_TAG_POSTS';
 
 // potential improvement :: remove duplicates
 export const actionCreators = {
@@ -23,6 +26,9 @@ export const actionCreators = {
   prefetchUserPosts: createAction(PREFETCH_USER_POSTS, PostsAPI.getUserPosts),
   getTrendingPosts: createAction(GET_TRENDING_POSTS, PostsAPI.getTrendingPosts),
   prefetchTrendingPosts: createAction(PREFETCH_TRENDING_POSTS, PostsAPI.getTrendingPosts),
+  getTagPosts: createAction(GET_TAG_POSTS, PostsAPI.getPublicPostsByTag),
+  prefetchTagPosts: createAction(PREFETCH_TAG_POSTS, PostsAPI.getPublicPostsByTag),
+  clearTagPosts: createAction(CLEAR_TAG_POSTS),
 };
 
 export type PostItem = {
@@ -56,6 +62,7 @@ export type Listing = {
   trending: ListingSet,
   recent: ListingSet,
   user: ListingSet,
+  tag: ListingSet,
 };
 
 type RevealPrefetchedAction = ActionType<typeof actionCreators.revealPrefetched>;
@@ -74,6 +81,9 @@ export interface ListingActionCreators {
   prefetchUserPosts(payload: PostsAPI.GetUserPostsPayload): any;
   getTrendingPosts(): any;
   prefetchTrendingPosts(cursor: string): any;
+  getTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
+  prefetchTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
+  clearTagPosts(): any;
 }
 
 const initialState: Listing = {
@@ -88,6 +98,11 @@ const initialState: Listing = {
     end: false,
   },
   user: {
+    posts: null,
+    prefetched: null,
+    end: false,
+  },
+  tag: {
     posts: null,
     prefetched: null,
     end: false,
@@ -108,7 +123,20 @@ const reducer = handleActions(
     },
     [CLEAR_USER_POSTS]: (state) => {
       return produce(state, (draft) => {
-        draft.user.posts = null;
+        draft.user = {
+          posts: null,
+          prefetched: null,
+          end: false,
+        };
+      });
+    },
+    [CLEAR_TAG_POSTS]: (state) => {
+      return produce(state, (draft) => {
+        draft.tag = {
+          posts: null,
+          prefetched: null,
+          end: false,
+        };
       });
     },
   },
@@ -136,6 +164,30 @@ export default applyPenders(reducer, [
         draft.recent.prefetched = data;
         if (data && data.length === 0) {
           draft.recent.end = true;
+        }
+      });
+    },
+  },
+  {
+    type: GET_TAG_POSTS,
+    onSuccess: (state: Listing, action: PostsResponseAction) => {
+      return produce(state, (draft) => {
+        draft.tag = {
+          end: false,
+          posts: action.payload.data,
+          prefetched: null,
+        };
+      });
+    },
+  },
+  {
+    type: PREFETCH_TAG_POSTS,
+    onSuccess: (state: Listing, action: PostsResponseAction) => {
+      const { data } = action.payload;
+      return produce(state, (draft) => {
+        draft.tag.prefetched = data;
+        if (data && data.length === 0) {
+          draft.tag.end = true;
         }
       });
     },
