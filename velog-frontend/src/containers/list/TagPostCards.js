@@ -17,7 +17,7 @@ type Props = {
   hasEnded: boolean,
   selectedTag: ?{
     name: string,
-    posts_count: string,
+    posts_count: number,
   },
 };
 
@@ -25,7 +25,7 @@ class TagPostCards extends Component<Props> {
   prevCursor: ?string = null;
 
   prefetch = async () => {
-    const { posts, prefetching, loading, selectedTag } = this.props;
+    const { posts, prefetching, loading, selectedTag, hasEnded } = this.props;
     if (!selectedTag || !posts || posts.length === 0 || prefetching || loading) return;
     const lastId = posts[posts.length - 1].id;
     if (this.props.prefetched) {
@@ -34,6 +34,7 @@ class TagPostCards extends Component<Props> {
     }
     if (lastId === this.prevCursor) return;
     this.prevCursor = lastId;
+    if (hasEnded) return;
     try {
       await ListingActions.prefetchTagPosts({
         cursor: lastId,
@@ -53,7 +54,7 @@ class TagPostCards extends Component<Props> {
       await ListingActions.getTagPosts({
         tag: selectedTag.name,
       });
-      this.prefetch();
+      await this.prefetch();
     } catch (e) {
       console.log(e);
     }
@@ -80,6 +81,7 @@ class TagPostCards extends Component<Props> {
 
   componentDidUpdate(prevProps) {
     if (this.props.selectedTag !== prevProps.selectedTag) {
+      console.log('request!');
       this.initialize();
     }
   }
@@ -89,6 +91,10 @@ class TagPostCards extends Component<Props> {
   }
 
   render() {
+    const { selectedTag } = this.props;
+
+    const placeholderCount = selectedTag ? selectedTag.posts_count : 5;
+
     return (
       <PostCardList
         posts={this.props.posts}
@@ -96,6 +102,7 @@ class TagPostCards extends Component<Props> {
         prefetching={!!this.props.prefetched || this.props.prefetching}
         width={this.props.width}
         hasEnded={this.props.hasEnded}
+        placeholderCount={placeholderCount > 10 ? 10 : placeholderCount}
       />
     );
   }

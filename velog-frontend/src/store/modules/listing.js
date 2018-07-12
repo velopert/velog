@@ -173,7 +173,7 @@ export default applyPenders(reducer, [
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       return produce(state, (draft) => {
         draft.tag = {
-          end: false,
+          end: action.payload.data.length < 20,
           posts: action.payload.data,
           prefetched: null,
         };
@@ -227,6 +227,9 @@ export default applyPenders(reducer, [
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       return produce(state, (draft) => {
         draft.user.posts = action.payload.data;
+        if (action.payload.data.length < 20) {
+          draft.user.end = true;
+        }
       });
     },
   },

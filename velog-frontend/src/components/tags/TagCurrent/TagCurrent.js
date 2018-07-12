@@ -8,12 +8,13 @@ import './TagCurrent.scss';
 type Props = {
   name: string,
   count: ?number,
+  lastSort: string,
 };
 
-const TagCurrent = ({ name, count }: Props) => {
+const TagCurrent = ({ name, count, lastSort }: Props) => {
   return (
     <div className="TagCurrent">
-      <Link className="backwards-btn" to="/tags">
+      <Link className="backwards-btn" to={`/tags${lastSort === 'popular' ? '' : '?sort=name'}`}>
         <BackIcon />
         전체태그 보기
       </Link>

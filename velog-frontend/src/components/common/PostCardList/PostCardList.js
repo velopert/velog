@@ -12,6 +12,7 @@ type Props = {
   width?: number,
   hasEnded: boolean,
   oneColumn?: boolean,
+  placeholderCount?: number,
 };
 
 const createArray = length => Array.from(Array(length).keys());
@@ -30,11 +31,19 @@ const getColumnCount = (width) => {
   return 5;
 };
 
-const PostCardList = ({ posts, loading, prefetching, width, hasEnded, oneColumn }: Props) => {
+const PostCardList = ({
+  posts,
+  loading,
+  prefetching,
+  width,
+  hasEnded,
+  oneColumn,
+  placeholderCount,
+}: Props) => {
   if (loading) {
     return (
       <div className="PostCardList">
-        {createArray(10).map(num => <FakePostCard key={num} oneColumn={oneColumn} />)}
+        {createArray(placeholderCount).map(num => <FakePostCard key={num} oneColumn={oneColumn} />)}
       </div>
     );
   }
@@ -60,7 +69,6 @@ const PostCardList = ({ posts, loading, prefetching, width, hasEnded, oneColumn 
     />
   ));
 
-  console.log(posts, postList);
   return (
     <Fragment>
       <div className="PostCardList">
@@ -76,6 +84,7 @@ PostCardList.defaultProps = {
   posts: [],
   oneColumn: false,
   width: 0,
+  placeholderCount: 10,
 };
 
 export default PostCardList;

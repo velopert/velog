@@ -5,6 +5,7 @@ import placeholder from 'static/images/post_placeholder.png';
 import cx from 'classnames';
 
 import './FakePostCard.scss';
+import Postpone from '../Postpone/Postpone';
 
 type GrayBoxProps = {
   min: number,
@@ -44,29 +45,31 @@ type Props = {
 };
 
 const FakePostCard = ({ oneColumn }: Props) => (
-  <div className={cx('PostCard FakePostCard', { 'one-column': oneColumn })}>
-    <div className="thumbnail-wrapper">
-      <img src={placeholder} alt="thumbnail" />
-    </div>
-    <div className="card-content">
-      {!oneColumn && <div className="user-thumbnail-wrapper " />}
-      <div className="content-head">
-        <div className="username">
-          <GrayBox min={6} max={8} />
+  <Postpone duration={100}>
+    <div className={cx('PostCard FakePostCard', { 'one-column': oneColumn })}>
+      <div className="thumbnail-wrapper">
+        <img src={placeholder} alt="thumbnail" />
+      </div>
+      <div className="card-content">
+        {!oneColumn && <div className="user-thumbnail-wrapper " />}
+        <div className="content-head">
+          <div className="username">
+            <GrayBox min={6} max={8} />
+          </div>
+          <h3>
+            <GrayBoxes count={7} />
+          </h3>
+          <div className="subinfo">
+            <GrayBox min={4} max={4} />
+            <GrayBox min={5} max={5} />
+          </div>
         </div>
-        <h3>
-          <GrayBoxes count={7} />
-        </h3>
-        <div className="subinfo">
-          <GrayBox min={4} max={4} />
-          <GrayBox min={5} max={5} />
+        <div className="description">
+          <GrayBoxes count={15} />
         </div>
       </div>
-      <div className="description">
-        <GrayBoxes count={15} />
-      </div>
     </div>
-  </div>
+  </Postpone>
 );
 
 FakePostCard.defaultProps = {

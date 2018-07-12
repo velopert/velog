@@ -10,7 +10,7 @@ import TagPostCards from 'containers/list/TagPostCards';
 
 type Props = {} & ContextRouter;
 
-const Tags = ({ location, match }: Props) => {
+const Tags = ({ location, match, history }: Props) => {
   const { sort } = queryString.parse(location.search);
   const { tag } = match.params;
 
