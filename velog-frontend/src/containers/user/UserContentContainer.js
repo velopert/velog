@@ -28,12 +28,18 @@ class UserContentContainer extends Component<Props> {
     this.initialize();
   }
 
+  onSelectTag = (tagName: string) => {
+    ProfileActions.setRawTagName(tagName);
+  };
+
   render() {
     const { match, tagCounts } = this.props;
     const username = match.params.username || '';
 
     return (
-      <UserContent side={<UserSide tagCounts={tagCounts} username={username} />}>
+      <UserContent
+        side={<UserSide tagCounts={tagCounts} username={username} onSelectTag={this.onSelectTag} />}
+      >
         <UserTab username={username}>
           <Route exact path="/@:username" component={UserPostsSubpage} />
           <Route path="/@:username/tags/:tag" component={UserPostsSubpage} />

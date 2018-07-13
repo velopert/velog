@@ -1,6 +1,6 @@
 // @flow
 import React, { Component, type Node } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './UserTab.scss';
 
@@ -15,9 +15,9 @@ class UserTab extends Component<Props> {
     return (
       <div className="UserTab">
         <div className="tab-selector">
-          <NavLink exact activeClassName="active" to={`/@${username}`}>
+          <Link exact className="active" to={`/@${username}`}>
             최신 포스트
-          </NavLink>
+          </Link>
           {/* <NavLink activeClassName="active" to={`/@${username}/popular`}>
             인기 포스트
           </NavLink>

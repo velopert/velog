@@ -9,9 +9,10 @@ import './UserSide.scss';
 type Props = {
   tagCounts: ?(TagCountInfo[]),
   username: string,
+  onSelectTag: (tagName: string) => void,
 };
 
-const UserSide = ({ tagCounts, username }: Props) => (
+const UserSide = ({ tagCounts, username, onSelectTag }: Props) => (
   <div className="UserSide">
     <section>
       <div className="section-title">태그</div>
@@ -19,7 +20,10 @@ const UserSide = ({ tagCounts, username }: Props) => (
         <ul>
           {tagCounts.map(t => (
             <li key={t.tag}>
-              <Link to={`/@${username}/tags/${escapeForUrl(t.tag)}`}>
+              <Link
+                to={`/@${username}/tags/${escapeForUrl(t.tag)}`}
+                onClick={() => onSelectTag(t.tag)}
+              >
                 {t.tag}
                 <span className="count">({t.count})</span>
               </Link>

@@ -4,7 +4,7 @@ import PostCardList from 'components/common/PostCardList/PostCardList';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { ListingActions } from 'store/actionCreators';
+import { ListingActions, ProfileActions } from 'store/actionCreators';
 import type { State } from 'store';
 import type { PostItem } from 'store/modules/listing';
 import throttle from 'lodash/throttle';
@@ -21,6 +21,7 @@ type Props = OwnProps & {
   hasEnded: boolean,
   prefetching: boolean,
   loading: boolean,
+  rawTagName: ?string,
 };
 
 class UserPosts extends Component<Props> {
@@ -29,7 +30,15 @@ class UserPosts extends Component<Props> {
   initialize = async () => {
     const { username, tag } = this.props;
     ListingActions.clearUserPosts();
-    ListingActions.getUserPosts({ username, tag });
+    if (tag) {
+      try {
+        await ProfileActions.getTagInfo(tag);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    const { rawTagName } = this.props;
+    ListingActions.getUserPosts({ username, tag: rawTagName || undefined });
   };
   componentDidMount() {
     this.initialize();
@@ -96,12 +105,13 @@ class UserPosts extends Component<Props> {
 }
 
 export default connect(
-  ({ listing, pender }: State) => ({
+  ({ listing, pender, profile }: State) => ({
     posts: listing.user.posts,
     prefetched: listing.user.prefetched,
     hasEnded: listing.user.end,
     prefetching: pender.pending['listing/PREFETCH_USER_POSTS'],
     loading: pender.pending['listing/GET_USER_POSTS'],
+    rawTagName: profile.rawTagName,
   }),
   () => ({}),
 )(UserPosts);
