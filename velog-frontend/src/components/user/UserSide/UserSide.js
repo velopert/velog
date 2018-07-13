@@ -1,13 +1,17 @@
 // @flow
 import React from 'react';
 import { type TagCountInfo } from 'store/modules/profile';
+import { Link } from 'react-router-dom';
+import { escapeForUrl } from 'lib/common';
+
 import './UserSide.scss';
 
 type Props = {
   tagCounts: ?(TagCountInfo[]),
+  username: string,
 };
 
-const UserSide = ({ tagCounts }: Props) => (
+const UserSide = ({ tagCounts, username }: Props) => (
   <div className="UserSide">
     <section>
       <div className="section-title">태그</div>
@@ -15,8 +19,10 @@ const UserSide = ({ tagCounts }: Props) => (
         <ul>
           {tagCounts.map(t => (
             <li key={t.tag}>
-              {t.tag}
-              <span className="count">({t.count})</span>
+              <Link to={`/@${username}/tags/${escapeForUrl(t.tag)}`}>
+                {t.tag}
+                <span className="count">({t.count})</span>
+              </Link>
             </li>
           ))}
         </ul>

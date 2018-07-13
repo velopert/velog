@@ -84,6 +84,7 @@ export interface ListingActionCreators {
   getTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
   prefetchTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
   clearTagPosts(): any;
+  clearUserPosts(): any;
 }
 
 const initialState: Listing = {

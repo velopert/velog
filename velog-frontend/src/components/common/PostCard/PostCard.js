@@ -63,9 +63,9 @@ const PostCard = ({
       )}
       <div className="card-content">
         {!oneColumn && (
-          <div className="user-thumbnail-wrapper">
+          <Link className="user-thumbnail-wrapper" to={`/@${username}`}>
             <img src={userThumbnail || defaultThumbnail} alt={username} />
-          </div>
+          </Link>
         )}
         <div className="content-head">
           <Link to={`/@${username}`} className="username">

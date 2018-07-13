@@ -13,6 +13,7 @@ const App = () => (
       <Route path="/email-login" component={EmailLogin} />
       <Route path="/write" component={Write} />
       <Route exact path="/@:username/" component={User} />
+      <Route exact path="/@:username/tags/:tag" component={User} />
       <Route exact path="/@:username/:tab(collections|popular)" component={User} />
       <Route path="/@:username/:urlSlug" component={Post} />
       <Route path="/posts/preview/:id" component={Post} />

@@ -5,6 +5,8 @@ import MinusIcon from 'react-icons/lib/fa/minus-square-o';
 import PostCommentInput from 'components/post/PostCommentInput/PostCommentInput';
 import Button from 'components/common/Button';
 import type { Comment, SubcommentsMap } from 'store/modules/posts';
+import defaultThumbnail from 'static/images/default_thumbnail.png';
+import { Link } from 'react-router-dom';
 
 import './PostComment.scss';
 
@@ -95,12 +97,19 @@ class PostComment extends Component<Props, State> {
       onReadReplies,
     } = this.props;
     const { open, showInput } = this.state;
+
+    const userProfileLink = `/@${username}`;
+
     return (
       <div className="PostComment">
         <div className="comment-head">
-          <img src={thumbnail} alt={username} />
+          <Link to={userProfileLink}>
+            <img src={thumbnail || defaultThumbnail} alt={username} />
+          </Link>
           <div className="text-block">
-            <div className="username">{username}</div>
+            <Link to={userProfileLink} className="username">
+              {username}
+            </Link>
             <div className="date">2018.06.11</div>
           </div>
         </div>

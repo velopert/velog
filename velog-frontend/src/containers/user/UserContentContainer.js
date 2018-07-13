@@ -9,8 +9,7 @@ import { type TagCountInfo } from 'store/modules/profile';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { compose } from 'redux';
-
-import UserPosts from './UserPosts';
+import UserPostsSubpage from 'pages/user/UserPostsSubpage';
 
 type Props = {
   match: Match,
@@ -31,15 +30,13 @@ class UserContentContainer extends Component<Props> {
 
   render() {
     const { match, tagCounts } = this.props;
-    const { username } = match.params;
+    const username = match.params.username || '';
+
     return (
-      <UserContent side={<UserSide tagCounts={tagCounts} />}>
-        <UserTab username={username || ''}>
-          <Route
-            exact
-            path={`/@${username || ''}`}
-            render={() => <UserPosts username={username || ''} />}
-          />
+      <UserContent side={<UserSide tagCounts={tagCounts} username={username} />}>
+        <UserTab username={username}>
+          <Route exact path="/@:username" component={UserPostsSubpage} />
+          <Route path="/@:username/tags/:tag" component={UserPostsSubpage} />
         </UserTab>
       </UserContent>
     );

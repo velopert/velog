@@ -79,12 +79,16 @@ export const getTrendingPosts = (cursor: ?string) => {
 
 export type GetUserPostsPayload = {
   username: string,
+  tag?: string,
   cursor?: string,
 };
 
-export const getUserPosts = ({ username, cursor }: GetUserPostsPayload) => {
-  const query = cursor ? `?cursor=${cursor}` : '';
-  return axios.get(`/posts/@${username}${query}`);
+export const getUserPosts = ({ username, cursor, tag }: GetUserPostsPayload) => {
+  const query = queryString.stringify({
+    cursor,
+    tag,
+  });
+  return axios.get(`/posts/@${username}?${query}`);
 };
 
 export type GetPublicPostsByTagPayload = {

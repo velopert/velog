@@ -34,6 +34,7 @@
     display: block;
     img,
     .image-placeholder {
+      background: $oc-gray-3;
       object-fit: cover;
       display: block;
       border-top-left-radius: 4px;

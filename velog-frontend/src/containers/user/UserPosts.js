@@ -10,21 +10,26 @@ import type { PostItem } from 'store/modules/listing';
 import throttle from 'lodash/throttle';
 import { getScrollBottom, preventStickBottom } from 'lib/common';
 
-type Props = {
+type OwnProps = {
+  username: string,
+  tag?: string,
+};
+
+type Props = OwnProps & {
   posts: ?(PostItem[]),
   prefetched: ?(PostItem[]),
   hasEnded: boolean,
   prefetching: boolean,
   loading: boolean,
-  username: string,
 };
 
 class UserPosts extends Component<Props> {
   prevCursor: ?string = null;
 
   initialize = async () => {
-    const { username } = this.props;
-    ListingActions.getUserPosts({ username });
+    const { username, tag } = this.props;
+    ListingActions.clearUserPosts();
+    ListingActions.getUserPosts({ username, tag });
   };
   componentDidMount() {
     this.initialize();
@@ -33,8 +38,15 @@ class UserPosts extends Component<Props> {
   componentWillUnmount() {
     this.unlistenScroll();
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.tag !== this.props.tag || prevProps.username !== this.props.username) {
+      this.initialize();
+    }
+  }
+
   prefetch = async () => {
-    const { prefetched, hasEnded, posts, prefetching, loading, username } = this.props;
+    const { prefetched, hasEnded, posts, prefetching, loading, username, tag } = this.props;
     if (prefetched) {
       ListingActions.revealPrefetched('user');
       await Promise.resolve(); // next tick
@@ -46,6 +58,7 @@ class UserPosts extends Component<Props> {
     try {
       await ListingActions.prefetchUserPosts({
         username,
+        tag,
         cursor: lastId,
       });
       preventStickBottom();
