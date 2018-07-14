@@ -14,7 +14,7 @@ type Props = {
 
 const MainHead = ({ logged, onLogin, rightArea }: Props) => (
   <div className="MainHead">
-    <div className="button-area">{logged && <Button>새 포스트 작성</Button>}</div>
+    <div className="button-area">{logged && <Button to="/write">새 포스트 작성</Button>}</div>
     <div className="spacer" />
     <div className="right-area">
       {rightArea || (

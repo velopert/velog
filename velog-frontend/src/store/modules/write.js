@@ -4,7 +4,9 @@ import moment from 'moment';
 import produce from 'immer';
 import * as MeAPI from 'lib/api/me';
 import * as PostsAPI from 'lib/api/posts';
-import { applyPenders } from 'lib/common';
+import * as SavesAPI from 'lib/api/posts/saves';
+
+import { applyPenders, type GenericResponseAction } from 'lib/common';
 
 /* ACTION TYPE */
 const EDIT_FIELD = 'write/EDIT_FIELD';
@@ -44,6 +46,8 @@ const SET_LAYOUT_MODE = 'write/SET_LAYOUT_MODE';
 const TOGGLE_ADDITIONAL_CONFIG = 'write/TOGGLE_ADDITIONAL_CONFIG';
 const SET_META_VALUE = 'write/SET_META_VALUE';
 const RESET_META = 'write/RESET_META';
+
+const LIST_TEMP_SAVES = 'write/LIST_TEMP_SAVES';
 
 let tempCategoryId = 0;
 
@@ -89,6 +93,7 @@ export interface WriteActionCreators {
   toggleAdditionalConfig(): any,
   setMetaValue(payload: SetMetaValuePayload): any,
   resetMeta(): any,
+  listTempSaves(postId: string): any,
 }
 
 /* EXPORT ACTION CREATORS */
@@ -135,6 +140,13 @@ export const actionCreators = {
   toggleAdditionalConfig: createAction(TOGGLE_ADDITIONAL_CONFIG),
   setMetaValue: createAction(SET_META_VALUE, (payload: SetMetaValuePayload) => payload),
   resetMeta: createAction(RESET_META),
+  listTempSaves: createAction(LIST_TEMP_SAVES, SavesAPI.getTempSaveList),
+};
+
+export type BriefTempSaveInfo = {
+  id: string,
+  created_at: string,
+  title: string,
 };
 
 /* ACTION FLOW TYPE */
@@ -150,6 +162,8 @@ type ReorderCategoryAction = ActionType<typeof actionCreators.reorderCategory>;
 type SetUploadMaskAction = ActionType<typeof actionCreators.setUploadMask>;
 type SetTempDataAction = ActionType<typeof actionCreators.setTempData>;
 type SetMetaValueAction = ActionType<typeof actionCreators.setMetaValue>;
+type ListTempSavesResponseAction = GenericResponseAction<BriefTempSaveInfo[], null>;
+
 /* STATE TYPES */
 export type Category = {
   id: string,
@@ -222,7 +236,8 @@ export type Write = {
   categoryModal: CategoryModal,
   upload: Upload,
   insertText: ?string,
-  writeExtra: WriteExtra
+  writeExtra: WriteExtra,
+  tempSaves: ?BriefTempSaveInfo[]
 };
 
 const initialState: Write = {
@@ -258,6 +273,7 @@ const initialState: Write = {
     layoutMode: 'both',
   },
   insertText: null,
+  tempSaves: null,
 };
 
 const reducer = handleActions(
@@ -510,6 +526,15 @@ export default applyPenders(reducer, [
         draft.upload.imagePath = data.imagePath;
         draft.upload.id = data.id;
       });
+    },
+  },
+  {
+    type: LIST_TEMP_SAVES,
+    onSuccess: (state: Write, { payload }: ListTempSavesResponseAction) => {
+      return {
+        ...state,
+        tempSaves: payload.data,
+      };
     },
   },
 ]);

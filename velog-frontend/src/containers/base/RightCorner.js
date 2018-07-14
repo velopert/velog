@@ -20,7 +20,7 @@ class RightCorner extends Component<Props> {
     if (!user) return null;
     return (
       <Fragment>
-        <NotificationButton count={10} onClick={() => undefined} />
+        {/* <NotificationButton count={10} onClick={() => undefined} /> */}
         <UserButton onClick={this.onUserButtonClick} thumbnail={user.thumbnail} />
         <UserMenuContainer />
       </Fragment>

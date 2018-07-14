@@ -13,9 +13,11 @@ type Props = {
 
 const PostContent = ({ body, onSetToc, onActivateHeading, thumbnail }: Props) => (
   <div className="PostContent">
-    <div className="post-thumbnail">
-      <img src={thumbnail} alt="" />
-    </div>
+    {thumbnail && (
+      <div className="post-thumbnail">
+        <img src={thumbnail} alt="" />
+      </div>
+    )}
     <div className="contents">
       <MarkdownRender body={body} onSetToc={onSetToc} onActivateHeading={onActivateHeading} />
     </div>

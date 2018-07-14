@@ -7,6 +7,7 @@ import * as savesCtrl from './saves.ctrl';
 const saves: Router = new Router();
 
 saves.get('/', savesCtrl.getTempSaveList);
+saves.get('/:saveId', savesCtrl.loadTempSave);
 saves.post('/', savesCtrl.tempSave);
 
 export default saves;

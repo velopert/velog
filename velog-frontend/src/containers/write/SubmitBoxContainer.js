@@ -26,6 +26,7 @@ type Props = {
   thumbnail: ?string,
   additional: boolean,
   meta: Meta,
+  username: ?string,
 };
 
 class SubmitBoxContainer extends Component<Props> {
@@ -200,9 +201,24 @@ class SubmitBoxContainer extends Component<Props> {
       onCancelAdditionalConfig,
       onConfirmAdditionalConfig,
     } = this;
-    const { body, open, categories, tags, postData, thumbnail, additional, meta } = this.props;
+
+    const {
+      body,
+      open,
+      categories,
+      tags,
+      postData,
+      thumbnail,
+      additional,
+      meta,
+      username,
+    } = this.props;
+
+    const postLink = username && postData && `/@${username}/${postData.url_slug}`;
+
     return (
       <SubmitBox
+        postLink={postLink}
         onEditCategoryClick={onEditCategoryClick}
         selectCategory={<SelectCategory categories={categories} onToggle={onToggleCategory} />}
         inputTags={<InputTags tags={tags} onInsert={onInsertTag} onRemove={onRemoveTag} />}
@@ -237,7 +253,7 @@ class SubmitBoxContainer extends Component<Props> {
 }
 
 export default connect(
-  ({ write }: State) => ({
+  ({ write, user }: State) => ({
     open: write.submitBox.open,
     categories: write.submitBox.categories,
     tags: write.submitBox.tags,
@@ -250,6 +266,7 @@ export default connect(
     thumbnail: write.thumbnail,
     additional: write.submitBox.additional,
     meta: write.meta,
+    username: user.user && user.user.username,
   }),
   () => ({}),
 )(SubmitBoxContainer);
