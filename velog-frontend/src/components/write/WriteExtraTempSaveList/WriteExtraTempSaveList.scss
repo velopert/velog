@@ -1,0 +1,12 @@
+@import 'utils';
+.WriteExtraTempSaveList {
+  background: $oc-gray-8;
+  font-size: 0.875rem;
+  flex: 1;
+  overflow-y: auto;
+  .no-data {
+    padding: .75rem;
+    color: white;
+    font-weight: 500;
+  }
+}

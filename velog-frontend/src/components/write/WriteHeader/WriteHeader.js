@@ -11,7 +11,7 @@ import './WriteHeader.scss';
 
 type Props = {
   onChangeTitle(e: any): void,
-  onTempSave(): void,
+  onTempSave(): Promise<*>,
   onOpenSubmitBox(): void,
   onShowWriteExtra(): void,
   onHideWriteExtra(): void,

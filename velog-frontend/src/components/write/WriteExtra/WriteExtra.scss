@@ -1,5 +1,4 @@
 @import "utils";
-
 @keyframes writeExtraAppear {
   0% {
     opacity: 0;
@@ -31,7 +30,8 @@
     animation: writeExtraDisappear 0.15s cubic-bezier(0.49, 0.01, 0.14, 0.86);
     animation-fill-mode: forwards;
   }
-
+  display: flex;
+  flex-direction: column;
   position: absolute;
   right: 0;
   top: 0;
@@ -58,5 +58,13 @@
       margin: 0;
       margin-bottom: 1rem;
     }
+    &.full {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  section+section {
+    margin-top: 2rem;
   }
 }

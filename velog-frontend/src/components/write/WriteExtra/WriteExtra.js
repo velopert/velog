@@ -1,15 +1,17 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import CloseIcon from 'react-icons/lib/io/close';
 import cx from 'classnames';
 import withClickOutside from 'react-onclickoutside';
 import './WriteExtra.scss';
+import WriteExtraTempSaveList from '../WriteExtraTempSaveList';
 import WriteSelectLayouts from '../WriteSelectLayouts';
 
 type Props = {
   visible: boolean,
   mode: string,
   onSelectLayoutMode(mode: string): void,
+  tempSaveList: Node,
 };
 type State = {
   animating: boolean,
@@ -45,7 +47,7 @@ class WriteExtra extends Component<Props, State> {
 
   render() {
     const { animating } = this.state;
-    const { visible, mode } = this.props;
+    const { visible, mode, tempSaveList } = this.props;
 
     if (!visible && !animating) return null;
 
@@ -54,6 +56,10 @@ class WriteExtra extends Component<Props, State> {
         <section>
           <h4>레이아웃 설정</h4>
           <WriteSelectLayouts onSelect={this.onSelectLayoutMode} mode={mode} />
+        </section>
+        <section className="full">
+          <h4>임시 저장 기록</h4>
+          {tempSaveList}
         </section>
       </div>
     );

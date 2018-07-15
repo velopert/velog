@@ -1,0 +1,19 @@
+@import 'utils';
+.WriteExtraTempSaveItem {
+  padding: 0.5rem;
+  border-bottom: 1px solid lighten($oc-gray-8, 10%);
+  cursor: pointer;
+  .title {
+    font-weight: 500;
+    @include ellipsis();
+  }
+  .time {
+    margin-top: 0.25rem;
+    text-align: right;
+    color: $oc-gray-5;
+    font-style: italic;
+  }
+  &:hover {
+    background: lighten($oc-gray-8, 2.5%);
+  }
+}

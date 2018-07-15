@@ -1,5 +1,4 @@
 @import "utils";
-
 .WriteSelectLayouts {
   display: flex;
   .layout-button {
@@ -21,7 +20,6 @@
       font-size: 0.7rem;
       font-weight: 600;
     }
-    @include material-shadow(2, 0.15);
     &:hover {
       background: lighten($oc-gray-8, 2.5%);
     }
@@ -31,7 +29,7 @@
     &.active {
       border: 2px solid rgba(255, 255, 255, 0.9);
     }
-    & + .layout-button {
+    &+.layout-button {
       margin-left: 0.5rem;
     }
   }
