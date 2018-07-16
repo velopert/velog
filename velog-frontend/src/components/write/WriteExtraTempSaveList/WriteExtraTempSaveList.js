@@ -6,9 +6,10 @@ import WriteExtraTempSaveItem from '../WriteExtraTempSaveItem';
 
 type Props = {
   tempSaves: ?(BriefTempSaveInfo[]),
+  onLoadTempSave: (id: string) => Promise<*>,
 };
 
-const WriteExtraTempSaveList = ({ tempSaves }: Props) => {
+const WriteExtraTempSaveList = ({ tempSaves, onLoadTempSave }: Props) => {
   if (!tempSaves) {
     return (
       <div className="WriteExtraTempSaveList">
@@ -23,6 +24,7 @@ const WriteExtraTempSaveList = ({ tempSaves }: Props) => {
       title={tempSave.title}
       date={tempSave.created_at}
       id={tempSave.id}
+      onClick={() => onLoadTempSave(tempSave.id)}
     />
   ));
   return <div className="WriteExtraTempSaveList">{tempSaveList}</div>;

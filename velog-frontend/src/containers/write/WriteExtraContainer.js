@@ -12,6 +12,9 @@ type Props = {
   mode: string,
   postData: ?PostData,
   tempSaves: ?(BriefTempSaveInfo[]),
+  title: string,
+  body: string,
+  changed: boolean,
 };
 
 class WriteExtraContainer extends Component<Props> {
@@ -20,6 +23,20 @@ class WriteExtraContainer extends Component<Props> {
     if (!postData) return;
     WriteActions.listTempSaves(postData.id);
   }
+
+  tempSave = async () => {
+    const { postData, title, body, changed } = this.props;
+
+    if (!changed) return;
+
+    try {
+      if (postData) {
+        await WriteActions.tempSave({ title, body, postId: postData.id });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   componentDidUpdate(prevProps) {
     if (!prevProps.visible && this.props.visible) {
@@ -37,6 +54,17 @@ class WriteExtraContainer extends Component<Props> {
     }
     WriteActions.hideWriteExtra();
   };
+
+  onLoadTempSave = async (id: string) => {
+    const { postData } = this.props;
+    if (!postData) return;
+    await this.tempSave();
+    await WriteActions.loadTempSave({
+      postId: postData.id,
+      saveId: id,
+    });
+  };
+
   render() {
     const { mode, tempSaves } = this.props;
     return (
@@ -44,7 +72,9 @@ class WriteExtraContainer extends Component<Props> {
         visible={this.props.visible}
         onSelectLayoutMode={this.onSelectLayoutMode}
         onClickOutside={this.onClickOutside}
-        tempSaveList={<WriteExtraTempSaveList tempSaves={tempSaves} />}
+        tempSaveList={
+          <WriteExtraTempSaveList tempSaves={tempSaves} onLoadTempSave={this.onLoadTempSave} />
+        }
         mode={mode}
       />
     );
@@ -57,6 +87,9 @@ export default connect(
     mode: write.writeExtra.layoutMode,
     postData: write.postData,
     tempSaves: write.tempSaves,
+    title: write.title,
+    body: write.body,
+    changed: write.changed,
   }),
   () => ({}),
 )(WriteExtraContainer);

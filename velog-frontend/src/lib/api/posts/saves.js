@@ -9,5 +9,5 @@ export type LoadTempSavePayload = {
 };
 
 export const loadTempSave = ({ postId, saveId }: LoadTempSavePayload) => {
-  axios.get(`/posts/${postId}/saves/${saveId}`);
+  return axios.get(`/posts/${postId}/saves/${saveId}`);
 };

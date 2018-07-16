@@ -58,6 +58,7 @@ export const loadTempSave: Middleware = async (ctx) => {
   }
   try {
     const postHistory = await PostHistory.findOne({
+      attributes: ['id', 'title', 'body', 'created_at'],
       where: {
         fk_post_id: id,
         id: saveId,

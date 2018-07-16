@@ -5,13 +5,13 @@ import moment from 'moment';
 import './WriteExtraTempSaveItem.scss';
 
 type Props = {
-  id: string,
   title: string,
   date: string,
+  onClick: () => Promise<*>,
 };
 
-const WriteExtraTempSaveItem = ({ id, title, date }: Props) => (
-  <div className="WriteExtraTempSaveItem">
+const WriteExtraTempSaveItem = ({ title, date, onClick }: Props) => (
+  <div className="WriteExtraTempSaveItem" onClick={onClick}>
     <div className="title">{title}</div>
     <div className="time">{moment(date).fromNow()}</div>
   </div>

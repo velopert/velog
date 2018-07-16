@@ -48,6 +48,7 @@ const SET_META_VALUE = 'write/SET_META_VALUE';
 const RESET_META = 'write/RESET_META';
 
 const LIST_TEMP_SAVES = 'write/LIST_TEMP_SAVES';
+const LOAD_TEMP_SAVE = 'write/LOAD_TEMP_SAVE';
 
 let tempCategoryId = 0;
 
@@ -89,11 +90,12 @@ export interface WriteActionCreators {
   createUploadUrl(payload: PostsAPI.CreateUploadUrlPayload): any;
   showWriteExtra(): any;
   hideWriteExtra(): any;
-  setLayoutMode(mode: string): any,
-  toggleAdditionalConfig(): any,
-  setMetaValue(payload: SetMetaValuePayload): any,
-  resetMeta(): any,
-  listTempSaves(postId: string): any,
+  setLayoutMode(mode: string): any;
+  toggleAdditionalConfig(): any;
+  setMetaValue(payload: SetMetaValuePayload): any;
+  resetMeta(): any;
+  listTempSaves(postId: string): any;
+  loadTempSave(payload: SavesAPI.LoadTempSavePayload): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -141,12 +143,17 @@ export const actionCreators = {
   setMetaValue: createAction(SET_META_VALUE, (payload: SetMetaValuePayload) => payload),
   resetMeta: createAction(RESET_META),
   listTempSaves: createAction(LIST_TEMP_SAVES, SavesAPI.getTempSaveList),
+  loadTempSave: createAction(LOAD_TEMP_SAVE, SavesAPI.loadTempSave),
 };
 
 export type BriefTempSaveInfo = {
   id: string,
   created_at: string,
   title: string,
+};
+
+export type TempSaveData = BriefTempSaveInfo & {
+  body: string,
 };
 
 /* ACTION FLOW TYPE */
@@ -163,6 +170,7 @@ type SetUploadMaskAction = ActionType<typeof actionCreators.setUploadMask>;
 type SetTempDataAction = ActionType<typeof actionCreators.setTempData>;
 type SetMetaValueAction = ActionType<typeof actionCreators.setMetaValue>;
 type ListTempSavesResponseAction = GenericResponseAction<BriefTempSaveInfo[], null>;
+type LoadTempSaveResponseAction = GenericResponseAction<TempSaveData, null>;
 
 /* STATE TYPES */
 export type Category = {
@@ -194,7 +202,7 @@ export type CategoryModal = {
 export type Meta = {
   code_theme?: string,
   short_description?: ?string,
-}
+};
 export type PostData = {
   id: string,
   title: string,
@@ -237,7 +245,8 @@ export type Write = {
   upload: Upload,
   insertText: ?string,
   writeExtra: WriteExtra,
-  tempSaves: ?BriefTempSaveInfo[]
+  tempSaves: ?(BriefTempSaveInfo[]),
+  changed: boolean,
 };
 
 const initialState: Write = {
@@ -274,6 +283,7 @@ const initialState: Write = {
   },
   insertText: null,
   tempSaves: null,
+  changed: false,
 };
 
 const reducer = handleActions(
@@ -282,6 +292,7 @@ const reducer = handleActions(
       const { field, value } = payload;
       return produce(state, (draft) => {
         draft[field] = value;
+        draft.changed = true;
       });
     },
     [SET_THUMBNAIL]: (state, { payload }: SetThumbnailAction) => {
@@ -494,6 +505,7 @@ export default applyPenders(reducer, [
     type: WRITE_POST,
     onSuccess: (state: Write, { payload: { data } }) => {
       return produce(state, (draft) => {
+        draft.changed = false;
         draft.postData = data;
       });
     },
@@ -514,8 +526,18 @@ export default applyPenders(reducer, [
     type: UPDATE_POST,
     onSuccess: (state: Write, { payload: { data } }) => {
       return produce(state, (draft) => {
+        draft.changed = false;
         draft.postData = data;
       });
+    },
+  },
+  {
+    type: TEMP_SAVE,
+    onSuccess: (state: Write) => {
+      return {
+        ...state,
+        changed: false,
+      };
     },
   },
   {
@@ -535,6 +557,16 @@ export default applyPenders(reducer, [
         ...state,
         tempSaves: payload.data,
       };
+    },
+  },
+  {
+    type: LOAD_TEMP_SAVE,
+    onSuccess: (state: Write, { payload }: LoadTempSaveResponseAction) => {
+      return produce(state, (draft) => {
+        draft.changed = false;
+        draft.body = payload.data.body;
+        draft.title = payload.data.title;
+      });
     },
   },
 ]);
