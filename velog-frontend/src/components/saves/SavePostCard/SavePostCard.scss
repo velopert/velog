@@ -1,0 +1,54 @@
+@import 'utils';
+.SavePostCard {
+  border: 1px solid $oc-gray-3;
+  font-family: initial;
+  .img-wrapper {
+    padding-top: 52.63%;
+    position: relative;
+    img {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: block;
+    }
+  }
+  .white-area {
+    padding: 1.5rem 1rem;
+    display: flex;
+    align-items: center;
+    .post-info {
+      flex: 1;
+      h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+      .date {
+        color: $oc-gray-7;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+    }
+    .remove-button {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.75rem;
+      color: $oc-gray-3;
+      border-radius: 1.5rem;
+      border: 2px solid $oc-gray-2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &:hover {
+        color: $oc-red-6;
+        border: 2px solid $oc-red-6;
+      }
+    }
+  }
+  &+& {
+    margin-top: 2rem;
+  }
+}

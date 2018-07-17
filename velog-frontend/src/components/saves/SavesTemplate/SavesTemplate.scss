@@ -1,0 +1,15 @@
+@import 'utils';
+.SavesTemplate {
+  main {
+    width: $medium-w;
+    margin: 0 auto;
+    margin-top: 4rem;
+    h2 {
+      margin: 0;
+      font-weight: 500;
+      font-size: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $oc-gray-4;
+    }
+  }
+}
