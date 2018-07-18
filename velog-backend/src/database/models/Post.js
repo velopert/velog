@@ -132,10 +132,15 @@ type PostsQueryInfo = {
   tag: ?string,
   categoryUrlSlug: ?string,
   cursor: ?string,
+  isTemp: ?boolean,
 };
 
 Post.listPosts = async function ({
-  username, categoryUrlSlug, tag, cursor,
+  username,
+  categoryUrlSlug,
+  tag,
+  cursor,
+  isTemp,
 }: PostsQueryInfo) {
   // find post with cursor
   let cursorData = null;
@@ -166,6 +171,7 @@ Post.listPosts = async function ({
     : ''
 }
     WHERE true
+    ${isTemp ? 'AND p.is_temp = true' : 'AND p.is_temp = false'}
     ${username ? 'AND u.username = $username' : ''}
     ${tag ? 'AND t.name = $tag' : ''}
     ${categoryUrlSlug ? 'AND c.url_slug = $category' : ''}

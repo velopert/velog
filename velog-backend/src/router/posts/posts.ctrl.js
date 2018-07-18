@@ -33,7 +33,10 @@ import Sequelize from 'sequelize';
 import removeMd from 'remove-markdown';
 import { TYPES } from 'database/models/PostScore';
 import db from 'database/db';
-import { getTrendingPostScore, getTrendingPosts } from 'database/rawQuery/trending';
+import {
+  getTrendingPostScore,
+  getTrendingPosts,
+} from 'database/rawQuery/trending';
 
 const { Op } = Sequelize;
 
@@ -52,7 +55,10 @@ function convertMapToObject(m: Map<string, *>): any {
   return obj;
 }
 async function createFeeds({
-  postId, userId, tags, username,
+  postId,
+  userId,
+  tags,
+  username,
 }: CreateFeedsParams): Promise<*> {
   // TODO:
 
@@ -247,7 +253,11 @@ export const readPost = async (ctx: Context): Promise<*> => {
       liked = !!exists;
     }
 
-    ctx.body = serializePost({ ...post.toJSON(), comments_count: commentsCount, liked });
+    ctx.body = serializePost({
+      ...post.toJSON(),
+      comments_count: commentsCount,
+      liked,
+    });
     const hash = generalHash(ctx.request.ip);
     const userId = ctx.user ? ctx.user.id : null;
 
@@ -288,13 +298,16 @@ export const readPost = async (ctx: Context): Promise<*> => {
 
 export const listPosts = async (ctx: Context): Promise<*> => {
   const { username } = ctx.params;
-  const { category, tag, cursor } = ctx.query;
+  const {
+    category, tag, cursor, is_temp,
+  } = ctx.query;
 
   const query = {
     username,
     categoryUrlSlug: category,
     tag,
     cursor,
+    isTemp: is_temp === 'true',
   };
 
   if (cursor && !isUUID(cursor)) {
@@ -303,6 +316,17 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     };
     ctx.status = 400;
     return;
+  }
+
+  if (is_temp === 'true') {
+    if (!ctx.user) {
+      ctx.status = 401;
+      return;
+    }
+    if (ctx.user.username !== username) {
+      ctx.status = 403;
+      return;
+    }
   }
 
   try {
