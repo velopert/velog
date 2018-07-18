@@ -1,6 +1,7 @@
 @import 'utils';
 .SavePostCard {
   border: 1px solid $oc-gray-3;
+  color: $oc-gray-9;
   font-family: initial;
   .img-wrapper {
     padding-top: 52.63%;
@@ -24,6 +25,12 @@
         margin: 0;
         font-size: 1.5rem;
         font-weight: 500;
+        a {
+          &:hover {
+            color: $oc-violet-5;
+            text-decoration: underline;
+          }
+        }
       }
       .date {
         color: $oc-gray-7;

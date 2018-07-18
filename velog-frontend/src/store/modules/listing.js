@@ -15,6 +15,8 @@ const PREFETCH_TRENDING_POSTS = 'listing/PREFETCH_TRENDING_POSTS';
 const GET_TAG_POSTS = 'listing/GET_TAG_POSTS';
 const PREFETCH_TAG_POSTS = 'listing/PREFETCH_TAG_POSTS';
 const CLEAR_TAG_POSTS = 'listing/CLEAR_TAG_POSTS';
+const GET_TEMP_POSTS = 'listing/GET_TEMP_POSTS';
+const PREFETCH_TEMP_POSTS = 'listing/PREFETCH_TEMP_POSTS';
 
 // potential improvement :: remove duplicates
 export const actionCreators = {
@@ -29,6 +31,8 @@ export const actionCreators = {
   getTagPosts: createAction(GET_TAG_POSTS, PostsAPI.getPublicPostsByTag),
   prefetchTagPosts: createAction(PREFETCH_TAG_POSTS, PostsAPI.getPublicPostsByTag),
   clearTagPosts: createAction(CLEAR_TAG_POSTS),
+  getTempPosts: createAction(GET_TEMP_POSTS, PostsAPI.getTempPosts),
+  prefetchTempPosts: createAction(PREFETCH_TEMP_POSTS, PostsAPI.getTempPosts),
 };
 
 export type PostItem = {
@@ -63,6 +67,7 @@ export type Listing = {
   recent: ListingSet,
   user: ListingSet,
   tag: ListingSet,
+  temp: ListingSet,
 };
 
 type RevealPrefetchedAction = ActionType<typeof actionCreators.revealPrefetched>;
@@ -83,31 +88,23 @@ export interface ListingActionCreators {
   prefetchTrendingPosts(cursor: string): any;
   getTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
   prefetchTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
+  getTempPosts(payload: PostsAPI.GetTempPostsPayload): any;
   clearTagPosts(): any;
   clearUserPosts(): any;
 }
 
+const initialListingSet = {
+  posts: null,
+  prefetched: null,
+  end: false,
+};
+
 const initialState: Listing = {
-  trending: {
-    posts: null,
-    prefetched: null,
-    end: false,
-  },
-  recent: {
-    posts: null,
-    prefetched: null,
-    end: false,
-  },
-  user: {
-    posts: null,
-    prefetched: null,
-    end: false,
-  },
-  tag: {
-    posts: null,
-    prefetched: null,
-    end: false,
-  },
+  trending: initialListingSet,
+  recent: initialListingSet,
+  user: initialListingSet,
+  tag: initialListingSet,
+  temp: initialListingSet,
 };
 
 const reducer = handleActions(
@@ -242,6 +239,35 @@ export default applyPenders(reducer, [
         draft.user.prefetched = data;
         if (data && data.length === 0) {
           draft.user.end = true;
+        }
+      });
+    },
+  },
+  {
+    type: GET_TEMP_POSTS,
+    onPending: (state: Listing) => {
+      return produce(state, (draft) => {
+        draft.temp.end = false;
+        draft.temp.prefetched = null;
+      });
+    },
+    onSuccess: (state: Listing, action: PostsResponseAction) => {
+      return produce(state, (draft) => {
+        draft.temp.posts = action.payload.data;
+        if (action.payload.data.length < 20) {
+          draft.temp.end = true;
+        }
+      });
+    },
+  },
+  {
+    type: PREFETCH_TEMP_POSTS,
+    onSuccess: (state: Listing, action: PostsResponseAction) => {
+      const { data } = action.payload;
+      return produce(state, (draft) => {
+        draft.temp.prefetched = data;
+        if (data && data.length === 0) {
+          draft.temp.end = true;
         }
       });
     },

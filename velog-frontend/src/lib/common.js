@@ -1,6 +1,7 @@
 // @flow
 import { pender } from 'redux-pender';
 import type { $AxiosXHR, $AxiosError } from 'axios';
+import moment from 'moment';
 
 export const pressedEnter = (fn: () => void) => (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
@@ -73,4 +74,14 @@ export const escapeForUrl = (text: string): string => {
     )
     .replace(/ /g, '-')
     .replace(/--+/g, '-');
+};
+
+export const fromNow = (date: string) => {
+  const now = new Date();
+  const givenDate = new Date(date);
+  const lessThanWeek = now - givenDate < 1000 * 60 * 60 * 24 * 7;
+  if (lessThanWeek) {
+    return moment(date).fromNow();
+  }
+  return moment(date).format('YYYY년 M월 D일');
 };

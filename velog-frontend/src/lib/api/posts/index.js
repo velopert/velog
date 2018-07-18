@@ -100,3 +100,16 @@ export const getPublicPostsByTag = (payload: GetPublicPostsByTagPayload) => {
   const query = queryString.stringify(payload);
   return axios.get(`/posts/public?${query}`);
 };
+
+export type GetTempPostsPayload = {
+  username: string,
+  cursor?: string,
+};
+
+export const getTempPosts = ({ username, cursor }: GetTempPostsPayload) => {
+  const query = queryString.stringify({
+    is_temp: true,
+    cursor,
+  });
+  return axios.get(`/posts/@${username}?${query}`);
+};

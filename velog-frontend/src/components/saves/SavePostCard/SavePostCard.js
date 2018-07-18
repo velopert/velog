@@ -1,22 +1,34 @@
 // @flow
 import React from 'react';
 import DeleteIcon from 'react-icons/lib/md/delete';
+import { fromNow } from 'lib/common';
+import { Link } from 'react-router-dom';
+
 import './SavePostCard.scss';
 
-type Props = {};
+type Props = {
+  thumbnail: ?string,
+  id: string,
+  title: string,
+  updatedAt: string,
+};
 
-const SavePostCard = (props: Props) => (
+const SavePostCard = ({ id, thumbnail, title, updatedAt }: Props) => (
   <div className="SavePostCard">
-    <div className="img-wrapper">
-      <img
-        src="https://images.velog.io/post-images/velopert/1d26a150-6747-11e8-9dff-1b161279fc07/goodb.png"
-        alt="thumbnail"
-      />
-    </div>
+    {thumbnail && (
+      <div className="img-wrapper">
+        <img
+          src="https://images.velog.io/post-images/velopert/1d26a150-6747-11e8-9dff-1b161279fc07/goodb.png"
+          alt="thumbnail"
+        />
+      </div>
+    )}
     <div className="white-area">
       <div className="post-info">
-        <h3>제목이 있다리</h3>
-        <div className="date">4 초 전</div>
+        <h3>
+          <Link to={`/write?edit_id=${id}`}>{title}</Link>
+        </h3>
+        <div className="date">{fromNow(updatedAt)}</div>
       </div>
       <button className="remove-button">
         <DeleteIcon />
