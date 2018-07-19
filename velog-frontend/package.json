@@ -131,7 +131,8 @@
     "onchange": "^3.3.0",
     "prettier": "^1.12.1",
     "prettier-eslint": "^8.8.1",
-    "prettier-eslint-cli": "^4.7.1"
+    "prettier-eslint-cli": "^4.7.1",
+    "webpack-bundle-analyzer": "^2.13.1"
   },
   "proxy": "http://localhost:4000/"
 }

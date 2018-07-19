@@ -1,0 +1,34 @@
+@import 'utils';
+.QuestionModal {
+  width: 24rem;
+  @include material-shadow(4, 0.125);
+  .purple-line {
+    background: $oc-violet-5;
+    width: 100%;
+    height: 4px;
+  }
+  .modal-content {
+    background: white;
+    padding: 1.5rem 1rem;
+    color: $oc-gray-9;
+    h4,
+    p {
+      margin: 0;
+    }
+    h4 {
+      font-weight: 500;
+      font-size: 1.25rem;
+    }
+    p {
+      line-height: 1.5;
+    }
+    h4+p {
+      margin-top: 1rem;
+    }
+    .button-area {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+  }
+}

@@ -89,6 +89,7 @@ export interface ListingActionCreators {
   getTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
   prefetchTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
   getTempPosts(payload: PostsAPI.GetTempPostsPayload): any;
+  prefetchTempPosts(payload: PostsAPI.GetTempPostsPayload): any;
   clearTagPosts(): any;
   clearUserPosts(): any;
 }

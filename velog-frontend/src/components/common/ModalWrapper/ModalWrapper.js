@@ -3,23 +3,24 @@ import React, { Component, type Node } from 'react';
 import cx from 'classnames';
 
 import './ModalWrapper.scss';
+import HideScrollbar from '../HideScrollbar';
 
 type Props = {
   children: Node,
-  className: ?string,
+  className?: string,
   open: boolean,
-}
+};
 
 type State = {
   animate: boolean,
-}
+};
 
 class ModalWrapper extends Component<Props, State> {
   animateId: any = null;
 
   state = {
     animate: false,
-  }
+  };
 
   animate(): void {
     this.setState({ animate: true });
@@ -30,9 +31,7 @@ class ModalWrapper extends Component<Props, State> {
     }, 150);
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.open !== this.props.open) {
@@ -52,10 +51,12 @@ class ModalWrapper extends Component<Props, State> {
 
     return (
       <div className="ModalWrapper">
+        <HideScrollbar />
         <div className="dimmer" />
         <div className="center">
           <div className="modal-positioner">
-            <div className={cx('modal-content', className, {
+            <div
+              className={cx('modal-content', className, {
                 appear: open,
                 disappear: animate && !open,
               })}

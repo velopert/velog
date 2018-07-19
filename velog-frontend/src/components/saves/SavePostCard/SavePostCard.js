@@ -11,9 +11,10 @@ type Props = {
   id: string,
   title: string,
   updatedAt: string,
+  onAskRemove: (postId: string) => void,
 };
 
-const SavePostCard = ({ id, thumbnail, title, updatedAt }: Props) => (
+const SavePostCard = ({ id, thumbnail, title, updatedAt, onAskRemove }: Props) => (
   <div className="SavePostCard">
     {thumbnail && (
       <div className="img-wrapper">
@@ -30,7 +31,7 @@ const SavePostCard = ({ id, thumbnail, title, updatedAt }: Props) => (
         </h3>
         <div className="date">{fromNow(updatedAt)}</div>
       </div>
-      <button className="remove-button">
+      <button className="remove-button" onClick={() => onAskRemove(id)}>
         <DeleteIcon />
       </button>
     </div>

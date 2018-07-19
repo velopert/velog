@@ -6,9 +6,10 @@ import SavePostCard from '../SavePostCard';
 
 type Props = {
   posts: ?(PostItem[]),
+  onAskRemove: (postId: string) => void,
 };
 
-const SavePostCardList = ({ posts }: Props) => {
+const SavePostCardList = ({ posts, onAskRemove }: Props) => {
   if (!posts) return null;
   const postList = posts.map(post => (
     <SavePostCard
@@ -17,6 +18,7 @@ const SavePostCardList = ({ posts }: Props) => {
       title={post.title}
       thumbnail={post.thumbnail}
       updatedAt={post.updated_at}
+      onAskRemove={onAskRemove}
     />
   ));
   return <div className="SavePostCardList">{postList}</div>;
