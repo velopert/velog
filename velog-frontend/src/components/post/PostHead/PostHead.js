@@ -5,6 +5,7 @@ import type { Categories } from 'store/modules/posts';
 import PostLikeButton from 'components/post/PostLikeButton';
 import { Link } from 'react-router-dom';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
+import PostActionButtons from '../PostActionButtons';
 import './PostHead.scss';
 
 type Props = {
@@ -18,10 +19,11 @@ type Props = {
   },
   likes: number,
   liked: boolean,
+  ownPost: boolean,
   onToggleLike: () => void,
 };
 
-const PostHead = ({ title, categories, user, likes, liked, onToggleLike }: Props) => {
+const PostHead = ({ title, categories, user, likes, liked, ownPost, onToggleLike }: Props) => {
   const userLink = `/@${user.username}`;
 
   return (
@@ -44,6 +46,7 @@ const PostHead = ({ title, categories, user, likes, liked, onToggleLike }: Props
         <PostLikeButton onClick={onToggleLike} liked={liked} likes={likes} />
       </div>
       <div className="separator" />
+      {ownPost && <PostActionButtons />}
     </div>
   );
 };

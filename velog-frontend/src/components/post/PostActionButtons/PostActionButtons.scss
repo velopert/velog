@@ -1,0 +1,17 @@
+@import 'utils';
+.PostActionButtons {
+  margin-right: -0.4rem;
+  margin-top: -2rem;
+  display: flex;
+  justify-content: flex-end;
+  .btn {
+    font-size: 0.875rem;
+    color: $oc-gray-6;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    cursor: pointer;
+    &:hover {
+      color: $oc-violet-5;
+    }
+  }
+}

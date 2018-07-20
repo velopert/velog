@@ -21,7 +21,7 @@ const UserMenu = ({ onClick, onLogout, username }: Props) => {
             <UserMenuItem to={`/@${username}`}>내 벨로그</UserMenuItem>
             <div className="separator" />
             <UserMenuItem to="/write">새 글 작성</UserMenuItem>
-            <UserMenuItem>임시 글</UserMenuItem>
+            <UserMenuItem to="/saves">임시 글</UserMenuItem>
             <div className="separator" />
             <UserMenuItem>설정</UserMenuItem>
             <UserMenuItem onClick={onLogout}>로그아웃</UserMenuItem>
