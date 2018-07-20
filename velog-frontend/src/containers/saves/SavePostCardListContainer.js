@@ -86,9 +86,16 @@ class SavePostCardListContainer extends Component<Props> {
     CommonActions.askRemove(postId);
   };
 
+  onConfirmRemove = async () => {
+    const { removeId } = this.props;
+    if (!removeId) return;
+    CommonActions.removePost(removeId);
+    ListingActions.removeTempPost(removeId);
+    CommonActions.closeRemove();
+  };
+
   onCancelRemove = () => {
-    console.log('하이');
-    CommonActions.cancelRemove();
+    CommonActions.closeRemove();
   };
 
   render() {
@@ -101,7 +108,7 @@ class SavePostCardListContainer extends Component<Props> {
           title="임시 글 삭제"
           description="이 포스트를 정말로 삭제하시겠습니까?"
           confirmText="삭제"
-          onConfirm={() => null}
+          onConfirm={this.onConfirmRemove}
           onCancel={this.onCancelRemove}
         />
       </Fragment>

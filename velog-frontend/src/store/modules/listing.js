@@ -17,6 +17,7 @@ const PREFETCH_TAG_POSTS = 'listing/PREFETCH_TAG_POSTS';
 const CLEAR_TAG_POSTS = 'listing/CLEAR_TAG_POSTS';
 const GET_TEMP_POSTS = 'listing/GET_TEMP_POSTS';
 const PREFETCH_TEMP_POSTS = 'listing/PREFETCH_TEMP_POSTS';
+const REMOVE_TEMP_POST = 'listing/REMOVE_TEMP_POST';
 
 // potential improvement :: remove duplicates
 export const actionCreators = {
@@ -33,6 +34,7 @@ export const actionCreators = {
   clearTagPosts: createAction(CLEAR_TAG_POSTS),
   getTempPosts: createAction(GET_TEMP_POSTS, PostsAPI.getTempPosts),
   prefetchTempPosts: createAction(PREFETCH_TEMP_POSTS, PostsAPI.getTempPosts),
+  removeTempPost: createAction(REMOVE_TEMP_POST, (postId: string) => postId),
 };
 
 export type PostItem = {
@@ -77,6 +79,7 @@ type PostsResponseAction = {
     data: PostItem[],
   },
 };
+type RemoveTempPostAction = ActionType<typeof actionCreators.removeTempPost>;
 
 export interface ListingActionCreators {
   getRecentPosts(): any;
@@ -92,6 +95,7 @@ export interface ListingActionCreators {
   prefetchTempPosts(payload: PostsAPI.GetTempPostsPayload): any;
   clearTagPosts(): any;
   clearUserPosts(): any;
+  removeTempPost(postId: string): any;
 }
 
 const initialListingSet = {
@@ -136,6 +140,12 @@ const reducer = handleActions(
           prefetched: null,
           end: false,
         };
+      });
+    },
+    [REMOVE_TEMP_POST]: (state, { payload }: RemoveTempPostAction) => {
+      return produce(state, (draft) => {
+        if (!draft.temp.posts) return;
+        draft.temp.posts = draft.temp.posts.filter(p => p.id !== payload);
       });
     },
   },

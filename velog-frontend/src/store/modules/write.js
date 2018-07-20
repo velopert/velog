@@ -50,6 +50,8 @@ const RESET_META = 'write/RESET_META';
 const LIST_TEMP_SAVES = 'write/LIST_TEMP_SAVES';
 const LOAD_TEMP_SAVE = 'write/LOAD_TEMP_SAVE';
 
+const GET_POST_BY_ID = 'write/GET_POST_BY_ID';
+
 let tempCategoryId = 0;
 
 /* ACTION CREATOR */
@@ -96,6 +98,7 @@ export interface WriteActionCreators {
   resetMeta(): any;
   listTempSaves(postId: string): any;
   loadTempSave(payload: SavesAPI.LoadTempSavePayload): any;
+  getPostById(postId: string): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -144,6 +147,7 @@ export const actionCreators = {
   resetMeta: createAction(RESET_META),
   listTempSaves: createAction(LIST_TEMP_SAVES, SavesAPI.getTempSaveList),
   loadTempSave: createAction(LOAD_TEMP_SAVE, SavesAPI.loadTempSave),
+  getPostById: createAction(GET_POST_BY_ID, PostsAPI.getPostById),
 };
 
 export type BriefTempSaveInfo = {
@@ -155,22 +159,6 @@ export type BriefTempSaveInfo = {
 export type TempSaveData = BriefTempSaveInfo & {
   body: string,
 };
-
-/* ACTION FLOW TYPE */
-type EditFieldAction = ActionType<typeof actionCreators.editField>;
-type SetThumbnailAction = ActionType<typeof actionCreators.setThumbnail>;
-type ToggleCategoryAction = ActionType<typeof actionCreators.toggleCategory>;
-type InsertTagAction = ActionType<typeof actionCreators.insertTag>;
-type RemovetagAction = ActionType<typeof actionCreators.removeTag>;
-type ToggleEditCategoryAction = ActionType<typeof actionCreators.toggleEditCategory>;
-type ChangeCategoryNameAction = ActionType<typeof actionCreators.changeCategoryName>;
-type HideCategoryAction = ActionType<typeof actionCreators.hideCategory>;
-type ReorderCategoryAction = ActionType<typeof actionCreators.reorderCategory>;
-type SetUploadMaskAction = ActionType<typeof actionCreators.setUploadMask>;
-type SetTempDataAction = ActionType<typeof actionCreators.setTempData>;
-type SetMetaValueAction = ActionType<typeof actionCreators.setMetaValue>;
-type ListTempSavesResponseAction = GenericResponseAction<BriefTempSaveInfo[], null>;
-type LoadTempSaveResponseAction = GenericResponseAction<TempSaveData, null>;
 
 /* STATE TYPES */
 export type Category = {
@@ -248,6 +236,24 @@ export type Write = {
   tempSaves: ?(BriefTempSaveInfo[]),
   changed: boolean,
 };
+
+/* ACTION FLOW TYPE */
+type EditFieldAction = ActionType<typeof actionCreators.editField>;
+type SetThumbnailAction = ActionType<typeof actionCreators.setThumbnail>;
+type ToggleCategoryAction = ActionType<typeof actionCreators.toggleCategory>;
+type InsertTagAction = ActionType<typeof actionCreators.insertTag>;
+type RemovetagAction = ActionType<typeof actionCreators.removeTag>;
+type ToggleEditCategoryAction = ActionType<typeof actionCreators.toggleEditCategory>;
+type ChangeCategoryNameAction = ActionType<typeof actionCreators.changeCategoryName>;
+type HideCategoryAction = ActionType<typeof actionCreators.hideCategory>;
+type ReorderCategoryAction = ActionType<typeof actionCreators.reorderCategory>;
+type SetUploadMaskAction = ActionType<typeof actionCreators.setUploadMask>;
+type SetTempDataAction = ActionType<typeof actionCreators.setTempData>;
+type SetMetaValueAction = ActionType<typeof actionCreators.setMetaValue>;
+type ListTempSavesResponseAction = GenericResponseAction<BriefTempSaveInfo[], null>;
+type LoadTempSaveResponseAction = GenericResponseAction<TempSaveData, null>;
+type GetPostByIdResponseAction = GenericResponseAction<PostData, null>;
+
 
 const initialState: Write = {
   body: '',
@@ -564,6 +570,18 @@ export default applyPenders(reducer, [
     onSuccess: (state: Write, { payload }: LoadTempSaveResponseAction) => {
       return produce(state, (draft) => {
         draft.changed = false;
+        draft.body = payload.data.body;
+        draft.title = payload.data.title;
+      });
+    },
+  },
+  {
+    type: GET_POST_BY_ID,
+    onSuccess: (state: Write, { payload }: GetPostByIdResponseAction) => {
+      return produce(state, (draft) => {
+        draft.changed = false;
+        draft.postData = payload.data;
+        draft.submitBox.tags = payload.data.tags;
         draft.body = payload.data.body;
         draft.title = payload.data.title;
       });

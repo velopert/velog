@@ -3,12 +3,25 @@ import type { Context } from 'koa';
 import { serializePost } from 'database/models/Post';
 import db from 'database/db';
 import Joi from 'joi';
-import { validateSchema, generateSlugId, escapeForUrl, extractKeys } from 'lib/common';
+import {
+  validateSchema,
+  generateSlugId,
+  escapeForUrl,
+  extractKeys,
+} from 'lib/common';
 import { diff } from 'json-diff';
-import { Post, PostLike, PostsTags, PostsCategories, Category } from 'database/models';
+import {
+  Post,
+  PostLike,
+  PostsTags,
+  PostsCategories,
+  Category,
+} from 'database/models';
 
-
-export const checkPostExistancy = async (ctx: Context, next: () => Promise<*>): Promise<*> => {
+export const checkPostExistancy = async (
+  ctx: Context,
+  next: () => Promise<*>,
+): Promise<*> => {
   const { id } = ctx.params;
   try {
     const post = await Post.findById(id);
@@ -54,16 +67,22 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     url_slug: string,
     thumbnail: string,
     is_temp: boolean,
-  }
+    meta: any,
+  };
 
   const schema = Joi.object().keys({
-    title: Joi.string().min(1).max(120),
+    title: Joi.string()
+      .min(1)
+      .max(120),
     body: Joi.string().min(1),
-    thumbnail: Joi.string().uri().allow(null),
+    thumbnail: Joi.string()
+      .uri()
+      .allow(null),
     is_temp: Joi.boolean(),
     categories: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string()),
     url_slug: Joi.string().max(130),
+    meta: Joi.object(),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -78,16 +97,16 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     url_slug: urlSlug,
     thumbnail,
     is_temp: isTemp,
+    meta,
   }: BodySchema = (ctx.request.body: any);
 
   const generatedUrlSlug = `${title} ${generateSlugId()}`;
   const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
 
-
   const { id } = ctx.params;
 
-  const urlSlugShouldChange = urlSlug !== ctx.post.url_slug
-    || (title && (ctx.post.title !== title));
+  const urlSlugShouldChange =
+    urlSlug !== ctx.post.url_slug || (title && ctx.post.title !== title);
 
   // current !== received -> check urlSlugExistancy
   if (urlSlugShouldChange) {
@@ -110,6 +129,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     url_slug: urlSlugShouldChange && escapedUrlSlug,
     thumbnail,
     is_temp: isTemp,
+    meta,
   };
 
   Object.keys(updateQuery).forEach((key) => {
@@ -125,8 +145,12 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     const tagNames = currentTags.tags.map(tag => tag.name);
     const tagDiff = diff(tagNames.sort(), tags.sort()) || [];
 
-    const tagsToRemove = tagDiff.filter(info => info[0] === '-').map(info => info[1]);
-    const tagsToAdd = tagDiff.filter(info => info[0] === '+').map(info => info[1]);
+    const tagsToRemove = tagDiff
+      .filter(info => info[0] === '-')
+      .map(info => info[1]);
+    const tagsToAdd = tagDiff
+      .filter(info => info[0] === '+')
+      .map(info => info[1]);
 
     try {
       await PostsTags.removeTagsFromPost(id, tagsToRemove);
@@ -158,9 +182,14 @@ export const updatePost = async (ctx: Context): Promise<*> => {
 
       // check which categories to remove or add
       const currentCategories = await ctx.post.getCategoryIds();
-      const categoryDiff = diff(currentCategories.sort(), categories.sort()) || [];
-      const categoriesToRemove = categoryDiff.filter(info => info[0] === '-').map(info => info[1]);
-      const categoriesToAdd = categoryDiff.filter(info => info[0] === '+').map(info => info[1]);
+      const categoryDiff =
+        diff(currentCategories.sort(), categories.sort()) || [];
+      const categoriesToRemove = categoryDiff
+        .filter(info => info[0] === '-')
+        .map(info => info[1]);
+      const categoriesToAdd = categoryDiff
+        .filter(info => info[0] === '+')
+        .map(info => info[1]);
 
       await PostsCategories.removeCategoriesFromPost(id, categoriesToRemove);
       await PostsCategories.addCategoriesToPost(id, categoriesToAdd);
@@ -195,7 +224,9 @@ export const deletePost = async (ctx: Context): Promise<*> => {
   try {
     // LATER ON: REMOVE COMMENTS
     await Promise.all([
-      db.getQueryInterface().bulkDelete('posts_categories', { fk_post_id: post.id }),
+      db
+        .getQueryInterface()
+        .bulkDelete('posts_categories', { fk_post_id: post.id }),
       db.getQueryInterface().bulkDelete('posts_tags', { fk_post_id: post.id }),
       db.getQueryInterface().bulkDelete('post_likes', { fk_post_id: post.id }),
     ]);

@@ -113,3 +113,11 @@ export const getTempPosts = ({ username, cursor }: GetTempPostsPayload) => {
   });
   return axios.get(`/posts/@${username}?${query}`);
 };
+
+export const deletePost = (postId: string) => {
+  return axios.delete(`/posts/${postId}`);
+};
+
+export const getPostById = (postId: string) => {
+  return axios.get(`/posts/${postId}`);
+};

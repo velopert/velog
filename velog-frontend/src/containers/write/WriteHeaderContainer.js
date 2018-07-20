@@ -8,6 +8,8 @@ import type { PostData, Category } from 'store/modules/write';
 import { Prompt, withRouter, type ContextRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import Blocker from 'components/common/Blocker';
+import queryString from 'query-string';
+
 
 type Props = {
   title: string,
@@ -23,8 +25,17 @@ type Props = {
 class WriteHeaderContainer extends Component<Props> {
   timer = null;
 
+  loadPost = (id: string) => {
+    WriteActions.getPostById(id);
+  }
+
   componentDidMount() {
     this.timer = setInterval(this.autoTempSave, 30000);
+    // reads edit_id
+    const query = queryString.parse(this.props.location.search);
+    if (query.edit_id) {
+      this.loadPost(query.edit_id);
+    }
   }
 
   componentWillUnmount() {

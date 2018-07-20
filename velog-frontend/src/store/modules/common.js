@@ -3,13 +3,14 @@ import { createAction, handleActions, type ActionType } from 'redux-actions';
 import { applyPenders, type GenericResponseAction } from 'lib/common';
 import * as CommonAPI from 'lib/api/common';
 import produce from 'immer';
+import * as PostsAPI from 'lib/api/posts';
 
 const GET_TAGS = 'common/GET_TAGS';
 const SET_TAG_INFO = 'common/SET_TAG_INFO';
 const GET_TAG_INFO = 'common/GET_TAG_INFO';
 const ASK_REMOVE = 'common/saves/ASK_REMOVE';
-const CONFIRM_REMOVE = 'common/saves/CONFIRM_REMOVE';
-const CANCEL_REMOVE = 'common/saves/CANCEL_REMOVE';
+const CLOSE_REMOVE = 'common/saves/CLOSE_REMOVE';
+const REMOVE_POST = 'common/saves/REMOVE_POST';
 
 export type TagData = {
   name: string,
@@ -21,7 +22,8 @@ export const actionCreators = {
   setTagInfo: createAction(SET_TAG_INFO, (info: ?TagData) => info),
   getTagInfo: createAction(GET_TAG_INFO, CommonAPI.getTagInfo),
   askRemove: createAction(ASK_REMOVE, (postId: string) => postId),
-  cancelRemove: createAction(CANCEL_REMOVE),
+  closeRemove: createAction(CLOSE_REMOVE),
+  removePost: createAction(REMOVE_POST, PostsAPI.deletePost),
 };
 
 type GetTagsResponseAction = GenericResponseAction<TagData[], string>;
@@ -68,7 +70,7 @@ const reducer = handleActions(
         draft.saves.removeId = payload;
       });
     },
-    [CANCEL_REMOVE]: (state) => {
+    [CLOSE_REMOVE]: (state) => {
       return produce(state, (draft) => {
         draft.saves.ask = false;
       });
