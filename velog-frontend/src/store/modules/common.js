@@ -4,6 +4,7 @@ import { applyPenders, type GenericResponseAction } from 'lib/common';
 import * as CommonAPI from 'lib/api/common';
 import produce from 'immer';
 import * as PostsAPI from 'lib/api/posts';
+import { type Location } from 'react-router-dom';
 
 const GET_TAGS = 'common/GET_TAGS';
 const SET_TAG_INFO = 'common/SET_TAG_INFO';
@@ -11,11 +12,14 @@ const GET_TAG_INFO = 'common/GET_TAG_INFO';
 const ASK_REMOVE = 'common/saves/ASK_REMOVE';
 const CLOSE_REMOVE = 'common/saves/CLOSE_REMOVE';
 const REMOVE_POST = 'common/saves/REMOVE_POST';
+const CHANGE_ROUTE = 'common/router/CHANGE_ROUTE';
 
 export type TagData = {
   name: string,
   posts_count: number,
 };
+
+export type HistoryPayload = Location & { type: string };
 
 export const actionCreators = {
   getTags: createAction(GET_TAGS, CommonAPI.getTags, meta => meta),
@@ -24,12 +28,14 @@ export const actionCreators = {
   askRemove: createAction(ASK_REMOVE, (postId: string) => postId),
   closeRemove: createAction(CLOSE_REMOVE),
   removePost: createAction(REMOVE_POST, PostsAPI.deletePost),
+  changeRoute: createAction(CHANGE_ROUTE, (payload: HistoryPayload) => payload),
 };
 
 type GetTagsResponseAction = GenericResponseAction<TagData[], string>;
 type GetTagInfoResponseAction = GenericResponseAction<TagData, string>;
 type SetTagInfoAction = ActionType<typeof actionCreators.setTagInfo>;
 type AskRemoveAction = ActionType<typeof actionCreators.askRemove>;
+type ChangeRouteAction = ActionType<typeof actionCreators.changeRoute>;
 
 export type CommonState = {
   tags: {
@@ -41,6 +47,9 @@ export type CommonState = {
   saves: {
     removeId: ?string,
     ask: boolean,
+  },
+  router: {
+    history: Location[],
   },
 };
 
@@ -54,6 +63,9 @@ const initialState: CommonState = {
   saves: {
     removeId: null,
     ask: false,
+  },
+  router: {
+    history: [],
   },
 };
 
@@ -73,6 +85,20 @@ const reducer = handleActions(
     [CLOSE_REMOVE]: (state) => {
       return produce(state, (draft) => {
         draft.saves.ask = false;
+      });
+    },
+    [CHANGE_ROUTE]: (state, { payload }: ChangeRouteAction) => {
+      return produce(state, (draft) => {
+        const { type, ...rest } = payload;
+        if (type === 'PUSH') {
+          draft.router.history.push(rest);
+        }
+        if (type === 'POP') {
+          draft.router.history.pop();
+        }
+        if (type === 'REPLACE') {
+          draft.router.history[draft.router.history.length - 1] = payload;
+        }
       });
     },
   },

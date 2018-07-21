@@ -1,13 +1,21 @@
 // @flow
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './PostActionButtons.scss';
 
-type Props = {};
+type Props = {
+  id: string,
+  onAskRemove: () => void,
+};
 
-const PostActionButtons = (props: Props) => (
+const PostActionButtons = ({ id, onAskRemove }: Props) => (
   <div className="PostActionButtons">
-    <button className="btn">수정</button>
-    <button className="btn">삭제</button>
+    <Link to={`/write?edit_id=${id}`} className="btn">
+      수정
+    </Link>
+    <button className="btn" onClick={onAskRemove}>
+      삭제
+    </button>
   </div>
 );
 

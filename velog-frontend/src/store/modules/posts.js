@@ -22,6 +22,7 @@ const READ_SUBCOMMENTS = 'posts/READ_SUBCOMMENTS';
 const LIKE = 'posts/LIKE';
 const UNLIKE = 'posts/UNLIKE';
 const GET_LIKES_COUNT = 'posts/GET_LIKES_COUNT';
+const TOGGLE_ASK_REMOVE = 'posts/TOGGLE_ASK_REMOVE';
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
@@ -33,6 +34,7 @@ export interface PostsActionCreators {
   like(postId: string): any;
   unlike(postId: string): any;
   getLikesCount(postId: string): any;
+  toggleAskRemove(): any;
 }
 
 export const actionCreators = {
@@ -45,10 +47,12 @@ export const actionCreators = {
   like: createAction(LIKE, LikesAPI.like),
   unlike: createAction(UNLIKE, LikesAPI.unlike),
   getLikesCount: createAction(GET_LIKES_COUNT, LikesAPI.getLikesCount),
+  toggleAskRemove: createAction(TOGGLE_ASK_REMOVE),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
 type ActivateHeadingAction = ActionType<typeof actionCreators.activateHeading>;
+
 
 export type Categories = { id: string, name: string, url_slug: string }[];
 export type Comment = {
@@ -95,6 +99,7 @@ export type Posts = {
   activeHeading: ?string,
   comments: ?(Comment[]),
   subcommentsMap: SubcommentsMap,
+  askRemove: boolean,
 };
 
 const initialState: Posts = {
@@ -103,6 +108,7 @@ const initialState: Posts = {
   activeHeading: null,
   comments: null,
   subcommentsMap: {},
+  askRemove: false,
 };
 
 const reducer = handleActions(
@@ -116,6 +122,12 @@ const reducer = handleActions(
       return produce(state, (draft) => {
         draft.activeHeading = action.payload;
       });
+    },
+    [TOGGLE_ASK_REMOVE]: (state) => {
+      return {
+        ...state,
+        askRemove: !state.askRemove,
+      };
     },
   },
   initialState,

@@ -1,19 +1,23 @@
 // @flow
 import React, { Component, Fragment } from 'react';
-import { UserActions, BaseActions } from 'store/actionCreators';
+import { UserActions, BaseActions, CommonActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import type { UserData } from 'store/modules/user';
 import storage from 'lib/storage';
 import NanoBar from 'components/common/NanoBar';
 import throttle from 'lodash/throttle';
+import { withRouter, type ContextRouter } from 'react-router-dom';
+
 import FullscreenLoaderContainer from './FullscreenLoaderContainer';
 
 type Props = {
   user: ?UserData,
-};
+} & ContextRouter;
 
 class Core extends Component<Props> {
+  unlisten = null;
+
   checkUser = async () => {
     const storedUser = storage.get('__velog_user__');
     if (!storedUser) {
@@ -52,9 +56,24 @@ class Core extends Component<Props> {
     // TODO
   };
 
+  listenHistory = () => {
+    const { history } = this.props;
+    this.unlisten = history.listen((location, type) => {
+      CommonActions.changeRoute({
+        type,
+        ...location,
+      });
+    });
+  };
+
   componentDidMount() {
     this.initialize();
     this.integrateAxiosProgressbar();
+    this.listenHistory();
+  }
+
+  componentWillUnmount() {
+    if (this.unlisten) this.unlisten();
   }
 
   render() {
@@ -72,4 +91,4 @@ export default connect(
     user: user.user,
   }),
   () => ({}),
-)(Core);
+)(withRouter(Core));

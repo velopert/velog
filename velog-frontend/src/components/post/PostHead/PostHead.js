@@ -9,6 +9,7 @@ import PostActionButtons from '../PostActionButtons';
 import './PostHead.scss';
 
 type Props = {
+  id: string,
   title: string,
   categories: Categories,
   user: {
@@ -21,9 +22,20 @@ type Props = {
   liked: boolean,
   ownPost: boolean,
   onToggleLike: () => void,
+  onAskRemove: () => void,
 };
 
-const PostHead = ({ title, categories, user, likes, liked, ownPost, onToggleLike }: Props) => {
+const PostHead = ({
+  id,
+  title,
+  categories,
+  user,
+  likes,
+  liked,
+  ownPost,
+  onToggleLike,
+  onAskRemove,
+}: Props) => {
   const userLink = `/@${user.username}`;
 
   return (
@@ -46,7 +58,7 @@ const PostHead = ({ title, categories, user, likes, liked, ownPost, onToggleLike
         <PostLikeButton onClick={onToggleLike} liked={liked} likes={likes} />
       </div>
       <div className="separator" />
-      {ownPost && <PostActionButtons />}
+      {ownPost && <PostActionButtons id={id} onAskRemove={onAskRemove} />}
     </div>
   );
 };
