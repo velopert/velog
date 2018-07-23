@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home, Register, Write, Post, User, Saves } from 'pages';
+import { Home, Register, Write, Post, User, Saves, Settings } from 'pages';
 import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
 
@@ -18,6 +18,7 @@ const App = () => (
       <Route path="/@:username/:urlSlug" component={Post} />
       <Route path="/posts/preview/:id" component={Post} />
       <Route path="/saves" component={Saves} />
+      <Route path="/settings" component={Settings} />
     </Switch>
     <Core />
   </React.Fragment>

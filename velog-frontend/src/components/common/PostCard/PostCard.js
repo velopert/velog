@@ -20,6 +20,7 @@ type Props = {
   urlSlug: string,
   userThumbnail: ?string,
   oneColumn?: boolean,
+  commentsCount: number,
 };
 
 moment.locale('ko');
@@ -33,6 +34,7 @@ const PostCard = ({
   urlSlug,
   userThumbnail,
   oneColumn,
+  commentsCount,
 }: Props) => {
   const now = new Date();
   const d = new Date(date);
@@ -76,7 +78,7 @@ const PostCard = ({
           </h3>
           <div className="subinfo">
             <span>{formattedDate}</span>
-            <span>8개의 댓글</span>
+            <span>{commentsCount}개의 댓글</span>
           </div>
         </div>
         <div className="description">{body}</div>

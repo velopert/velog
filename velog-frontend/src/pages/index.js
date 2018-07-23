@@ -4,3 +4,4 @@ export { default as Write } from './Write';
 export { default as Post } from './Post';
 export { default as User } from './User';
 export { default as Saves } from './Saves';
+export { default as Settings } from './Settings';

@@ -1,0 +1,21 @@
+@import 'utils';
+.SettingsTemplate {
+  main {
+    width: $medium-w;
+    margin: 0 auto;
+    margin-top: 4rem;
+    h2 {
+      color: $oc-gray-8;
+      margin: 0;
+      font-weight: 400;
+      font-size: 2.5rem;
+      padding-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      margin-bottom: 3rem;
+      svg {
+        margin-right: 1rem;
+      }
+    }
+  }
+}

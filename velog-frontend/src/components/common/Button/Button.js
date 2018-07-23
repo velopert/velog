@@ -12,6 +12,8 @@ type Props = {
   className?: string,
   to?: ?string,
   children: Node,
+  large?: boolean,
+  fullWidth?: boolean,
 };
 
 const Button = ({
@@ -22,9 +24,17 @@ const Button = ({
   violetFont,
   className,
   to,
+  large,
+  fullWidth,
   ...rest
 }: Props) => {
-  const processedClassName = cx('Button', theme, className, { confirm, cancel, violetFont });
+  const processedClassName = cx('Button', theme, className, {
+    confirm,
+    cancel,
+    violetFont,
+    large,
+    fullWidth,
+  });
   if (to) {
     return (
       <Link className={processedClassName} to={to} {...rest}>
@@ -46,6 +56,8 @@ Button.defaultProps = {
   violetFont: false,
   className: '',
   to: null,
+  large: false,
+  fullWidth: false,
 };
 
 export default Button;

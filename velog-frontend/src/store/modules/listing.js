@@ -49,6 +49,7 @@ export type PostItem = {
   categories: any[],
   url_slug: string,
   likes: number,
+  comments_count: number,
   user: {
     id: string,
     username: string,

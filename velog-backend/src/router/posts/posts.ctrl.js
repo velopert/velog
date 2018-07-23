@@ -33,6 +33,7 @@ import Sequelize from 'sequelize';
 import removeMd from 'remove-markdown';
 import { TYPES } from 'database/models/PostScore';
 import db from 'database/db';
+import { getCommentCountsOfPosts } from 'database/rawQuery/comments';
 import {
   getTrendingPostScore,
   getTrendingPosts,
@@ -296,6 +297,17 @@ export const readPost = async (ctx: Context): Promise<*> => {
   }
 };
 
+function injectCommentCounts(posts, commentCounts) {
+  // inject postCount
+  return posts.map((p) => {
+    const row = commentCounts.find(cc => cc.fk_post_id === p.id);
+    const count = row ? row.comments_count : 0;
+    return {
+      ...p,
+      comments_count: count,
+    };
+  });
+}
 export const listPosts = async (ctx: Context): Promise<*> => {
   const { username } = ctx.params;
   const {
@@ -335,13 +347,14 @@ export const listPosts = async (ctx: Context): Promise<*> => {
       ctx.body = [];
       return;
     }
-    // Fake Delay
-    // await new Promise((resolve) => { setTimeout(resolve, 2000); });
-    ctx.body = result.data
+    const data = result.data
       .map(serializePost)
       .map(post => ({ ...post, body: formatShortDescription(post.body) }));
-    // const link = `<${ctx.path}?cursor=${result.data[result.data.length - 1].id}>; rel="next";`;
-    // ctx.set('Link', link)
+
+    const commentCounts = await getCommentCountsOfPosts(result.data.map(p => p.id));
+
+    ctx.body = injectCommentCounts(data, commentCounts);
+
     ctx.set('Count', result.count.toString());
   } catch (e) {
     ctx.throw(500, e);
@@ -379,9 +392,13 @@ export const listTrendingPosts = async (ctx: Context) => {
       return;
     }
     const posts = await Post.readPostsByIds(postIds.map(postId => postId.post_id));
-    ctx.body = posts
+    const data = posts
       .map(serializePost)
       .map(post => ({ ...post, body: formatShortDescription(post.body) }));
+
+    // retrieve commentCounts and inject
+    const commentCounts = await getCommentCountsOfPosts(posts.map(p => p.id));
+    ctx.body = injectCommentCounts(data, commentCounts);
   } catch (e) {
     ctx.throw(500, e);
   }

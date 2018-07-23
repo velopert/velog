@@ -68,6 +68,14 @@
   }
   &.fullWidth {
     width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  &.large {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.25rem;
+    line-height: 1.25rem;
   }
 }
 

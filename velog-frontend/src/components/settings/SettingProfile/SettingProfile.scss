@@ -1,0 +1,19 @@
+@import 'utils';
+.SettingProfile {
+  display: flex;
+  margin-top: 2rem;
+  .thumbnail-area {
+    display: flex;
+    flex-direction: column;
+    width: 12rem;
+    margin-right: 1rem;
+    img {
+      width: 12rem;
+      height: 12rem;
+      display: block;
+      border-radius: 6rem;
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+  }
+}
