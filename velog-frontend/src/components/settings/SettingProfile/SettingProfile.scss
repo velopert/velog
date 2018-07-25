@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .SettingProfile {
   display: flex;
   margin-top: 2rem;
@@ -14,6 +14,55 @@
       border-radius: 6rem;
       object-fit: cover;
       margin-bottom: 1rem;
+    }
+  }
+  .user-info {
+    font-family: initial;
+    padding-left: 0.5rem;
+    flex: 1;
+    color: $oc-gray-7;
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    p {
+      line-height: 1.5;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      font-size: 1.125rem;
+    }
+  }
+  form {
+    font-family: initial;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    input,
+    textarea {
+      border-radius: 4px;
+      border: 1px solid $oc-gray-4;
+      outline: none;
+      font-size: 1.125rem;
+      padding: 0.875rem;
+      line-height: 1.5;
+    }
+    input {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    textarea {
+      margin-top: 1rem;
+      resize: none;
+      max-height: 11.875rem;
+    }
+  }
+  .right {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    button+button {
+      margin-left: 0.5rem;
     }
   }
 }

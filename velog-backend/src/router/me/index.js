@@ -7,5 +7,6 @@ import follow from './follow';
 const me: Router = new Router();
 me.use('/categories', categories.routes());
 me.use('/follow', follow.routes());
+me.patch('/profile', meCtrl.updateProfile);
 
 export default me;

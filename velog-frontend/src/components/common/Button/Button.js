@@ -5,7 +5,7 @@ import cx from 'classnames';
 import './Button.scss';
 
 type Props = {
-  theme: void | 'default' | 'outline' | 'paper' | 'gray',
+  theme: void | 'default' | 'outline' | 'paper' | 'gray' | 'transparent',
   confirm?: boolean,
   cancel?: boolean,
   violetFont?: boolean,

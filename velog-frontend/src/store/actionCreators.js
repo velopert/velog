@@ -11,6 +11,7 @@ import { actionCreators as listingActions, type ListingActionCreators } from './
 import { actionCreators as profileActions } from './modules/profile';
 import { actionCreators as followActions } from './modules/follow';
 import { actionCreators as commonActions } from './modules/common';
+import { actionCreators as settingsActions } from './modules/settings';
 
 const { dispatch } = store;
 
@@ -24,3 +25,7 @@ export const ListingActions: ListingActionCreators = bindActionCreators(listingA
 export const ProfileActions: typeof profileActions = bindActionCreators(profileActions, dispatch);
 export const FollowActions: typeof followActions = bindActionCreators(followActions, dispatch);
 export const CommonActions: typeof commonActions = bindActionCreators(commonActions, dispatch);
+export const SettingsActions: typeof settingsActions = bindActionCreators(
+  settingsActions,
+  dispatch,
+);

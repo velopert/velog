@@ -1,7 +1,6 @@
 // @flow
 import Sequelize from 'sequelize';
 import db from 'database/db';
-import User from './User';
 
 export interface UserProfileModel {
   id: number;

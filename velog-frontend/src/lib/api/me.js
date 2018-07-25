@@ -28,3 +28,14 @@ export const reorderCategories = (categoryOrders: ReorderCategoryPayload): Promi
 export const followUser = (userId: string) => axios.post(`/me/follow/users/${userId}`);
 export const getUserFollow = (userId: string) => axios.get(`/me/follow/users/${userId}`);
 export const unfollowUser = (userId: string) => axios.delete(`/me/follow/users/${userId}`);
+
+export type UpdateProfilePayload = {
+  displayName?: string,
+  shortBio?: string,
+};
+
+export const updateProfile = ({ displayName, shortBio }: UpdateProfilePayload) =>
+  axios.patch('/me/profile', {
+    display_name: displayName,
+    short_bio: shortBio,
+  });

@@ -5,6 +5,7 @@
   padding: 0.5rem 0.875rem;
   line-height: 0.875rem;
   font-size: 0.875rem;
+  cursor: pointer;
   &.default {
     background: $oc-violet-5;
     color: white;
@@ -76,6 +77,16 @@
     padding-bottom: 1rem;
     font-size: 1.25rem;
     line-height: 1.25rem;
+  }
+  &.transparent {
+    color: $oc-gray-8;
+    border-radius: 4px;
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+    &:active {
+      background: rgba(0, 0, 0, 0.07);
+    }
   }
 }
 
