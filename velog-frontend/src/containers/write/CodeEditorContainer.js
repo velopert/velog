@@ -98,7 +98,7 @@ class CodeEditorContainer extends Component<Props> {
     try {
       WriteActions.setUploadStatus(true);
       if (!this.props.uploadUrl) return;
-      const response = await axios.put(this.props.uploadUrl, file, {
+      await axios.put(this.props.uploadUrl, file, {
         headers: {
           'Content-Type': file.type,
         },
@@ -109,7 +109,6 @@ class CodeEditorContainer extends Component<Props> {
           }
         },
       });
-      console.log(this.props.imagePath);
       if (!this.props.imagePath) return;
       const imageUrl = `${'\n'}![${file.name}](https://images.velog.io/${
         this.props.imagePath

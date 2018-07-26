@@ -6,7 +6,16 @@ import * as filesCtrl from './files.ctrl';
 
 const files: Router = new Router();
 
-files.post('/create-url', filesCtrl.createSignedUrl);
+files.post(
+  '/create-url/post-image',
+  needsAuth,
+  filesCtrl.createPostImageSignedUrl,
+);
+files.post(
+  '/create-url/thumbnail',
+  needsAuth,
+  filesCtrl.createThumbnailSignedUrl,
+);
 files.post('/upload', needsAuth, filesCtrl.upload);
 files.post('/retrieve-size/:id', checkUUID, filesCtrl.retrieveSize);
 

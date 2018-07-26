@@ -12,6 +12,7 @@ export const updateProfile = async (ctx: Context): Promise<*> => {
       .min(1)
       .max(40),
     short_bio: Joi.string().max(140),
+    thumbnail: Joi.string(),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -21,6 +22,7 @@ export const updateProfile = async (ctx: Context): Promise<*> => {
   type BodySchema = {
     display_name?: string,
     short_bio?: string,
+    thumbnail?: string,
   };
 
   const body: BodySchema = (ctx.request.body: any);
@@ -36,7 +38,7 @@ export const updateProfile = async (ctx: Context): Promise<*> => {
       ctx.throw(500, 'Invalid Profile');
     }
 
-    ['display_name', 'short_bio'].forEach((key) => {
+    ['display_name', 'short_bio', 'thumbnail'].forEach((key) => {
       if (body[key]) {
         profile[key] = body[key];
       }

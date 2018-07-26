@@ -8,10 +8,11 @@ import PostImage from 'database/models/PostImage';
 import { isUUID } from 'lib/common';
 import downloadImage from 'lib/downloadImage';
 import mimeTypes from 'mime-types';
+import UserThumbnail from 'database/models/UserThumbnail';
 
 const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
-export const createSignedUrl: Middleware = async (ctx: Context) => {
+export const createPostImageSignedUrl: Middleware = async (ctx: Context) => {
   const { post_id, filename } = (ctx.request.body: any);
   if (!post_id) {
     ctx.status = 400;
@@ -57,7 +58,9 @@ export const createSignedUrl: Middleware = async (ctx: Context) => {
       fk_post_id: post_id,
       fk_user_id: ctx.user.id,
     });
-    const imagePath = `post-images/${ctx.user.username}/${postImage.id}/${filename}`;
+    const imagePath = `post-images/${ctx.user.username}/${
+      postImage.id
+    }/${filename}`;
     postImage.path = imagePath;
     await postImage.save();
     const url = await s3.getSignedUrl('putObject', {
@@ -94,6 +97,33 @@ export const retrieveSize: Middleware = async (ctx: Context) => {
   // get filesize
   // update filesize
   // return result
+};
+
+export const createThumbnailSignedUrl: Middleware = async (ctx) => {
+  const { id: userId, username } = ctx.user;
+  const { filename } = (ctx.request.body: any);
+
+  try {
+    const contentType = mimeTypes.contentType(filename);
+    const userThumbnail = UserThumbnail.build({
+      fk_user_id: userId,
+    });
+    const imagePath = `thumbnails/${username}/${userThumbnail.id}-${filename}`;
+    userThumbnail.path = imagePath;
+    await userThumbnail.save();
+    const url = await s3.getSignedUrl('putObject', {
+      Bucket: 's3.images.velog.io',
+      Key: imagePath,
+      ContentType: contentType,
+    });
+    ctx.body = {
+      url,
+      image_path: imagePath,
+      id: userThumbnail.id,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
 
 export const upload: Middleware = async (ctx: Context) => {
@@ -169,7 +199,9 @@ export const upload: Middleware = async (ctx: Context) => {
       fk_user_id: ctx.user.id,
       filesize: stats.size,
     });
-    const imagePath = `post-images/${ctx.user.username}/${postImage.id}/${image.name}`;
+    const imagePath = `post-images/${ctx.user.username}/${postImage.id}/${
+      image.name
+    }`;
     console.log(imagePath);
     postImage.path = imagePath;
     const read = fs.createReadStream(image.path);

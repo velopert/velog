@@ -32,10 +32,15 @@ export const unfollowUser = (userId: string) => axios.delete(`/me/follow/users/$
 export type UpdateProfilePayload = {
   displayName?: string,
   shortBio?: string,
+  thumbnail?: string,
 };
 
-export const updateProfile = ({ displayName, shortBio }: UpdateProfilePayload) =>
+export const updateProfile = ({ displayName, shortBio, thumbnail }: UpdateProfilePayload) =>
   axios.patch('/me/profile', {
     display_name: displayName,
     short_bio: shortBio,
+    thumbnail,
   });
+
+export const createThumbnailSignedUrl = (filename: string) =>
+  axios.post('/files/create-url/thumbnail', { filename });

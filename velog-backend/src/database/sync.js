@@ -18,6 +18,7 @@ import {
   Feed,
   PostScore,
   PostRead,
+  UserThumbnail,
 } from './models';
 import * as views from './views';
 
@@ -39,6 +40,7 @@ export function associate() {
   Feed.associate();
   PostScore.associate();
   PostRead.associate();
+  UserThumbnail.associate();
 }
 export default function sync() {
   associate();

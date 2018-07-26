@@ -10,6 +10,7 @@ import './SettingProfile.scss';
 type Props = {
   profile: Profile,
   onUpdateProfile: ({ displayName: string, shortBio: string }) => any,
+  onUploadThumbnail: () => any,
 };
 
 type State = {
@@ -70,13 +71,13 @@ class SettingProfile extends Component<Props, State> {
     }
   };
   render() {
-    const { profile } = this.props;
+    const { profile, onUploadThumbnail } = this.props;
     const { editing, displayName, shortBio } = this.state;
     return (
       <div className="SettingProfile">
         <div className="thumbnail-area">
           <img src={profile.thumbnail || defaultThumbnail} alt="thumbnail" />
-          <Button large fullWidth>
+          <Button large fullWidth onClick={onUploadThumbnail}>
             썸네일 변경
           </Button>
         </div>
