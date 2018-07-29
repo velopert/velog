@@ -6,6 +6,7 @@ type Storage = {
   set(key: string, value: any): void,
   get(key: string): ?any,
   remove(key: string): void,
+  clear(): void,
 };
 
 export const keys = {
@@ -28,6 +29,11 @@ const storage: Storage = {
   },
   remove(key) {
     delete st[key];
+  },
+  clear() {
+    if (st.clear) {
+      st.clear();
+    }
   },
 };
 

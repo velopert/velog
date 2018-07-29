@@ -16,7 +16,6 @@ type Props = {
 const QuestionModal = ({ title, description, confirmText, onConfirm, onCancel, open }: Props) => (
   <ModalWrapper open={open}>
     <div className="QuestionModal">
-      <div className="purple-line" />
       <div className="modal-content">
         {title && <h4>{title}</h4>}
         <p>{description}</p>

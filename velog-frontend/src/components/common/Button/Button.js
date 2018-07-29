@@ -14,6 +14,7 @@ type Props = {
   children: Node,
   large?: boolean,
   fullWidth?: boolean,
+  color?: string,
 };
 
 const Button = ({
@@ -26,9 +27,10 @@ const Button = ({
   to,
   large,
   fullWidth,
+  color,
   ...rest
 }: Props) => {
-  const processedClassName = cx('Button', theme, className, {
+  const processedClassName = cx('Button', theme, className, color, {
     confirm,
     cancel,
     violetFont,
@@ -58,6 +60,7 @@ Button.defaultProps = {
   to: null,
   large: false,
   fullWidth: false,
+  color: '',
 };
 
 export default Button;

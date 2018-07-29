@@ -4,7 +4,10 @@ import db from 'database/db';
 import { User, PostsTags, UserProfile } from 'database/models';
 import { pick } from 'lodash';
 
-export const getUser = async (ctx: Context, next: () => Promise<*>): Promise<*> => {
+export const getUser = async (
+  ctx: Context,
+  next: () => Promise<*>,
+): Promise<*> => {
   const { username } = ctx.params;
   try {
     const user = await User.findOne({
@@ -29,13 +32,12 @@ export const getProfile = async (ctx: Context) => {
     const profile = await ctx.selectedUser.getProfile();
     ctx.body = {
       user_id: ctx.selectedUser.id,
-      ...pick(profile, ['display_name', 'short_bio', 'thumbnail'])
+      ...pick(profile, ['display_name', 'short_bio', 'thumbnail']),
     };
   } catch (e) {
     ctx.throw(500, e);
   }
 };
-
 
 export const getTags = async (ctx: Context) => {
   const { id } = ctx.selectedUser;

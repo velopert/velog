@@ -52,6 +52,20 @@
       color: $oc-violet-5;
       cursor: pointer;
     }
+    &.red {
+      border: 1px solid $oc-red-8;
+      color: $oc-red-8;
+      font-weight: 500;
+      &:hover {
+        color: white;
+        background: $oc-red-6;
+        border: 1px solid $oc-red-6;
+      }
+      &:active {
+        background: $oc-red-7;
+        border: 1px solid $oc-red-7;
+      }
+    }
   }
   &.paper {
     @include common-button-style();

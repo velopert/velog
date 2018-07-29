@@ -5,13 +5,13 @@ import { generate } from 'lib/token';
 import UserProfile, { type UserProfileModel } from './UserProfile';
 
 export interface UserModel {
-  id: string,
-  username: string,
-  email: string,
+  id: string;
+  username: string;
+  email: string;
   // static findUser(type: 'email' | 'username', value: string): Promise<*>,
-  generateToken(): string,
-  validatePassword(password: string): Promise<boolean>,
-  getProfile(): Promise<UserProfileModel>
+  generateToken(): string;
+  validatePassword(password: string): Promise<boolean>;
+  getProfile(): Promise<UserProfileModel>;
 }
 
 const User = db.define('user', {
@@ -46,10 +46,10 @@ User.prototype.getProfile = async function getProfile(): Promise<*> {
 User.prototype.generateToken = async function generateToken(): Promise<string> {
   type TokenPayload = {
     id: string,
-    username: string
+    username: string,
   };
 
-  const { id, username } : TokenPayload = this;
+  const { id, username }: TokenPayload = this;
   const userProfile: UserProfileModel = await UserProfile.findByUserId(id);
   if (!userProfile) {
     throw new Error('user profile not found');

@@ -44,3 +44,9 @@ export const updateProfile = ({ displayName, shortBio, thumbnail }: UpdateProfil
 
 export const createThumbnailSignedUrl = (filename: string) =>
   axios.post('/files/create-url/thumbnail', { filename });
+
+export const generateUnregisterToken = () => axios.get('/me/unregister-token');
+export const unregister = (unregisterToken: string) =>
+  axios.post('/me/unregister', {
+    unregister_token: unregisterToken,
+  });

@@ -8,5 +8,7 @@ const me: Router = new Router();
 me.use('/categories', categories.routes());
 me.use('/follow', follow.routes());
 me.patch('/profile', meCtrl.updateProfile);
+me.get('/unregister-token', meCtrl.generateUnregisterToken);
+me.post('/unregister', meCtrl.unregister);
 
 export default me;

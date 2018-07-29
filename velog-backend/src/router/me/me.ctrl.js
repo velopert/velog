@@ -2,7 +2,10 @@
 import type { Context } from 'koa';
 import UserProfile from 'database/models/UserProfile';
 import { validateSchema } from 'lib/common';
+import { generate, decode } from 'lib/token';
+
 import Joi from 'joi';
+import User from '../../database/models/User';
 
 export const updateProfile = async (ctx: Context): Promise<*> => {
   const { user } = ctx;
@@ -54,5 +57,48 @@ export const updateProfile = async (ctx: Context): Promise<*> => {
     };
   } catch (e) {
     ctx.throw(500, e);
+  }
+};
+
+export const generateUnregisterToken = async (ctx: Context) => {
+  const { username } = ctx.user;
+  try {
+    const token = await generate(
+      { username },
+      {
+        expiresIn: '1h',
+        subject: 'unregister',
+      },
+    );
+    ctx.body = {
+      unregister_token: token,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const unregister = async (ctx: Context) => {
+  const { username, id } = ctx.user;
+  const schema = Joi.object().keys({
+    unregister_token: Joi.string().required(),
+  });
+
+  if (!validateSchema(ctx, schema)) return;
+
+  const unregisterToken = (ctx.request.body: any).unregister_token;
+  try {
+    const decoded = await decode(unregisterToken);
+    if (decoded.username !== username) {
+      ctx.status = 400;
+      return;
+    }
+    const user = await User.findById(id);
+    await user.destroy();
+    ctx.cookies.set('access_token', 'asdf');
+    // 탈퇴처리
+    ctx.status = 204;
+  } catch (e) {
+    ctx.status = 400;
   }
 };
