@@ -18,13 +18,11 @@
       }
       flex: 1;
       height: auto; // font-family: 'D2 coding';
-      font-family: "Inconsolata",
-      "D2 Coding",
-      sans-serif;
+      font-family: "Inconsolata", "D2 Coding", sans-serif;
       font-size: 1.3125rem;
       line-height: 1.5em;
       .cm-header {
-        font-family: initial;
+        @include common-font();
       }
       .cm-header-1 {
         font-size: 3rem;

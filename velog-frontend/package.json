@@ -51,6 +51,7 @@
     "react-autosize-textarea": "^3.0.3",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.3.2",
+    "react-helmet": "^5.2.0",
     "react-icon-base": "^2.1.2",
     "react-icons": "^2.2.7",
     "react-onclickoutside": "^6.7.1",

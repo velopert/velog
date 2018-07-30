@@ -14,10 +14,14 @@ import CategoryEditModalContainer from 'containers/write/CategoryEditModalContai
 import WriteExtraContainer from 'containers/write/WriteExtraContainer';
 import DisablePanesContainer from 'containers/write/DisablePanesContainer';
 import WritePanesContainer from 'containers/write/WritePanesContainer';
+import { Helmet } from 'react-helmet';
 
 const Write = () => {
   return (
     <WriteTemplate header={<WriteHeaderContainer />}>
+      <Helmet>
+        <title>새 글 작성하기 | velog</title>
+      </Helmet>
       <SubmitBoxContainer />
       <WriteExtraContainer />
       <WritePanesContainer />

@@ -584,6 +584,7 @@ export default applyPenders(reducer, [
         draft.submitBox.tags = payload.data.tags;
         draft.body = payload.data.body;
         draft.title = payload.data.title;
+        draft.thumbnail = payload.data.thumbnail;
       });
     },
   },

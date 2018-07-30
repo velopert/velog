@@ -9,7 +9,7 @@ import { Prompt, withRouter, type ContextRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import Blocker from 'components/common/Blocker';
 import queryString from 'query-string';
-
+import { Helmet } from 'react-helmet';
 
 type Props = {
   title: string,
@@ -27,7 +27,7 @@ class WriteHeaderContainer extends Component<Props> {
 
   loadPost = (id: string) => {
     WriteActions.getPostById(id);
-  }
+  };
 
   componentDidMount() {
     this.timer = setInterval(this.autoTempSave, 30000);
@@ -122,6 +122,11 @@ class WriteHeaderContainer extends Component<Props> {
     const { title, postData, writeExtraOpen, changed } = this.props;
     return (
       <Fragment>
+        {title && (
+          <Helmet>
+            <title>{`(작성중) ${title} | velog`}</title>
+          </Helmet>
+        )}
         <WriteHeader
           onOpenSubmitBox={onOpenSubmitBox}
           onChangeTitle={onChangeTitle}

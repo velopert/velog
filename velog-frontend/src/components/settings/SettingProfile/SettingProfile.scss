@@ -17,7 +17,7 @@
     }
   }
   .user-info {
-    font-family: initial;
+    @include common-font();
     padding-left: 0.5rem;
     flex: 1;
     color: $oc-gray-7;
@@ -34,7 +34,7 @@
     }
   }
   form {
-    font-family: initial;
+    @include common-font();
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -61,7 +61,7 @@
     margin-top: 1rem;
     display: flex;
     justify-content: flex-end;
-    button+button {
+    button + button {
       margin-left: 0.5rem;
     }
   }

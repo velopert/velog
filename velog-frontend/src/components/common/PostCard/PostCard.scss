@@ -116,7 +116,7 @@
       h3 {
         display: block;
         margin: 0;
-        font-family: initial;
+        @include common-font();
         font-size: 1.25rem;
         line-height: 2rem;
         max-height: 4rem;
@@ -142,6 +142,7 @@
       overflow-y: hidden;
       color: #4c657d;
       word-break: break-all;
+      @include common-font();
     }
   }
 }

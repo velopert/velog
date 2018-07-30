@@ -95,7 +95,7 @@ export const unregister = async (ctx: Context) => {
     }
     const user = await User.findById(id);
     await user.destroy();
-    ctx.cookies.set('access_token', 'asdf');
+    ctx.cookies.set('access_token', '');
     // 탈퇴처리
     ctx.status = 204;
   } catch (e) {

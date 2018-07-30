@@ -10,6 +10,15 @@ import type { PostData, TocItem } from 'store/modules/posts';
 import PostToc from 'components/post/PostToc';
 import QuestionModal from 'components/common/QuestionModal/QuestionModal';
 import { withRouter, type ContextRouter, type Location } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import removeMd from 'remove-markdown';
+
+function convertToPlainText(markdown: string): string {
+  const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
+  return removeMd(replaced)
+    .slice(0, 100)
+    .replace(/#/g, '');
+}
 
 type Props = {
   username: ?string,
@@ -87,6 +96,10 @@ class PostViewer extends Component<Props> {
 
     return (
       <Fragment>
+        <Helmet>
+          <title>{post.title}</title>
+          <meta name="description" content={convertToPlainText(post.body)} />
+        </Helmet>
         <PostToc toc={toc} activeHeading={activeHeading} />
         <PostHead
           id={post.id}

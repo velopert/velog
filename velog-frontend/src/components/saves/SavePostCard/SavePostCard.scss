@@ -1,8 +1,8 @@
-@import 'utils';
+@import "utils";
 .SavePostCard {
   border: 1px solid $oc-gray-3;
   color: $oc-gray-9;
-  font-family: initial;
+  @include common-font();
   .img-wrapper {
     padding-top: 52.63%;
     position: relative;
@@ -55,7 +55,7 @@
       }
     }
   }
-  &+& {
+  & + & {
     margin-top: 2rem;
   }
 }

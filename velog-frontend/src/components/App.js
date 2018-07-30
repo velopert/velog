@@ -3,9 +3,17 @@ import { Route, Switch } from 'react-router-dom';
 import { Home, Register, Write, Post, User, Saves, Settings } from 'pages';
 import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
+import { Helmet } from 'react-helmet';
 
 const App = () => (
   <React.Fragment>
+    <Helmet>
+      <title>velog</title>
+      <meta
+        name="description"
+        content="개발자들을 위한 취향저격 블로그 서비스. 어디서 글 쓸지 고민하지 말고 벨로그에서 시작하세요."
+      />
+    </Helmet>
     <Switch>
       <Route exact path="/" component={Home} />
       <Route path="/(trending|recent|collections|tags|stored)" component={Home} />

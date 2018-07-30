@@ -1,9 +1,9 @@
 // hover only for non-mobile
 @mixin hover() {
   @media (hover: hover) {
-    &:hover { 
+    &:hover {
       @content;
-     }
+    }
   }
 }
 
@@ -25,6 +25,10 @@
   cursor: pointer;
 }
 
+@mixin common-font() {
+  font-family: "Apple SD Gothic Neo", AppleSDGothicNeo, "Noto Sans CJK KR", "NanumGothic", "Malgun Gothic", "맑은 고딕", 돋움, dotum, arial, sans-serif;
+}
+
 @mixin unstyle-button() {
   outline: none;
   border: none;
@@ -32,20 +36,15 @@
   padding: 0;
   width: auto;
   overflow: visible;
-
   background: transparent;
-
   /* inherit font & color from ancestor */
   color: inherit;
   font: inherit;
-
   /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
   line-height: normal;
-
   /* Corrects font smoothing for webkit */
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
-
   /* Corrects inability to style clickable `input` types in iOS */
   -webkit-appearance: none;
   text-align: inherit;

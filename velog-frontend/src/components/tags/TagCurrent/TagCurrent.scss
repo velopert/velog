@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .TagCurrent {
   margin-top: 1rem;
   .backwards-btn {
@@ -24,7 +24,7 @@
     font-size: 2.5rem;
     font-weight: 400;
     color: $oc-gray-8;
-    font-family: initial;
+    @include common-font();
     .lighten {
       font-size: 1.25rem;
       color: $oc-gray-7;
