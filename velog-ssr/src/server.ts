@@ -1,5 +1,6 @@
 import * as Koa from 'koa';
 import router from './router';
+import './ssr';
 
 class Server {
   app: Koa;

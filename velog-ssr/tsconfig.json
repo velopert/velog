@@ -9,6 +9,9 @@
     "outDir": "./dist",
     "moduleResolution": "node"
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules"
   ]
