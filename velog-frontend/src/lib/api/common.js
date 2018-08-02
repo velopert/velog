@@ -6,5 +6,6 @@ export const getTags = (sort: string = 'popular') => {
 };
 
 export const getTagInfo = (tag: string) => {
+  console.log('errrrrr');
   return axios.get(`/common/tags/${tag}`);
 };

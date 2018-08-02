@@ -3,8 +3,8 @@ import { Context } from 'koa';
 
 const router = new Router();
 
-router.get('/', (ctx: Context) => {
-  ctx.body = 'I am alive!';
+router.get('/ping', (ctx: Context) => {
+  ctx.body = 'pong';
 });
 
 export default router;

@@ -62,5 +62,8 @@ module.exports = {
       process.env.NODE_PATH.split(path.delimiter).filter(Boolean),
     ),
   },
-  plugins: [new webpack.DefinePlugin(env.stringified)],
+  plugins: [
+    new webpack.DefinePlugin(env.stringified),
+    new webpack.NormalModuleReplacementPlugin(/hello/, 'fakeModule'),
+  ],
 };

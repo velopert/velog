@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import router from './router';
-import './ssr';
+import ssr from './ssr';
 
 class Server {
   app: Koa;
@@ -10,6 +10,7 @@ class Server {
   }
   setup() {
     this.app.use(router.routes()).use(router.allowedMethods());
+    this.app.use(ssr);
   }
   listen(port: number) {
     this.app.listen(port);
