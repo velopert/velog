@@ -9,8 +9,12 @@
     "deploy": "sls deploy"
   },
   "dependencies": {
+    "@types/html-minifier": "^3.5.2",
+    "@types/koa-compress": "^2.0.8",
+    "html-minifier": "^3.5.19",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
+    "koa-compress": "^3.0.0",
     "koa-router": "^7.4.0",
     "serverless-http": "^1.6.0",
     "source-map-support": "^0.5.0"

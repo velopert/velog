@@ -12,7 +12,7 @@ import type { FollowState } from './modules/follow';
 import type { CommonState } from './modules/common';
 import type { SettingsState } from './modules/settings';
 
-const store = configure();
+const store = configure(typeof window === 'undefined' ? undefined : window.__REDUX_STATE__);
 
 export default store;
 

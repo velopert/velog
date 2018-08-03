@@ -78,7 +78,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "build:server": "node scripts/build.server.js && cp ../velog-ssr/src/ssr/render.js ../velog-ssr/dist/ssr/render.js",
+    "build:server": "node scripts/build.server.js && cp ../velog-ssr/src/ssr/render.js ../velog-ssr/dist/ssr/render.js && cp ./build/asset-manifest.json ../velog-ssr/",
     "test": "node scripts/test.js --env=jsdom",
     "prettier:watch": "onchange '**/*.js' -- prettier-eslint --write {{changed}}",
     "deploy": "aws s3 sync ./build s3://cdn.velog.io/",

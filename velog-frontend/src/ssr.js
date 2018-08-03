@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router';
 import { Provider } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import routeConfig from './routeConfig';
 import App from './components/App';
 import configure from './store/configure';
@@ -36,8 +37,10 @@ const serverRender = async (ctx: any) => {
       </StaticRouter>
     </Provider>,
   );
+  const helmet = Helmet.renderStatic();
   return {
     html,
+    helmet,
     state: store.getState(),
   };
 };
