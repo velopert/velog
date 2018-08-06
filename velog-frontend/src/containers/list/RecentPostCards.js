@@ -15,6 +15,7 @@ type Props = {
   loading: boolean,
   width: number,
   hasEnded: boolean,
+  shouldCancel: boolean,
 };
 
 class RecentPostCards extends Component<Props> {
@@ -41,7 +42,9 @@ class RecentPostCards extends Component<Props> {
 
   initialize = async () => {
     try {
-      await ListingActions.getRecentPosts();
+      if (!this.props.shouldCancel) {
+        await ListingActions.getRecentPosts();
+      }
       this.prefetch();
     } catch (e) {
       console.log(e);
@@ -83,13 +86,14 @@ class RecentPostCards extends Component<Props> {
   }
 }
 
-const mapStateToProps = ({ listing, pender, base }: State) => ({
+const mapStateToProps = ({ listing, pender, base, common }: State) => ({
   posts: listing.recent.posts,
   prefetched: listing.recent.prefetched,
   prefetching: pender.pending['listing/PREFETCH'],
   loading: pender.pending['listing/GET_RECENT_POSTS'],
   width: base.windowWidth,
   hasEnded: listing.recent.end,
+  shouldCancel: common.router.history.length === 0,
 });
 
 export default connect(mapStateToProps, () => ({}))(RecentPostCards);

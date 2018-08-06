@@ -30,13 +30,15 @@ type Props = {
   currentUsername: ?string,
   askRemove: boolean,
   routerHistory: Location[],
+  shouldCancel: boolean,
 } & ContextRouter;
 
 class PostViewer extends Component<Props> {
   initialize = async () => {
-    const { username, urlSlug } = this.props;
+    const { username, urlSlug, shouldCancel } = this.props;
     if (!username || !urlSlug) return;
     try {
+      if (shouldCancel) return;
       PostsActions.readPost({
         username,
         urlSlug,
@@ -45,6 +47,10 @@ class PostViewer extends Component<Props> {
       console.log(e);
     }
   };
+
+  componentWillUnmount() {
+    PostsActions.unloadPost();
+  }
 
   onSetToc = (toc: ?(TocItem[])) => {
     PostsActions.setToc(toc);
@@ -142,6 +148,7 @@ export default connect(
     likeInProcess: pender.pending['posts/LIKE'] || pender.pending['posts/UNLIKE'],
     askRemove: posts.askRemove,
     routerHistory: common.router.history,
+    shouldCancel: common.router.history.length === 0,
   }),
   () => ({}),
 )(withRouter(PostViewer));

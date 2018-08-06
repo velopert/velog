@@ -19,6 +19,7 @@ type Props = {
     name: string,
     posts_count: number,
   },
+  shouldCancel: boolean,
 };
 
 class TagPostCards extends Component<Props> {
@@ -48,12 +49,14 @@ class TagPostCards extends Component<Props> {
   };
 
   initialize = async () => {
-    const { selectedTag } = this.props;
+    const { selectedTag, shouldCancel } = this.props;
     if (!selectedTag) return;
     try {
-      await ListingActions.getTagPosts({
-        tag: selectedTag.name,
-      });
+      if (!shouldCancel) {
+        await ListingActions.getTagPosts({
+          tag: selectedTag.name,
+        });
+      }
       await this.prefetch();
     } catch (e) {
       console.log(e);
@@ -116,6 +119,7 @@ const mapStateToProps = ({ listing, pender, base, common }: State) => ({
   width: base.windowWidth,
   hasEnded: listing.tag.end,
   selectedTag: common.tags.selected,
+  shouldCancel: common.router.history.length === 0,
 });
 
 export default connect(mapStateToProps, () => ({}))(TagPostCards);

@@ -28,6 +28,7 @@ router.use('/common', common.routes());
 router.get('/check', (ctx: Context) => {
   ctx.body = {
     version: '1.0.0-alpha.0',
+    origin: ctx.origin,
   };
 });
 

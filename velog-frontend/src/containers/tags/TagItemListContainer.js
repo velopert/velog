@@ -12,11 +12,13 @@ type OwnProps = {
 
 type Props = OwnProps & {
   tags: ?(TagData[]),
+  shouldCancel: boolean,
 };
 
 class TagItemListContainer extends Component<Props> {
   initialize = () => {
-    const { sort } = this.props;
+    const { sort, shouldCancel } = this.props;
+    if (shouldCancel) return;
     CommonActions.getTags(sort);
   };
 
@@ -44,6 +46,7 @@ class TagItemListContainer extends Component<Props> {
 export default connect(
   ({ common }: State) => ({
     tags: common.tags.data,
+    shouldCancel: common.router.history.length === 0,
   }),
   () => ({}),
 )(TagItemListContainer);

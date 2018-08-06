@@ -11,6 +11,7 @@ type Props = {
   postId: ?string,
   comments: ?(Comment[]),
   subcommentsMap: SubcommentsMap,
+  shouldCancel: boolean,
 };
 
 class PostCommentsContainer extends Component<Props> {
@@ -36,9 +37,10 @@ class PostCommentsContainer extends Component<Props> {
   };
 
   initialize = async () => {
-    const { postId } = this.props;
+    const { postId, shouldCancel } = this.props;
     if (!postId) return;
     try {
+      if (shouldCancel) return;
       await PostsActions.readComments({ postId });
     } catch (e) {
       console.log(e);
@@ -84,6 +86,7 @@ export default connect(
     postId: state.posts.post && state.posts.post.id,
     comments: state.posts.comments,
     subcommentsMap: state.posts.subcommentsMap,
+    shouldCancel: state.common.router.history.length === 0,
   }),
   () => ({}),
 )(PostCommentsContainer);

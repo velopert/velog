@@ -14,6 +14,7 @@ export type TocItem = {
 
 /* ACTION TYPE */
 const READ_POST = 'posts/READ_POST';
+const UNLOAD_POST = 'posts/UNLOAD_POST';
 const SET_TOC = 'posts/SET_TOC';
 const ACTIVATE_HEADING = 'posts/ACTIVATE_HEADING';
 const WRITE_COMMENT = 'posts/WRITE_COMMENT';
@@ -26,6 +27,7 @@ const TOGGLE_ASK_REMOVE = 'posts/TOGGLE_ASK_REMOVE';
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
+  unloadPost(): any;
   setToc(payload: ?(TocItem[])): any;
   activateHeading(payload: string): any;
   writeComment(payload: CommentsAPI.WriteCommentPayload): any;
@@ -39,6 +41,7 @@ export interface PostsActionCreators {
 
 export const actionCreators = {
   readPost: createAction(READ_POST, PostsAPI.readPost),
+  unloadPost: createAction(UNLOAD_POST),
   setToc: createAction(SET_TOC, (toc: ?(TocItem[])) => toc),
   activateHeading: createAction(ACTIVATE_HEADING, (headingId: string) => headingId),
   writeComment: createAction(WRITE_COMMENT, CommentsAPI.writeComment),
@@ -113,6 +116,12 @@ const initialState: Posts = {
 
 const reducer = handleActions(
   {
+    [UNLOAD_POST]: (state, action) => {
+      return {
+        ...state,
+        post: null,
+      };
+    },
     [SET_TOC]: (state, action: SetTocAction) => {
       return produce(state, (draft) => {
         draft.toc = action.payload;

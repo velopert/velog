@@ -80,14 +80,19 @@ const routes = [
   {
     path: '/@:username/:urlSlug',
     component: Post,
-    preload: (ctx: any, { dispatch }: any, match: Match) => {
+    preload: async (ctx: any, { dispatch, getState }: any, match: Match) => {
       const { username, urlSlug } = match.params;
       const PostsActions = bindActionCreators(postsActions, dispatch);
       if (!username || !urlSlug) return Promise.resolve();
-      return PostsActions.readPost({
+      await PostsActions.readPost({
         username,
         urlSlug,
       });
+      const { posts } = getState();
+      if (!posts.post) return null;
+      const postId = posts.post.id;
+      await PostsActions.readComments({ postId });
+      return null;
     },
   },
 ];

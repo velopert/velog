@@ -51,7 +51,7 @@ const PostCardList = ({
   const columnCount = oneColumn ? 1 : getColumnCount(width);
 
   if (!posts) return null;
-  const postList = (hasEnded
+  const postList = (hasEnded || posts.length <= 20
     ? posts
     : posts.slice(0, posts.length - posts.length % columnCount)
   ).map(post => (

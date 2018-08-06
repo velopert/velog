@@ -16,7 +16,6 @@ const serverRender = async (ctx: any) => {
   routeConfig.every((route) => {
     const match = matchPath(ctx.url, route);
     if (match) {
-      console.log(route);
       if (route.preload) {
         promises.push(route.preload(ctx, store, match));
       }

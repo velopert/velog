@@ -4,6 +4,7 @@ import SocialLoginButton from 'components/landing/SocialLoginButton';
 import CheckIcon from 'react-icons/lib/md/check';
 import Spinner from 'components/common/Spinner';
 import cx from 'classnames';
+import { Link } from 'react-router-dom';
 
 import './AuthForm.scss';
 
@@ -63,9 +64,9 @@ const AuthForm = ({
         <SocialLoginButton type="facebook" onSocialLogin={onSocialLogin} />
       </div>
       <div className="explore-wrapper">
-        <a className="explore" onClick={onExitLanding}>
+        <Link className="explore" to="/trending" onClick={onExitLanding}>
           로그인 하지 않고 둘러보기
-        </a>
+        </Link>
       </div>
     </div>
   );
