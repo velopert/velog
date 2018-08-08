@@ -2,6 +2,7 @@ import * as Koa from 'koa';
 import * as compress from 'koa-compress';
 import router from './router';
 import ssr from './ssr';
+import redisClient from './lib/redisClient';
 
 class Server {
   app: Koa;
@@ -10,6 +11,8 @@ class Server {
     this.setup();
   }
   setup() {
+    // connect redis
+    redisClient.connect();
     this.app.use(compress({
       filter: (contentType) => {
         return /text/i.test(contentType)

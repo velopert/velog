@@ -9,13 +9,16 @@
     "deploy": "sls deploy"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/html-minifier": "^3.5.2",
     "@types/koa-compress": "^2.0.8",
+    "axios": "^0.18.0",
     "html-minifier": "^3.5.19",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-compress": "^3.0.0",
     "koa-router": "^7.4.0",
+    "redis": "^2.8.0",
     "serverless-http": "^1.6.0",
     "source-map-support": "^0.5.0"
   },
@@ -24,6 +27,7 @@
     "@types/koa": "^2.0.46",
     "@types/koa-router": "^7.0.31",
     "@types/node": "^8.0.57",
+    "@types/redis": "^2.8.6",
     "nodemon": "^1.18.3",
     "serverless-offline": "^3.25.6",
     "serverless-webpack": "^5.1.1",

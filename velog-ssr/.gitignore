@@ -8,3 +8,5 @@ jspm_packages
 # Webpack directories
 .webpack
 dist
+dist/ssr/render.js
+src/ssr/render.js
