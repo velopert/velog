@@ -10,6 +10,9 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: ap-northeast-2
+  environment:
+    REDIS_HOST: ${file(./env.json):REDIS_HOST}
+    REDIS_PASS: ${file(./env.json):REDIS_PASS}
 
 functions:
   app:
@@ -21,3 +24,10 @@ functions:
       - http:
           method: ANY
           path: /{any+}
+    vpc:
+      securityGroupIds:
+        - sg-5bc57830
+      subnetIds:
+        - subnet-91481ef9
+        - subnet-2c59dc60
+        - subnet-4f59dc03

@@ -77,6 +77,11 @@ class MarkdownRender extends Component<Props, State> {
     theme: 'atom-one',
   };
 
+  constructor(props: Props) {
+    super(props);
+    this.state.html = marked(this.props.body);
+  }
+
   renderMarkdown() {
     if (toc) {
       toc = [];
@@ -91,6 +96,10 @@ class MarkdownRender extends Component<Props, State> {
   }
 
   componentDidMount() {
+    if (this.state.html !== '') {
+      this.renderPrism();
+      this.updatePositions();
+    }
     this.renderMarkdown();
     this.registerEvent();
   }

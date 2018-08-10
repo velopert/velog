@@ -1,5 +1,7 @@
 import render from './render.js';
 import { Context } from 'koa';
+import redisClient from '../lib/redisClient';
+import { check } from './rules';
 
 const manifest = require('../../asset-manifest.json');
 
@@ -44,11 +46,24 @@ function buildHtml(rendered, state, helmet) {
 export const indexHtml = buildHtml('', null, null);
 
 const ssr = async (ctx: Context) => {
+  console.log(redisClient.connectedTime);
   try {
+    // check cache
+    const cache = await redisClient.getCache(ctx.url);
+    if (cache) {
+      ctx.body = cache;
+      return;
+    }
     const { state, html, helmet } = await render(ctx);
-    ctx.body = buildHtml(html, state, helmet);
+    const body = buildHtml(html, state, helmet);
+    ctx.body = body;
+    const rule = check(ctx.path);
+    if (rule) {
+      await redisClient.setCache(ctx.url, body, rule.maxAge); 
+      ctx.set('SSR-Cache-Duration', rule.maxAge.toString());
+    }
   } catch (e) {
-    console.log(e);
+    ctx.body = indexHtml;
   }
 }
 

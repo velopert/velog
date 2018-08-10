@@ -1,5 +1,6 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
+const webpack = require('webpack');
 
 const entries = {};
 
@@ -26,4 +27,7 @@ module.exports = {
       { test: /\.tsx?$/, loader: 'ts-loader' },
     ],
   },
+  plugins: [
+    new webpack.IgnorePlugin(/^hiredis$/),
+  ]
 };

@@ -10,3 +10,7 @@ jspm_packages
 dist
 dist/ssr/render.js
 src/ssr/render.js
+
+
+.env
+env.json

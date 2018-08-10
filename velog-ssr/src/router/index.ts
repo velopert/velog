@@ -2,13 +2,21 @@ import * as Router from 'koa-router';
 import { Context } from 'koa';
 import { indexHtml } from '../ssr/index';
 import axios from 'axios';
+import redisClient from '../lib/redisClient';
 
 const router = new Router();
 
 let serviceWorkerCache = null;
 
-router.get('/ping', (ctx: Context) => {
-  ctx.body = 'pong';
+router.get('/ping', async (ctx: Context) => {
+  try {
+    const cache = await redisClient.getCache('hello');
+    ctx.body = cache;
+    await redisClient.setCache('hello', 'world', 360);
+  } catch (e) {
+    console.log(e);
+  }
+
 });
 
 router.get('/index.html', (ctx: Context) => {

@@ -10,9 +10,13 @@ class Server {
     this.app = new Koa();
     this.setup();
   }
-  setup() {
+  async setup() {
     // connect redis
-    redisClient.connect();
+    if (!redisClient.connected) {
+      redisClient.connect();
+    } else {
+      console.log('reusing redis connection...');
+    }
     this.app.use(compress({
       filter: (contentType) => {
         return /text/i.test(contentType)
