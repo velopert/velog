@@ -93,7 +93,7 @@ const mapStateToProps = ({ listing, pender, base, common }: State) => ({
   loading: pender.pending['listing/GET_TRENDING_POSTS'],
   width: base.windowWidth,
   hasEnded: listing.trending.end,
-  shouldCancel: common.router.history.length === 0,
+  shouldCancel: common.ssr && common.router.history.length === 0,
 });
 
 export default connect(mapStateToProps, () => ({}))(TrendingPostCards);

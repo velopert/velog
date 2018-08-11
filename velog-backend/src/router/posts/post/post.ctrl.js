@@ -17,6 +17,7 @@ import {
   PostsCategories,
   Category,
 } from 'database/models';
+import redisClient from 'lib/redisClient';
 
 export const checkPostExistancy = async (
   ctx: Context,
@@ -105,8 +106,8 @@ export const updatePost = async (ctx: Context): Promise<*> => {
 
   const { id } = ctx.params;
 
-  const urlSlugShouldChange =
-    urlSlug !== ctx.post.url_slug || (title && ctx.post.title !== title);
+  // TODO: urlSlug change feature
+  const urlSlugShouldChange = false; // urlSlug !== ctx.post.url_slug || (title && ctx.post.title !== title);
 
   // current !== received -> check urlSlugExistancy
   if (urlSlugShouldChange) {
@@ -126,7 +127,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   const updateQuery = {
     title,
     body,
-    url_slug: urlSlugShouldChange && escapedUrlSlug,
+    // url_slug: urlSlugShouldChange && escapedUrlSlug,
     thumbnail,
     is_temp: isTemp,
     meta,
@@ -206,6 +207,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   } catch (e) {
     ctx.throw(500, e);
   }
+  redisClient.remove(`/@${ctx.user.username}/${ctx.post.url_slug}`);
 };
 
 export const readPost = async (ctx: Context): Promise<*> => {
@@ -231,6 +233,7 @@ export const deletePost = async (ctx: Context): Promise<*> => {
       db.getQueryInterface().bulkDelete('post_likes', { fk_post_id: post.id }),
     ]);
     await post.destroy();
+    redisClient.remove(`/@${ctx.user.username}/${ctx.post.url_slug}`);
     ctx.status = 204;
   } catch (e) {
     ctx.throw(500, e);

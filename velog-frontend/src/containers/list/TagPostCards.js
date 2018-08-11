@@ -119,7 +119,7 @@ const mapStateToProps = ({ listing, pender, base, common }: State) => ({
   width: base.windowWidth,
   hasEnded: listing.tag.end,
   selectedTag: common.tags.selected,
-  shouldCancel: common.router.history.length === 0,
+  shouldCancel: common.ssr && common.router.history.length === 0,
 });
 
 export default connect(mapStateToProps, () => ({}))(TagPostCards);

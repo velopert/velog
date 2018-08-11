@@ -64,6 +64,7 @@
     "nodemon": "^1.12.1",
     "pg": "^7.4.1",
     "prettier-eslint": "^8.8.1",
+    "redis": "^2.8.0",
     "remove-markdown": "^0.3.0",
     "sequelize": "^4.26.0",
     "sequelize-cockroachdb": "^1.0.3",

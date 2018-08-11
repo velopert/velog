@@ -34,5 +34,8 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js',
   },
-  plugins: [new webpack.DefinePlugin({ 'global.GENTLY': false })],
+  plugins: [
+    new webpack.DefinePlugin({ 'global.GENTLY': false }),
+    new webpack.IgnorePlugin(/^hiredis$/),
+  ],
 };

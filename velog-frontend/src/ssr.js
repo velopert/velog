@@ -4,12 +4,14 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router';
 import { Provider } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { actionCreators as commonActions } from 'store/modules/common';
 import routeConfig from './routeConfig';
 import App from './components/App';
 import configure from './store/configure';
 
 const serverRender = async (ctx: any) => {
   const store = configure();
+  store.dispatch(commonActions.didSSR());
   // match routes...
   const promises = [];
 

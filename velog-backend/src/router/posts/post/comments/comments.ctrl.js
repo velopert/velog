@@ -5,6 +5,7 @@ import db from 'database/db';
 import Comment, { type WriteParams } from 'database/models/Comment';
 import { validateSchema } from 'lib/common';
 import PostScore, { TYPES } from 'database/models/PostScore';
+import redisClient from 'lib/redisClient';
 
 export const writeComment: Middleware = async (ctx: Context) => {
   type BodySchema = {
@@ -80,6 +81,7 @@ export const writeComment: Middleware = async (ctx: Context) => {
       fk_post_id: postId,
       score: 0.375,
     });
+    // redisClient.remove(`/@${ctx.post.user.username}/${ctx.post.url_slug}`);
   } catch (e) {
     ctx.throw(e);
   }
@@ -93,7 +95,8 @@ export const getCommentList: Middleware = async (ctx: Context) => {
       postId,
       offset,
     });
-    const link = `<${ctx.path}?offset=${parseInt(offset, 10) + 20}>; rel="next";`;
+    const link = `<${ctx.path}?offset=${parseInt(offset, 10) +
+      20}>; rel="next";`;
     if (count >= offset + 20) {
       ctx.set('Link', link);
     }

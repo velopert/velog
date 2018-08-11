@@ -46,7 +46,7 @@ class TagItemListContainer extends Component<Props> {
 export default connect(
   ({ common }: State) => ({
     tags: common.tags.data,
-    shouldCancel: common.router.history.length === 0,
+    shouldCancel: common.ssr && common.router.history.length === 0,
   }),
   () => ({}),
 )(TagItemListContainer);

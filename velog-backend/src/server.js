@@ -7,11 +7,15 @@ import db from 'database/db';
 import { associate } from 'database/sync';
 import koaBody from 'koa-body';
 import router from './router';
+import redisClient from './lib/redisClient';
 
 export default class Server {
   app: Koa;
 
   constructor() {
+    if (!redisClient.connected) {
+      redisClient.connect();
+    }
     this.app = new Koa();
     this.middleware();
     this.initializeDb();
@@ -36,8 +40,7 @@ export default class Server {
     app.use(koaBody({
       multipart: true,
     }));
-    app.use(router.routes())
-      .use(router.allowedMethods());
+    app.use(router.routes()).use(router.allowedMethods());
     app.use((ctx) => {
       ctx.body = ctx.path;
     });

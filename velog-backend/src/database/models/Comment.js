@@ -4,37 +4,48 @@ import db from 'database/db';
 import { primaryUUID, extractKeys } from 'lib/common';
 import { Post, User, UserProfile } from 'database/models';
 
-
-const Comment = db.define('comment', {
-  id: primaryUUID,
-  fk_post_id: Sequelize.UUID,
-  fk_user_id: Sequelize.UUID,
-  text: Sequelize.TEXT,
-  likes: {
-    defaultValue: 0,
-    type: Sequelize.INTEGER,
-  },
-  meta_json: Sequelize.TEXT,
-  reply_to: Sequelize.UUID,
-  level: {
-    defaultValue: 0,
-    type: Sequelize.INTEGER,
-  },
-  has_replies: {
-    defaultValue: false,
-    type: Sequelize.BOOLEAN,
-  },
-}, {
-  indexes: [
-    {
-      fields: ['created_at'],
+const Comment = db.define(
+  'comment',
+  {
+    id: primaryUUID,
+    fk_post_id: Sequelize.UUID,
+    fk_user_id: Sequelize.UUID,
+    text: Sequelize.TEXT,
+    likes: {
+      defaultValue: 0,
+      type: Sequelize.INTEGER,
     },
-  ],
-});
+    meta_json: Sequelize.TEXT,
+    reply_to: Sequelize.UUID,
+    level: {
+      defaultValue: 0,
+      type: Sequelize.INTEGER,
+    },
+    has_replies: {
+      defaultValue: false,
+      type: Sequelize.BOOLEAN,
+    },
+  },
+  {
+    indexes: [
+      {
+        fields: ['created_at'],
+      },
+    ],
+  },
+);
 
 Comment.associate = function associate() {
-  Comment.belongsTo(Post, { foreignKey: 'fk_post_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
-  Comment.belongsTo(User, { foreignKey: 'fk_user_id', onDelete: 'CASCADE', onUpdate: 'restrict' });
+  Comment.belongsTo(Post, {
+    foreignKey: 'fk_post_id',
+    onDelete: 'CASCADE',
+    onUpdate: 'restrict',
+  });
+  Comment.belongsTo(User, {
+    foreignKey: 'fk_user_id',
+    onDelete: 'CASCADE',
+    onUpdate: 'restrict',
+  });
 };
 
 export type WriteParams = {
@@ -42,7 +53,7 @@ export type WriteParams = {
   userId: string,
   text: string,
   replyTo: ?string,
-  level: number
+  level: number,
 };
 
 Comment.getCommentsCount = async function (postId: string) {
@@ -60,14 +71,18 @@ Comment.getCommentsCountList = function (postIds: string[]) {
 Comment.readComment = async function (commentId: string) {
   try {
     const data = await Comment.findOne({
-      include: [{
-        model: User,
-        attributes: ['username'],
-        include: [{
-          model: UserProfile,
-          attributes: ['thumbnail'],
-        }],
-      }],
+      include: [
+        {
+          model: User,
+          attributes: ['username'],
+          include: [
+            {
+              model: UserProfile,
+              attributes: ['thumbnail'],
+            },
+          ],
+        },
+      ],
       where: {
         id: commentId,
       },
@@ -98,28 +113,27 @@ Comment.getChildrenOf = function (id) {
 };
 
 Comment.listComments = async function ({
-  postId,
-  replyTo,
-  offset = 0,
-  order,
+  postId, replyTo, offset = 0, order,
 }) {
   try {
     const { rows: data, count } = await Comment.findAndCountAll({
-      include: [{
-        model: User,
-        attributes: ['username'],
-        include: [{
-          model: UserProfile,
-          attributes: ['thumbnail'],
-        }],
-      }],
+      include: [
+        {
+          model: User,
+          attributes: ['username'],
+          include: [
+            {
+              model: UserProfile,
+              attributes: ['thumbnail'],
+            },
+          ],
+        },
+      ],
       where: {
         fk_post_id: postId,
         ...(replyTo ? { reply_to: replyTo } : { level: 0 }),
       },
-      order: [
-        ['created_at', 'ASC'],
-      ],
+      order: [['created_at', 'ASC']],
       // limit: 20,
       offset,
     });
@@ -140,7 +154,6 @@ Comment.listComments = async function ({
     await fetchChildren(comments);
     */
     for (let i = 0; i < comments.length; i++) {
-      console.log(comments[i]);
       if (!comments[i].has_replies) {
         comments[i].replies_count = 0;
         continue;
@@ -174,16 +187,26 @@ Comment.write = function ({
 };
 
 Comment.serialize = (data: any) => {
-  return Object.assign(extractKeys(data, [
-    'id', 'text', 'likes', 'meta_json', 'reply_to',
-    'actual_reply_to', 'level', 'created_at', 'updated_at',
-  ]), {
-    user: {
-      username: data.user.username,
-      thumbnail: data.user.user_profile.thumbnail,
+  return Object.assign(
+    extractKeys(data, [
+      'id',
+      'text',
+      'likes',
+      'meta_json',
+      'reply_to',
+      'actual_reply_to',
+      'level',
+      'created_at',
+      'updated_at',
+    ]),
+    {
+      user: {
+        username: data.user.username,
+        thumbnail: data.user.user_profile.thumbnail,
+      },
+      replies_count: data.replies_count || 0,
     },
-    replies_count: data.replies_count || 0,
-  });
+  );
 };
 
 export default Comment;

@@ -13,6 +13,7 @@ const ASK_REMOVE = 'common/saves/ASK_REMOVE';
 const CLOSE_REMOVE = 'common/saves/CLOSE_REMOVE';
 const REMOVE_POST = 'common/saves/REMOVE_POST';
 const CHANGE_ROUTE = 'common/router/CHANGE_ROUTE';
+const DID_SSR = 'common/DID_SSR';
 
 export type TagData = {
   name: string,
@@ -29,6 +30,7 @@ export const actionCreators = {
   closeRemove: createAction(CLOSE_REMOVE),
   removePost: createAction(REMOVE_POST, PostsAPI.deletePost),
   changeRoute: createAction(CHANGE_ROUTE, (payload: HistoryPayload) => payload),
+  didSSR: createAction(DID_SSR),
 };
 
 type GetTagsResponseAction = GenericResponseAction<TagData[], string>;
@@ -51,6 +53,7 @@ export type CommonState = {
   router: {
     history: Location[],
   },
+  ssr: boolean,
 };
 
 const initialState: CommonState = {
@@ -67,6 +70,7 @@ const initialState: CommonState = {
   router: {
     history: [],
   },
+  ssr: false,
 };
 
 const reducer = handleActions(
@@ -101,6 +105,10 @@ const reducer = handleActions(
         }
       });
     },
+    [DID_SSR]: state => ({
+      ...state,
+      ssr: true,
+    }),
   },
   initialState,
 );

@@ -148,7 +148,7 @@ export default connect(
     likeInProcess: pender.pending['posts/LIKE'] || pender.pending['posts/UNLIKE'],
     askRemove: posts.askRemove,
     routerHistory: common.router.history,
-    shouldCancel: common.router.history.length === 0,
+    shouldCancel: common.ssr && common.router.history.length === 0,
   }),
   () => ({}),
 )(withRouter(PostViewer));
