@@ -12,7 +12,7 @@ type Props = {
 };
 
 type State = {
-  input: string
+  input: string,
 };
 
 // const processTags = (tags: Array<string>): Array<string> => {
@@ -40,33 +40,37 @@ class InputTags extends Component<Props, State> {
 
   state = {
     input: '',
-  }
+  };
 
   onChange = (e: any) => {
     this.setState({
       input: e.target.value,
     });
-  }
+  };
 
   onKeyUp = (e: any) => {
     if (['Enter', ','].indexOf(e.key) !== -1) {
       this.onButtonClick();
       e.preventDefault();
     }
-  }
+  };
 
   onButtonClick = () => {
     const { input } = this.state;
     const { onInsert } = this.props;
-    onInsert(input.replace(',', ''));
+    const filtered = input.replace(
+      /[^0-9a-zA-Zㄱ-힣\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf ]/g,
+      ' ',
+    );
+    onInsert(filtered);
     this.setState({
       input: '',
     });
-  }
+  };
 
   renderTags() {
     const { tags, onRemove } = this.props;
-    return tags.map(tag => (<Tag key={tag} name={tag} onRemove={onRemove} />));
+    return tags.map(tag => <Tag key={tag} name={tag} onRemove={onRemove} />);
   }
 
   componentDidMount() {
@@ -80,10 +84,23 @@ class InputTags extends Component<Props, State> {
     return (
       <div className="InputTags">
         <div className="input-button">
-          <input placeholder="태그를 입력하세요" value={input} onChange={onChange} onKeyUp={onKeyUp} />
-          <div className="button util flex-center" onClick={onButtonClick}>등록</div>
+          <input
+            placeholder="태그를 입력하세요"
+            value={input}
+            onChange={onChange}
+            onKeyUp={onKeyUp}
+          />
+          <div className="button util flex-center" onClick={onButtonClick}>
+            등록
+          </div>
         </div>
-        <div id="tags" className="tags" ref={(ref) => { this.tags = ref; }}>
+        <div
+          id="tags"
+          className="tags"
+          ref={(ref) => {
+            this.tags = ref;
+          }}
+        >
           {this.renderTags()}
         </div>
       </div>
