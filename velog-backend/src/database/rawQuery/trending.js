@@ -13,9 +13,12 @@ type TrendingPostRow = {
 };
 
 // credits to SeniorDev778 dev
-export const getTrendingPosts = async (cursor: ?CursorPayload): Promise<TrendingPostRow[]> => {
+export const getTrendingPosts = async (
+  cursor: ?CursorPayload,
+): Promise<TrendingPostRow[]> => {
   const query = `SELECT fk_post_id AS post_id, SUM(score) AS score FROM post_scores
   WHERE created_at > now()::DATE - 14
+  AND fk_post_id IS NOT NULL
   ${cursor ? 'AND fk_post_id > $id' : ''}
   GROUP BY fk_post_id
   ${cursor ? 'HAVING SUM(score) <= $score' : ''}
@@ -33,7 +36,10 @@ export const getTrendingPosts = async (cursor: ?CursorPayload): Promise<Trending
   }
 };
 
-export const getTrendingPostScore = async (postId: string, days: number = 14) => {
+export const getTrendingPostScore = async (
+  postId: string,
+  days: number = 14,
+) => {
   const query = `
   SELECT fk_post_id AS post_id, SUM(score) AS score FROM post_scores
   WHERE created_at > now()::DATE - ${days}

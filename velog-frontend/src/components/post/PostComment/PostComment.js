@@ -7,6 +7,7 @@ import Button from 'components/common/Button';
 import type { Comment, SubcommentsMap } from 'store/modules/posts';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
 import { Link } from 'react-router-dom';
+import { fromNow } from 'lib/common';
 
 import './PostComment.scss';
 
@@ -17,10 +18,12 @@ type Props = {
   repliesCount: number,
   level: number,
   id: string,
+  date: string,
   replies: ?(Comment[]),
   subcommentsMap: SubcommentsMap,
   onReply: (text: string, replyTo: ?string) => Promise<*>,
   onReadReplies: (commentId: string) => Promise<*>,
+  logged: boolean,
 };
 
 type State = {
@@ -95,6 +98,8 @@ class PostComment extends Component<Props, State> {
       replies,
       subcommentsMap,
       onReadReplies,
+      date,
+      logged,
     } = this.props;
     const { open, showInput } = this.state;
 
@@ -110,7 +115,7 @@ class PostComment extends Component<Props, State> {
             <Link to={userProfileLink} className="username">
               {username}
             </Link>
-            <div className="date">2018.06.11</div>
+            <div className="date">{fromNow(date)}</div>
           </div>
         </div>
         <div className="comment-body">{comment}</div>
@@ -121,10 +126,12 @@ class PostComment extends Component<Props, State> {
               숨기기
             </button>
           ) : (
-            <button className="replies-button" onClick={this.onOpen}>
-              <PlusIcon />
-              {repliesCount === 0 ? '답글 달기' : `${repliesCount}개의 답글`}
-            </button>
+            (logged || repliesCount > 0) && (
+              <button className="replies-button" onClick={this.onOpen}>
+                <PlusIcon />
+                {repliesCount === 0 ? '답글 달기' : `${repliesCount}개의 답글`}
+              </button>
+            )
           ))}
         {open && (
           <section className="replies">
@@ -132,11 +139,13 @@ class PostComment extends Component<Props, State> {
               replies.map((reply) => {
                 return (
                   <PostComment
+                    logged={logged}
                     key={reply.id}
                     id={reply.id}
                     username={reply.user.username}
                     thumbnail={reply.user.thumbnail}
                     comment={reply.text}
+                    date={reply.created_at}
                     replies={subcommentsMap[reply.id]}
                     repliesCount={reply.replies_count}
                     subcommentsMap={subcommentsMap}
@@ -154,9 +163,11 @@ class PostComment extends Component<Props, State> {
                 replyTo={id}
               />
             ) : (
-              <button className="show-input-button" onClick={this.onShowInput}>
-                답글 작성하기
-              </button>
+              logged && (
+                <button className="show-input-button" onClick={this.onShowInput}>
+                  답글 작성하기
+                </button>
+              )
             )}
           </section>
         )}

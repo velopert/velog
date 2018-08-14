@@ -6,6 +6,7 @@ import Comment, { type WriteParams } from 'database/models/Comment';
 import { validateSchema } from 'lib/common';
 import PostScore, { TYPES } from 'database/models/PostScore';
 import redisClient from 'lib/redisClient';
+import User from 'database/models/User';
 
 export const writeComment: Middleware = async (ctx: Context) => {
   type BodySchema = {
@@ -81,7 +82,8 @@ export const writeComment: Middleware = async (ctx: Context) => {
       fk_post_id: postId,
       score: 0.375,
     });
-    // redisClient.remove(`/@${ctx.post.user.username}/${ctx.post.url_slug}`);
+    const postWriter = await User.findById(ctx.post.fk_user_id);
+    redisClient.remove(`/@${postWriter.username}/${ctx.post.url_slug}`);
   } catch (e) {
     ctx.throw(e);
   }

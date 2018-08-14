@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import ImageIcon from 'react-icons/lib/io/image';
-import moment from 'moment';
+import { fromNow } from 'lib/common';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
@@ -23,8 +23,6 @@ type Props = {
   commentsCount: number,
 };
 
-moment.locale('ko');
-
 const PostCard = ({
   thumbnail,
   username,
@@ -36,18 +34,7 @@ const PostCard = ({
   oneColumn,
   commentsCount,
 }: Props) => {
-  const now = new Date();
-  const d = new Date(date);
-  const m = moment(date);
-  const diff = now - d;
-  const formattedDate = (() => {
-    if (diff < 1000 * 60) return '방금 전';
-    if (diff > 1000 * 60 * 60 * 24) {
-      return m.format('MMM Do');
-    }
-    return m.fromNow();
-  })();
-
+  const formattedDate = fromNow(date);
   const link = `/@${username}/${urlSlug}`;
   return (
     <div className={cx('PostCard', { 'one-column': oneColumn })}>

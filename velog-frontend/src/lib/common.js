@@ -1,7 +1,9 @@
 // @flow
 import { pender } from 'redux-pender';
 import type { $AxiosXHR, $AxiosError } from 'axios';
-import moment from 'moment';
+import koLocale from 'date-fns/locale/ko';
+import distanceInWords from 'date-fns/distance_in_words';
+import format from 'date-fns/format';
 
 export const pressedEnter = (fn: () => void) => (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
@@ -79,9 +81,13 @@ export const escapeForUrl = (text: string): string => {
 export const fromNow = (date: string) => {
   const now = new Date();
   const givenDate = new Date(date);
-  const lessThanWeek = now - givenDate < 1000 * 60 * 60 * 24 * 7;
-  if (lessThanWeek) {
-    return moment(date).fromNow();
+  const diff = now - givenDate;
+  if (diff < 1000 * 60) {
+    return '방금 전';
   }
-  return moment(date).format('YYYY년 M월 D일');
+  if (diff < 1000 * 60 * 60 * 24 * 7) {
+    const distanceString = distanceInWords(now, givenDate, { locale: koLocale, addSuffix: true });
+    return distanceString;
+  }
+  return format(givenDate, 'YYYY년 M월 D일');
 };

@@ -11,7 +11,7 @@ const rules = [
   },
   {
     path: '/trending',
-    maxAge: 60 * 10,
+    maxAge: 60 * 5,
   },
   {
     path: '/tags/:tag',
@@ -27,7 +27,7 @@ const rules = [
   },
   {
     path: '/@:username/:urlSlug',
-    maxAge: 60 * 60,
+    maxAge: 60 * 60 * 3,
   },
 ]
 

@@ -1,10 +1,10 @@
 // @flow
 import { createAction, handleActions, type ActionType } from 'redux-actions';
-import moment from 'moment';
 import produce from 'immer';
 import * as MeAPI from 'lib/api/me';
 import * as PostsAPI from 'lib/api/posts';
 import * as SavesAPI from 'lib/api/posts/saves';
+import format from 'date-fns/format';
 
 import { applyPenders, type GenericResponseAction } from 'lib/common';
 
@@ -131,7 +131,7 @@ export const actionCreators = {
   tempSave: createAction(TEMP_SAVE, PostsAPI.tempSave),
   setUploadMask: createAction(SET_UPLOAD_MASK, (visible: boolean) => visible),
   setTempData: createAction(SET_TEMP_DATA, () => {
-    const now = moment().format('LLL');
+    const now = format(new Date(), 'YYYY-MM-DD HH:MM');
     const tempText = `${now} 작성됨`;
     return tempText;
   }),

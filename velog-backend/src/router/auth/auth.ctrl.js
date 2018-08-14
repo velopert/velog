@@ -76,7 +76,9 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
       
       <div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>위 버튼을 클릭하시거나, 다음 링크를 열으세요: <br/> <a style="color: #b197fc;" href="https://velog.io/${
   emailKeywords.type
-}?code=${verification.code}">https://velog.io/${emailKeywords.type}?code=${
+}?code=${verification.code}">https://velog.io/${
+  emailKeywords.type
+}?code=${
   verification.code
 }</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
     });
@@ -99,7 +101,10 @@ export const getCode = async (ctx: Context): Promise<*> => {
     }
     const { email } = auth;
 
-    const registerToken = await generate({ email }, { expiresIn: '1h', subject: 'auth-register' });
+    const registerToken = await generate(
+      { email },
+      { expiresIn: '1h', subject: 'auth-register' },
+    );
 
     ctx.body = {
       email,
@@ -145,6 +150,7 @@ export const codeLogin = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
+      domain: '.velog.io',
     });
 
     ctx.body = {
@@ -255,6 +261,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
+      domain: '.velog.io',
     });
 
     ctx.body = {
@@ -298,6 +305,7 @@ export const check = async (ctx: Context): Promise<*> => {
         ctx.cookies.set('access_token', token, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24 * 7,
+          domain: '.velog.io',
         });
       } catch (e) {
         ctx.throw(500, e);
@@ -313,7 +321,7 @@ export const check = async (ctx: Context): Promise<*> => {
 
 export const logout = (ctx: Context) => {
   // $FlowFixMe: intersection bug
-  ctx.cookies.set('access_token', null);
+  ctx.cookies.set('access_token', null, { domain: '.velog.io' });
   ctx.status = 204;
 };
 
@@ -403,7 +411,8 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
   }
 
   const { provider } = ctx.params;
-  const { accessToken, form, fallbackEmail }: BodySchema = (ctx.request.body: any);
+  const { accessToken, form, fallbackEmail }: BodySchema = (ctx.request
+    .body: any);
 
   let profile = null;
 
@@ -455,9 +464,8 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
     try {
       const imageData = await downloadImage(thumbnail);
       console.log(imageData);
-      const tempPath = `profiles/${username}/thumbnails/${new Date().getTime() / 1000}.${
-        imageData.extension
-      }`;
+      const tempPath = `profiles/${username}/thumbnails/${new Date().getTime() /
+        1000}.${imageData.extension}`;
       const uploadResult = await s3
         .upload({
           Bucket: 's3.images.velog.io',
@@ -499,6 +507,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
+      domain: '.velog.io',
     });
 
     ctx.body = {
@@ -586,6 +595,7 @@ export const socialLogin = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
+      domain: '.velog.io',
     });
   } catch (e) {
     ctx.throw(500, e);

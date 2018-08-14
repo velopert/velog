@@ -21,7 +21,7 @@ type SetUserPayload = {
 };
 const setUser = createAction(SET_USER, (payload: SetUserPayload) => payload);
 const processUser = createAction(PROCESS_USER);
-const logout = createAction(LOGOUT);
+const logout = createAction(LOGOUT, AuthAPI.logout);
 
 /* ACTION FLOW TYPE */
 type CheckUserAction = ActionType<typeof checkUser>;

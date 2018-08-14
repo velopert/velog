@@ -12,6 +12,7 @@ type Props = {
   comments: ?(Comment[]),
   subcommentsMap: SubcommentsMap,
   shouldCancel: boolean,
+  logged: boolean,
 };
 
 class PostCommentsContainer extends Component<Props> {
@@ -67,11 +68,12 @@ class PostCommentsContainer extends Component<Props> {
   };
 
   render() {
-    const { comments, subcommentsMap } = this.props;
+    const { comments, subcommentsMap, logged } = this.props;
 
     return (
       <PostComments
-        commentInput={<PostCommentInput onWriteComment={this.onWriteComment} />}
+        logged={logged}
+        commentInput={logged && <PostCommentInput onWriteComment={this.onWriteComment} />}
         comments={comments}
         subcommentsMap={subcommentsMap}
         onReply={this.onWriteComment}
@@ -83,10 +85,11 @@ class PostCommentsContainer extends Component<Props> {
 
 export default connect(
   (state: State) => ({
+    logged: !!state.user.user,
     postId: state.posts.post && state.posts.post.id,
     comments: state.posts.comments,
     subcommentsMap: state.posts.subcommentsMap,
-    shouldCancel: state.common.router.history.length === 0,
+    shouldCancel: state.common.ssr && state.common.router.history.length === 0,
   }),
   () => ({}),
 )(PostCommentsContainer);

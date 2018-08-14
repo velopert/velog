@@ -5,6 +5,7 @@ import type { Categories } from 'store/modules/posts';
 import PostLikeButton from 'components/post/PostLikeButton';
 import { Link } from 'react-router-dom';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
+import { fromNow } from 'lib/common';
 import PostActionButtons from '../PostActionButtons';
 import './PostHead.scss';
 
@@ -23,11 +24,13 @@ type Props = {
   ownPost: boolean,
   onToggleLike: () => void,
   onAskRemove: () => void,
+  date: string,
 };
 
 const PostHead = ({
   id,
   title,
+  date,
   categories,
   user,
   likes,
@@ -53,7 +56,7 @@ const PostHead = ({
       </div>
       <h1>{title}</h1>
       <div className="date-and-likes">
-        <div className="date">2018년 5월 25일</div>
+        <div className="date">{fromNow(date)}</div>
         <div className="placeholder" />
         <PostLikeButton onClick={onToggleLike} liked={liked} likes={likes} />
       </div>

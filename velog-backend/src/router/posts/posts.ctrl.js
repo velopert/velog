@@ -38,6 +38,7 @@ import {
   getTrendingPostScore,
   getTrendingPosts,
 } from 'database/rawQuery/trending';
+import redisClient from 'lib/redisClient';
 
 const { Op } = Sequelize;
 
@@ -230,6 +231,12 @@ export const writePost = async (ctx: Context): Promise<*> => {
         tags: tagData,
       });
     }
+    redisClient.remove('/recent');
+    redisClient.remove(`/@${ctx.user.username}`);
+    tags.forEach((tag) => {
+      redisClient.remove(`/tags/${tag}`);
+      redisClient.remove(`/@${ctx.user.username}/tags/${tag}`);
+    });
   } catch (e) {
     ctx.throw(500, e);
   }

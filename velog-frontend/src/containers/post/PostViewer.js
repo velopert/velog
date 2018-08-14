@@ -109,6 +109,7 @@ class PostViewer extends Component<Props> {
         <PostToc toc={toc} activeHeading={activeHeading} />
         <PostHead
           id={post.id}
+          date={post.created_at}
           title={post.title}
           tags={post.tags}
           categories={post.categories}
