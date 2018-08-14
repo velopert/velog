@@ -42,11 +42,17 @@ const renderer = (() => {
 
     const suffixed = `${anchor}${suffix}`;
     if (level <= 3) {
-      toc.push({
-        anchor: suffixed,
-        level,
-        text: stripHtml(text),
-      });
+      if (toc) {
+        try {
+          toc.push({
+            anchor: suffixed,
+            level,
+            text: stripHtml(text),
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      }
     }
     return `<h${level} id="${suffixed}">${text}</h${level}>`;
   };
