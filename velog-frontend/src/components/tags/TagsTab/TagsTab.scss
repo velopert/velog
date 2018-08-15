@@ -1,6 +1,9 @@
-@import 'utils';
+@import "utils";
 .TagsTab {
   margin-top: 1rem;
+  @include media("<large") {
+    margin-top: 2rem;
+  }
   font-size: 1.25rem;
   font-weight: 400;
   color: $oc-gray-6;
@@ -21,7 +24,7 @@
       border-bottom: 2px solid $oc-violet-5;
     }
   }
-  a+a {
+  a + a {
     margin-left: 1rem;
   }
 }

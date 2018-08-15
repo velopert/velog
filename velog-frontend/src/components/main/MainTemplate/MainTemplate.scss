@@ -5,4 +5,7 @@
   @include media("<x-wide") {
     margin-left: 15rem;
   }
+  @include media("<large") {
+    margin-left: 0;
+  }
 }

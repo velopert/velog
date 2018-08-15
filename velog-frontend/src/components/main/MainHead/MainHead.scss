@@ -4,7 +4,17 @@
   padding: 1.75rem;
   display: flex;
   align-items: center;
-  .button-area {
+  .mobile-logo {
+    @include media(">=large") {
+      display: none;
+    }
+    font-family: "Inconsolata";
+    color: $oc-gray-9;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 2rem;
+    font-weight: 500;
   }
   .spacer {
     flex: 1;
@@ -12,5 +22,9 @@
   .right-area {
     display: flex;
     align-items: center;
+  }
+  @include media("<large") {
+    background: white;
+    padding-bottom: 0;
   }
 }

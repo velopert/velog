@@ -5,6 +5,9 @@
   @include media("<x-wide") {
     width: 15rem;
   }
+  @include media("<large") {
+    transform: translate(-100%);
+  }
   background: white;
   height: 100%;
   top: 0;

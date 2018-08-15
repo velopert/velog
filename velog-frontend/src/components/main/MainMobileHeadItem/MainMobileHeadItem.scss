@@ -1,0 +1,24 @@
+@import "utils";
+
+.MainMobileHeadItem {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  color: $oc-gray-7;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  .icon-wrapper {
+    margin-right: 1rem;
+    font-size: 1.5rem;
+  }
+  .item-name {
+    font-size: 1.25rem;
+  }
+  border-bottom: 2px solid transparent;
+  &.active {
+    border-bottom: 2px solid $oc-violet-4;
+    color: $oc-violet-5;
+    font-weight: 600;
+  }
+}
