@@ -1,0 +1,23 @@
+@import "utils";
+
+.WriteMobileTitle {
+  background: #384850;
+  display: flex;
+  padding: 0.75rem;
+  input {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 500;
+    outline: none;
+    border: none;
+    width: 100%;
+    background: transparent;
+    &::placeholder {
+      color: $oc-gray-3;
+      font-weight: 300;
+    }
+  }
+  @include media(">=large") {
+    display: none;
+  }
+}

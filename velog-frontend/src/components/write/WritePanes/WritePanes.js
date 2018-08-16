@@ -131,7 +131,7 @@ class WritePanes extends Component<Props, State> {
           </div>
         )}
         {!hideLeft && (
-          <div className="pane" style={leftStyle}>
+          <div className="pane left" style={leftStyle}>
             {left}
             {!(hideLeft || hideRight) && (
               <div className="separator" onMouseDown={this.onSeparatorMouseDown} />

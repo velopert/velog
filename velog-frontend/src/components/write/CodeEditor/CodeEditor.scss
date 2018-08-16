@@ -4,7 +4,10 @@
   display: flex;
   flex: 1;
   min-width: 0;
-  padding-left: 2rem;
+  padding: 1rem;
+  @include media("<large") {
+    padding: 0.75rem;
+  }
   &.material {
     background: #263238;
   }
@@ -21,6 +24,10 @@
       font-family: "Inconsolata", "D2 Coding", sans-serif;
       font-size: 1.3125rem;
       line-height: 1.5em;
+      @include media("<large") {
+        font-size: 1rem;
+        line-height: 1.25em;
+      }
       .cm-header {
         @include common-font();
       }

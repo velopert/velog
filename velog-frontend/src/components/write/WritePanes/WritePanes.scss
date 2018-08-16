@@ -2,7 +2,7 @@
 .WriteTemplate {
   .rest {
     position: responsive;
-    >.pane {
+    > .pane {
       * {
         -webkit-user-drag: none;
         -khtml-user-drag: none;
@@ -14,9 +14,12 @@
       display: flex;
       min-width: 300px;
       position: relative;
+      &.left {
+        flex-direction: column;
+      }
       &.right {
         background: $oc-gray-0;
-        .MarkdownPreview>h1 {
+        .MarkdownPreview > h1 {
           max-width: 100%;
           margin-left: auto;
           margin-right: auto;
@@ -39,6 +42,9 @@
     }
     .reveal {
       display: flex;
+      @include media("<large") {
+        display: none;
+      }
       align-items: center;
       padding-left: 1rem;
       padding-right: 1rem;

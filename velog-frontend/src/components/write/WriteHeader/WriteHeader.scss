@@ -1,8 +1,8 @@
-@import 'utils';
+@import "utils";
 
 .WriteHeader {
   position: relative;
-  z-index: z('write-header');
+  z-index: z("write-header");
   height: 4rem;
   background: $oc-gray-8;
   padding-left: 1rem;
@@ -12,13 +12,17 @@
   color: white;
   .back-icon {
     cursor: pointer;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.75rem;
-    &:hover, &:active {
+    &:hover,
+    &:active {
       color: white;
     }
   }
   .title-area {
+    @include media("<large") {
+      display: none;
+    }
     flex: 1;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -31,13 +35,16 @@
       font-size: 1.25rem;
       color: white;
       &::placeholder {
-        color: rgba(255,255,255,0.9);
+        color: rgba(255, 255, 255, 0.9);
       }
     }
   }
   .actions {
     display: flex;
     align-items: center;
+    @include media("<large") {
+      margin-left: auto;
+    }
 
     .button {
       background: $oc-gray-0;
@@ -63,7 +70,7 @@
           background: darken(#65707b, 5%);
         }
       }
-      
+
       &.submit {
         background: $oc-violet-5;
         color: white;
@@ -96,10 +103,10 @@
       cursor: pointer;
       transition: 0.05s all ease-in;
       &:hover {
-        background: rgba(255,255,255,0.125);
+        background: rgba(255, 255, 255, 0.125);
       }
       &:active {
-        background: rgba(255,255,255,0.075);
+        background: rgba(255, 255, 255, 0.075);
       }
     }
   }

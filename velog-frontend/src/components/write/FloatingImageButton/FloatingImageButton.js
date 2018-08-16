@@ -18,7 +18,7 @@ const FloatingImageButton = ({ onClick }: Props) => (
     >
       <ImageIcon />
     </div>
-    <Tooltip effect="solid" />
+    <Tooltip effect="solid" className="tooltip" />
   </Fragment>
 );
 

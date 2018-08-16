@@ -1,7 +1,13 @@
 @import "utils";
 .WriteSelectLayouts {
   display: flex;
+
   .layout-button {
+    &:nth-child(2) {
+      @include media("<large") {
+        display: none;
+      }
+    }
     @include unstyle-button();
     flex: 1;
     background: $oc-gray-8;
@@ -29,7 +35,7 @@
     &.active {
       border: 2px solid rgba(255, 255, 255, 0.9);
     }
-    &+.layout-button {
+    & + .layout-button {
       margin-left: 0.5rem;
     }
   }

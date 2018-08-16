@@ -21,3 +21,9 @@
   align-items: center;
   justify-content: center;
 }
+
+.FloatingImageButton + .tooltip {
+  @include media("<large") {
+    display: none !important;
+  }
+}

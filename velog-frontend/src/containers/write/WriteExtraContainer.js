@@ -82,7 +82,7 @@ class WriteExtraContainer extends Component<Props> {
 }
 
 export default connect(
-  ({ write }: State) => ({
+  ({ write, base }: State) => ({
     visible: write.writeExtra.visible,
     mode: write.writeExtra.layoutMode,
     postData: write.postData,
