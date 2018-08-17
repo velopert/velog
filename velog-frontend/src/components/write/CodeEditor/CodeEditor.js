@@ -156,6 +156,7 @@ class CodeEditor extends Component<Props, State> {
       placeholder: '당신의 이야기를 적어보세요...',
     });
     window.cm = this.codeMirror; // for debugging use
+    this.codeMirror.on('keypress', () => {});
     this.codeMirror.on('change', this.onChange);
     this.codeMirror.on('scroll', this.onScroll);
     this.codeMirror.on('dragenter', (event, e) => onDragEnter(e));

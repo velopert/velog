@@ -15,6 +15,9 @@ provider:
     SECRET_KEY: ${file(./env.json):SECRET_KEY}
     COCKROACHDB_HOST: ${file(./env.json):COCKROACHDB_HOST}
     COCKROACHDB_PW: ${file(./env.json):COCKROACHDB_PW}
+    HASH_KEY: ${file(./env.json):HASH_KEY}
+    REDIS_HOST: ${file(./env.json):REDIS_HOST}
+    REDIS_PASS: ${file(./env.json):REDIS_PASS}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -33,7 +36,7 @@ functions:
           path: /
           method: ANY
           cors:
-            origin: 'https://velog.io'
+            origin: "https://velog.io"
             headers:
               - Cookie
               - Content-Type
@@ -47,7 +50,7 @@ functions:
           path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
           method: ANY
           cors:
-            origin: 'https://velog.io'
+            origin: "https://velog.io"
             headers:
               - Cookie
               - Content-Type
@@ -67,6 +70,6 @@ functions:
 
 custom:
   apigwBinary:
-    types:           #list of mime-types
-      - 'multipart/form-data'
-      - 'application/x-www-form-urlencoded'
+    types: #list of mime-types
+      - "multipart/form-data"
+      - "application/x-www-form-urlencoded"

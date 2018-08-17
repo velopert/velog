@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 
 .SubmitBox {
   @keyframes submitBoxAppear {
@@ -22,25 +22,28 @@
       transform: translateY(-25%);
     }
   }
-  
+
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
   background: $oc-gray-7;
   width: 20rem;
+  @include media("<376px") {
+    width: calc(100vw - 1rem);
+  }
   padding: 1.5rem;
-  z-index: z('submit-box');
+  z-index: z("submit-box");
   @include material-shadow(2, 1);
   color: white;
   // transition: transform 0.075s ease-in;
   // transform-origin: top right;
   // transform: scale(1);
   &.appear {
-    animation: submitBoxAppear .15s ease-in-out;
+    animation: submitBoxAppear 0.15s ease-in-out;
     animation-fill-mode: forwards;
   }
   &.disappear {
-    animation: submitBoxDisappear .15s ease-in-out;
+    animation: submitBoxDisappear 0.15s ease-in-out;
     animation-fill-mode: forwards;
   }
   .title {
@@ -122,7 +125,7 @@
         background: lighten($oc-violet-5, 5%);
       }
       &:active {
-        background:$oc-violet-5;
+        background: $oc-violet-5;
       }
 
       &.edit {
@@ -131,7 +134,7 @@
           background: lighten($oc-indigo-5, 5%);
         }
         &:active {
-          background:$oc-indigo-5;
+          background: $oc-indigo-5;
         }
       }
     }

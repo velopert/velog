@@ -14,7 +14,7 @@ type Props = {
   onTempSave(): Promise<*>,
   onOpenSubmitBox(): void,
   onShowWriteExtra(): void,
-  onHideWriteExtra(): void,
+  onHideWriteExtra(e: SyntheticMouseEvent<any>): void,
   onGoBack(): void,
   writeExtraOpen: boolean,
   title: string,
@@ -45,13 +45,13 @@ const WriteHeader = ({
           {isEdit ? '업데이트' : '작성하기'}
         </div>
         {writeExtraOpen && (
-          <div className="more util flex-center" onClick={onHideWriteExtra}>
-            <CloseIcon />
+          <div className="ignore-click-outside more util flex-center" onClick={onHideWriteExtra}>
+            <CloseIcon className="ignore-click-outside" />
           </div>
         )}
         {!writeExtraOpen && (
-          <div className="more util flex-center" onClick={onShowWriteExtra}>
-            <MoreIcon />
+          <div className="ignore-click-outside more util flex-center" onClick={onShowWriteExtra}>
+            <MoreIcon className="ignore-click-outside" />
           </div>
         )}
       </div>

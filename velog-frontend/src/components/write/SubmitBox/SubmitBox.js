@@ -44,8 +44,8 @@ class SubmitBox extends Component<Props, State> {
     onClose();
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.visible && !nextProps.visible) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.visible && this.props.visible) {
       this.animate();
     }
   }

@@ -7,7 +7,7 @@ import type { State } from 'store';
 import Posts from 'pages/Posts';
 import Trending from 'pages/Trending';
 import MainHead from 'components/main/MainHead';
-import { Switch, Route, withRouter, ContextRouter } from 'react-router-dom';
+import { Switch, Route, withRouter, type ContextRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import Recent from 'pages/Recent';
 import MainMobileHead from 'components/main/MainMobileHead';
