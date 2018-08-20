@@ -25,6 +25,10 @@ const Comment = db.define(
       defaultValue: false,
       type: Sequelize.BOOLEAN,
     },
+    deleted: {
+      defaultValue: false,
+      type: Sequelize.BOOLEAN,
+    },
   },
   {
     indexes: [
@@ -140,19 +144,6 @@ Comment.listComments = async function ({
     if (!data) return [];
     // TODO: Pagination
     const comments = data.map(c => c.toJSON());
-    /*
-    const fetchChildren = async (list: any[], level = 0) => {
-      for (let i = 0; i < list.length; i++) {
-        if (!list[i].has_replies) continue;
-        const children = await Comment.getChildrenOf(list[i].id);
-        const childrenJSON = children.map(c => c.toJSON());
-        list[i].children = childrenJSON;
-        if (level === 2) return;
-        return fetchChildren(childrenJSON, level + 1);
-      }
-    };
-    await fetchChildren(comments);
-    */
     for (let i = 0; i < comments.length; i++) {
       if (!comments[i].has_replies) {
         comments[i].replies_count = 0;
@@ -187,7 +178,7 @@ Comment.write = function ({
 };
 
 Comment.serialize = (data: any) => {
-  return Object.assign(
+  const serialized = Object.assign(
     extractKeys(data, [
       'id',
       'text',
@@ -207,6 +198,14 @@ Comment.serialize = (data: any) => {
       replies_count: data.replies_count || 0,
     },
   );
+  if (data.deleted) {
+    serialized.text = null;
+    serialized.user = {
+      username: null,
+      thumbnail: null,
+    };
+  }
+  return serialized;
 };
 
 export default Comment;

@@ -13,6 +13,7 @@ type Props = {
   hasEnded: boolean,
   oneColumn?: boolean,
   placeholderCount?: number,
+  hideUsername?: boolean,
 };
 
 const createArray = length => Array.from(Array(length).keys());
@@ -39,6 +40,7 @@ const PostCardList = ({
   hasEnded,
   oneColumn,
   placeholderCount,
+  hideUsername,
 }: Props) => {
   if (loading) {
     return (
@@ -67,6 +69,7 @@ const PostCardList = ({
       urlSlug={post.url_slug}
       oneColumn={oneColumn}
       commentsCount={post.comments_count}
+      hideUsername={hideUsername}
     />
   ));
 
@@ -86,6 +89,7 @@ PostCardList.defaultProps = {
   oneColumn: false,
   width: 0,
   placeholderCount: 10,
+  hideUsername: false,
 };
 
 export default PostCardList;

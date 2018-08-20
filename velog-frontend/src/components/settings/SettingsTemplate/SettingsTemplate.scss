@@ -1,7 +1,12 @@
-@import 'utils';
+@import "utils";
 .SettingsTemplate {
   main {
     width: $medium-w;
+    @include media("<medium") {
+      width: 100%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
     margin: 0 auto;
     margin-top: 4rem;
     h2 {

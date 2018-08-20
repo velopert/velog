@@ -3,7 +3,7 @@ import Joi from 'joi';
 import type { Context, Middleware } from 'koa';
 import db from 'database/db';
 import Comment, { type WriteParams } from 'database/models/Comment';
-import { validateSchema } from 'lib/common';
+import { validateSchema, isUUID } from 'lib/common';
 import PostScore, { TYPES } from 'database/models/PostScore';
 import redisClient from 'lib/redisClient';
 import User from 'database/models/User';
@@ -117,11 +117,35 @@ export const getReplies: Middleware = async (ctx: Context) => {
       replyTo: commentId,
     });
     const link = `<${ctx.path}>; rel="next";`;
-    console.log(link);
     ctx.body = comments.data;
   } catch (e) {
     ctx.throw(500, e);
   }
 };
 
-// TODO: REMOVE COMMENT!
+export const deleteReply: Middleware = async (ctx) => {
+  const { commentId } = ctx.params;
+  if (!isUUID(commentId)) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'NOT_UUID',
+    };
+    return;
+  }
+  try {
+    const comment = await Comment.findById(commentId);
+    if (comment.fk_user_id !== ctx.user.id) {
+      ctx.status = 403;
+      ctx.body = {
+        name: 'NOT_OWN_COMMENT',
+      };
+      return;
+    }
+    await comment.update({
+      deleted: true,
+    });
+    ctx.status = 204;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};

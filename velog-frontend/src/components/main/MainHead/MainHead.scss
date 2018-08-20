@@ -4,6 +4,9 @@
   padding: 1.75rem;
   display: flex;
   align-items: center;
+  @include media("<large") {
+    padding: 1rem;
+  }
   .mobile-logo {
     @include media(">=large") {
       display: none;

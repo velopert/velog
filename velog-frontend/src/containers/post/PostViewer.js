@@ -12,6 +12,8 @@ import QuestionModal from 'components/common/QuestionModal/QuestionModal';
 import { withRouter, type ContextRouter, type Location } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import removeMd from 'remove-markdown';
+import PostPlaceholder from 'components/post/PostPlaceholder';
+import TagCurrent from '../../components/tags/TagCurrent/TagCurrent';
 
 function convertToPlainText(markdown: string): string {
   const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
@@ -98,7 +100,7 @@ class PostViewer extends Component<Props> {
   render() {
     const { post, toc, activeHeading, username, currentUsername, askRemove } = this.props;
     const { onSetToc, onActivateHeading } = this;
-    if (!post) return null;
+    if (!post) return <PostPlaceholder />;
 
     return (
       <Fragment>

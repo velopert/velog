@@ -1,10 +1,15 @@
-@import 'utils';
+@import "utils";
 .ViewerHead {
   height: 7rem;
   display: flex;
   align-items: center;
   padding-left: 2rem;
   padding-right: 2rem;
+  @include media("<medium") {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    height: 5rem;
+  }
   .logo-area {
     font-size: 2rem;
     line-height: 2rem;

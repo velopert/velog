@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .PostContent {
   .post-thumbnail {
     img {
@@ -11,6 +11,8 @@
     pre[class*="language-"] {
       margin-top: 2rem;
       margin-bottom: 2rem;
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
       /*
       margin-left: calc(-1 * (100vw - 768px)/2);
       margin-right: calc(-1 * (100vw - 768px)/2);

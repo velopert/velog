@@ -20,14 +20,14 @@
     box-shadow: none;
     border: 1px solid $oc-gray-3;
     width: calc(100% - 1.75rem);
-    &+& {
+    & + & {
       margin-top: 2.5rem;
     }
     .card-content {
       box-shadow: none;
     }
   }
-  &>.thumbnail-wrapper {
+  & > .thumbnail-wrapper {
     width: 100%;
     padding-top: 52.63%;
     position: relative;
@@ -127,7 +127,7 @@
         font-size: 0.875rem;
         margin-top: 0.5rem;
         color: #8aa6c1;
-        span+span::before {
+        span + span::before {
           color: $oc-gray-5;
           padding-left: 0.25rem;
           padding-right: 0.25rem;

@@ -12,6 +12,7 @@ type Props = {
   onReadReplies: (commentId: string) => Promise<*>,
   subcommentsMap: SubcommentsMap,
   logged: boolean,
+  username: ?string,
 };
 
 const PostComments = ({
@@ -21,6 +22,7 @@ const PostComments = ({
   onReadReplies,
   subcommentsMap,
   logged,
+  username,
 }: Props) => (
   <div className="PostComments">
     <h4>{comments ? comments.length : 0}개의 댓글</h4>
@@ -42,6 +44,7 @@ const PostComments = ({
               onReadReplies={onReadReplies}
               onReply={onReply}
               logged={logged}
+              currentUsername={username}
             />
           );
         })}

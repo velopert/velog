@@ -150,7 +150,7 @@ export const codeLogin = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      domain: '.velog.io',
+      domain: process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
     });
 
     ctx.body = {
@@ -261,7 +261,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      domain: '.velog.io',
+      domain: process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
     });
 
     ctx.body = {
@@ -305,7 +305,8 @@ export const check = async (ctx: Context): Promise<*> => {
         ctx.cookies.set('access_token', token, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24 * 7,
-          domain: '.velog.io',
+          domain:
+            process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
         });
       } catch (e) {
         ctx.throw(500, e);
@@ -321,7 +322,9 @@ export const check = async (ctx: Context): Promise<*> => {
 
 export const logout = (ctx: Context) => {
   // $FlowFixMe: intersection bug
-  ctx.cookies.set('access_token', null, { domain: '.velog.io' });
+  ctx.cookies.set('access_token', null, {
+    domain: process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
+  });
   ctx.status = 204;
 };
 
@@ -507,7 +510,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      domain: '.velog.io',
+      domain: process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
     });
 
     ctx.body = {
@@ -595,7 +598,7 @@ export const socialLogin = async (ctx: Context): Promise<*> => {
     ctx.cookies.set('access_token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      domain: '.velog.io',
+      domain: process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
     });
   } catch (e) {
     ctx.throw(500, e);

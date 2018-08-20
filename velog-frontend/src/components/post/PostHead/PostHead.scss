@@ -4,6 +4,7 @@
   font-size: 1rem;
   @include media("<medium") {
     font-size: 0.875rem;
+    margin-top: 0rem;
   }
   .category {
     font-size: 1.125em;
@@ -23,6 +24,17 @@
     color: $oc-gray-6;
   }
   .userinfo {
+    @include media("<medium") {
+      margin-top: -0.25rem;
+      border-top: 1px solid $oc-gray-2;
+      border-bottom: 1px solid $oc-gray-2;
+      padding: 0.5rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      margin-bottom: 4rem;
+    }
     display: flex;
     margin-top: 1em;
     align-items: center;

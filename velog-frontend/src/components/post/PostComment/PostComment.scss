@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .PostComment {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -8,6 +8,21 @@
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
+    position: relative;
+    .actions {
+      position: absolute;
+      right: 0;
+      top: 0.6rem;
+      font-size: 0.875rem;
+      color: $oc-gray-5;
+      .remove {
+        cursor: pointer;
+        &:hover {
+          color: $oc-gray-8;
+          text-decoration: underline;
+        }
+      }
+    }
     img {
       width: 3rem;
       height: 3rem;
@@ -19,6 +34,9 @@
       .username {
         font-weight: 600;
         color: $oc-gray-9;
+        &.unknown {
+          font-weight: 400;
+        }
       }
       .date {
         margin-top: 0.125rem;
@@ -31,6 +49,10 @@
     margin-top: 1rem;
     line-height: 1.5rem;
     white-space: pre;
+    &.deleted {
+      color: $oc-gray-6;
+      font-style: italic;
+    }
   }
   .replies-button {
     margin-top: 1rem;
@@ -82,6 +104,6 @@
   }
 }
 
-.PostComment+.PostComment {
+.PostComment + .PostComment {
   border-top: 1px solid $oc-gray-2;
 }

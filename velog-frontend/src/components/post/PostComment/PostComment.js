@@ -8,13 +8,14 @@ import type { Comment, SubcommentsMap } from 'store/modules/posts';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
 import { Link } from 'react-router-dom';
 import { fromNow } from 'lib/common';
+import cx from 'classnames';
 
 import './PostComment.scss';
 
 type Props = {
-  username: string,
+  username: ?string,
   thumbnail: ?string,
-  comment: string,
+  comment: ?string,
   repliesCount: number,
   level: number,
   id: string,
@@ -24,6 +25,8 @@ type Props = {
   onReply: (text: string, replyTo: ?string) => Promise<*>,
   onReadReplies: (commentId: string) => Promise<*>,
   logged: boolean,
+  currentUsername: ?string,
+  onOpenRemove: (payload: { commentId: string, parentId: ?string }) => any,
 };
 
 type State = {
@@ -82,7 +85,8 @@ class PostComment extends Component<Props, State> {
       this.state !== nextState ||
       compare('replies') ||
       compare('comment') ||
-      compare('repliesCount')
+      compare('repliesCount') ||
+      compare('subcommentsMap')
     );
   }
 
@@ -100,10 +104,12 @@ class PostComment extends Component<Props, State> {
       onReadReplies,
       date,
       logged,
+      currentUsername,
+      onOpenRemove,
     } = this.props;
     const { open, showInput } = this.state;
 
-    const userProfileLink = `/@${username}`;
+    const userProfileLink = `/@${username || ''}`;
 
     return (
       <div className="PostComment">
@@ -112,13 +118,28 @@ class PostComment extends Component<Props, State> {
             <img src={thumbnail || defaultThumbnail} alt={username} />
           </Link>
           <div className="text-block">
-            <Link to={userProfileLink} className="username">
-              {username}
-            </Link>
+            {username === null ? (
+              <div className="username unknown">알 수 없음</div>
+            ) : (
+              <Link to={userProfileLink} className="username">
+                {username}
+              </Link>
+            )}
             <div className="date">{fromNow(date)}</div>
           </div>
+          {username === currentUsername && (
+            <div className="actions">
+              <button className="remove">삭제</button>
+            </div>
+          )}
         </div>
-        <div className="comment-body">{comment}</div>
+        <div
+          className={cx('comment-body', {
+            deleted: comment === null,
+          })}
+        >
+          {comment || '삭제된 댓글입니다.'}
+        </div>
         {level < 3 &&
           (open ? (
             <button className="replies-button" onClick={this.onClose}>
@@ -152,6 +173,8 @@ class PostComment extends Component<Props, State> {
                     onReadReplies={onReadReplies}
                     onReply={onReply}
                     level={level + 1}
+                    currentUsername={currentUsername}
+                    onOpenRemove={onOpenRemove}
                   />
                 );
               })}

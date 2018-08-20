@@ -21,6 +21,7 @@ type Props = {
   userThumbnail: ?string,
   oneColumn?: boolean,
   commentsCount: number,
+  hideUsername?: boolean,
 };
 
 const PostCard = ({
@@ -33,6 +34,7 @@ const PostCard = ({
   userThumbnail,
   oneColumn,
   commentsCount,
+  hideUsername,
 }: Props) => {
   const formattedDate = fromNow(date);
   const link = `/@${username}/${urlSlug}`;
@@ -57,9 +59,11 @@ const PostCard = ({
           </Link>
         )}
         <div className="content-head">
-          <Link to={`/@${username}`} className="username">
-            {username}
-          </Link>
+          {!hideUsername && (
+            <Link to={`/@${username}`} className="username">
+              {username}
+            </Link>
+          )}
           <h3>
             <Link to={`/@${username}/${urlSlug}`}>{title}</Link>
           </h3>
@@ -76,6 +80,7 @@ const PostCard = ({
 
 PostCard.defaultProps = {
   oneColumn: false,
+  hideUsername: false,
 };
 
 export default shouldUpdate((props: Props, nextProps: Props) => {

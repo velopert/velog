@@ -9,10 +9,13 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
   .icon-wrapper {
-    margin-right: 1rem;
+    margin-right: 0.5rem;
     font-size: 1.5rem;
+    display: flex;
+    align-items: center;
   }
   .item-name {
+    line-height: 1.25rem;
     font-size: 1.25rem;
   }
   border-bottom: 2px solid transparent;

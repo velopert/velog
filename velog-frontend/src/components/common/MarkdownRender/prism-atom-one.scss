@@ -6,7 +6,7 @@
 
 code[class*="language-"],
 pre[class*="language-"] {
-  color: #ABB2BF;
+  color: #abb2bf;
   background: none;
   text-align: left;
   white-space: pre;
@@ -50,27 +50,27 @@ code[class*="language-"] ::selection {
 
 pre[class*="language-"] {
   padding: 1em;
-  margin: .5em 0;
+  margin: 0.5em 0;
   overflow: auto;
 }
 
 pre[class*="language-"] {
   padding: 1em;
-  padding-top: 2em;
-  padding-bottom: 2em;
+  // padding-top: 2em;
+  // padding-bottom: 2em;
   overflow: auto;
 }
 
-:not(pre)>code[class*="language-"],
+:not(pre) > code[class*="language-"],
 pre[class*="language-"] {
   background: #282c34;
 }
 
 /* Inline code */
 
-:not(pre)>code[class*="language-"] {
-  padding: .1em;
-  border-radius: .3em;
+:not(pre) > code[class*="language-"] {
+  padding: 0.1em;
+  border-radius: 0.3em;
   white-space: normal;
 }
 
@@ -78,7 +78,7 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #5C6370;
+  color: #5c6370;
 }
 
 .token.punctuation {
@@ -150,7 +150,7 @@ pre.line-numbers {
   counter-reset: linenumber;
 }
 
-pre.line-numbers>code {
+pre.line-numbers > code {
   position: relative;
 }
 
@@ -169,15 +169,15 @@ pre.line-numbers>code {
   user-select: none;
 }
 
-.line-numbers-rows>span {
+.line-numbers-rows > span {
   pointer-events: none;
   display: block;
   counter-increment: linenumber;
 }
 
-.line-numbers-rows>span:before {
+.line-numbers-rows > span:before {
   content: counter(linenumber);
-  color: #5C6370;
+  color: #5c6370;
   display: block;
   padding-right: 0.8em;
   text-align: right;

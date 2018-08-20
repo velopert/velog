@@ -99,6 +99,7 @@ class UserPosts extends Component<Props> {
         loading={loading}
         prefetching={prefetching}
         hasEnded={false}
+        hideUsername
       />
     );
   }

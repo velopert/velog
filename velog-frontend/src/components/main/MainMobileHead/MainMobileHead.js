@@ -22,12 +22,7 @@ class MainMobileHead extends Component<Props> {
           name="트렌딩"
           icon={TrendingIcon}
         />
-        <MainMobileHeadItem
-          active={url === '/recent'}
-          to="/recent"
-          name="최신 포스트"
-          icon={RecentIcon}
-        />
+        <MainMobileHeadItem active={url === '/recent'} to="/recent" name="최신" icon={RecentIcon} />
         <MainMobileHeadItem active={/^\/tags/.test(url)} to="/tags" name="태그" icon={TagIcon} />
       </div>
     );

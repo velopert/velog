@@ -27,3 +27,12 @@ export type ReadSubcommentsPayload = {
 
 export const readSubcomments = ({ postId, commentId }: ReadSubcommentsPayload) =>
   axios.get(`/posts/${postId}/comments/${commentId}/replies`);
+
+export type RemoveCommentPayload = {
+  postId: string,
+  commentId: string,
+};
+
+export const removeComment = ({ postId, commentId }: RemoveCommentPayload) => {
+  return axios.delete(`/posts/${postId}/comments/${commentId}`);
+};

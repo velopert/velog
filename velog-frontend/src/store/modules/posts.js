@@ -24,6 +24,11 @@ const LIKE = 'posts/LIKE';
 const UNLIKE = 'posts/UNLIKE';
 const GET_LIKES_COUNT = 'posts/GET_LIKES_COUNT';
 const TOGGLE_ASK_REMOVE = 'posts/TOGGLE_ASK_REMOVE';
+const OPEN_COMMENT_REMOVE = 'posts/OPEN_COMMENT_REMOVE';
+const CANCEL_COMMENT_REMOVE = 'posts/CANCEL_COMMENT_REMOVE';
+const REMOVE_COMMENT = 'posts/REMOVE_COMMENT';
+
+type OpenCommentRemovePayload = { commentId: string, parentId: ?string };
 
 export interface PostsActionCreators {
   readPost(payload: PostsAPI.ReadPostPayload): any;
@@ -37,6 +42,9 @@ export interface PostsActionCreators {
   unlike(postId: string): any;
   getLikesCount(postId: string): any;
   toggleAskRemove(): any;
+  openCommentRemove(payload: OpenCommentRemovePayload): any;
+  cancelCommentRemove(): any;
+  removeComment(payload: CommentsAPI.RemoveCommentPayload): any;
 }
 
 export const actionCreators = {
@@ -51,22 +59,27 @@ export const actionCreators = {
   unlike: createAction(UNLIKE, LikesAPI.unlike),
   getLikesCount: createAction(GET_LIKES_COUNT, LikesAPI.getLikesCount),
   toggleAskRemove: createAction(TOGGLE_ASK_REMOVE),
+  openCommentRemove: createAction(
+    OPEN_COMMENT_REMOVE,
+    (payload: OpenCommentRemovePayload) => payload,
+  ),
+  cancelCommentRemove: createAction(CANCEL_COMMENT_REMOVE),
+  removeComment: createAction(REMOVE_COMMENT, CommentsAPI.removeComment),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
 type ActivateHeadingAction = ActionType<typeof actionCreators.activateHeading>;
-
-
+type OpenCommentRemoveAction = ActionType<typeof actionCreators.openCommentRemove>;
 export type Categories = { id: string, name: string, url_slug: string }[];
 export type Comment = {
   id: string,
-  text: string,
+  text: ?string,
   reply_to: string,
   level: number,
   created_at: string,
   updated_at: string,
   user: {
-    username: string,
+    username: ?string,
     thumbnail: ?string,
   },
   replies_count: number,
@@ -96,6 +109,13 @@ export type PostData = {
 export type SubcommentsMap = {
   [string]: Comment[],
 };
+
+export type RemoveComment = {
+  visible: boolean,
+  commentId: ?string,
+  parentId: ?string,
+};
+
 export type Posts = {
   post: ?PostData,
   toc: ?(TocItem[]),
@@ -103,6 +123,7 @@ export type Posts = {
   comments: ?(Comment[]),
   subcommentsMap: SubcommentsMap,
   askRemove: boolean,
+  removeComment: RemoveComment,
 };
 
 const initialState: Posts = {
@@ -112,15 +133,17 @@ const initialState: Posts = {
   comments: null,
   subcommentsMap: {},
   askRemove: false,
+  removeComment: {
+    commentId: null,
+    parentId: null,
+    visible: false,
+  },
 };
 
 const reducer = handleActions(
   {
     [UNLOAD_POST]: (state, action) => {
-      return {
-        ...state,
-        post: null,
-      };
+      return initialState;
     },
     [SET_TOC]: (state, action: SetTocAction) => {
       return produce(state, (draft) => {
@@ -136,6 +159,21 @@ const reducer = handleActions(
       return {
         ...state,
         askRemove: !state.askRemove,
+      };
+    },
+    [OPEN_COMMENT_REMOVE]: (state, { payload }: OpenCommentRemoveAction) => {
+      return {
+        ...state,
+        removeComment: {
+          ...payload,
+          visible: true,
+        },
+      };
+    },
+    [CANCEL_COMMENT_REMOVE]: (state) => {
+      return {
+        ...state,
+        removeComment: initialState.removeComment,
       };
     },
   },
@@ -232,6 +270,38 @@ export default applyPenders(reducer, [
           draft.post.likes += 1;
           draft.post.liked = true;
         }
+      });
+    },
+  },
+  {
+    type: REMOVE_COMMENT,
+    onPending: (state: Posts) => {
+      return produce(state, (draft) => {
+        draft.removeComment.visible = false;
+      });
+    },
+    onSuccess: (state: Posts) => {
+      const { commentId, parentId } = state.removeComment;
+      return produce(state, (draft) => {
+        const target = (() => {
+          const { subcommentsMap, comments } = draft;
+          // Case 1. it is subcomment
+          if (parentId) {
+            const subcomments = subcommentsMap[parentId];
+            if (!subcomments) return null;
+            const comment = subcomments.find(c => c.id === commentId);
+            return comment;
+          }
+          // Case 2. it is normal comment
+          if (!comments) return null;
+          const comment = comments.find(c => c.id === commentId);
+          return comment;
+        })();
+
+        if (!target) return; // ensure target is found
+        target.text = null;
+        target.user.username = null;
+        target.user.thumbnail = null;
       });
     },
   },

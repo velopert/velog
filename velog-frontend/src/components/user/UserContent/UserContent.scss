@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .UserContent {
   display: flex;
   margin-top: 4rem;
@@ -6,6 +6,9 @@
     flex: 1;
   }
   .side-wrapper {
+    @include media("<medium") {
+      display: none;
+    }
     width: 15rem;
     margin-left: 2rem;
   }

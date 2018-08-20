@@ -2,11 +2,21 @@
 .SettingProfile {
   display: flex;
   margin-top: 2rem;
+  @include media("<800px") {
+    flex-direction: column;
+  }
   .thumbnail-area {
     display: flex;
     flex-direction: column;
     width: 12rem;
     margin-right: 1rem;
+    @include media("<800px") {
+      width: 100%;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid $oc-gray-3;
+      margin-bottom: 1.5rem;
+    }
     img {
       width: 12rem;
       height: 12rem;

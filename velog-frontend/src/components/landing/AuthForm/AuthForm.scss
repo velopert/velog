@@ -56,9 +56,6 @@
       &:active {
         background: $oc-violet-7;
       }
-      @include media("<x-large") {
-        padding: 0.75rem;
-      }
     }
     transition: opacity 0.3s ease-in;
     &.sending {

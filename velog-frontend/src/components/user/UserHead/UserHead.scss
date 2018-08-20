@@ -1,6 +1,10 @@
-@import 'utils';
+@import "utils";
 .UserHead {
   display: flex;
+  @include media("<medium") {
+    flex-direction: column;
+    align-items: center;
+  }
   img {
     width: 10rem;
     height: 10rem;
@@ -12,6 +16,9 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    @include media("<medium") {
+      width: 100%;
+    }
     section {
       min-height: 5rem;
     }
@@ -19,6 +26,10 @@
       display: flex;
       flex-direction: column;
       .subscribe-wrapper {
+        @include media("<medium") {
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+        }
         display: flex;
         justify-content: flex-end;
         .subscribe {

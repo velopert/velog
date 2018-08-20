@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .TagItem {
   display: inline-flex;
   padding: 0.5rem 1rem;
@@ -17,6 +17,16 @@
     margin-left: 0.5rem;
     color: $oc-gray-6;
     font-size: 0.625rem;
+  }
+  @include media("<large") {
+    padding: 0.4rem 0.8rem;
+    margin: 0.15rem;
+    .name {
+      font-size: 0.75rem;
+    }
+    .counts {
+      font-size: 0.5rem;
+    }
   }
   &:hover {
     .name {

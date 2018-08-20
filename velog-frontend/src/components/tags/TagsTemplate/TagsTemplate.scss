@@ -1,5 +1,9 @@
-@import 'utils';
+@import "utils";
 .TagsTemplate {
   padding-left: 1.75rem;
   padding-right: 1.75rem;
+  @include media("<large") {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }
