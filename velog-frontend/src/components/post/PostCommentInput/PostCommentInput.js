@@ -9,6 +9,8 @@ type Props = {
   replyTo?: ?string,
   onCancel?: () => any,
   onWriteComment: (text: string, replyTo: ?string) => Promise<*>,
+  editing?: ?boolean,
+  defaultValue?: string,
 };
 type State = {
   input: string,
@@ -20,6 +22,7 @@ class PostCommentInput extends Component<Props, State> {
   static defaultProps = {
     showCancel: false,
     onCancel: () => null,
+    defaultValue: '',
   };
 
   state = {
@@ -27,6 +30,13 @@ class PostCommentInput extends Component<Props, State> {
     focused: false,
     waiting: false,
   };
+
+  constructor(props: Props) {
+    super(props);
+    if (props.defaultValue) {
+      this.state.input = props.defaultValue;
+    }
+  }
 
   onFocus = () => {
     this.setState({
@@ -63,7 +73,7 @@ class PostCommentInput extends Component<Props, State> {
   };
 
   render() {
-    const { showCancel, onCancel } = this.props;
+    const { showCancel, onCancel, editing } = this.props;
     const { focused, input, waiting } = this.state;
 
     return (
@@ -78,7 +88,7 @@ class PostCommentInput extends Component<Props, State> {
         />
         <div className="button-wrapper">
           <Button disabled={waiting} onClick={this.onWriteButtonClick}>
-            댓글 작성
+            {editing ? '수정하기' : '댓글 작성'}
           </Button>
           {showCancel && (
             <Button cancel onMouseDown={onCancel}>

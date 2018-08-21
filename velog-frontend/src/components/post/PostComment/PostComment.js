@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PlusIcon from 'react-icons/lib/fa/plus-square-o';
 import MinusIcon from 'react-icons/lib/fa/minus-square-o';
 import PostCommentInput from 'components/post/PostCommentInput/PostCommentInput';
@@ -27,11 +27,13 @@ type Props = {
   logged: boolean,
   currentUsername: ?string,
   onOpenRemove: (payload: { commentId: string, parentId: ?string }) => any,
+  parentId?: ?string,
 };
 
 type State = {
   open: boolean,
   showInput: boolean,
+  editing: boolean,
 };
 
 class PostComment extends Component<Props, State> {
@@ -43,6 +45,7 @@ class PostComment extends Component<Props, State> {
   state = {
     open: false,
     showInput: false,
+    editing: false,
   };
 
   onOpen = () => {
@@ -71,6 +74,12 @@ class PostComment extends Component<Props, State> {
     });
   };
 
+  onToggleEdit = () => {
+    this.setState({
+      editing: !this.state.editing,
+    });
+  };
+
   readReplies = () => {
     const { onReadReplies, id } = this.props;
     onReadReplies(id);
@@ -90,6 +99,14 @@ class PostComment extends Component<Props, State> {
     );
   }
 
+  onOpenRemove = () => {
+    const { id, parentId } = this.props;
+    this.props.onOpenRemove({
+      commentId: id,
+      parentId,
+    });
+  };
+
   render() {
     const {
       username,
@@ -107,39 +124,56 @@ class PostComment extends Component<Props, State> {
       currentUsername,
       onOpenRemove,
     } = this.props;
-    const { open, showInput } = this.state;
+    const { open, showInput, editing } = this.state;
 
     const userProfileLink = `/@${username || ''}`;
 
     return (
       <div className="PostComment">
-        <div className="comment-head">
-          <Link to={userProfileLink}>
-            <img src={thumbnail || defaultThumbnail} alt={username} />
-          </Link>
-          <div className="text-block">
-            {username === null ? (
-              <div className="username unknown">알 수 없음</div>
-            ) : (
-              <Link to={userProfileLink} className="username">
-                {username}
+        {editing ? (
+          <PostCommentInput
+            showCancel
+            onCancel={this.onToggleEdit}
+            onWriteComment={onReply}
+            editing
+            defaultValue={comment || ''}
+          />
+        ) : (
+          <Fragment>
+            <div className="comment-head">
+              <Link to={userProfileLink}>
+                <img src={thumbnail || defaultThumbnail} alt={username} />
               </Link>
-            )}
-            <div className="date">{fromNow(date)}</div>
-          </div>
-          {username === currentUsername && (
-            <div className="actions">
-              <button className="remove">삭제</button>
+              <div className="text-block">
+                {username === null ? (
+                  <div className="username unknown">알 수 없음</div>
+                ) : (
+                  <Link to={userProfileLink} className="username">
+                    {username}
+                  </Link>
+                )}
+                <div className="date">{fromNow(date)}</div>
+              </div>
+              {username === currentUsername && (
+                <div className="actions">
+                  <button className="edit" onClick={this.onToggleEdit}>
+                    수정
+                  </button>
+                  <button className="remove" onClick={this.onOpenRemove}>
+                    삭제
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div
-          className={cx('comment-body', {
-            deleted: comment === null,
-          })}
-        >
-          {comment || '삭제된 댓글입니다.'}
-        </div>
+            <div
+              className={cx('comment-body', {
+                deleted: comment === null,
+              })}
+            >
+              {comment || '삭제된 댓글입니다.'}
+            </div>
+          </Fragment>
+        )}
         {level < 3 &&
           (open ? (
             <button className="replies-button" onClick={this.onClose}>
@@ -175,6 +209,7 @@ class PostComment extends Component<Props, State> {
                     level={level + 1}
                     currentUsername={currentUsername}
                     onOpenRemove={onOpenRemove}
+                    parentId={id}
                   />
                 );
               })}

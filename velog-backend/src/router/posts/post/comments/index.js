@@ -4,11 +4,21 @@ import needsAuth from 'lib/middlewares/needsAuth';
 
 import * as commentsCtrl from './comments.ctrl';
 
-const comment: Router = new Router();
+const comments: Router = new Router();
 
-comment.get('/', commentsCtrl.getCommentList);
-comment.get('/:commentId/replies', commentsCtrl.getReplies);
-comment.delete('/:commentId', needsAuth, commentsCtrl.deleteReply);
-comment.post('/', needsAuth, commentsCtrl.writeComment);
+comments.get('/', commentsCtrl.getCommentList);
+comments.get('/:commentId/replies', commentsCtrl.getReplies);
+comments.post('/', needsAuth, commentsCtrl.writeComment);
 
-export default comment;
+const comment = new Router();
+comment.delete('/', commentsCtrl.deleteComment);
+comment.patch('/', commentsCtrl.editComment);
+
+comments.use(
+  '/:commentId',
+  needsAuth,
+  commentsCtrl.checkOwnComment,
+  comment.routes(),
+);
+
+export default comments;

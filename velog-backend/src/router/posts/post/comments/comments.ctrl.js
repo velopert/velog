@@ -123,7 +123,7 @@ export const getReplies: Middleware = async (ctx: Context) => {
   }
 };
 
-export const deleteReply: Middleware = async (ctx) => {
+export const checkOwnComment: Middleware = async (ctx, next) => {
   const { commentId } = ctx.params;
   if (!isUUID(commentId)) {
     ctx.status = 400;
@@ -141,6 +141,50 @@ export const deleteReply: Middleware = async (ctx) => {
       };
       return;
     }
+    ctx.state.comment = comment;
+    return next();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const editComment: Middleware = async (ctx) => {
+  const { comment } = ctx.state;
+  if (!comment) {
+    ctx.status = 500;
+    return;
+  }
+
+  const schema = Joi.object().keys({
+    text: Joi.string()
+      .min(1)
+      .max(1000)
+      .required(),
+  });
+
+  if (!validateSchema(ctx, schema)) {
+    return;
+  }
+
+  const { text } = (ctx.request.body: any);
+  try {
+    await comment.update({
+      text,
+    });
+    const updatedComment = await Comment.readComment(comment.id);
+    ctx.body = updatedComment;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const deleteComment: Middleware = async (ctx) => {
+  const { comment } = ctx.state;
+  if (!comment) {
+    ctx.status = 500;
+    return;
+  }
+  try {
     await comment.update({
       deleted: true,
     });

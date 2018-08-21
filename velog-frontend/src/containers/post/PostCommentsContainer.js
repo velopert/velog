@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PostComments from 'components/post/PostComments/PostComments';
 import PostCommentInput from 'components/post/PostCommentInput/PostCommentInput';
 import { PostsActions } from 'store/actionCreators';
-import type { Comment, SubcommentsMap } from 'store/modules/posts';
+import type { Comment, SubcommentsMap, RemoveComment } from 'store/modules/posts';
 import QuestionModal from 'components/common/QuestionModal';
 
 type Props = {
@@ -16,11 +16,25 @@ type Props = {
   logged: boolean,
   loading: boolean,
   username: ?string,
+  removeComment: RemoveComment,
 };
 
 class PostCommentsContainer extends Component<Props> {
   onOpenRemove = (payload: { commentId: string, parentId: ?string }) => {
     PostsActions.openCommentRemove(payload);
+  };
+
+  onCancelRemove = () => {
+    PostsActions.cancelCommentRemove();
+  };
+
+  onConfirmRemove = () => {
+    const { postId, removeComment } = this.props;
+    if (!postId || !removeComment.commentId) return;
+    PostsActions.removeComment({
+      postId,
+      commentId: removeComment.commentId,
+    });
   };
 
   onWriteComment = async (text: string, replyTo: ?string) => {
@@ -75,7 +89,7 @@ class PostCommentsContainer extends Component<Props> {
   };
 
   render() {
-    const { comments, subcommentsMap, logged, loading, username } = this.props;
+    const { comments, subcommentsMap, logged, loading, username, removeComment } = this.props;
 
     if (loading) return null;
 
@@ -95,9 +109,9 @@ class PostCommentsContainer extends Component<Props> {
           title="댓글 삭제"
           description="이 댓글을 정말로 삭제하시겠습니까?"
           confirmText="삭제하기"
-          onConfirm={() => null}
-          onCancel={() => null}
-          open={false}
+          onConfirm={this.onConfirmRemove}
+          onCancel={this.onCancelRemove}
+          open={removeComment.visible}
         />
       </Fragment>
     );
@@ -113,6 +127,7 @@ export default connect(
     shouldCancel: state.common.ssr && state.common.router.history.length === 0,
     loading: !state.posts.post || state.pender.pending['posts/READ_COMMENTS'],
     username: state.user.user && state.user.user.username,
+    removeComment: state.posts.removeComment,
   }),
   () => ({}),
 )(PostCommentsContainer);

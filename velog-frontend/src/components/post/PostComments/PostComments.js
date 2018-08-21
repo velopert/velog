@@ -13,6 +13,7 @@ type Props = {
   subcommentsMap: SubcommentsMap,
   logged: boolean,
   username: ?string,
+  onOpenRemove: (payload: { commentId: string, parentId: ?string }) => any,
 };
 
 const PostComments = ({
@@ -23,6 +24,7 @@ const PostComments = ({
   subcommentsMap,
   logged,
   username,
+  onOpenRemove,
 }: Props) => (
   <div className="PostComments">
     <h4>{comments ? comments.length : 0}개의 댓글</h4>
@@ -45,6 +47,7 @@ const PostComments = ({
               onReply={onReply}
               logged={logged}
               currentUsername={username}
+              onOpenRemove={onOpenRemove}
             />
           );
         })}

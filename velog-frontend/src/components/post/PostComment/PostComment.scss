@@ -15,12 +15,15 @@
       top: 0.6rem;
       font-size: 0.875rem;
       color: $oc-gray-5;
-      .remove {
+      button {
         cursor: pointer;
         &:hover {
           color: $oc-gray-8;
           text-decoration: underline;
         }
+      }
+      button + button {
+        margin-left: 0.5rem;
       }
     }
     img {
