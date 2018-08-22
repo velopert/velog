@@ -37,6 +37,25 @@ class PostCommentsContainer extends Component<Props> {
     });
   };
 
+  onEditComment = ({
+    commentId,
+    parentId,
+    text,
+  }: {
+    commentId: string,
+    parentId: ?string,
+    text: string,
+  }) => {
+    const { postId } = this.props;
+    if (!postId) return Promise.resolve();
+    return PostsActions.editComment({
+      postId,
+      commentId,
+      text,
+      parentId,
+    });
+  };
+
   onWriteComment = async (text: string, replyTo: ?string) => {
     const { postId } = this.props;
     if (!postId) return Promise.resolve();
@@ -104,6 +123,7 @@ class PostCommentsContainer extends Component<Props> {
           onReadReplies={this.onReadReplies}
           username={username}
           onOpenRemove={this.onOpenRemove}
+          onEditComment={this.onEditComment}
         />
         <QuestionModal
           title="댓글 삭제"

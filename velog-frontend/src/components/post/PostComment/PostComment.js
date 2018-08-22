@@ -28,6 +28,11 @@ type Props = {
   currentUsername: ?string,
   onOpenRemove: (payload: { commentId: string, parentId: ?string }) => any,
   parentId?: ?string,
+  onEditComment: ({
+    commentId: string,
+    parentId: ?string,
+    text: string,
+  }) => any,
 };
 
 type State = {
@@ -107,6 +112,22 @@ class PostComment extends Component<Props, State> {
     });
   };
 
+  onConfirmEdit = async (text: string) => {
+    const { onEditComment, id, parentId } = this.props;
+    try {
+      await onEditComment({
+        commentId: id,
+        parentId,
+        text,
+      });
+      this.setState({
+        editing: false,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   render() {
     const {
       username,
@@ -123,6 +144,7 @@ class PostComment extends Component<Props, State> {
       logged,
       currentUsername,
       onOpenRemove,
+      onEditComment,
     } = this.props;
     const { open, showInput, editing } = this.state;
 
@@ -134,7 +156,7 @@ class PostComment extends Component<Props, State> {
           <PostCommentInput
             showCancel
             onCancel={this.onToggleEdit}
-            onWriteComment={onReply}
+            onWriteComment={this.onConfirmEdit}
             editing
             defaultValue={comment || ''}
           />
@@ -181,12 +203,13 @@ class PostComment extends Component<Props, State> {
               숨기기
             </button>
           ) : (
-            (logged || repliesCount > 0) && (
+            (logged || repliesCount > 0) &&
+            ((comment || repliesCount > 0) && (
               <button className="replies-button" onClick={this.onOpen}>
                 <PlusIcon />
                 {repliesCount === 0 ? '답글 달기' : `${repliesCount}개의 답글`}
               </button>
-            )
+            ))
           ))}
         {open && (
           <section className="replies">
@@ -210,6 +233,7 @@ class PostComment extends Component<Props, State> {
                     currentUsername={currentUsername}
                     onOpenRemove={onOpenRemove}
                     parentId={id}
+                    onEditComment={onEditComment}
                   />
                 );
               })}

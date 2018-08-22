@@ -27,6 +27,7 @@ const TOGGLE_ASK_REMOVE = 'posts/TOGGLE_ASK_REMOVE';
 const OPEN_COMMENT_REMOVE = 'posts/OPEN_COMMENT_REMOVE';
 const CANCEL_COMMENT_REMOVE = 'posts/CANCEL_COMMENT_REMOVE';
 const REMOVE_COMMENT = 'posts/REMOVE_COMMENT';
+const EDIT_COMMENT = 'posts/EDIT_COMMENT';
 
 type OpenCommentRemovePayload = { commentId: string, parentId: ?string };
 
@@ -45,6 +46,7 @@ export interface PostsActionCreators {
   openCommentRemove(payload: OpenCommentRemovePayload): any;
   cancelCommentRemove(): any;
   removeComment(payload: CommentsAPI.RemoveCommentPayload): any;
+  editComment(payload: CommentsAPI.EditCommentPayload): any;
 }
 
 export const actionCreators = {
@@ -65,6 +67,7 @@ export const actionCreators = {
   ),
   cancelCommentRemove: createAction(CANCEL_COMMENT_REMOVE),
   removeComment: createAction(REMOVE_COMMENT, CommentsAPI.removeComment),
+  editComment: createAction(EDIT_COMMENT, CommentsAPI.editComment, payload => payload),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
@@ -302,6 +305,28 @@ export default applyPenders(reducer, [
         target.text = null;
         target.user.username = null;
         target.user.thumbnail = null;
+      });
+    },
+  },
+  {
+    type: EDIT_COMMENT,
+    onSuccess: (state: Posts, action: ResponseAction) => {
+      const { payload, meta } = action;
+      const { commentId, parentId } = meta;
+      return produce(state, (draft) => {
+        const { subcommentsMap, comments } = draft;
+        // is subcomment
+        if (parentId) {
+          const subcomments = subcommentsMap[parentId];
+          if (!subcomments) return;
+          const index = subcomments.findIndex(c => c.id === commentId);
+          subcomments[index] = payload.data;
+          return;
+        }
+        // is root comment
+        if (!comments) return;
+        const index = comments.findIndex(c => c.id === commentId);
+        comments[index] = payload.data;
       });
     },
   },

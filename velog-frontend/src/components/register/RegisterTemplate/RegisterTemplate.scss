@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 
 .register-template {
   .mock-header {
@@ -8,10 +8,11 @@
     align-items: center;
     .brand {
       font-size: 2.25rem;
-      font-family: 'Inconsolata', monospace;
+      font-family: "Inconsolata", monospace;
       font-weight: 700;
     }
     .light {
+      margin-top: 8px;
       margin-left: 1rem;
       font-size: 1.25rem;
       font-weight: 600;
@@ -26,7 +27,7 @@
       justify-content: center;
       background: $oc-violet-6;
       .light {
-        color: rgba(255,255,255,0.5);
+        color: rgba(255, 255, 255, 0.5);
       }
     }
     @include media("height<800px") {
@@ -35,7 +36,7 @@
       justify-content: center;
       background: $oc-violet-6;
       .light {
-        color: rgba(255,255,255,0.5);
+        color: rgba(255, 255, 255, 0.5);
       }
     }
   }
@@ -52,7 +53,7 @@
       @include material-shadow(3, 0.5);
       border-radius: 2px;
     }
-    
+
     @include media("<=large") {
       height: calc(100vh - 4.5rem);
       .register-card {

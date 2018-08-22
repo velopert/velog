@@ -36,3 +36,13 @@ export type RemoveCommentPayload = {
 export const removeComment = ({ postId, commentId }: RemoveCommentPayload) => {
   return axios.delete(`/posts/${postId}/comments/${commentId}`);
 };
+
+export type EditCommentPayload = {
+  postId: string,
+  commentId: string,
+  text: string,
+  parentId: ?string,
+};
+
+export const editComment = ({ postId, commentId, text }: EditCommentPayload) =>
+  axios.patch(`/posts/${postId}/comments/${commentId}`, { text });

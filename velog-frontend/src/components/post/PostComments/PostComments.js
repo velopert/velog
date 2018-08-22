@@ -14,6 +14,11 @@ type Props = {
   logged: boolean,
   username: ?string,
   onOpenRemove: (payload: { commentId: string, parentId: ?string }) => any,
+  onEditComment: ({
+    commentId: string,
+    parentId: ?string,
+    text: string,
+  }) => any,
 };
 
 const PostComments = ({
@@ -25,6 +30,7 @@ const PostComments = ({
   logged,
   username,
   onOpenRemove,
+  onEditComment,
 }: Props) => (
   <div className="PostComments">
     <h4>{comments ? comments.length : 0}개의 댓글</h4>
@@ -48,6 +54,7 @@ const PostComments = ({
               logged={logged}
               currentUsername={username}
               onOpenRemove={onOpenRemove}
+              onEditComment={onEditComment}
             />
           );
         })}

@@ -8,7 +8,7 @@ type Props = {
   showCancel?: boolean,
   replyTo?: ?string,
   onCancel?: () => any,
-  onWriteComment: (text: string, replyTo: ?string) => Promise<*>,
+  onWriteComment: (text: string, replyTo?: ?string) => Promise<*>,
   editing?: ?boolean,
   defaultValue?: string,
 };
