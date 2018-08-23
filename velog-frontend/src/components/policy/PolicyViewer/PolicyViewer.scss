@@ -1,0 +1,28 @@
+@import "utils";
+
+.PolicyViewer {
+  background: white;
+  width: 768px;
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  .links {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid $oc-gray-2;
+    margin-bottom: 2.5rem;
+    a {
+      font-size: 1.25rem;
+      color: $oc-gray-8;
+      &.active {
+        color: $oc-violet-6;
+        font-weight: 600;
+      }
+    }
+    a + a {
+      margin-left: 1rem;
+    }
+  }
+  h1 {
+    font-weight: 800;
+  }
+}

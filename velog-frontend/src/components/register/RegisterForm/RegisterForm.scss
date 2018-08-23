@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 
 .register-form {
   @include media("<=large") {
@@ -38,6 +38,15 @@
         font-weight: 600;
       }
     }
+    .error {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      border: 1px solid $oc-red-6;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: $oc-red-0;
+      color: $oc-red-8;
+    }
     .button-wrapper {
       display: flex;
       justify-content: flex-end;
@@ -53,7 +62,7 @@
       line-height: 1.25rem;
       border-radius: 4px;
       font-weight: 600;
-      transition: all .15s ease-in;
+      transition: all 0.15s ease-in;
       cursor: pointer;
       user-select: none;
       svg {

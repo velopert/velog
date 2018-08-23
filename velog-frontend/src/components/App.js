@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home, Register, Write, Post, User, Saves, Settings } from 'pages';
+import { Home, Register, Write, Post, User, Saves, Settings, Policy } from 'pages';
 import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
 import { Helmet } from 'react-helmet';
@@ -27,6 +27,7 @@ const App = () => (
       <Route path="/posts/preview/:id" component={Post} />
       <Route path="/saves" component={Saves} />
       <Route path="/settings" component={Settings} />
+      <Route path="/policy/:mode(policy|terms)?" component={Policy} />
     </Switch>
     <Core />
   </React.Fragment>

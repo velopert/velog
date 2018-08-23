@@ -22,7 +22,11 @@ type Props = {
   authResult: AuthResult,
   isSocial: boolean,
   socialAuthResult: SocialAuthResult,
-  socialEmail: ?string
+  socialEmail: ?string,
+  error: ?{
+    name: string,
+    payload: any,
+  },
 };
 
 class RegisterFormContainer extends Component<Props> {
@@ -39,7 +43,7 @@ class RegisterFormContainer extends Component<Props> {
     } catch (e) {
       // TODO: INITIALIZE ERROR
     }
-  }
+  };
 
   componentDidMount() {
     this.initialize();
@@ -48,9 +52,10 @@ class RegisterFormContainer extends Component<Props> {
   onChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
     const { value, name } = e.target;
     AuthActions.changeRegisterForm({
-      name, value,
+      name,
+      value,
     });
-  }
+  };
 
   onRegister = async () => {
     const {
@@ -68,6 +73,21 @@ class RegisterFormContainer extends Component<Props> {
       username,
       shortBio,
     };
+
+    if (!/^[a-z0-9-_]{3,16}$/.test(username)) {
+      AuthActions.setError({ name: 'FIELD_RULE', payload: 'username' });
+      return;
+    }
+
+    if (shortBio.length > 140) {
+      AuthActions.setError({ name: 'FIELD_RULE', payload: 'shortBio' });
+      return;
+    }
+
+    if (displayName.length < 1 || displayName.length > 40) {
+      AuthActions.setError({ name: 'FIELD_RULE', payload: 'displayName' });
+      return;
+    }
 
     try {
       if (isSocial) {
@@ -94,11 +114,11 @@ class RegisterFormContainer extends Component<Props> {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   render() {
     const { onChange, onRegister } = this;
-    const { displayName, email, username, shortBio, socialEmail, isSocial } = this.props;
+    const { displayName, email, username, shortBio, socialEmail, isSocial, error } = this.props;
 
     return (
       <RegisterForm
@@ -109,6 +129,7 @@ class RegisterFormContainer extends Component<Props> {
         username={username}
         shortBio={shortBio}
         emailEditable={isSocial && !socialEmail}
+        error={error}
       />
     );
   }
@@ -123,6 +144,7 @@ export default connect(
       socialAuthResult,
       isSocial,
       verifySocialResult,
+      error,
     } = auth;
     const { displayName, email, username, shortBio } = registerForm;
 
@@ -136,6 +158,7 @@ export default connect(
       socialAuthResult,
       isSocial,
       socialEmail: verifySocialResult && verifySocialResult.email,
+      error,
     };
   },
   () => ({}),

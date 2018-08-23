@@ -18,7 +18,7 @@ const VERIFY_SOCIAL = 'auth/VERIFY_SOCIAL';
 const SOCIAL_REGISTER = 'auth/SOCIAL_REGISTER';
 const SOCIAL_VELOG_LOGIN = 'auth/SOCIAL_VELOG_LOGIN';
 const AUTOCOMPLETE_REGISTER_FORM = 'auth/AUTOCOMPLETE_REGISTER_FORM';
-
+const SET_ERROR = 'auth/SET_ERROR';
 
 /* ACTION CREATOR */
 const setEmailInput = createAction(SET_EMAIL_INPUT, (value: string) => value);
@@ -26,23 +26,33 @@ const sendAuthEmail = createAction(SEND_AUTH_EMAIL, AuthAPI.sendAuthEmail);
 const getCode = createAction(GET_CODE, AuthAPI.getCode);
 
 type ChangeRegisterFormPayload = { name: string, value: string };
-const changeRegisterForm = createAction(CHANGE_REGISTER_FORM,
-  (payload: ChangeRegisterFormPayload) => payload);
+const changeRegisterForm = createAction(
+  CHANGE_REGISTER_FORM,
+  (payload: ChangeRegisterFormPayload) => payload,
+);
 
 const localRegister = createAction(LOCAL_REGISTER, AuthAPI.localRegister);
 const codeLogin = createAction(CODE_LOGIN, AuthAPI.codeLogin);
-const socialLogin = createAction(SOCIAL_LOGIN,
-  (provider: string) => socialAuth[provider](), provider => provider);
+const socialLogin = createAction(
+  SOCIAL_LOGIN,
+  (provider: string) => socialAuth[provider](),
+  provider => provider,
+);
 const verifySocial = createAction(VERIFY_SOCIAL, AuthAPI.verifySocial);
 const socialRegister = createAction(SOCIAL_REGISTER, AuthAPI.socialRegister);
 const socialVelogLogin = createAction(SOCIAL_VELOG_LOGIN, AuthAPI.socialLogin);
 
+type ErrorType = { name: string, payload?: ?any };
+const setError = createAction(SET_ERROR, (payload: ErrorType) => payload);
+
 type AutoCompleteFormPayload = {
   email: string,
-  name: string
+  name: string,
 };
-const autoCompleteRegisterForm = createAction(AUTOCOMPLETE_REGISTER_FORM,
-  (payload: AutoCompleteFormPayload) => payload);
+const autoCompleteRegisterForm = createAction(
+  AUTOCOMPLETE_REGISTER_FORM,
+  (payload: AutoCompleteFormPayload) => payload,
+);
 
 /* ACTION FLOW TYPE */
 type SetEmailInputAction = ActionType<typeof setEmailInput>;
@@ -56,20 +66,22 @@ type VerifySocialAction = ActionType<typeof verifySocial>;
 type SocialRegisterAction = ActionType<typeof socialRegister>;
 type SocialVelogLoginAction = ActionType<typeof socialVelogLogin>;
 type AutoCompleteRegisterForm = ActionType<typeof autoCompleteRegisterForm>;
+type SetErrorAction = ActionType<typeof setError>;
 
 /* ACTION CREATORS INTERFACE */
 export interface AuthActionCreators {
-  setEmailInput(value: string): any,
-  sendAuthEmail(email: string): any,
-  changeRegisterForm({ name: string, value: string }): any,
-  getCode(code: string): any,
-  localRegister(payload: AuthAPI.LocalRegisterPayload): any,
-  codeLogin(code: string): any,
-  socialLogin(provider: string): any,
-  verifySocial(payload: AuthAPI.VerifySocialPayload): any,
-  socialRegister(payload: AuthAPI.SocialRegisterPayload): any,
-  socialVelogLogin(payload: AuthAPI.SocialLoginPayload): any,
-  autoCompleteRegisterForm(payload: AutoCompleteFormPayload): any
+  setEmailInput(value: string): any;
+  sendAuthEmail(email: string): any;
+  changeRegisterForm({ name: string, value: string }): any;
+  getCode(code: string): any;
+  localRegister(payload: AuthAPI.LocalRegisterPayload): any;
+  codeLogin(code: string): any;
+  socialLogin(provider: string): any;
+  verifySocial(payload: AuthAPI.VerifySocialPayload): any;
+  socialRegister(payload: AuthAPI.SocialRegisterPayload): any;
+  socialVelogLogin(payload: AuthAPI.SocialLoginPayload): any;
+  autoCompleteRegisterForm(payload: AutoCompleteFormPayload): any;
+  setError(payload: ErrorType): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -85,12 +97,13 @@ export const actionCreators: AuthActionCreators = {
   socialRegister,
   socialVelogLogin,
   autoCompleteRegisterForm,
+  setError,
 };
 
 /* STATE TYPES */
 export type SocialAuthResult = ?{
   provider: string,
-  accessToken: string
+  accessToken: string,
 };
 
 export type AuthResult = ?{
@@ -100,7 +113,7 @@ export type AuthResult = ?{
     displayName: string,
     thumbnail?: ?string,
   },
-  token: string
+  token: string,
 };
 
 export type VerifySocialResult = ?{
@@ -119,13 +132,17 @@ export type Auth = {
     displayName: string,
     email: string,
     username: string,
-    shortBio: string
+    shortBio: string,
   },
   isSocial: boolean,
   registerToken: string,
   authResult: AuthResult,
   socialAuthResult: SocialAuthResult,
   verifySocialResult: VerifySocialResult,
+  error: ?{
+    name: string,
+    payload: any,
+  },
 };
 
 /* INITIAL STATE */
@@ -144,35 +161,46 @@ const initialState: Auth = {
   authResult: null,
   socialAuthResult: null,
   verifySocialResult: null,
+  error: null,
 };
 
 /* REDUCER */
-const reducer = handleActions({
-  [SET_EMAIL_INPUT]: (state, action: SetEmailInputAction) => {
-    return produce(state, (draft) => {
-      if (!action) return;
-      draft.email = action.payload;
-    });
+const reducer = handleActions(
+  {
+    [SET_EMAIL_INPUT]: (state, action: SetEmailInputAction) => {
+      return produce(state, (draft) => {
+        if (!action) return;
+        draft.email = action.payload;
+      });
+    },
+    [CHANGE_REGISTER_FORM]: (state, action: ChangeRegisterFormAction) => {
+      const {
+        payload: { name, value },
+      } = action;
+      return produce(state, (draft) => {
+        draft.registerForm[name] = value;
+      });
+    },
+    [AUTOCOMPLETE_REGISTER_FORM]: (state, action: AutoCompleteRegisterForm) => {
+      const { email, name } = action.payload;
+      return produce(state, (draft) => {
+        draft.registerForm = {
+          displayName: name,
+          email,
+          shortBio: '',
+          username: '',
+        };
+        draft.isSocial = true;
+      });
+    },
+    [SET_ERROR]: (state, { payload }: SetErrorAction) => {
+      return produce(state, (draft) => {
+        draft.error = payload;
+      });
+    },
   },
-  [CHANGE_REGISTER_FORM]: (state, action: ChangeRegisterFormAction) => {
-    const { payload: { name, value } } = action;
-    return produce(state, (draft) => {
-      draft.registerForm[name] = value;
-    });
-  },
-  [AUTOCOMPLETE_REGISTER_FORM]: (state, action: AutoCompleteRegisterForm) => {
-    const { email, name } = action.payload;
-    return produce(state, (draft) => {
-      draft.registerForm = {
-        displayName: name,
-        email,
-        shortBio: '',
-        username: '',
-      };
-      draft.isSocial = true;
-    });
-  },
-}, initialState);
+  initialState,
+);
 
 export default applyPenders(reducer, [
   {
@@ -203,6 +231,11 @@ export default applyPenders(reducer, [
           user,
           token,
         };
+      });
+    },
+    onFailure: (state: Auth, { payload: { response } }) => {
+      return produce(state, (draft) => {
+        draft.error = response.data;
       });
     },
   },
@@ -238,7 +271,11 @@ export default applyPenders(reducer, [
       const { id, thumbnail, email, name } = profile;
       return produce(state, (draft) => {
         draft.verifySocialResult = {
-          id, thumbnail, email, name, exists,
+          id,
+          thumbnail,
+          email,
+          name,
+          exists,
         };
       });
     },
@@ -249,7 +286,8 @@ export default applyPenders(reducer, [
       const { user, token } = data;
       return produce(state, (draft) => {
         draft.authResult = {
-          user, token,
+          user,
+          token,
         };
       });
     },
@@ -260,6 +298,11 @@ export default applyPenders(reducer, [
       const { user, token } = data;
       return produce(state, (draft) => {
         draft.authResult = { user, token };
+      });
+    },
+    onFailure: (state: Auth, { payload: { response } }) => {
+      return produce(state, (draft) => {
+        draft.error = response.data;
       });
     },
   },
