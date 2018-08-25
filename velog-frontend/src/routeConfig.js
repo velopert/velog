@@ -8,6 +8,21 @@ import { bindActionCreators } from 'redux';
 import { type Match } from 'react-router';
 import queryString from 'query-string';
 
+const tagsFetcher = async (ctx: any, { dispatch, getState }: any, match: Match) => {
+  const { tag } = match.params;
+  const { sort } = ctx.query;
+  const CommonActions = bindActionCreators(commonActions, dispatch);
+  const promises = [CommonActions.getTags(sort)];
+  if (tag) {
+    await CommonActions.getTagInfo(tag);
+    const ListingActions = bindActionCreators(listingActions, dispatch);
+    const state = getState();
+    const tagName = state.common.tags.selected.name;
+    promises.push(ListingActions.getTagPosts({ tag: tagName }));
+  }
+  return Promise.all(promises);
+};
+
 const routes = [
   {
     path: '/recent',
@@ -24,7 +39,7 @@ const routes = [
     },
   },
   {
-    path: '/tags/:tag',
+    path: '/tags/:tag?',
     preload: async (ctx: any, { dispatch, getState }: any, match: Match) => {
       const { tag } = match.params;
       const { sort } = ctx.query;

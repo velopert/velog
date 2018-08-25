@@ -57,6 +57,10 @@ class MainSidebar extends Component<Props> {
             to="stored"
           /> */}
         </ul>
+        <div className="placer" />
+        <div className="footer">
+          <Link to="policy">서비스 정책</Link>
+        </div>
       </aside>
     );
   }

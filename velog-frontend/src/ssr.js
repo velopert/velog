@@ -17,20 +17,21 @@ const serverRender = async (ctx: any) => {
   // match routes...
   const promises = [];
   const token = ctx.cookies.get('access_token');
-  let { url } = ctx;
+  let { path, url } = ctx;
 
   if (token) {
     defaultClient.defaults.headers.cookie = `access_token=${token}`;
     promises.push(store.dispatch(userActions.checkUser()));
   }
 
-  if (token && url === '/') {
-    url = '/trending';
+  if (token && path === '/') {
+    path = '/trending';
   }
 
   routeConfig.every((route) => {
-    const match = matchPath(url, route);
+    const match = matchPath(path, route);
     if (match) {
+      console.log(match);
       if (route.preload) {
         promises.push(route.preload(ctx, store, match));
       }
@@ -41,7 +42,7 @@ const serverRender = async (ctx: any) => {
   try {
     await Promise.all(promises);
   } catch (e) {
-    console.log(e);
+    throw e;
   }
   const context = {};
   const html = ReactDOMServer.renderToString(

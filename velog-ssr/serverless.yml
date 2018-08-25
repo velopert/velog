@@ -29,5 +29,4 @@ functions:
         - sg-5bc57830
       subnetIds:
         - subnet-91481ef9
-        - subnet-2c59dc60
         - subnet-4f59dc03

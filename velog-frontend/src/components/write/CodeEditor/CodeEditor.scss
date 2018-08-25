@@ -8,6 +8,7 @@
   @include media("<large") {
     padding: 0.75rem;
   }
+  padding-right: 0;
   &.material {
     background: #263238;
   }

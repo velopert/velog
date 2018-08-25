@@ -51,7 +51,7 @@ const ssr = async (ctx: Context) => {
     // check cache
     if (!token) {
       const cache = await redisClient.getCache(ctx.url);
-      if (cache) {
+      if (cache && process.env.DISABLE_CACHE !== 'true') {
         ctx.set('Cache-Status', 'cached');
         ctx.body = cache;
         return;

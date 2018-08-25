@@ -45,7 +45,7 @@ class SubmitBox extends Component<Props, State> {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.visible && this.props.visible) {
+    if (prevProps.visible !== this.props.visible) {
       this.animate();
     }
   }

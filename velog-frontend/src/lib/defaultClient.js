@@ -9,4 +9,8 @@ const defaultClient: Axios = axios.create({
   withCredentials: true,
 });
 
+if (process.env.APP_ENV === 'server') {
+  defaultClient.defaults.timeout = 3000;
+}
+
 export default defaultClient;
