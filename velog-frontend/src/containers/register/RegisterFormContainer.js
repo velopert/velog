@@ -31,11 +31,13 @@ type Props = {
 
 class RegisterFormContainer extends Component<Props> {
   initialize = async () => {
+    const { isSocial, history } = this.props;
     const { search } = this.props.location;
     const { code } = queryString.parse(search);
 
-    if (!code) {
-      // TODO: ERROR WHEN NO CODE
+    if (!code && !isSocial) {
+      history.push('/');
+      return;
     }
 
     try {
@@ -130,6 +132,7 @@ class RegisterFormContainer extends Component<Props> {
         shortBio={shortBio}
         emailEditable={isSocial && !socialEmail}
         error={error}
+        hideEmail={isSocial && !email}
       />
     );
   }

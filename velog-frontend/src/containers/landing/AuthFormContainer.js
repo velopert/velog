@@ -75,11 +75,9 @@ class AuthFormContainer extends Component<Props> {
         // does not exist -> enroute to register, auto complete
         const { email, name } = verifySocialResult;
         if (!email || !name) {
-          console.log('?');
-          return;
           // TODO
         }
-        AuthActions.autoCompleteRegisterForm({ email, name });
+        AuthActions.autoCompleteRegisterForm({ email: email || '', name: name || '' });
         this.props.history.push('/register');
       }
     } catch (e) {

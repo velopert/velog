@@ -17,6 +17,7 @@ type Props = {
     name: string,
     payload: any,
   },
+  hideEmail: boolean,
 };
 
 const errorMap = {
@@ -45,6 +46,7 @@ const RegisterForm = ({
   shortBio,
   emailEditable,
   error,
+  hideEmail,
 }: Props) => {
   return (
     <div className="register-form">
@@ -60,16 +62,18 @@ const RegisterForm = ({
           placeholder="이름을 입력하세요"
           onChange={onChange}
         />
-        <LabelInput
-          type="email"
-          value={email}
-          name="email"
-          required
-          label="이메일"
-          placeholder="이메일을 입력하세요"
-          onChange={onChange}
-          disabled={!emailEditable}
-        />
+        {!hideEmail && (
+          <LabelInput
+            type="email"
+            value={email}
+            name="email"
+            required
+            label="이메일"
+            placeholder="이메일을 입력하세요"
+            onChange={onChange}
+            disabled={!emailEditable}
+          />
+        )}
         <LabelInput
           value={username}
           name="username"
