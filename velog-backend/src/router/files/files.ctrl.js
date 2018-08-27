@@ -82,8 +82,6 @@ export const retrieveSize: Middleware = async (ctx: Context) => {
   // find file row from db
   try {
     const fileInfo = await PostImage.findById(ctx.params.id);
-    console.log(fileInfo);
-    console.log(`https://images.velog.io/${fileInfo.path}`);
     const downloaded = await downloadImage(`https://images.velog.io/${fileInfo.path}`);
     fileInfo.filesize = downloaded.stats.size;
     await fileInfo.save();
@@ -202,7 +200,6 @@ export const upload: Middleware = async (ctx: Context) => {
     const imagePath = `post-images/${ctx.user.username}/${postImage.id}/${
       image.name
     }`;
-    console.log(imagePath);
     postImage.path = imagePath;
     const read = fs.createReadStream(image.path);
     const response = await s3
@@ -214,7 +211,6 @@ export const upload: Middleware = async (ctx: Context) => {
       })
       .promise();
     if (!response || !response.ETag) {
-      console.log(response);
       ctx.status = 418; // I AM A TEAPOT
       return;
     }

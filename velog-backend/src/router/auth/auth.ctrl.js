@@ -340,7 +340,6 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
 
   try {
     profile = await getSocialProfile(provider, accessToken);
-    console.log(profile);
   } catch (e) {
     ctx.status = 401;
     ctx.body = {

@@ -192,7 +192,6 @@ Post.listPosts = async function ({
     cursor,
     time,
   };
-  console.log(bindVariables);
   try {
     const countResult = await db.query(
       `SELECT COUNT(DISTINCT p.id) as count FROM posts p ${query}`,
@@ -366,7 +365,6 @@ export const serializePost = (data: any) => {
     name: category.name,
     url_slug: category.url_slug,
   }));
-  // console.log(is_temp);
   return {
     id,
     title,

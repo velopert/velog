@@ -24,10 +24,7 @@ const profileGetters = {
           return;
         }
         const {
-          id,
-          avatar_url: thumbnail,
-          email,
-          name,
+          id, avatar_url: thumbnail, email, name,
         } = res.data;
 
         console.log(res.data);
@@ -44,47 +41,51 @@ const profileGetters = {
     });
   },
   facebook(accessToken: string): Promise<Profile> {
-    return FacebookAPI.api('me', { fields: ['name', 'email', 'picture'], access_token: accessToken })
-      .then((auth) => {
-        return {
-          id: auth.id,
-          name: auth.name,
-          email: auth.email || null,
-          thumbnail: auth.picture.data.url,
-        };
-      });
+    return FacebookAPI.api('me', {
+      fields: ['name', 'email', 'picture'],
+      access_token: accessToken,
+    }).then((auth) => {
+      return {
+        id: auth.id,
+        name: auth.name,
+        email: auth.email || null,
+        thumbnail: auth.picture.data.url,
+      };
+    });
   },
   google(accessToken: string): Promise<Profile> {
     const plus = GoogleAPI.plus('v1');
     return new Promise((resolve, reject) => {
-      plus.people.get({
-        userId: 'me',
-        access_token: accessToken,
-      }, (err, auth) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        console.log(auth);
-        const {
-          id,
-          image,
-          emails,
-          displayName,
-        } = auth;
+      plus.people.get(
+        {
+          userId: 'me',
+          access_token: accessToken,
+        },
+        (err, auth) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          const {
+            id, image, emails, displayName,
+          } = auth;
 
-        const profile = {
-          id,
-          thumbnail: image.url,
-          email: emails[0].value,
-          name: displayName && displayName.split(' (')[0],
-        };
-        resolve(profile);
-      });
+          const profile = {
+            id,
+            thumbnail: image.url,
+            email: emails[0].value,
+            name: displayName && displayName.split(' (')[0],
+          };
+          resolve(profile);
+        },
+      );
     });
   },
 };
 
-export default function getSocialProfile(provider: string, accessToken: string) {
+export default function getSocialProfile(
+  provider: string,
+  accessToken: string,
+) {
   return profileGetters[provider](accessToken);
 }

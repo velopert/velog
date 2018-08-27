@@ -16,6 +16,7 @@ export default class Server {
     if (!redisClient.connected) {
       redisClient.connect();
     }
+    associate();
     this.app = new Koa();
     this.middleware();
     this.initializeDb();
@@ -24,7 +25,6 @@ export default class Server {
   initializeDb(): void {
     db.authenticate().then(
       () => {
-        associate();
         console.log('DB Connection has been established');
       },
       (err) => {
