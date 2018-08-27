@@ -25,6 +25,7 @@ type Props = {
   onToggleLike: () => void,
   onAskRemove: () => void,
   date: string,
+  logged: boolean,
 };
 
 const PostHead = ({
@@ -38,6 +39,7 @@ const PostHead = ({
   ownPost,
   onToggleLike,
   onAskRemove,
+  logged,
 }: Props) => {
   const userLink = `/@${user.username}`;
 
@@ -58,7 +60,7 @@ const PostHead = ({
       <div className="date-and-likes">
         <div className="date">{fromNow(date)}</div>
         <div className="placeholder" />
-        <PostLikeButton onClick={onToggleLike} liked={liked} likes={likes} />
+        <PostLikeButton onClick={onToggleLike} liked={liked} likes={likes} disabled={!logged} />
       </div>
       <div className="separator" />
       {ownPost && <PostActionButtons id={id} onAskRemove={onAskRemove} />}

@@ -27,7 +27,6 @@ class TagItemListContainer extends Component<Props> {
   }
 
   onSelectTag = (info: TagData) => {
-    console.log('what?');
     CommonActions.setTagInfo(info);
   };
 

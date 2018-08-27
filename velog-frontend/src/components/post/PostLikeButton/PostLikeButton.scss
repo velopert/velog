@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .PostLikeButton {
   cursor: pointer;
   padding: 0.5rem 0.875rem;
@@ -34,6 +34,14 @@
     }
     &:active {
       background: $oc-violet-6;
+    }
+  }
+  &.disabled {
+    cursor: not-allowed;
+    &:hover {
+      background: white;
+      border: 1px solid $oc-violet-5;
+      color: $oc-violet-5;
     }
   }
 }

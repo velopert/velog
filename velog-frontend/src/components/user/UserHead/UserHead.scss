@@ -18,6 +18,7 @@
     flex-direction: column;
     @include media("<medium") {
       width: 100%;
+      margin-left: 0;
     }
     section {
       min-height: 5rem;

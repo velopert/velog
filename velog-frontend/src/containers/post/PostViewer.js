@@ -33,6 +33,7 @@ type Props = {
   askRemove: boolean,
   routerHistory: Location[],
   shouldCancel: boolean,
+  logged: boolean,
 } & ContextRouter;
 
 class PostViewer extends Component<Props> {
@@ -98,7 +99,7 @@ class PostViewer extends Component<Props> {
   }
 
   render() {
-    const { post, toc, activeHeading, username, currentUsername, askRemove } = this.props;
+    const { post, toc, activeHeading, username, currentUsername, askRemove, logged } = this.props;
     const { onSetToc, onActivateHeading } = this;
     if (!post) return <PostPlaceholder />;
 
@@ -121,12 +122,14 @@ class PostViewer extends Component<Props> {
           onToggleLike={this.onToggleLike}
           ownPost={currentUsername === username}
           onAskRemove={this.onToggleAskRemove}
+          logged={logged}
         />
         <PostContent
           thumbnail={post.thumbnail}
           body={post.body}
           onSetToc={onSetToc}
           onActivateHeading={onActivateHeading}
+          theme={post.meta.code_theme}
         />
         <PostTags tags={post.tags} />
         <QuestionModal
@@ -152,6 +155,7 @@ export default connect(
     askRemove: posts.askRemove,
     routerHistory: common.router.history,
     shouldCancel: common.ssr && common.router.history.length === 0,
+    logged: !!user.user,
   }),
   () => ({}),
 )(withRouter(PostViewer));

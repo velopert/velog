@@ -107,6 +107,10 @@ export type PostData = {
     thumbnail: ?string,
     short_bio: ?string,
   },
+  meta: {
+    code_theme: string,
+    short_description: ?string,
+  }
 };
 
 export type SubcommentsMap = {

@@ -80,7 +80,7 @@ class MarkdownRender extends Component<Props, State> {
   };
 
   static defaultProps = {
-    theme: 'atom-one',
+    theme: 'github',
   };
 
   constructor(props: Props) {
@@ -173,7 +173,7 @@ class MarkdownRender extends Component<Props, State> {
     const { theme } = this.props;
     return (
       <div
-        className={cx('MarkdownRender', theme || 'atom-one')}
+        className={cx('MarkdownRender', theme || 'github')}
         dangerouslySetInnerHTML={markup}
         id="markdown-render"
       />

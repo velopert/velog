@@ -10,7 +10,7 @@ import hello from 'hellojs';
       google: '512153499356-4sg3s216vvqiv5kjfstal7dd2c1gc1an.apps.googleusercontent.com',
     },
     {
-      redirect_uri: 'callback',
+      redirect_uri: '/callback',
     },
   );
 })();

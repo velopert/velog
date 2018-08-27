@@ -6,12 +6,13 @@ import './PostContent.scss';
 
 type Props = {
   body: string,
+  theme: string,
   thumbnail: ?string,
   onSetToc: (toc: any) => void,
   onActivateHeading: (headingId: string) => void,
 };
 
-const PostContent = ({ body, onSetToc, onActivateHeading, thumbnail }: Props) => (
+const PostContent = ({ body, onSetToc, onActivateHeading, thumbnail, theme }: Props) => (
   <div className="PostContent">
     {thumbnail && (
       <div className="post-thumbnail">
@@ -19,7 +20,12 @@ const PostContent = ({ body, onSetToc, onActivateHeading, thumbnail }: Props) =>
       </div>
     )}
     <div className="contents">
-      <MarkdownRender body={body} onSetToc={onSetToc} onActivateHeading={onActivateHeading} />
+      <MarkdownRender
+        body={body}
+        onSetToc={onSetToc}
+        onActivateHeading={onActivateHeading}
+        theme={theme || 'github'}
+      />
     </div>
   </div>
 );

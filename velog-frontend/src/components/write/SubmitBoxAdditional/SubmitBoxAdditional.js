@@ -19,6 +19,10 @@ type Props = {
 
 const codeThemes = [
   {
+    id: 'github',
+    text: 'Github',
+  },
+  {
     id: 'atom-one',
     text: 'Atom One',
   },
@@ -31,10 +35,6 @@ const codeThemes = [
     text: 'Duotone Light',
   },
   {
-    id: 'github',
-    text: 'Github',
-  },
-  {
     id: 'monokai',
     text: 'Monokai',
   },
@@ -42,7 +42,9 @@ const codeThemes = [
 
 function convertToPlainText(markdown: string): string {
   const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
-  return removeMd(replaced).slice(0, 100).replace(/#/g, '');
+  return removeMd(replaced)
+    .slice(0, 100)
+    .replace(/#/g, '');
 }
 
 const SubmitBoxAdditional = ({
@@ -73,7 +75,7 @@ const SubmitBoxAdditional = ({
         <SelectBox
           options={codeThemes}
           className="select-theme"
-          value={(realMeta && realMeta.code_theme) || meta.code_theme || 'atom-one'}
+          value={meta.code_theme || 'github'}
           onChange={onChangeCodeTheme}
         />
       </section>

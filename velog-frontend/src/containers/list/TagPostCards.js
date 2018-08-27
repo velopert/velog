@@ -84,7 +84,6 @@ class TagPostCards extends Component<Props> {
 
   componentDidUpdate(prevProps) {
     if (this.props.selectedTag !== prevProps.selectedTag) {
-      console.log('request!');
       this.initialize();
     }
   }
