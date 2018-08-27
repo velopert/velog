@@ -10,6 +10,7 @@ import DropImage from 'components/write/DropImage';
 import WriteUploadMask from 'components/write/WriteUploadMask';
 import axios from 'axios';
 import type { PostData, Category } from 'store/modules/write';
+import { escapeForFilename } from 'lib/common';
 
 type Props = {
   title: string,
@@ -94,7 +95,8 @@ class CodeEditorContainer extends Component<Props> {
     const { id } = this.props.postData;
     const data = new FormData();
     if (!file) return;
-    await WriteActions.createUploadUrl({ postId: id, filename: file.name });
+    const filename = escapeForFilename(file.name);
+    await WriteActions.createUploadUrl({ postId: id, filename });
     try {
       WriteActions.setUploadStatus(true);
       if (!this.props.uploadUrl) return;

@@ -9,6 +9,7 @@ import { type Profile } from 'store/modules/profile';
 import { type UploadInfo } from 'store/modules/settings';
 import axios from 'axios';
 import storage, { keys } from 'lib/storage';
+import { escapeForFilename } from 'lib/common';
 
 type Props = {
   user: ?UserData,
@@ -35,7 +36,8 @@ class SettingProfileContainer extends Component<Props> {
 
   uploadFile = async (file: any) => {
     try {
-      await SettingsActions.createThumbnailSignedUrl(file.name);
+      const filename = escapeForFilename(file.name);
+      await SettingsActions.createThumbnailSignedUrl(filename);
       if (!this.props.uploadInfo) return;
       const { url, image_path: imagePath } = this.props.uploadInfo;
       await axios.put(url, file, {
