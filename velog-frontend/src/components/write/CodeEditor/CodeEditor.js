@@ -155,7 +155,7 @@ class CodeEditor extends Component<Props, State> {
       scrollbarStyle: 'overlay',
       placeholder: '당신의 이야기를 적어보세요...',
     });
-    window.cm = this.codeMirror; // for debugging use
+    window.codeMirror = this.codeMirror; // for debugging use
     this.codeMirror.on('focus', () => {
       if (this.props.body === '' && window.outerWidth < 768) {
         this.codeMirror.options.placeholder = '';
@@ -213,13 +213,14 @@ class CodeEditor extends Component<Props, State> {
     const { codeMirror } = this;
     const { cursor } = this.state;
     const { body } = this.props;
+
     if (!codeMirror) return;
     // diff cursor
     if (prevState.cursor !== cursor) {
       codeMirror.setCursor(cursor);
       return;
     }
-    if (prevProps.body !== body) {
+    if (codeMirror.doc.getValue() !== body) {
       const scrollInfo = codeMirror.getScrollInfo();
       codeMirror.setValue(body);
       if (!cursor) return;
