@@ -70,6 +70,10 @@ class Core extends Component<Props> {
     this.initialize();
     this.integrateAxiosProgressbar();
     this.listenHistory();
+    CommonActions.changeRoute({
+      type: 'PUSH',
+      ...this.props.location,
+    });
   }
 
   componentWillUnmount() {

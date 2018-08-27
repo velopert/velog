@@ -8,14 +8,11 @@ type Props = {
   name: string,
   to: string,
   active: boolean,
-  icon: ComponentType<any>,
 };
 
-const MainMobileHeadItem = ({ to, name, icon, active }: Props) => {
-  const iconElement = React.createElement(icon);
+const MainMobileHeadItem = ({ to, name, active }: Props) => {
   return (
     <Link to={to} className={cx('MainMobileHeadItem', { active })}>
-      <div className="icon-wrapper">{iconElement}</div>
       <div className="item-name">{name}</div>
     </Link>
   );

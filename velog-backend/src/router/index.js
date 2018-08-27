@@ -26,9 +26,11 @@ router.use('/users', users.routes());
 router.use('/common', common.routes());
 
 router.get('/check', (ctx: Context) => {
+  console.log('avoiding cold start...');
   ctx.body = {
     version: '1.0.0-alpha.0',
     origin: ctx.origin,
+    env: process.env.NODE_ENV,
   };
 });
 

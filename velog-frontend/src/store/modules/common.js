@@ -52,6 +52,7 @@ export type CommonState = {
   },
   router: {
     history: Location[],
+    altered: boolean,
   },
   ssr: boolean,
 };
@@ -69,6 +70,7 @@ const initialState: CommonState = {
   },
   router: {
     history: [],
+    altered: false,
   },
   ssr: false,
 };
@@ -94,6 +96,7 @@ const reducer = handleActions(
     [CHANGE_ROUTE]: (state, { payload }: ChangeRouteAction) => {
       return produce(state, (draft) => {
         const { type, ...rest } = payload;
+        draft.router.altered = true;
         if (type === 'PUSH') {
           draft.router.history.push(rest);
         }

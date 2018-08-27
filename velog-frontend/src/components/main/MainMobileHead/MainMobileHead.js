@@ -20,10 +20,9 @@ class MainMobileHead extends Component<Props> {
           active={['/', '/trending'].indexOf(url) > -1}
           to="/trending"
           name="트렌딩"
-          icon={TrendingIcon}
         />
-        <MainMobileHeadItem active={url === '/recent'} to="/recent" name="최신" icon={RecentIcon} />
-        <MainMobileHeadItem active={/^\/tags/.test(url)} to="/tags" name="태그" icon={TagIcon} />
+        <MainMobileHeadItem active={url === '/recent'} to="/recent" name="최신" />
+        <MainMobileHeadItem active={/^\/tags/.test(url)} to="/tags" name="태그" />
       </div>
     );
   }

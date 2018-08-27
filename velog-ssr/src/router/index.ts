@@ -8,6 +8,13 @@ const router = new Router();
 
 let serviceWorkerCache = null;
 
+router.get('/check', (ctx) => {
+  ctx.body = {
+    version: '1.0.0-alpha.0',
+    redis_connected_time: redisClient.connectedTime,
+  }
+});
+
 router.get('/ping', async (ctx: Context) => {
   try {
     const cache = await redisClient.getCache('hello');

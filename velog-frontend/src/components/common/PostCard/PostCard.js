@@ -39,9 +39,9 @@ const PostCard = ({
   const formattedDate = fromNow(date);
   const link = `/@${username}/${urlSlug}`;
   return (
-    <div className={cx('PostCard', { 'one-column': oneColumn })}>
+    <div className={cx('PostCard', { 'one-column': oneColumn, empty: !thumbnail })}>
       {(!oneColumn || thumbnail) && (
-        <Link to={link} className="thumbnail-wrapper">
+        <Link to={link} className={cx('thumbnail-wrapper')}>
           {thumbnail ? (
             <img src={thumbnail} alt={title} />
           ) : (

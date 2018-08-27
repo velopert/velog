@@ -5,13 +5,12 @@ import pg from 'pg';
 
 (pg: any).defaults.parseInt8 = true; // fixes issue: umbers returning as string.
 
-
 const { COCKROACHDB_HOST, COCKROACHDB_PW } = process.env;
-const db:Sequelize = new SequelizeCockroach('velog', 'velog', COCKROACHDB_PW, {
+const db: Sequelize = new SequelizeCockroach('velog', 'velog', COCKROACHDB_PW, {
   host: COCKROACHDB_HOST,
   dialect: 'postgres',
   port: 26257,
-  logging: true,
+  logging: process.env.NODE_ENV === 'development',
   ssl: true,
   dialectOptions: {
     ssl: true,
@@ -21,5 +20,7 @@ const db:Sequelize = new SequelizeCockroach('velog', 'velog', COCKROACHDB_PW, {
     underscored: true,
   },
 });
+
+global.db = db;
 
 export default db;

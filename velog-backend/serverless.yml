@@ -18,6 +18,7 @@ provider:
     HASH_KEY: ${file(./env.json):HASH_KEY}
     REDIS_HOST: ${file(./env.json):REDIS_HOST}
     REDIS_PASS: ${file(./env.json):REDIS_PASS}
+    NODE_ENV: "production"
   iamRoleStatements:
     - Effect: "Allow"
       Action:

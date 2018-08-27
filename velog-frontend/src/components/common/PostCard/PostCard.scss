@@ -15,6 +15,10 @@
   }
   @include media("<=large") {
     width: calc(100% - 1.75rem);
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  @include media("<medium") {
   }
   &.one-column {
     box-shadow: none;
@@ -143,6 +147,13 @@
       color: #4c657d;
       word-break: break-all;
       @include common-font();
+    }
+  }
+  &.empty {
+    @include media("<large") {
+      .thumbnail-wrapper {
+        display: none;
+      }
     }
   }
 }
