@@ -59,7 +59,7 @@ class MainSidebar extends Component<Props> {
         </ul>
         <div className="placer" />
         <div className="footer">
-          <Link to="policy">서비스 정책</Link>
+          <Link to="/policy/privacy">서비스 정책</Link>
         </div>
       </aside>
     );

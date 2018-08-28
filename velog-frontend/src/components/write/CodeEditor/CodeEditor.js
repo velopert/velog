@@ -4,6 +4,7 @@ import React, { Component, type Node } from 'react';
 import marked from 'marked';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
+import 'codemirror/theme/dracula.css';
 import 'codemirror/addon/scroll/simplescrollbars.css';
 import './CodeEditor.scss';
 

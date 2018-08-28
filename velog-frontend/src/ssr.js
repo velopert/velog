@@ -56,6 +56,7 @@ const serverRender = async (ctx: any) => {
   return {
     html,
     helmet,
+    context,
     state: store.getState(),
   };
 };

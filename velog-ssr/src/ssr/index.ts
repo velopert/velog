@@ -57,7 +57,10 @@ const ssr = async (ctx: Context) => {
         return;
       }
     }
-    const { state, html, helmet } = await render(ctx);
+    const { state, html, helmet, context } = await render(ctx);
+    if (context.status) {
+      ctx.status = context.status;
+    }
     const body = buildHtml(html, state, helmet);
     ctx.body = body;
     if (token) return;
@@ -67,6 +70,7 @@ const ssr = async (ctx: Context) => {
       ctx.set('Cache-Status', `cached_now (${rule.maxAge})`);
     }
   } catch (e) {
+    console.log(e);
     ctx.body = indexHtml;
   }
 }

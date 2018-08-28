@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
+import { Helmet } from 'react-helmet';
 import policyData from '../policyData';
 
 import './PolicyViewer.scss';
@@ -13,6 +14,9 @@ type Props = {
 
 const PolicyViewer = ({ mode }: Props) => (
   <div className="PolicyViewer">
+    <Helmet>
+      <title>{`${mode === 'privacy' ? '개인정보 취급 방침' : '이용약관'} | velog`}</title>
+    </Helmet>
     <div className="links">
       <Link to="/policy" className={cx({ active: mode === 'privacy' })}>
         개인정보 취급 방침

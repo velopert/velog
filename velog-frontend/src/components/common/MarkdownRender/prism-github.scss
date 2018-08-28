@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 /**
  * Github-like theme for Prism.js
  * @author Luke Askew http://github.com/lukeaskew
@@ -8,8 +8,8 @@
 $code-colors: ( blue: #183691, teal: #0086b3, black: #333, purple: #a71d5d, maroon: #a71d5d, green: #63a35c, light-gray: #f7f7f7, dark-gray: #969896);
 // base
 code,
-code[class*='language-'],
-pre[class*='language-'] {
+code[class*="language-"],
+pre[class*="language-"] {
   color: map-get($code-colors, black);
   text-align: left;
   white-space: pre;
@@ -22,7 +22,7 @@ pre[class*='language-'] {
 }
 
 // code blocks
-pre[class*='language-'] {
+pre[class*="language-"] {
   overflow: auto;
   margin: 1em 0;
   padding: 1.2em;
@@ -40,18 +40,16 @@ table code {
   &:before,
   &:after {
     letter-spacing: -0.2em;
-    content: '\00a0';
+    content: "\00a0";
   }
 }
 
 code,
-:not(pre)>code[class*='language-'],
-pre[class*='language-'] {
-  background: map-get($code-colors, light-gray);
-}
+:not(pre)>code[class*="language-"],
+pre[class*="language-"] {}
 
 // inline code
-:not(pre)>code[class*='language-'] {
+:not(pre)>code[class*="language-"] {
   padding: 0.1em;
   border-radius: 0.3em;
 }
