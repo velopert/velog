@@ -1,6 +1,3 @@
-asset-manifest.json
-src/ssr/render.js
-
 # package directories
 node_modules
 jspm_packages
@@ -17,3 +14,5 @@ src/ssr/render.js
 
 .env
 env.json
+
+asset-manifest.json
