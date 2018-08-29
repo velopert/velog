@@ -10,6 +10,7 @@ import { checkPostExistancy } from './post/post.ctrl';
 const posts: Router = new Router();
 
 posts.post('/', needsAuth, postsCtrl.writePost);
+posts.get('/sequences', postsCtrl.listSequences);
 posts.get('/@:username/:urlSlug', postsCtrl.readPost);
 posts.get('/@:username', postsCtrl.listPosts);
 posts.get('/public', postsCtrl.listPosts);

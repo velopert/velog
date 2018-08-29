@@ -410,3 +410,62 @@ export const listTrendingPosts = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+
+export const listSequences = async (ctx: Context) => {
+  const { post_id } = ctx.query;
+  console.log(ctx.query);
+  if (!isUUID(post_id)) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'NOT_UUID',
+    };
+    return;
+  }
+  try {
+    const post = await Post.findById(post_id, {
+      attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'fk_user_id', 'created_at'],
+      raw: true,
+    });
+    if (!post) {
+      ctx.status = 404;
+      return;
+    }
+    const { fk_user_id } = post;
+    const promises = [];
+    promises.push(Post.findAll({
+      order: [['created_at', 'desc']],
+      attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'created_at'],
+      where: {
+        fk_user_id,
+        created_at: {
+          // $FlowFixMe
+          [Op.gt]: post.created_at,
+        },
+        is_temp: false,
+      },
+      raw: true,
+      limit: 4,
+    }));
+    promises.push(Post.findAll({
+      order: [['created_at', 'desc']],
+      attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'created_at'],
+      where: {
+        fk_user_id,
+        created_at: {
+          // $FlowFixMe
+          [Op.lt]: post.created_at,
+        },
+        is_temp: false,
+      },
+      limit: 4,
+      raw: true,
+    }));
+    const [before, after] = await Promise.all(promises);
+    delete post.fk_user_id;
+    const list = [...before, post, ...after];
+    ctx.body = list.map(p => ({ ...p, body: formatShortDescription(p.body) }));
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
