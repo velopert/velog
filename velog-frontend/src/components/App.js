@@ -28,6 +28,7 @@ const App = () => (
       <Route path="/saves" component={Saves} />
       <Route path="/settings" component={Settings} />
       <Route path="/policy/:mode(policy|terms)?" component={Policy} />
+      <Route path="/callback" render={() => null} />
       <Route component={NotFound} />
     </Switch>
     <Core />
