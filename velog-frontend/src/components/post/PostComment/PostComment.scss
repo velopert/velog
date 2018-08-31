@@ -1,9 +1,9 @@
 @import "utils";
 .PostComment {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 1rem;
+  @include media("<medium") {
+    padding: 1rem 0.5rem;
+  }
   .comment-head {
     display: flex;
     align-items: center;
@@ -84,6 +84,12 @@
     padding-bottom: 1rem;
     padding-left: 1rem;
     padding-right: 1rem;
+    @include media("<medium") {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      margin-left: 0;
+      padding: 1rem 0.5rem;
+    }
     border-radius: 4px;
     .show-input-button {
       margin-top: 1rem;

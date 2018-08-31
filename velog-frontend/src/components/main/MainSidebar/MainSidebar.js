@@ -48,7 +48,7 @@ class MainSidebar extends Component<Props> {
             active={/^\/tags/.test(url)}
             icon={<TagIcon />}
             text="태그 목록"
-            to="tags"
+            to="/tags"
           />
           {/* <MainMenuItem
             active={/^\/stored/.test(url)}

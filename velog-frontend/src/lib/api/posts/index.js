@@ -121,3 +121,7 @@ export const deletePost = (postId: string) => {
 export const getPostById = (postId: string) => {
   return axios.get(`/posts/${postId}`);
 };
+
+export const getPostSequences = (postId: string) => {
+  return axios.get(`/posts/sequences?post_id=${postId}`);
+};

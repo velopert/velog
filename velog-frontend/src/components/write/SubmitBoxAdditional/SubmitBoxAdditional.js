@@ -3,7 +3,7 @@ import React from 'react';
 import Button from 'components/common/Button';
 import SelectBox from 'components/common/SelectBox/SelectBox';
 import type { Meta } from 'store/modules/write';
-import removeMd from 'remove-markdown';
+import { convertToPlainText } from 'lib/common';
 
 import './SubmitBoxAdditional.scss';
 
@@ -39,13 +39,6 @@ const codeThemes = [
     text: 'Monokai',
   },
 ];
-
-function convertToPlainText(markdown: string): string {
-  const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
-  return removeMd(replaced)
-    .slice(0, 100)
-    .replace(/#/g, '');
-}
 
 const SubmitBoxAdditional = ({
   realMeta,

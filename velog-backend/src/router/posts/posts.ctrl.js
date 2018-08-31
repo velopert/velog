@@ -433,8 +433,9 @@ export const listSequences = async (ctx: Context) => {
     }
     const { fk_user_id } = post;
     const promises = [];
+    // loads posts before post
     promises.push(Post.findAll({
-      order: [['created_at', 'desc']],
+      order: [['created_at', 'asc']],
       attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'created_at'],
       where: {
         fk_user_id,
@@ -447,6 +448,7 @@ export const listSequences = async (ctx: Context) => {
       raw: true,
       limit: 4,
     }));
+    // loads posts after post
     promises.push(Post.findAll({
       order: [['created_at', 'desc']],
       attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'created_at'],
@@ -462,9 +464,18 @@ export const listSequences = async (ctx: Context) => {
       raw: true,
     }));
     const [before, after] = await Promise.all(promises);
+
+    before.reverse();
     delete post.fk_user_id;
-    const list = [...before, post, ...after];
-    ctx.body = list.map(p => ({ ...p, body: formatShortDescription(p.body) }));
+
+    const beforeCount = after.length < 2 ? 4 - after.length : 2;
+    const afterCount = before.length < 2 ? 4 - before.length : 2;
+
+    ctx.body = [
+      ...before.slice(before.length - beforeCount, before.length),
+      post,
+      ...after.slice(0, afterCount),
+    ].map(p => ({ ...p, body: formatShortDescription(p.body) }));
   } catch (e) {
     ctx.throw(500, e);
   }

@@ -4,6 +4,7 @@ import type { $AxiosXHR, $AxiosError } from 'axios';
 import koLocale from 'date-fns/locale/ko';
 import distanceInWords from 'date-fns/distance_in_words';
 import format from 'date-fns/format';
+import removeMd from 'remove-markdown';
 
 export const pressedEnter = (fn: () => void) => (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
@@ -100,3 +101,10 @@ export const fromNow = (date: string) => {
   }
   return format(givenDate, 'YYYY년 M월 D일');
 };
+
+export function convertToPlainText(markdown: string): string {
+  const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
+  return removeMd(replaced)
+    .slice(0, 100)
+    .replace(/#/g, '');
+}

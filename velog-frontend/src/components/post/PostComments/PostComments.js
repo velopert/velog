@@ -33,7 +33,7 @@ const PostComments = ({
   onEditComment,
 }: Props) => (
   <div className="PostComments">
-    <h4>{comments ? comments.length : 0}개의 댓글</h4>
+    <h3>{comments ? comments.length : 0}개의 댓글</h3>
     <div className="comment-input">{commentInput}</div>
     <div className="comment-list">
       {comments &&

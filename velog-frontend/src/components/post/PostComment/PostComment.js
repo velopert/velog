@@ -176,7 +176,7 @@ class PostComment extends Component<Props, State> {
                 )}
                 <div className="date">{fromNow(date)}</div>
               </div>
-              {username === currentUsername && (
+              {username && (username === currentUsername) && (
                 <div className="actions">
                   <button className="edit" onClick={this.onToggleEdit}>
                     수정

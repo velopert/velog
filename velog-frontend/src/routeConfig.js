@@ -106,7 +106,7 @@ const routes = [
       const { posts } = getState();
       if (!posts.post) return null;
       const postId = posts.post.id;
-      await PostsActions.readComments({ postId });
+      await Promise.all([PostsActions.readComments({ postId }), PostsActions.getSequences(postId)]);
       return null;
     },
   },

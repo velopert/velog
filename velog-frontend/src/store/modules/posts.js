@@ -28,6 +28,7 @@ const OPEN_COMMENT_REMOVE = 'posts/OPEN_COMMENT_REMOVE';
 const CANCEL_COMMENT_REMOVE = 'posts/CANCEL_COMMENT_REMOVE';
 const REMOVE_COMMENT = 'posts/REMOVE_COMMENT';
 const EDIT_COMMENT = 'posts/EDIT_COMMENT';
+const GET_SEQUENCES = 'posts/GET_SEQUENCES';
 
 type OpenCommentRemovePayload = { commentId: string, parentId: ?string };
 
@@ -47,6 +48,7 @@ export interface PostsActionCreators {
   cancelCommentRemove(): any;
   removeComment(payload: CommentsAPI.RemoveCommentPayload): any;
   editComment(payload: CommentsAPI.EditCommentPayload): any;
+  getSequences(postId: string): any;
 }
 
 export const actionCreators = {
@@ -68,6 +70,7 @@ export const actionCreators = {
   cancelCommentRemove: createAction(CANCEL_COMMENT_REMOVE),
   removeComment: createAction(REMOVE_COMMENT, CommentsAPI.removeComment),
   editComment: createAction(EDIT_COMMENT, CommentsAPI.editComment, payload => payload),
+  getSequences: createAction(GET_SEQUENCES, PostsAPI.getPostSequences),
 };
 
 type SetTocAction = ActionType<typeof actionCreators.setToc>;
@@ -123,11 +126,21 @@ export type RemoveComment = {
   parentId: ?string,
 };
 
+export type PostSequence = {
+  id: string;
+  title: string;
+  body: string;
+  short_description: ?string;
+  url_slug: string;
+  created_at: string;
+}
+
 export type Posts = {
   post: ?PostData,
   toc: ?(TocItem[]),
   activeHeading: ?string,
   comments: ?(Comment[]),
+  sequences: ?(PostSequence[]),
   subcommentsMap: SubcommentsMap,
   askRemove: boolean,
   removeComment: RemoveComment,
@@ -138,6 +151,7 @@ const initialState: Posts = {
   toc: null,
   activeHeading: null,
   comments: null,
+  sequences: [],
   subcommentsMap: {},
   askRemove: false,
   removeComment: {
@@ -332,6 +346,15 @@ export default applyPenders(reducer, [
         const index = comments.findIndex(c => c.id === commentId);
         comments[index] = payload.data;
       });
+    },
+  },
+  {
+    type: GET_SEQUENCES,
+    onSuccess: (state: Posts, action: ResponseAction) => {
+      return {
+        ...state,
+        sequences: action.payload.data,
+      };
     },
   },
 ]);

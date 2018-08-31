@@ -11,16 +11,8 @@ import PostToc from 'components/post/PostToc';
 import QuestionModal from 'components/common/QuestionModal/QuestionModal';
 import { withRouter, type ContextRouter, type Location } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import removeMd from 'remove-markdown';
+import { convertToPlainText } from 'lib/common';
 import PostPlaceholder from 'components/post/PostPlaceholder';
-import TagCurrent from '../../components/tags/TagCurrent/TagCurrent';
-
-function convertToPlainText(markdown: string): string {
-  const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
-  return removeMd(replaced)
-    .slice(0, 100)
-    .replace(/#/g, '');
-}
 
 type Props = {
   username: ?string,
@@ -42,14 +34,24 @@ class PostViewer extends Component<Props> {
     if (!username || !urlSlug) return;
     try {
       if (shouldCancel) return;
-      PostsActions.readPost({
+      await PostsActions.readPost({
         username,
         urlSlug,
       });
+      if (!this.props.post) return;
+      const { id } = this.props.post;
+      PostsActions.getSequences(id);
     } catch (e) {
       console.log(e);
     }
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.urlSlug !== this.props.urlSlug) {
+      PostsActions.unloadPost();
+      this.initialize();
+    }
+  }
 
   componentWillUnmount() {
     PostsActions.unloadPost();
