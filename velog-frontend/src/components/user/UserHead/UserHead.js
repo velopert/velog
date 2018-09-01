@@ -3,6 +3,7 @@ import React from 'react';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
 import Button from 'components/common/Button';
 import { type Profile } from 'store/modules/profile';
+import { Helmet } from 'react-helmet';
 import './UserHead.scss';
 
 type Props = {
@@ -15,6 +16,10 @@ type Props = {
 
 const UserHead = ({ username, profile, self, following, onToggleFollow }: Props) => (
   <div className="UserHead">
+    <Helmet>
+      <title>{`${username} (${profile.display_name}) | velog`}</title>
+      <meta name="description" content={profile.short_bio} />
+    </Helmet>
     <img src={profile.thumbnail || defaultThumbnail} alt="thumbnail" />
     <div className="user-info">
       <section className="top">

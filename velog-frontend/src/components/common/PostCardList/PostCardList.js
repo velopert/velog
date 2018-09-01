@@ -76,6 +76,8 @@ const PostCardList = ({
   return (
     <Fragment>
       <div className="PostCardList">
+        {postList &&
+          postList.length === 0 && <div className="empty">아직 작성한 포스트가 없습니다.</div>}
         {postList}
         {prefetching &&
           createArray(columnCount).map(num => <FakePostCard key={num} oneColumn={oneColumn} />)}

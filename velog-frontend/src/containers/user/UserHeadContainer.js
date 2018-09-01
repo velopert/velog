@@ -54,7 +54,6 @@ class UserHeadContainer extends Component<Props> {
 
     const following = followingUsers[profile.user_id];
 
-    console.log('state', following);
     return (
       <UserHead
         username={username}

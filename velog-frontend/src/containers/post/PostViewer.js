@@ -43,6 +43,9 @@ class PostViewer extends Component<Props> {
       PostsActions.getSequences(id);
     } catch (e) {
       console.log(e);
+      if (e && e.response && e.response.status === 404) {
+        this.props.history.replace('/404');
+      }
     }
   };
 
@@ -85,7 +88,7 @@ class PostViewer extends Component<Props> {
     PostsActions.toggleAskRemove();
     if (!post) return;
     try {
-      CommonActions.removePost(post.id);
+      await CommonActions.removePost(post.id);
     } catch (e) {
       console.log(e);
     }

@@ -1,6 +1,16 @@
 @import "utils";
-
 .PostCardList {
+  .empty {
+    width: 100%;
+    text-align: center;
+    padding-top: 8rem;
+    color: $oc-gray-4;
+    font-size: 2rem;
+    @include media("<medium") {
+      padding-top: 4rem;
+      font-size: 1.5rem;
+    }
+  }
   display: flex;
   flex-wrap: wrap;
   position: relative;

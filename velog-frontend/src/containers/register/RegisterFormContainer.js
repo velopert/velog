@@ -41,7 +41,9 @@ class RegisterFormContainer extends Component<Props> {
     }
 
     try {
-      await AuthActions.getCode(code);
+      if (!isSocial) {
+        await AuthActions.getCode(code);
+      }
     } catch (e) {
       // TODO: INITIALIZE ERROR
     }
