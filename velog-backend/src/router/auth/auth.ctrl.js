@@ -361,8 +361,6 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
       SocialAccount.findBySocialId(profile.id.toString()),
     ]);
 
-    console.log(socialAccount, user);
-
     ctx.body = {
       profile,
       exists: !!(socialAccount || user),
@@ -465,7 +463,6 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
     let uploadedThumbnail = null;
     try {
       const imageData = await downloadImage(thumbnail);
-      console.log(imageData);
       const tempPath = `profiles/${username}/thumbnails/${new Date().getTime() /
         1000}.${imageData.extension}`;
       const uploadResult = await s3
@@ -477,7 +474,6 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
         })
         .promise();
       if (!uploadResult || !uploadResult.ETag) {
-        console.log(uploadResult);
         throw new Error('upload has failed');
       }
       uploadedThumbnail = `https://images.velog.io/${tempPath}`;
