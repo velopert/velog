@@ -101,6 +101,18 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     meta,
   }: BodySchema = (ctx.request.body: any);
 
+  // validate tags
+  if (tags) {
+    for (let i = 0; i < tags.length; i++) {
+      if (tags[i].length > 25) {
+        ctx.status = 400;
+        ctx.body = {
+          name: 'TAG_TOO_LONG',
+        };
+      }
+    }
+  }
+
   const generatedUrlSlug = `${title} ${generateSlugId()}`;
   const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
 
