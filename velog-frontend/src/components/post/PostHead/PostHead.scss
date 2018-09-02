@@ -39,6 +39,7 @@
     margin-top: 1em;
     align-items: center;
     .user-thumbnail {
+      flex-shrink: 0;
       width: 4em;
       height: 4em;
       position: relative;
@@ -58,6 +59,7 @@
         color: $oc-gray-9;
       }
       .description {
+        word-break: break-word;
         color: $oc-gray-6;
       }
     }
