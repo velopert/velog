@@ -1,5 +1,6 @@
 @import "utils";
 .PostSequences {
+  z-index: 1;
   flex: 1;
   background: $oc-gray-0;
   padding-top: 4rem;
@@ -50,7 +51,7 @@
       font-size: 0.875rem;
     }
   }
-  .PostSequenceItem + .PostSequenceItem {
+  .PostSequenceItem+.PostSequenceItem {
     margin-top: 1rem;
   }
 }
