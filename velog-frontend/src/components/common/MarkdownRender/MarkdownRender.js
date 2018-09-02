@@ -29,22 +29,20 @@ function stripHtml(text: string): string {
   return text.replace(regex, '');
 }
 
-let toc = [];
-
-const renderer = (() => {
+const createRenderer = (arr: any[]) => {
   const tocRenderer = new marked.Renderer();
   tocRenderer.heading = function heading(text, level, raw) {
     if (!raw) return '';
     const anchor = this.options.headerPrefix + escapeForUrl(raw.toLowerCase());
-    const hasDuplicate = toc.find(item => item.anchor === anchor);
-    const filtered = toc.filter(item => item.anchor.indexOf(anchor) > -1);
+    const hasDuplicate = arr.find(item => item.anchor === anchor);
+    const filtered = arr.filter(item => item.anchor.indexOf(anchor) > -1);
     const suffix = hasDuplicate && filtered.length === 0 ? '' : `-${filtered.length + 1}`;
 
     const suffixed = `${anchor}${suffix}`;
     if (level <= 3) {
-      if (toc) {
+      if (arr) {
         try {
-          toc.push({
+          arr.push({
             anchor: suffixed,
             level,
             text: stripHtml(text),
@@ -57,23 +55,12 @@ const renderer = (() => {
     return `<h${level} id="${suffixed}">${text}</h${level}>`;
   };
   return tocRenderer;
-})();
-
-marked.setOptions({
-  renderer,
-  gfm: true,
-  tables: true,
-  breaks: true,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-  xhtml: false,
-});
+};
 
 class MarkdownRender extends Component<Props, State> {
   positions: { id: string, top: number }[] = [];
   currentHeading: ?string;
+  toc = [];
 
   state = {
     html: '',
@@ -85,13 +72,35 @@ class MarkdownRender extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    const toc = [];
+    marked.setOptions({
+      renderer: createRenderer(toc),
+      gfm: true,
+      tables: true,
+      breaks: true,
+      pedantic: false,
+      sanitize: true,
+      smartLists: true,
+      smartypants: false,
+      xhtml: false,
+    });
     this.state.html = marked(this.props.body);
+    this.toc = toc;
   }
 
   renderMarkdown() {
-    if (toc) {
-      toc = [];
-    }
+    const toc = [];
+    marked.setOptions({
+      renderer: createRenderer(toc),
+      gfm: true,
+      tables: true,
+      breaks: true,
+      pedantic: false,
+      sanitize: true,
+      smartLists: true,
+      smartypants: false,
+      xhtml: false,
+    });
     const rendered = marked(this.props.body);
     if (this.props.onSetToc) {
       this.props.onSetToc(toc);
@@ -99,6 +108,7 @@ class MarkdownRender extends Component<Props, State> {
     this.setState({
       html: rendered,
     });
+    this.toc = toc;
   }
 
   componentDidMount() {
@@ -148,9 +158,9 @@ class MarkdownRender extends Component<Props, State> {
   };
 
   updatePositions = () => {
-    if (!toc) return;
+    if (!this.toc) return;
     const scrollTop = getScrollTop();
-    this.positions = toc.map(({ anchor }) => {
+    this.positions = this.toc.map(({ anchor }) => {
       const dom = document.getElementById(anchor);
       if (!dom) return { top: 0, id: '' };
       return { top: dom.getBoundingClientRect().top + scrollTop, id: anchor };

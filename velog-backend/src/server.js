@@ -6,6 +6,7 @@ import authToken from 'lib/middlewares/authToken';
 import db from 'database/db';
 import { associate } from 'database/sync';
 import koaBody from 'koa-body';
+import logger from 'koa-logger';
 import router from './router';
 import redisClient from './lib/redisClient';
 
@@ -33,17 +34,44 @@ export default class Server {
     );
   }
 
+  ensureDb() {
+    return new Promise((resolve, reject) => {
+      let counter = 0;
+      const tryConnect = async () => {
+        try {
+          await db.authenticate();
+          resolve();
+        } catch (e) {
+          counter++;
+          console.log(`db connection failed ${counter}`);
+          if (counter > 5) {
+            reject(new Error('Failed after 5 retries'));
+            return;
+          }
+          setTimeout(tryConnect, 10);
+        }
+      };
+      tryConnect();
+    });
+  }
+
   middleware(): void {
     const { app } = this;
+    app.use(logger());
     app.use(cors);
+    app.use(async (ctx, next) => {
+      try {
+        await this.ensureDb();
+        return next();
+      } catch (e) {
+        ctx.throw(e);
+      }
+    });
     app.use(authToken);
     app.use(koaBody({
       multipart: true,
     }));
     app.use(router.routes()).use(router.allowedMethods());
-    app.use((ctx) => {
-      ctx.body = ctx.path;
-    });
   }
 
   listen(port: number): void {

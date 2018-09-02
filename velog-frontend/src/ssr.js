@@ -19,6 +19,7 @@ const serverRender = async (ctx: any) => {
   const token = ctx.cookies.get('access_token');
   let { path, url } = ctx;
 
+  defaultClient.defaults.headers.cookie = '';
   if (token) {
     defaultClient.defaults.headers.cookie = `access_token=${token}`;
     promises.push(store.dispatch(userActions.checkUser()));
@@ -26,6 +27,7 @@ const serverRender = async (ctx: any) => {
 
   if (token && path === '/') {
     path = '/trending';
+    url = '/trending';
   }
 
   routeConfig.every((route) => {

@@ -9,8 +9,10 @@ const GET_USER_TAGS = 'profile/GET_USER_TAGS';
 const GET_PROFILE = 'profile/GET_PROFILE';
 const SET_RAW_TAG_NAME = 'profile/SET_RAW_TAG_NAME';
 const GET_TAG_INFO = 'profile/GET_TAG_INFO';
+const INITIALIZE = 'profile/INITIALIZE';
 
 export const actionCreators = {
+  initialize: createAction(INITIALIZE),
   getUserTags: createAction(GET_USER_TAGS, UsersAPI.listUserTags),
   getProfile: createAction(GET_PROFILE, UsersAPI.getProfile),
   setRawTagName: createAction(SET_RAW_TAG_NAME, (tagName: string) => tagName),
@@ -65,6 +67,7 @@ const initialState = {
 
 const reducer = handleActions(
   {
+    [INITIALIZE]: () => initialState,
     [SET_RAW_TAG_NAME]: (state, { payload }: SetRawTagNameAction) => {
       return {
         ...state,

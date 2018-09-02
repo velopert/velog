@@ -114,7 +114,11 @@ class PostViewer extends Component<Props> {
           <title>{post.title}</title>
           <meta name="description" content={convertToPlainText(post.body)} />
         </Helmet>
-        <PostToc toc={toc} activeHeading={activeHeading} />
+        <PostToc
+          toc={toc}
+          activeHeading={activeHeading}
+          onActivateHeading={this.onActivateHeading}
+        />
         <PostHead
           id={post.id}
           date={post.created_at}

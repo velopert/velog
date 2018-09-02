@@ -127,7 +127,6 @@ class CodeEditor extends Component<Props, State> {
     const index = totalLines.length > elements.length ? elements.length : totalLines.length;
     if (!elements[index - 1]) return;
     const { offsetTop } = elements[index - 1];
-    console.log(totalLines[index - 1], elements[index - 1]);
     // if pointing to same element, calculate diff and apply
     if (this.prevOffsetTop !== offsetTop) {
       this.scrollBefore = scrollInfo.top;
@@ -142,7 +141,6 @@ class CodeEditor extends Component<Props, State> {
       behavior: 'smooth',
       top: previewScrollTop,
     });
-    // console.log(elements[index - 1]);
   };
 
   initialize = () => {
@@ -221,18 +219,10 @@ class CodeEditor extends Component<Props, State> {
       codeMirror.setCursor(cursor);
       return;
     }
-    if (codeMirror.doc.getValue() !== body) {
-      const scrollInfo = codeMirror.getScrollInfo();
+    if (prevProps.body !== body && body !== this.codeMirror.getValue()) {
       codeMirror.setValue(body);
       if (!cursor) return;
       codeMirror.setCursor(cursor);
-      codeMirror.scrollTo(scrollInfo.left, scrollInfo.top);
-      // if editing the last line
-      const { line } = cursor;
-      const last = codeMirror.lastLine();
-      if (line === last) {
-        codeMirror.scrollTo(0, codeMirror.cursorCoords().top);
-      }
     }
     if (!prevProps.insertText && this.props.insertText) {
       this.insertText();

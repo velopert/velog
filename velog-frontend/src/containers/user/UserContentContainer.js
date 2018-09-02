@@ -20,6 +20,7 @@ class UserContentContainer extends Component<Props> {
   initialize = async () => {
     const { username } = this.props.match.params;
     if (!username) return;
+    ProfileActions.initialize();
     ProfileActions.getUserTags(username);
     ProfileActions.getProfile(username);
   };

@@ -8,8 +8,8 @@
   color: $oc-gray-8;
   a {
     color: $oc-violet-5;
-    text-decoration: underline;
     &:hover {
+      text-decoration: underline;
       color: $oc-violet-4;
     }
   }
@@ -22,7 +22,7 @@
     font-weight: 600;
   }
   p + p {
-    margin-top: 2em;
+    margin-top: 1.5em;
   }
   h1,
   h2,
@@ -31,7 +31,7 @@
   h5,
   h6 {
     font-weight: 500;
-    margin-top: 1em;
+    margin-top: 2em;
     margin-bottom: 1em;
     & code {
       font-weight: 600;
@@ -103,9 +103,6 @@
   ul {
     padding-left: 30px;
     line-height: 1.25em;
-    li + li {
-      margin-top: 0.75em;
-    }
   }
   ol {
     line-height: 1.75em;

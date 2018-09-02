@@ -20,10 +20,13 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         include: __dirname,
-        exclude: /node_modules\/(?!(koa-bodyparser)\/).*/,
+        exclude: /node_modules\/(?!(koa-bodyparser|koa-logger)\/).*/,
         loader: 'babel-loader',
         options: {
-          plugins: ['transform-object-rest-spread', 'transform-async-to-generator'],
+          plugins: [
+            'transform-object-rest-spread',
+            'transform-async-to-generator',
+          ],
           presets: ['flow'],
         },
       },

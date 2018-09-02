@@ -9,6 +9,7 @@ import './PostToc.scss';
 type Props = {
   toc: ?(TocItem[]),
   activeHeading: ?string,
+  onActivateHeading: (headingId: string) => void,
 };
 
 type State = {
@@ -89,7 +90,9 @@ class PostToc extends Component<Props, State> {
                 })}
                 key={anchor}
               >
-                <a href={`#${anchor}`}>{text}</a>
+                <a onClick={() => this.props.onActivateHeading(anchor)} href={`#${anchor}`}>
+                  {text}
+                </a>
               </li>
             ))}
           </ul>

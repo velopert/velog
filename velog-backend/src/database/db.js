@@ -19,8 +19,12 @@ const db: Sequelize = new SequelizeCockroach('velog', 'velog', COCKROACHDB_PW, {
   define: {
     underscored: true,
   },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 10000,
+    idle: 10000,
+  },
 });
-
-global.db = db;
 
 export default db;
