@@ -1,9 +1,13 @@
-@import 'utils';
+@import "utils";
 .PostActionButtons {
   margin-right: -0.4rem;
   margin-top: -2rem;
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 1rem;
+  @include media("<medium") {
+    margin-bottom: 0.5rem;
+  }
   .btn {
     font-size: 0.875rem;
     color: $oc-gray-6;
