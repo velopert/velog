@@ -57,6 +57,7 @@ export type PostItem = {
     short_bio: string,
     thumbnail: ?string,
   },
+  meta: any,
 };
 
 export type ListingSet = {

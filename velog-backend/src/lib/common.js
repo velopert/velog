@@ -71,9 +71,11 @@ export const extractKeys = (object: any, params: Array<string>): any => {
 
 export function formatShortDescription(markdown: string): string {
   const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
-  return removeMd(replaced)
-    .slice(0, 100)
-    .replace(/#/g, '');
+  return (
+    removeMd(replaced)
+      .slice(0, 125)
+      .replace(/#/g, '') + (replaced.length > 125 ? '...' : '')
+  );
 }
 
 export function generalHash(text: string) {

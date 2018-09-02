@@ -72,7 +72,9 @@ const PostCard = ({
             <span>{commentsCount}개의 댓글</span>
           </div>
         </div>
-        <div className="description">{body}</div>
+        <div className="description" style={{ WebkitBoxOrient: 'vertical' }}>
+          {body}
+        </div>
       </div>
     </div>
   );
