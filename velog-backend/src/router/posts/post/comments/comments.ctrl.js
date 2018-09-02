@@ -26,8 +26,14 @@ export const writeComment: Middleware = async (ctx: Context) => {
     return;
   }
 
-  const { text, reply_to: replyTo }: BodySchema = (ctx.request.body: any);
 
+  const { text, reply_to: replyTo }: BodySchema = (ctx.request.body: any);
+  if (text.trim().length === 0) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'EMPTY_COMMENT',
+    };
+  }
   // if user is replying to another comment,
   let level = 0;
   let processedReplyTo = replyTo;
