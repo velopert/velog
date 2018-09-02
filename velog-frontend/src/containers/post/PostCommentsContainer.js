@@ -17,6 +17,7 @@ type Props = {
   loading: boolean,
   username: ?string,
   removeComment: RemoveComment,
+  commentsCount: ?number,
 };
 
 class PostCommentsContainer extends Component<Props> {
@@ -108,7 +109,15 @@ class PostCommentsContainer extends Component<Props> {
   };
 
   render() {
-    const { comments, subcommentsMap, logged, loading, username, removeComment } = this.props;
+    const {
+      comments,
+      subcommentsMap,
+      logged,
+      loading,
+      username,
+      removeComment,
+      commentsCount,
+    } = this.props;
 
     if (loading) return null;
 
@@ -124,6 +133,7 @@ class PostCommentsContainer extends Component<Props> {
           username={username}
           onOpenRemove={this.onOpenRemove}
           onEditComment={this.onEditComment}
+          commentsCount={commentsCount || 0}
         />
         <QuestionModal
           title="댓글 삭제"
@@ -148,6 +158,7 @@ export default connect(
     loading: !state.posts.post || state.pender.pending['posts/READ_COMMENTS'],
     username: state.user.user && state.user.user.username,
     removeComment: state.posts.removeComment,
+    commentsCount: state.posts.post && state.posts.post.comments_count,
   }),
   () => ({}),
 )(PostCommentsContainer);

@@ -92,7 +92,9 @@ Comment.readComment = async function (commentId: string) {
       },
     });
     if (!data) return null;
-    return this.serialize(data);
+    const serialized = this.serialize(data);
+    serialized.replies_count = await Comment.countChildrenOf(commentId);
+    return serialized;
   } catch (e) {
     throw e;
   }

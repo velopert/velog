@@ -7,6 +7,7 @@ import './PostComments.scss';
 
 type Props = {
   commentInput: Node,
+  commentsCount: number,
   comments: ?(Comment[]),
   onReply: (text: string, replyTo: ?string) => Promise<*>,
   onReadReplies: (commentId: string) => Promise<*>,
@@ -31,9 +32,10 @@ const PostComments = ({
   username,
   onOpenRemove,
   onEditComment,
+  commentsCount,
 }: Props) => (
   <div className="PostComments">
-    <h3>{comments ? comments.length : 0}개의 댓글</h3>
+    <h3>{commentsCount}개의 댓글</h3>
     <div className="comment-input">{commentInput}</div>
     <div className="comment-list">
       {comments &&
