@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .PostTemplate {
   .post-area {
     margin: 0 auto;
@@ -9,7 +9,7 @@
     }
   }
   @include media("<medium") {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
