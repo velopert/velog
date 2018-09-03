@@ -50,7 +50,6 @@ class CodeEditorContainer extends Component<Props> {
   onDragEnter = (e) => {
     e.preventDefault();
     if (this.props.categoryModalOpen) return;
-    console.log(e);
     setImmediate(() => {
       WriteActions.setUploadMask(true);
     });
@@ -68,6 +67,11 @@ class CodeEditorContainer extends Component<Props> {
 
   uploadImage = async (file: any) => {
     WriteActions.setUploadMask(false);
+    if (!file) return;
+    if (file.size > 1024 * 1024 * 10) return;
+    const fileTypeRegex = /^image\/(.*?)/;
+    if (!fileTypeRegex.test(file.type)) return;
+    // console.log(file);
     // temp save post if there isn't one.
     // uploading needs postId
     if (!this.props.postData) {

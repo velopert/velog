@@ -35,6 +35,10 @@ class SettingProfileContainer extends Component<Props> {
   }
 
   uploadFile = async (file: any) => {
+    if (file.size > 1024 * 1024 * 10) return;
+    const fileTypeRegex = /^image\/(.*?)/;
+    if (!fileTypeRegex.test(file.type)) return;
+    if (file.type.indexOf('gif') > 0) return;
     try {
       const filename = escapeForFilename(file.name);
       await SettingsActions.createThumbnailSignedUrl(filename);

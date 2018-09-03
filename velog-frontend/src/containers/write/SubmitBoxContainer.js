@@ -53,6 +53,11 @@ class SubmitBoxContainer extends Component<Props> {
   }
 
   uploadImage = async (file: any) => {
+    if (!file) return;
+    if (file.size > 1024 * 1024 * 10) return;
+    const fileTypeRegex = /^image\/(.*?)/;
+    if (!fileTypeRegex.test(file.type)) return;
+    if (file.type.indexOf('gif') > 0) return;
     // temp save post if not released
     if (!this.props.postData) {
       await WriteActions.setTempData(); // nextTick
