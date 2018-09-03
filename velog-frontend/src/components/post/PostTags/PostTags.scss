@@ -1,8 +1,9 @@
-@import 'utils';
+@import "utils";
 .PostTags {
+  margin: -0.375rem;
   margin-top: 5rem;
   a {
-    margin-bottom: 0.75rem;
+    margin: 0.375rem;
     display: inline-flex;
     background: $oc-gray-0;
     border: 1px solid $oc-gray-3;
@@ -12,9 +13,6 @@
     font-weight: 500;
     line-height: 0.75rem;
     border-radius: 4px;
-    &+a {
-      margin-left: 0.75rem;
-    }
     &:hover {
       cursor: pointer;
       background: $oc-gray-1;
