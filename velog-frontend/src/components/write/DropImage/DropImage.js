@@ -22,9 +22,9 @@ class DropImage extends Component<Props> {
 
   onPaste = (e: any) => {
     const { items } = e.clipboardData || e.originalEvent.clipboardData;
-    if (items.length !== 2) return;
-    if (items[1].kind !== 'file') return;
-    const file = items[1].getAsFile();
+    if (items.length === 0) return;
+    const fileItem = [...items].filter(item => item.kind === 'file')[0];
+    const file = fileItem.getAsFile();
     this.props.onPaste(file);
     e.preventDefault();
   };
