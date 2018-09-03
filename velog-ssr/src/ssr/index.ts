@@ -15,7 +15,7 @@ function buildHtml(rendered, state, helmet) {
   
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="https://velog.io/manifest.json">
     <link rel="shortcut icon" href="https://cdn.velog.io/favicon.ico">
