@@ -38,7 +38,7 @@ class UserPosts extends Component<Props> {
       }
     }
     const { rawTagName } = this.props;
-    ListingActions.getUserPosts({ username, tag: rawTagName || undefined });
+    ListingActions.getUserPosts({ username, tag: tag ? rawTagName || undefined : undefined });
   };
   componentDidMount() {
     this.initialize();
