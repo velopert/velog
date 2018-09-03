@@ -3,6 +3,7 @@
   display: flex;
   margin-top: 4rem;
   .tab-wrapper {
+    margin-left: 2rem;
     flex: 1;
   }
   .side-wrapper {
@@ -10,6 +11,5 @@
       display: none;
     }
     width: 15rem;
-    margin-left: 2rem;
   }
 }

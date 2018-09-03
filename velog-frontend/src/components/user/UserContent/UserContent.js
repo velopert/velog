@@ -9,8 +9,8 @@ type Props = {
 
 const UserContent = ({ children, side }: Props) => (
   <div className="UserContent">
-    <div className="tab-wrapper">{children}</div>
     <div className="side-wrapper">{side}</div>
+    <div className="tab-wrapper">{children}</div>
   </div>
 );
 
