@@ -33,6 +33,12 @@ class UserContentContainer extends Component<Props> {
     ProfileActions.setRawTagName(tagName);
   };
 
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.username !== prevProps.match.params.username) {
+      this.initialize();
+    }
+  }
+
   render() {
     const { match, tagCounts } = this.props;
     const username = match.params.username || '';
