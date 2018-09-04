@@ -14,21 +14,34 @@ export interface UserModel {
   getProfile(): Promise<UserProfileModel>;
 }
 
-const User = db.define('user', {
-  id: {
-    type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV1,
-    primaryKey: true,
+const User = db.define(
+  'user',
+  {
+    id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV1,
+      primaryKey: true,
+    },
+    username: {
+      type: Sequelize.STRING,
+      unique: true,
+    },
+    email: {
+      type: Sequelize.STRING,
+      unique: true,
+    },
   },
-  username: {
-    type: Sequelize.STRING,
-    unique: true,
+  {
+    indexes: [
+      {
+        fields: ['username'],
+      },
+      {
+        fields: ['email'],
+      },
+    ],
   },
-  email: {
-    type: Sequelize.STRING,
-    unique: true,
-  },
-});
+);
 
 User.associate = function () {
   User.hasOne(UserProfile, { foreignKey: 'fk_user_id', onDelete: 'CASCADE' });

@@ -101,7 +101,9 @@ class TagPostCards extends Component<Props> {
       <PostCardList
         posts={this.props.posts}
         loading={this.props.loading}
-        prefetching={!!this.props.prefetched || this.props.prefetching}
+        prefetching={
+          (this.props.prefetched && this.props.prefetched.length > 0) || this.props.prefetching
+        }
         width={this.props.width}
         hasEnded={this.props.hasEnded}
         placeholderCount={placeholderCount > 10 ? 10 : placeholderCount}
