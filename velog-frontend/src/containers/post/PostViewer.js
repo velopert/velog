@@ -13,6 +13,7 @@ import { withRouter, type ContextRouter, type Location } from 'react-router-dom'
 import { Helmet } from 'react-helmet';
 import { convertToPlainText } from 'lib/common';
 import PostPlaceholder from 'components/post/PostPlaceholder';
+import throttle from 'lodash/throttle';
 
 type Props = {
   username: ?string,
@@ -64,9 +65,9 @@ class PostViewer extends Component<Props> {
     PostsActions.setToc(toc);
   };
 
-  onActivateHeading = (headingId: string) => {
+  onActivateHeading = throttle((headingId: string) => {
     PostsActions.activateHeading(headingId);
-  };
+  }, 250);
 
   onToggleLike = () => {
     const { post, likeInProcess } = this.props;
