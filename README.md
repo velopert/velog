@@ -1,7 +1,41 @@
 # velog
 
-개발자들을 위한 블로그 플랫폼 입니다! 개발을 시작한지 얼마 안되어 볼만한 코드는 아직 별로 없습니다. README 는 나중에 작성하도록 할게요.. 
+> velog is a blog platform for developers. It provides compfy markdown editor with syntax highlighter enabled. Currently, the service is only available in Korean. 
 
-[유튜브 채널](https://www.youtube.com/c/MinjunKim) 에서 매일 12시마다 라이브코딩으로 개발을 진행합니다.
+https://velog.io
 
-개발 스택: https://trello.com/c/99n98l4b
+The whole process of project development is recorded in my [Youtube Channel](https://www.youtube.com/watch?v=WEC6ATuP9Vo&list=PL9FpF_z-xR_FEhguHXMOvCErayV2Huezy&ab_channel=MinjunKim). Live stream is held at 11:00 PM KST everyday.
+
+## Project Stack
+
+### Client
+
+Following items are core frontend technologies used in this project: 
+- React
+- React Router v4
+- Sass
+- Flow
+- Redux
+- Redux-pender
+- Immer
+- Marked
+- Prismjs
+- CodeMirror
+
+### Server
+
+Following items are core backend technologies used in this project: 
+- Node.js
+- Koa
+- Sequelize
+- Sequelize-cockroachdb
+- Serverless (with AWS Lambda)
+- Flow (on Service API)
+- TypeScript (on SSR)
+
+
+## Project Architecture
+
+![](https://i.imgur.com/e7RIMOu.png)
+
+This service heavily relies on AWS Lambda. Its server side rendering function and every service API are hosted on AWS Lambda. CockroachDB is used for RDBMS, and it can be scaled with ease.
