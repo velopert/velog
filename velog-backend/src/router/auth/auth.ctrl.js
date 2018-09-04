@@ -190,7 +190,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
           .min(3)
           .max(16)
           .required(),
-        shortBio: Joi.string().max(140),
+        shortBio: Joi.string().max(140).optional(),
       })
       .required(),
   });
@@ -390,11 +390,11 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
           .min(1)
           .max(40),
         username: Joi.string()
-          .alphanum()
+          .regex(/^[a-z0-9-_]+$/)
           .min(3)
           .max(16)
           .required(),
-        shortBio: Joi.string().max(140),
+        shortBio: Joi.string().max(140).optional(),
       })
       .required(),
   });
