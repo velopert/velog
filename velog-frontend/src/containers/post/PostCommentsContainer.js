@@ -154,7 +154,7 @@ export default connect(
     postId: state.posts.post && state.posts.post.id,
     comments: state.posts.comments,
     subcommentsMap: state.posts.subcommentsMap,
-    shouldCancel: state.common.ssr && state.common.router.history.length === 0,
+    shouldCancel: state.common.ssr && !state.common.router.altered,
     loading: !state.posts.post || state.pender.pending['posts/READ_COMMENTS'],
     username: state.user.user && state.user.user.username,
     removeComment: state.posts.removeComment,
