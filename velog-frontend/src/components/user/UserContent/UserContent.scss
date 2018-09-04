@@ -4,6 +4,9 @@
   margin-top: 4rem;
   .tab-wrapper {
     margin-left: 2rem;
+    @include media("<medium") {
+      margin-left: 0;
+    }
     flex: 1;
   }
   .side-wrapper {
