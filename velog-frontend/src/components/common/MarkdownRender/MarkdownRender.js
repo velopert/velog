@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import throttle from 'lodash/throttle';
 import Prism from 'prismjs';
 import cx from 'classnames';
+import debounce from 'lodash/debounce';
 import { escapeForUrl, getScrollTop } from 'lib/common';
 import 'prismjs/components/prism-bash.min';
 import 'prismjs/components/prism-typescript.min';
@@ -61,6 +62,9 @@ class MarkdownRender extends Component<Props, State> {
   positions: { id: string, top: number }[] = [];
   currentHeading: ?string;
   toc = [];
+  el = null;
+  timerId = null;
+  prevHeight = null;
 
   state = {
     html: '',
@@ -87,6 +91,20 @@ class MarkdownRender extends Component<Props, State> {
     this.state.html = marked(this.props.body);
     this.toc = toc;
   }
+
+  checkHeight = () => {
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+    }
+    const { el } = this;
+    if (!el) return;
+    const currentHeight = el.clientHeight;
+    if (this.prevHeight !== currentHeight) {
+      this.updatePositions();
+    }
+    this.prevHeight = currentHeight;
+    setTimeout(this.checkHeight, 500);
+  };
 
   renderMarkdown() {
     const toc = [];
@@ -115,6 +133,7 @@ class MarkdownRender extends Component<Props, State> {
     if (this.state.html !== '') {
       this.renderPrism();
       this.updatePositions();
+      this.checkHeight();
     }
     this.renderMarkdown();
     this.registerEvent();
@@ -151,13 +170,15 @@ class MarkdownRender extends Component<Props, State> {
   registerEvent = () => {
     if (!this.props.onSetToc) return;
     window.addEventListener('scroll', this.onScroll);
+    window.addEventListener('resize', this.updatePositions);
   };
 
   unregisterEvent = () => {
     window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.updatePositions);
   };
 
-  updatePositions = () => {
+  updatePositions = debounce(() => {
     if (!this.toc) return;
     const scrollTop = getScrollTop();
     this.positions = this.toc.map(({ anchor }) => {
@@ -165,7 +186,7 @@ class MarkdownRender extends Component<Props, State> {
       if (!dom) return { top: 0, id: '' };
       return { top: dom.getBoundingClientRect().top + scrollTop, id: anchor };
     });
-  };
+  }, 500);
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevProps.body !== this.props.body) {
@@ -186,6 +207,9 @@ class MarkdownRender extends Component<Props, State> {
         className={cx('MarkdownRender', theme || 'github')}
         dangerouslySetInnerHTML={markup}
         id="markdown-render"
+        ref={(ref) => {
+          this.el = ref;
+        }}
       />
     );
   }
