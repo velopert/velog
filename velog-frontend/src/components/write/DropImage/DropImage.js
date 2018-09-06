@@ -24,6 +24,7 @@ class DropImage extends Component<Props> {
     const { items } = e.clipboardData || e.originalEvent.clipboardData;
     if (items.length === 0) return;
     const fileItem = [...items].filter(item => item.kind === 'file')[0];
+    if (!fileItem || !fileItem.getAsFile) return;
     const file = fileItem.getAsFile();
     this.props.onPaste(file);
     e.preventDefault();
