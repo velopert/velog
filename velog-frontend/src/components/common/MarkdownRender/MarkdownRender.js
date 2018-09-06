@@ -37,20 +37,18 @@ const createRenderer = (arr: any[]) => {
     const anchor = this.options.headerPrefix + escapeForUrl(raw.toLowerCase());
     const hasDuplicate = arr.find(item => item.anchor === anchor);
     const filtered = arr.filter(item => item.anchor.indexOf(anchor) > -1);
-    const suffix = hasDuplicate && filtered.length === 0 ? '' : `-${filtered.length + 1}`;
+    const suffix = !hasDuplicate && filtered.length === 0 ? '' : `-${filtered.length + 1}`;
 
     const suffixed = `${anchor}${suffix}`;
-    if (level <= 3) {
-      if (arr) {
-        try {
-          arr.push({
-            anchor: suffixed,
-            level,
-            text: stripHtml(text),
-          });
-        } catch (e) {
-          console.log(e);
-        }
+    if (level <= 3 && arr) {
+      try {
+        arr.push({
+          anchor: suffixed,
+          level,
+          text: stripHtml(text),
+        });
+      } catch (e) {
+        console.log(e);
       }
     }
     return `<h${level} id="${suffixed}">${text}</h${level}>`;

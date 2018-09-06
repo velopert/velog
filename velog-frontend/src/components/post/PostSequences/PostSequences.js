@@ -20,14 +20,14 @@ type Props = {
 };
 
 const PostSequenceItem = ({ sequence, username, active }: PostSequenceItemProps) => {
-  const { title, body, short_description, url_slug, created_at } = sequence;
+  const { title, body, meta, url_slug, created_at } = sequence;
   return (
     <div className={cx('PostSequenceItem', { active })}>
       <div className="date">{fromNow(created_at)}</div>
       <div className="title">
         <Link to={`/@${username}/${url_slug}`}>{title}</Link>
       </div>
-      <p>{short_description || body}</p>
+      <p>{(meta && meta.short_description) || body}</p>
     </div>
   );
 };

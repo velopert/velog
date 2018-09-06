@@ -424,7 +424,7 @@ export const listSequences = async (ctx: Context) => {
   }
   try {
     const post = await Post.findById(post_id, {
-      attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'fk_user_id', 'created_at'],
+      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'fk_user_id', 'created_at'],
       raw: true,
     });
     if (!post) {
@@ -436,7 +436,7 @@ export const listSequences = async (ctx: Context) => {
     // loads posts before post
     promises.push(Post.findAll({
       order: [['created_at', 'asc']],
-      attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'created_at'],
+      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at'],
       where: {
         fk_user_id,
         created_at: {
@@ -451,7 +451,7 @@ export const listSequences = async (ctx: Context) => {
     // loads posts after post
     promises.push(Post.findAll({
       order: [['created_at', 'desc']],
-      attributes: ['id', 'title', 'body', 'short_description', 'url_slug', 'created_at'],
+      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at'],
       where: {
         fk_user_id,
         created_at: {

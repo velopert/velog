@@ -12,7 +12,7 @@ import { WriteActions, UserActions } from 'store/actionCreators';
 import type { Categories, PostData, Meta } from 'store/modules/write';
 import axios from 'axios';
 import storage from 'lib/storage';
-import { escapeForFilename } from 'lib/common';
+import { escapeForUrl } from 'lib/common';
 
 type Props = {
   open: boolean,
@@ -83,7 +83,7 @@ class SubmitBoxContainer extends Component<Props> {
     if (!this.props.postData) return;
     const { id } = this.props.postData;
     try {
-      const filename = escapeForFilename(file.name);
+      const filename = escapeForUrl(file.name);
       await WriteActions.createUploadUrl({ postId: id, filename });
       WriteActions.setUploadStatus(true);
       if (!this.props.uploadUrl) return;

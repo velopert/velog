@@ -9,7 +9,7 @@ import { type Profile } from 'store/modules/profile';
 import { type UploadInfo } from 'store/modules/settings';
 import axios from 'axios';
 import storage, { keys } from 'lib/storage';
-import { escapeForFilename } from 'lib/common';
+import { escapeForUrl } from 'lib/common';
 
 type Props = {
   user: ?UserData,
@@ -40,7 +40,7 @@ class SettingProfileContainer extends Component<Props> {
     if (!fileTypeRegex.test(file.type)) return;
     if (file.type.indexOf('gif') > 0) return;
     try {
-      const filename = escapeForFilename(file.name);
+      const filename = escapeForUrl(file.name);
       await SettingsActions.createThumbnailSignedUrl(filename);
       if (!this.props.uploadInfo) return;
       const { url, image_path: imagePath } = this.props.uploadInfo;

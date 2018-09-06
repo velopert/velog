@@ -113,7 +113,7 @@ export type PostData = {
   meta: {
     code_theme: string,
     short_description: ?string,
-  }
+  },
 };
 
 export type SubcommentsMap = {
@@ -127,13 +127,16 @@ export type RemoveComment = {
 };
 
 export type PostSequence = {
-  id: string;
-  title: string;
-  body: string;
-  short_description: ?string;
-  url_slug: string;
-  created_at: string;
-}
+  id: string,
+  title: string,
+  body: string,
+  meta: ?({
+    code_theme: string,
+    short_description: string,
+  }),
+  url_slug: string,
+  created_at: string,
+};
 
 export type Posts = {
   post: ?PostData,
