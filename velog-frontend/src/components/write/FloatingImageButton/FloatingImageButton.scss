@@ -6,8 +6,10 @@
   right: 1rem;
   background: #475869;
   transition: all ease-in 0.15s;
+  opacity: 0.4;
   @include material-shadow(3, 0.25);
   @include hover() {
+    opacity: 1;
     background: lighten(#475869, 5%);
   }
   &:active {
