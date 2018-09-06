@@ -18,10 +18,7 @@ const SavePostCard = ({ id, thumbnail, title, updatedAt, onAskRemove }: Props) =
   <div className="SavePostCard">
     {thumbnail && (
       <div className="img-wrapper">
-        <img
-          src="https://images.velog.io/post-images/velopert/1d26a150-6747-11e8-9dff-1b161279fc07/goodb.png"
-          alt="thumbnail"
-        />
+        <img src={thumbnail} alt="thumbnail" />
       </div>
     )}
     <div className="white-area">
