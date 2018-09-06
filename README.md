@@ -1,6 +1,6 @@
 # velog
 
-> velog is a blog platform for developers. It provides compfy markdown editor with syntax highlighter enabled. Currently, the service is only available in Korean. 
+> velog is a blog platform for developers. It provides compfy markdown editor with syntax highlighter enabled. Currently, the service is only available in Korean.
 
 https://velog.io
 
@@ -10,7 +10,8 @@ The whole process of project development is recorded in my [Youtube Channel](htt
 
 ### Client
 
-Following items are core frontend technologies used in this project: 
+Following items are core frontend technologies used in this project:
+
 - React
 - React Router v4
 - Sass
@@ -24,7 +25,8 @@ Following items are core frontend technologies used in this project:
 
 ### Server
 
-Following items are core backend technologies used in this project: 
+Following items are core backend technologies used in this project:
+
 - Node.js
 - Koa
 - Sequelize
@@ -33,9 +35,8 @@ Following items are core backend technologies used in this project:
 - Flow (on Service API)
 - TypeScript (on SSR)
 
-
 ## Project Architecture
 
-![](https://i.imgur.com/e7RIMOu.png)
+![](https://i.imgur.com/BSlAJjy.png)
 
 This service heavily relies on AWS Lambda. Its server side rendering function and every service API are hosted on AWS Lambda. CockroachDB is used for RDBMS, and it can be scaled with ease.
