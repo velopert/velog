@@ -19,7 +19,7 @@ const Post = ({ match }: Props) => {
   return (
     <Fragment>
       <PostTemplate header={<ViewerHead rightCorner={<RightCorner />} />}>
-        <PostViewer username={username} urlSlug={urlSlug} />
+        <PostViewer username={username} urlSlug={decodeURI(urlSlug || '')} />
         <PostCommentsContainer />
       </PostTemplate>
       <PostSequencesContainer username={username} urlSlug={urlSlug} />
