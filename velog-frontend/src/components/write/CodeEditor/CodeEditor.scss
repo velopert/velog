@@ -8,6 +8,8 @@
   @include media("<large") {
     padding: 0.75rem;
   }
+  padding-top: 0rem;
+  padding-bottom: 0rem;
   padding-right: 0;
   &.material {
     background: #263238;
@@ -17,6 +19,12 @@
     flex: 1;
     display: flex;
     .CodeMirror {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      @include media("<large") {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
       .CodeMirror-lines {
         padding-right: 2rem;
       }
