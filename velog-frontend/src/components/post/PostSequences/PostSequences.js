@@ -16,7 +16,7 @@ type PostSequenceItemProps = {
 type Props = {
   sequences: ?(PostSequence[]),
   username: string,
-  urlSlug: string,
+  currentPostId: string,
 };
 
 const PostSequenceItem = ({ sequence, username, active }: PostSequenceItemProps) => {
@@ -32,7 +32,7 @@ const PostSequenceItem = ({ sequence, username, active }: PostSequenceItemProps)
   );
 };
 
-const PostSequences = ({ sequences, username, urlSlug }: Props) => {
+const PostSequences = ({ sequences, username, currentPostId }: Props) => {
   if (!sequences || sequences.length === 0 || sequences.length === 1) return null;
   return (
     <div className="PostSequences">
@@ -43,7 +43,7 @@ const PostSequences = ({ sequences, username, urlSlug }: Props) => {
             key={s.id}
             sequence={s}
             username={username}
-            active={s.url_slug === urlSlug}
+            active={s.id === currentPostId}
           />
         ))}
       </div>

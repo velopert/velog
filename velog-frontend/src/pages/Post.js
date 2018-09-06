@@ -22,7 +22,7 @@ const Post = ({ match }: Props) => {
         <PostViewer username={username} urlSlug={decodeURI(urlSlug || '')} />
         <PostCommentsContainer />
       </PostTemplate>
-      <PostSequencesContainer username={username} urlSlug={urlSlug} />
+      <PostSequencesContainer username={username} />
     </Fragment>
   );
 };

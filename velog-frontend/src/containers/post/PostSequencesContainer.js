@@ -9,20 +9,23 @@ import PostSequences from '../../components/post/PostSequences/PostSequences';
 type Props = {
   sequences: ?(PostSequence[]),
   username: string,
-  urlSlug: string,
+  currentPostId: string,
 };
 
 class PostSequencesContainer extends Component<Props> {
   render() {
-    const { sequences, username, urlSlug } = this.props;
+    const { sequences, username, currentPostId } = this.props;
 
-    return <PostSequences sequences={sequences} username={username} urlSlug={urlSlug} />;
+    return (
+      <PostSequences sequences={sequences} username={username} currentPostId={currentPostId} />
+    );
   }
 }
 
 export default connect(
   ({ posts }: State) => ({
     sequences: posts.sequences,
+    currentPostId: posts.post && posts.post.id,
   }),
   () => ({}),
 )(PostSequencesContainer);
