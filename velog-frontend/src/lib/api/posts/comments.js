@@ -23,6 +23,7 @@ export const readComments = ({ postId }: ReadCommentsPayload) =>
 export type ReadSubcommentsPayload = {
   postId: string,
   commentId: string,
+  parentId?: ?string,
 };
 
 export const readSubcomments = ({ postId, commentId }: ReadSubcommentsPayload) =>

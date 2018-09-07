@@ -22,8 +22,8 @@ type Props = {
   date: string,
   replies: ?(Comment[]),
   subcommentsMap: SubcommentsMap,
-  onReply: (text: string, replyTo: ?string) => Promise<*>,
-  onReadReplies: (commentId: string) => Promise<*>,
+  onReply: (text: string, replyTo: ?string, parentId?: ?string) => Promise<*>,
+  onReadReplies: (commentId: string, parentId?: ?string) => Promise<*>,
   logged: boolean,
   currentUsername: ?string,
   onOpenRemove: (payload: { commentId: string, parentId: ?string }) => any,
@@ -86,8 +86,8 @@ class PostComment extends Component<Props, State> {
   };
 
   readReplies = () => {
-    const { onReadReplies, id } = this.props;
-    onReadReplies(id);
+    const { onReadReplies, id, parentId } = this.props;
+    onReadReplies(id, parentId);
   };
 
   shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -126,6 +126,10 @@ class PostComment extends Component<Props, State> {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  onReply = (text: string, replyTo?: ?string) => {
+    return this.props.onReply(text, replyTo, this.props.parentId);
   };
 
   render() {
@@ -176,16 +180,17 @@ class PostComment extends Component<Props, State> {
                 )}
                 <div className="date">{fromNow(date)}</div>
               </div>
-              {username && (username === currentUsername) && (
-                <div className="actions">
-                  <button className="edit" onClick={this.onToggleEdit}>
-                    수정
-                  </button>
-                  <button className="remove" onClick={this.onOpenRemove}>
-                    삭제
-                  </button>
-                </div>
-              )}
+              {username &&
+                username === currentUsername && (
+                  <div className="actions">
+                    <button className="edit" onClick={this.onToggleEdit}>
+                      수정
+                    </button>
+                    <button className="remove" onClick={this.onOpenRemove}>
+                      삭제
+                    </button>
+                  </div>
+                )}
             </div>
             <div
               className={cx('comment-body', {
@@ -241,7 +246,7 @@ class PostComment extends Component<Props, State> {
               <PostCommentInput
                 showCancel
                 onCancel={this.onHideInput}
-                onWriteComment={onReply}
+                onWriteComment={this.onReply}
                 replyTo={id}
               />
             ) : (

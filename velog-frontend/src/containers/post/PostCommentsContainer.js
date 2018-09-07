@@ -57,7 +57,7 @@ class PostCommentsContainer extends Component<Props> {
     });
   };
 
-  onWriteComment = async (text: string, replyTo: ?string) => {
+  onWriteComment = async (text: string, replyTo: ?string, parentId?: ?string) => {
     const { postId } = this.props;
     if (!postId) return Promise.resolve();
     let comment = null;
@@ -68,7 +68,7 @@ class PostCommentsContainer extends Component<Props> {
         replyTo,
       });
       if (replyTo) {
-        await this.onReadReplies(replyTo);
+        await this.onReadReplies(replyTo, parentId);
       } else {
         await PostsActions.readComments({ postId });
       }
@@ -99,12 +99,13 @@ class PostCommentsContainer extends Component<Props> {
     }
   }
 
-  onReadReplies = (commentId: string) => {
+  onReadReplies = (commentId: string, parentId?: ?string) => {
     const { postId } = this.props;
     if (!postId) return Promise.resolve(null);
     return PostsActions.readSubcomments({
       postId,
       commentId,
+      parentId,
     });
   };
 

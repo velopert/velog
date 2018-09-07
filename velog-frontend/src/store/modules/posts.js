@@ -239,6 +239,18 @@ export default applyPenders(reducer, [
     type: READ_SUBCOMMENTS,
     onSuccess: (state: Posts, action: ResponseAction) => {
       return produce(state, (draft) => {
+        const { parentId, commentId } = action.meta;
+        // is root comment
+        if (!draft.comments) return;
+        let comment = null;
+        if (!parentId) {
+          comment = draft.comments.find(c => c.id === commentId);
+        } else {
+          if (!draft.subcommentsMap[parentId]) return;
+          comment = draft.subcommentsMap[parentId].find(c => c.id === commentId);
+        }
+        if (!comment) return;
+        comment.replies_count = action.payload.data.length;
         draft.subcommentsMap[action.meta.commentId] = action.payload.data;
       });
     },
