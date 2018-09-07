@@ -64,6 +64,7 @@ Comment.getCommentsCount = async function (postId: string) {
   return Comment.count({
     where: {
       fk_post_id: postId,
+      deleted: false,
     },
   });
 };
@@ -104,6 +105,7 @@ Comment.countChildrenOf = function (id) {
   return Comment.count({
     where: {
       reply_to: id,
+      deleted: false,
     },
   });
 };
