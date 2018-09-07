@@ -190,7 +190,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
           .min(3)
           .max(16)
           .required(),
-        shortBio: Joi.string().max(140).optional(),
+        shortBio: Joi.string().allow('').max(140).optional(),
       })
       .required(),
   });
@@ -394,7 +394,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
           .min(3)
           .max(16)
           .required(),
-        shortBio: Joi.string().max(140).optional(),
+        shortBio: Joi.string().allow('').max(140).optional(),
       })
       .required(),
   });
