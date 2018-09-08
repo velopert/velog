@@ -124,9 +124,9 @@ class SubmitBoxContainer extends Component<Props> {
     const { tags } = this.props;
     const processedTag = tag.trim();
     if (processedTag === '') return;
-    if (tags.indexOf(tag) !== -1) return;
-    if (tag.length > 25) return;
-    WriteActions.insertTag(tag);
+    if (tags.indexOf(processedTag) !== -1) return;
+    if (processedTag.length > 25) return;
+    WriteActions.insertTag(processedTag);
   };
   onRemoveTag = (tag) => {
     WriteActions.removeTag(tag);
