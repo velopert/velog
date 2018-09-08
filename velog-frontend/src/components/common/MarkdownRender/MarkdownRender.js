@@ -31,8 +31,13 @@ function stripHtml(text: string): string {
 }
 
 const createRenderer = (arr: any[]) => {
-  const tocRenderer = new marked.Renderer();
-  tocRenderer.heading = function heading(text, level, raw) {
+  const renderer = new marked.Renderer();
+  const linkRenderer = renderer.link;
+  renderer.link = (href, title, text) => {
+    const html = linkRenderer.call(renderer, href, title, text);
+    return html.replace(/^<a /, '<a target="_blank" ');
+  };
+  renderer.heading = function heading(text, level, raw) {
     if (!raw) return '';
     const anchor = this.options.headerPrefix + escapeForUrl(raw.toLowerCase());
     const hasDuplicate = arr.find(item => item.anchor === anchor);
@@ -53,7 +58,7 @@ const createRenderer = (arr: any[]) => {
     }
     return `<h${level} id="${suffixed}">${text}</h${level}>`;
   };
-  return tocRenderer;
+  return renderer;
 };
 
 class MarkdownRender extends Component<Props, State> {
