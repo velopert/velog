@@ -29,7 +29,7 @@ class Core extends Component<Props> {
     try {
       await UserActions.checkUser();
     } catch (e) {
-      storage.remove('__velog__user__');
+      storage.remove('__velog_user__');
     }
   };
 

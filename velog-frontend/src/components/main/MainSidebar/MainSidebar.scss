@@ -22,6 +22,18 @@
     font-family: "Inconsolata";
     color: $oc-gray-9;
     display: block;
+    position: relative;
+    .badge {
+      color: $oc-red-6;
+      font-style: italic;
+      font-size: 0.875rem;
+      padding: 0.25rem;
+      position: absolute;
+      line-height: 0.875rem;
+      font-weight: 700;
+      top: 1.75rem;
+      left: 7.25rem;
+    }
   }
   .menu {
     margin-top: 1rem;

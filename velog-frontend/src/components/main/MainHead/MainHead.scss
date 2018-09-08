@@ -1,5 +1,4 @@
 @import "utils";
-
 .MainHead {
   padding: 1.75rem;
   display: flex;
@@ -18,6 +17,17 @@
     transform: translate(-50%);
     font-size: 2rem;
     font-weight: 500;
+    .badge {
+      color: $oc-red-6;
+      font-style: italic;
+      font-size: 0.875rem;
+      padding: 0.25rem;
+      position: absolute;
+      line-height: 0.875rem;
+      font-weight: 700;
+      top: 0;
+      left: 5.15rem;
+    }
   }
   .spacer {
     flex: 1;
