@@ -27,6 +27,7 @@ type Props = {
     name: string,
     payload: any,
   },
+  nextUrl: string,
 };
 
 class RegisterFormContainer extends Component<Props> {
@@ -114,7 +115,7 @@ class RegisterFormContainer extends Component<Props> {
       UserActions.setUser(user);
       storage.set(keys.user, user);
       BaseActions.exitLanding();
-      history.push('/');
+      history.push(this.props.nextUrl || '/');
     } catch (e) {
       console.log(e);
     }
@@ -150,6 +151,7 @@ export default connect(
       isSocial,
       verifySocialResult,
       error,
+      nextUrl,
     } = auth;
     const { displayName, email, username, shortBio } = registerForm;
 
@@ -164,6 +166,7 @@ export default connect(
       isSocial,
       socialEmail: verifySocialResult && verifySocialResult.email,
       error,
+      nextUrl,
     };
   },
   () => ({}),

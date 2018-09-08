@@ -19,6 +19,7 @@ const SOCIAL_REGISTER = 'auth/SOCIAL_REGISTER';
 const SOCIAL_VELOG_LOGIN = 'auth/SOCIAL_VELOG_LOGIN';
 const AUTOCOMPLETE_REGISTER_FORM = 'auth/AUTOCOMPLETE_REGISTER_FORM';
 const SET_ERROR = 'auth/SET_ERROR';
+const SET_NEXT_URL = 'auth/SET_NEXT_URL';
 
 /* ACTION CREATOR */
 const setEmailInput = createAction(SET_EMAIL_INPUT, (value: string) => value);
@@ -45,6 +46,8 @@ const socialVelogLogin = createAction(SOCIAL_VELOG_LOGIN, AuthAPI.socialLogin);
 type ErrorType = { name: string, payload?: ?any };
 const setError = createAction(SET_ERROR, (payload: ErrorType) => payload);
 
+const setNextUrl = createAction(SET_NEXT_URL, (payload: string) => payload);
+
 type AutoCompleteFormPayload = {
   email: string,
   name: string,
@@ -67,6 +70,7 @@ type SocialRegisterAction = ActionType<typeof socialRegister>;
 type SocialVelogLoginAction = ActionType<typeof socialVelogLogin>;
 type AutoCompleteRegisterForm = ActionType<typeof autoCompleteRegisterForm>;
 type SetErrorAction = ActionType<typeof setError>;
+type SetNextUrlAction = ActionType<typeof setNextUrl>;
 
 /* ACTION CREATORS INTERFACE */
 export interface AuthActionCreators {
@@ -82,6 +86,7 @@ export interface AuthActionCreators {
   socialVelogLogin(payload: AuthAPI.SocialLoginPayload): any;
   autoCompleteRegisterForm(payload: AutoCompleteFormPayload): any;
   setError(payload: ErrorType): any;
+  setNextUrl(payload: string): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -98,6 +103,7 @@ export const actionCreators: AuthActionCreators = {
   socialVelogLogin,
   autoCompleteRegisterForm,
   setError,
+  setNextUrl,
 };
 
 /* STATE TYPES */
@@ -143,6 +149,7 @@ export type Auth = {
     name: string,
     payload: any,
   },
+  nextUrl: ?string,
 };
 
 /* INITIAL STATE */
@@ -162,6 +169,7 @@ const initialState: Auth = {
   socialAuthResult: null,
   verifySocialResult: null,
   error: null,
+  nextUrl: null,
 };
 
 /* REDUCER */
@@ -197,6 +205,12 @@ const reducer = handleActions(
       return produce(state, (draft) => {
         draft.error = payload;
       });
+    },
+    [SET_NEXT_URL]: (state, { payload }: SetNextUrlAction) => {
+      return {
+        ...state,
+        nextUrl: payload,
+      };
     },
   },
   initialState,

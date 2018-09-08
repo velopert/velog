@@ -18,6 +18,7 @@ type Props = {
   verifySocialResult: VerifySocialResult,
   authResult: AuthResult,
   history: RouterHistory,
+  nextUrl: ?string,
 };
 
 class AuthFormContainer extends Component<Props> {
@@ -71,6 +72,9 @@ class AuthFormContainer extends Component<Props> {
         UserActions.setUser(user);
         storage.set(keys.user, user);
         BaseActions.exitLanding();
+        if (this.props.nextUrl) {
+          this.props.history.push(this.props.nextUrl);
+        }
       } else {
         // does not exist -> enroute to register, auto complete
         const { email, name } = verifySocialResult;
@@ -119,6 +123,7 @@ export default connect(
     socialAuthResult: auth.socialAuthResult,
     verifySocialResult: auth.verifySocialResult,
     authResult: auth.authResult,
+    nextUrl: auth.nextUrl,
   }),
   () => ({}),
 )(withRouter(AuthFormContainer));
