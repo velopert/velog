@@ -146,7 +146,7 @@ class MarkdownRender extends Component<Props, State> {
     Prism.highlightAll();
   }
 
-  onScroll = throttle(() => {
+  onScroll = () => {
     const scrollTop = getScrollTop();
     if (!document.body) return;
     if (!this.positions || this.positions.length === 0) return;
@@ -163,7 +163,7 @@ class MarkdownRender extends Component<Props, State> {
     // not found, activate the first heading
     if (!this.props.onActivateHeading) return;
     this.props.onActivateHeading(this.positions[0].id);
-  }, 33);
+  };
 
   registerEvent = () => {
     if (!this.props.onSetToc) return;

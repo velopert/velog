@@ -97,8 +97,8 @@
   ul,
   ol {
     font-weight: 300;
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
   }
   ul {
     padding-left: 30px;
@@ -226,5 +226,9 @@
   }
   pre[class*="language-"] {
     font-size: 1.125em;
+  }
+  blockquote {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 }
