@@ -2,6 +2,7 @@
 import React, { type Node } from 'react';
 import PostComment from 'components/post/PostComment';
 import type { Comment, SubcommentsMap } from 'store/modules/posts';
+import { Link } from 'react-router-dom';
 
 import './PostComments.scss';
 
@@ -20,6 +21,7 @@ type Props = {
     parentId: ?string,
     text: string,
   }) => any,
+  currentPath: string,
 };
 
 const PostComments = ({
@@ -33,10 +35,16 @@ const PostComments = ({
   onOpenRemove,
   onEditComment,
   commentsCount,
+  currentPath,
 }: Props) => (
   <div className="PostComments">
     <h3>{commentsCount}개의 댓글</h3>
     <div className="comment-input">{commentInput}</div>
+    {!logged && (
+      <div className="ask-login">
+        <Link to={`/?next=${currentPath}`}>로그인</Link> 후 댓글을 작성 할 수 있습니다.
+      </div>
+    )}
     <div className="comment-list">
       {comments &&
         comments.map((comment) => {

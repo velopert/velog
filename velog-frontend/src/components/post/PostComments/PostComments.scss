@@ -1,6 +1,19 @@
-@import 'utils';
+@import "utils";
 .PostComments {
+  margin-top: 3rem;
   margin-bottom: 2rem;
+  .ask-login {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: $oc-gray-7;
+    a {
+      color: $oc-violet-5;
+      font-weight: 600;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
   .comment-list {
     margin-top: 2rem;
   }

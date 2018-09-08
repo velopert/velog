@@ -7,6 +7,7 @@ import PostCommentInput from 'components/post/PostCommentInput/PostCommentInput'
 import { PostsActions } from 'store/actionCreators';
 import type { Comment, SubcommentsMap, RemoveComment } from 'store/modules/posts';
 import QuestionModal from 'components/common/QuestionModal';
+import { withRouter, type ContextRouter } from 'react-router-dom';
 
 type Props = {
   postId: ?string,
@@ -18,7 +19,7 @@ type Props = {
   username: ?string,
   removeComment: RemoveComment,
   commentsCount: ?number,
-};
+} & ContextRouter;
 
 class PostCommentsContainer extends Component<Props> {
   onOpenRemove = (payload: { commentId: string, parentId: ?string }) => {
@@ -135,6 +136,7 @@ class PostCommentsContainer extends Component<Props> {
           onOpenRemove={this.onOpenRemove}
           onEditComment={this.onEditComment}
           commentsCount={commentsCount || 0}
+          currentPath={this.props.location.pathname}
         />
         <QuestionModal
           title="댓글 삭제"
@@ -162,4 +164,4 @@ export default connect(
     commentsCount: state.posts.post && state.posts.post.comments_count,
   }),
   () => ({}),
-)(PostCommentsContainer);
+)(withRouter(PostCommentsContainer));
