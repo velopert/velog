@@ -41,7 +41,8 @@ Tag.findByName = async (name: string) => {
 
 
 // gets tag id if exists, creates one if !exists.
-Tag.getId = async function getId(name: string) {
+Tag.getId = async function getId(rawName: string) {
+  const name = rawName.trim();
   try {
     // let tag = await Tag.findOne({ where: { name } });
     let tag = await Tag.findOne({
@@ -73,7 +74,8 @@ Tag.getId = async function getId(name: string) {
   }
 };
 
-Tag.bulkGetId = async function (names: Array<string>): Promise<*> {
+Tag.bulkGetId = async function (rawNames: Array<string>): Promise<*> {
+  const names = rawNames.map(r => r.trim());
   if (names.length === 0) return [];
   try {
     const tagData = await Tag.findAll({
