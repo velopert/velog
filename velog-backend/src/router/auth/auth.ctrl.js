@@ -190,7 +190,10 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
           .min(3)
           .max(16)
           .required(),
-        shortBio: Joi.string().allow('').max(140).optional(),
+        shortBio: Joi.string()
+          .allow('')
+          .max(140)
+          .optional(),
       })
       .required(),
   });
@@ -288,6 +291,11 @@ export const check = async (ctx: Context): Promise<*> => {
     const now = new Date();
     const user = await User.findById(ctx.user.id);
     if (!user) {
+      // $FlowFixMe: intersection bug
+      ctx.cookies.set('access_token', null, {
+        domain:
+          process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
+      });
       ctx.status = 401;
       return;
     }
@@ -394,7 +402,10 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
           .min(3)
           .max(16)
           .required(),
-        shortBio: Joi.string().allow('').max(140).optional(),
+        shortBio: Joi.string()
+          .allow('')
+          .max(140)
+          .optional(),
       })
       .required(),
   });
