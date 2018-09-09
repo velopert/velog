@@ -102,6 +102,10 @@ class PostViewer extends Component<Props> {
 
   componentDidMount() {
     this.initialize();
+    const { hash } = this.props.location;
+    if (hash !== '') {
+      PostsActions.activateHeading(decodeURI(hash.split('#')[1]));
+    }
   }
 
   render() {
