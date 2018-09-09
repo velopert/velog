@@ -140,6 +140,7 @@ class MarkdownRender extends Component<Props, State> {
     }
     this.renderMarkdown();
     this.registerEvent();
+    this.onScroll();
   }
 
   componentWillUnmount() {
