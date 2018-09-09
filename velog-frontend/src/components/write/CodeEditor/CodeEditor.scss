@@ -4,13 +4,10 @@
   display: flex;
   flex: 1;
   min-width: 0;
-  padding: 1rem;
+  flex-direction: column;
   @include media("<large") {
     padding: 0.75rem;
   }
-  padding-top: 0rem;
-  padding-bottom: 0rem;
-  padding-right: 0;
   &.material {
     background: #263238;
   }
@@ -26,7 +23,8 @@
         padding-bottom: 0.75rem;
       }
       .CodeMirror-lines {
-        padding-right: 2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
       }
       flex: 1;
       height: auto; // font-family: 'D2 coding';
