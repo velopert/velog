@@ -16,6 +16,7 @@ type Props = {
   visible: boolean,
   isEdit: boolean,
   onClose(): void,
+  onTempSave(): Promise<*>,
   onSubmit(): void,
   onEditCategoryClick(): void,
   onToggleAdditionalConfig(): void,
@@ -69,15 +70,14 @@ class SubmitBox extends Component<Props, State> {
   render() {
     const {
       isEdit,
-      selectCategory,
       inputTags,
       visible,
       onSubmit,
-      onEditCategoryClick,
       configureThumbnail,
       onToggleAdditionalConfig,
       additional,
       postLink,
+      onTempSave,
     } = this.props;
     const { animating } = this.state;
 
@@ -117,14 +117,16 @@ class SubmitBox extends Component<Props, State> {
               </section>
             </div>
             <div className="footer">
-              <a className="open-options" onClick={onToggleAdditionalConfig}>
-                <span>추가설정</span>
-              </a>
-              <div
-                className={cx('submit-button', 'util', 'flex-center', { edit: isEdit })}
-                onClick={onSubmit}
-              >
-                {isEdit ? '업데이트' : '작성하기'}
+              <div className="buttons">
+                <button className="gray" onClick={onTempSave}>
+                  임시저장
+                </button>
+                <button className={cx('purple', { blue: isEdit })} onClick={onSubmit}>
+                  {isEdit ? '업데이트' : '작성하기'}
+                </button>
+              </div>
+              <div className="open-options">
+                <a onClick={onToggleAdditionalConfig}>추가설정</a>
               </div>
             </div>
           </Fragment>

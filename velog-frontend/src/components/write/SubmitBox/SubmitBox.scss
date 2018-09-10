@@ -1,5 +1,4 @@
 @import "utils";
-
 .SubmitBox {
   @keyframes submitBoxAppear {
     0% {
@@ -11,7 +10,6 @@
       trasnform: translateY(0px);
     }
   }
-
   @keyframes submitBoxDisappear {
     0% {
       opacity: 1;
@@ -22,7 +20,6 @@
       transform: translateY(-25%);
     }
   }
-
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
@@ -34,8 +31,7 @@
   padding: 1.5rem;
   z-index: z("submit-box");
   @include material-shadow(2, 1);
-  color: white;
-  // transition: transform 0.075s ease-in;
+  color: white; // transition: transform 0.075s ease-in;
   // transform-origin: top right;
   // transform: scale(1);
   &.appear {
@@ -98,45 +94,94 @@
     }
   }
   .footer {
-    display: flex;
-    margin-top: 1rem;
+    padding-top: 1rem;
     user-select: none;
+    margin: -1.5rem;
+    padding: 1.5rem;
+    padding-bottom: 1rem;
+    margin-top: 0rem;
+    background: $oc-gray-8;
+    .buttons {
+      display: flex;
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 4px;
+        @include material-shadow(2, 0.75);
+        font-weight: 500;
+        font-size: 0.9rem;
+        &.gray {
+          background: #65707b;
+          &:hover {
+            background: lighten(#65707b, 5%);
+          }
+          &:active {
+            background: darken(#65707b, 5%);
+          }
+        }
+        &.purple {
+          background: $oc-violet-5;
+          &:hover {
+            background: lighten($oc-violet-5, 5%);
+          }
+          &:active {
+            background: $oc-violet-5;
+          }
+        }
+        &.blue {
+          background: $oc-blue-5;
+          &:hover {
+            background: lighten($oc-blue-5, 5%);
+          }
+          &:active {
+            background: $oc-blue-5;
+          }
+        }
+      }
+      button + button {
+        margin-left: 1rem;
+      }
+    }
     .open-options {
-      padding-top: 1rem;
-      flex: 2;
+      text-align: right;
       font-size: 0.9rem;
-      color: $oc-yellow-6;
-      span {
+      color: $oc-orange-7;
+      display: block;
+      margin-top: 1rem;
+      margin-right: 0.125rem;
+      font-weight: 600;
+      a {
         &:hover {
           cursor: pointer;
-          color: $oc-yellow-5;
+          color: $oc-orange-6;
         }
       }
-    }
-    .submit-button {
-      @include material-shadow(2, 0.75);
-      flex: 3;
-      background: $oc-violet-5;
-      border-radius: 3px;
-      font-weight: 600;
-      transition: 0.1s all ease-in;
-      cursor: pointer;
-      &:hover {
-        background: lighten($oc-violet-5, 5%);
-      }
-      &:active {
-        background: $oc-violet-5;
-      }
-
-      &.edit {
-        background: $oc-indigo-5;
-        &:hover {
-          background: lighten($oc-indigo-5, 5%);
-        }
-        &:active {
-          background: $oc-indigo-5;
-        }
-      }
-    }
+    } // .submit-button {
+    //   @include material-shadow(2, 0.75);
+    //   background: $oc-violet-5;
+    //   border-radius: 3px;
+    //   font-weight: 600;
+    //   transition: 0.1s all ease-in;
+    //   cursor: pointer;
+    //   &:hover {
+    //     background: lighten($oc-violet-5, 5%);
+    //   }
+    //   &:active {
+    //     background: $oc-violet-5;
+    //   }
+    //   &.edit {
+    //     background: $oc-indigo-5;
+    //     &:hover {
+    //       background: lighten($oc-indigo-5, 5%);
+    //     }
+    //     &:active {
+    //       background: $oc-indigo-5;
+    //     }
+    //   }
+    // }
   }
 }

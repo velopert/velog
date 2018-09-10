@@ -1,5 +1,4 @@
 @import "utils";
-
 .WriteHeader {
   position: relative;
   z-index: z("write-header");
@@ -45,7 +44,6 @@
     @include media("<large") {
       margin-left: auto;
     }
-
     .button {
       background: $oc-gray-0;
       padding: 0.6rem;
@@ -57,10 +55,9 @@
       transition: 0.1s all ease-in;
       user-select: none;
       cursor: pointer;
-      & + .button {
+      &+.button {
         margin-left: 0.75rem;
       }
-
       &.temp-save {
         background: #65707b;
         &:hover {
@@ -70,7 +67,6 @@
           background: darken(#65707b, 5%);
         }
       }
-
       &.submit {
         background: $oc-violet-5;
         color: white;
@@ -81,19 +77,16 @@
           background: $oc-violet-5;
         }
       }
-
       &.edit {
-        background: $oc-indigo-6;
-        color: white;
+        background: $oc-blue-5;
         &:hover {
-          background: lighten($oc-indigo-6, 5%);
+          background: lighten($oc-blue-5, 5%);
         }
         &:active {
-          background: $oc-indigo-6;
+          background: $oc-blue-5;
         }
       }
     }
-
     .more {
       margin-left: 0.75rem;
       width: 2.5rem;

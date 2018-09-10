@@ -174,6 +174,46 @@ class SubmitBoxContainer extends Component<Props> {
       console.log(e);
     }
   };
+
+  onTempSave = async () => {
+    const { postData, title, body, tags, categories, thumbnail } = this.props;
+
+    const activeCategories = (() => {
+      if (!categories || categories.length === 0) return [];
+      return categories.filter(c => c.active).map(c => c.id);
+    })();
+
+    try {
+      if (!postData) {
+        await WriteActions.writePost({
+          title,
+          body,
+          tags,
+          isMarkdown: true,
+          isTemp: true,
+          thumbnail,
+          categories: activeCategories,
+        });
+      }
+      if (postData && postData.is_temp) {
+        await WriteActions.updatePost({
+          id: postData.id,
+          title,
+          body,
+          tags,
+          is_temp: postData.is_temp,
+          thumbnail,
+          categories: activeCategories,
+        });
+      }
+      if (this.props.postData) {
+        await WriteActions.tempSave({ title, body, postId: this.props.postData.id });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   onToggleAdditionalConfig = () => {
     WriteActions.toggleAdditionalConfig();
   };
@@ -241,6 +281,7 @@ class SubmitBoxContainer extends Component<Props> {
         onClose={onClose}
         onSubmit={onSubmit}
         isEdit={!!postData && !postData.is_temp}
+        onTempSave={this.onTempSave}
         onToggleAdditionalConfig={onToggleAdditionalConfig}
         additional={
           additional && (

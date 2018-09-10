@@ -11,7 +11,7 @@ import './WriteHeader.scss';
 
 type Props = {
   onChangeTitle(e: any): void,
-  onTempSave(): Promise<*>,
+
   onOpenSubmitBox(): void,
   onShowWriteExtra(): void,
   onHideWriteExtra(e: SyntheticMouseEvent<any>): void,
@@ -23,7 +23,7 @@ type Props = {
 const WriteHeader = ({
   onChangeTitle,
   onOpenSubmitBox,
-  onTempSave,
+
   onShowWriteExtra,
   onHideWriteExtra,
   onGoBack,
@@ -38,9 +38,6 @@ const WriteHeader = ({
         <input placeholder="제목을 입력해주세요" autoFocus onChange={onChangeTitle} value={title} />
       </div>
       <div className="actions">
-        <div className="button temp-save" onClick={onTempSave}>
-          임시저장
-        </div>
         <div className={cx('button', isEdit ? 'edit' : 'submit')} onClick={onOpenSubmitBox}>
           {isEdit ? '업데이트' : '작성하기'}
         </div>
