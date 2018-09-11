@@ -44,13 +44,38 @@
     @include media("<large") {
       margin-left: auto;
     }
+    .upload-image {
+      height: 2.25rem;
+      line-height: 0.875rem;
+      font-size: 0.875rem;
+      padding: 0 0.75rem;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      &:hover {
+        background: white;
+        color: $oc-gray-9;
+      }
+      svg {
+        font-size: 1.125rem;
+      }
+      display: flex;
+      align-items: center;
+      margin-right: 0.75rem;
+      .btn-text {
+        margin-left: 0.5rem;
+      }
+    }
     .button {
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
       background: $oc-gray-0;
-      padding: 0.6rem;
+      padding: 0 0.75rem;
       font-weight: 500;
       border-radius: 2px;
-      line-height: 0.9rem;
-      font-size: 0.9rem;
+      line-height: 0.875rem;
+      font-size: 0.875rem;
       @include material-shadow(2, 0.75);
       transition: 0.1s all ease-in;
       user-select: none;

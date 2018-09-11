@@ -31,7 +31,6 @@ type Props = {
   onDragEnter(e: any): void,
   onDragLeave(e: any): void,
   onClearInsertText(): void,
-  imageButton: Node,
   insertText: ?string,
 };
 
@@ -230,8 +229,6 @@ class CodeEditor extends Component<Props, State> {
   }
 
   render() {
-    const { imageButton } = this.props;
-
     return (
       <div className="CodeEditor material">
         <div
@@ -240,7 +237,6 @@ class CodeEditor extends Component<Props, State> {
             this.editor = ref;
           }}
         />
-        {imageButton}
         {/* <textarea ref={(ref) => { this.textarea = ref; }} /> */}
       </div>
     );

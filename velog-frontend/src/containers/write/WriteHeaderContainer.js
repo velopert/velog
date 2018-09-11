@@ -10,6 +10,8 @@ import { compose } from 'redux';
 import Blocker from 'components/common/Blocker';
 import queryString from 'query-string';
 import { Helmet } from 'react-helmet';
+import { escapeForUrl } from 'lib/common';
+import axios from 'axios';
 
 type Props = {
   title: string,
@@ -20,6 +22,8 @@ type Props = {
   postData: ?PostData,
   writeExtraOpen: boolean,
   changed: boolean,
+  uploadUrl: ?string,
+  imagePath: ?string,
 } & ContextRouter;
 
 class WriteHeaderContainer extends Component<Props> {
@@ -64,6 +68,79 @@ class WriteHeaderContainer extends Component<Props> {
 
   onCloseSubmitBox = () => {
     WriteActions.closeSubmitBox();
+  };
+
+  onUploadClick = () => {
+    const upload = document.createElement('input');
+    upload.type = 'file';
+    upload.onchange = (e) => {
+      if (!upload.files) return;
+      const file = upload.files[0];
+      this.uploadImage(file);
+    };
+    upload.click();
+  };
+
+  // TODO: make this to HOC!!!!!!!!!!!!!!!!
+  // may be 6 months later?
+  uploadImage = async (file: any) => {
+    WriteActions.setUploadMask(false);
+    if (!file) return;
+    if (file.size > 1024 * 1024 * 10) return;
+    const fileTypeRegex = /^image\/(.*?)/;
+    if (!fileTypeRegex.test(file.type)) return;
+
+    if (!this.props.postData) {
+      await WriteActions.setTempData();
+      const { title, body, tags, categories, thumbnail } = this.props;
+      const activeCategories = (() => {
+        if (!categories || categories.length === 0) return [];
+        return categories.filter(c => c.active).map(c => c.id);
+      })();
+      try {
+        await WriteActions.writePost({
+          title,
+          body,
+          tags,
+          isMarkdown: true,
+          isTemp: true,
+          categories: activeCategories,
+          thumbnail,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    if (!this.props.postData) return;
+    const { id } = this.props.postData;
+    const data = new FormData();
+    if (!file) return;
+    const filename = escapeForUrl(file.name);
+    await WriteActions.createUploadUrl({ postId: id, filename });
+    try {
+      WriteActions.setUploadStatus(true);
+      if (!this.props.uploadUrl) return;
+      await axios.put(this.props.uploadUrl, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+        withCredentials: false,
+        onUploadProgress: (e) => {
+          if (window.nanobar) {
+            window.nanobar.go(e.loaded / e.total * 100);
+          }
+        },
+      });
+      if (!this.props.imagePath) return;
+      const imageUrl = `${'\n'}![${file.name}](https://images.velog.io/${
+        this.props.imagePath
+      })${'\n'}`;
+      WriteActions.setInsertText(imageUrl);
+      WriteActions.setUploadStatus(false);
+    } catch (e) {
+      WriteActions.setUploadStatus(false);
+      console.log(e);
+    }
   };
 
   onTempSave = async () => {
@@ -130,7 +207,7 @@ class WriteHeaderContainer extends Component<Props> {
         <WriteHeader
           onOpenSubmitBox={onOpenSubmitBox}
           onChangeTitle={onChangeTitle}
-          onTempSave={onTempSave}
+          onUploadClick={this.onUploadClick}
           onShowWriteExtra={onShowWriteExtra}
           onHideWriteExtra={onHideWriteExtra}
           title={title}
@@ -160,6 +237,8 @@ export default compose(
       writeExtraOpen: write.writeExtra.visible,
       thumbnail: write.thumbnail,
       changed: write.changed,
+      uploadUrl: write.upload.uploadUrl,
+      imagePath: write.upload.imagePath,
     }),
     () => ({}),
   ),

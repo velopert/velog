@@ -7,11 +7,13 @@ import EditorRightPaneIcon from 'components/icons/EditorRightPaneIcon';
 import EditorBothPanesIcon from 'components/icons/EditorBothPanesIcon';
 import CloseIcon from 'react-icons/lib/md/close';
 import cx from 'classnames';
+import ImageIcon from 'react-icons/lib/io/image';
+import Tooltip from 'react-tooltip';
 import './WriteHeader.scss';
 
 type Props = {
   onChangeTitle(e: any): void,
-
+  onUploadClick(): void,
   onOpenSubmitBox(): void,
   onShowWriteExtra(): void,
   onHideWriteExtra(e: SyntheticMouseEvent<any>): void,
@@ -23,7 +25,7 @@ type Props = {
 const WriteHeader = ({
   onChangeTitle,
   onOpenSubmitBox,
-
+  onUploadClick,
   onShowWriteExtra,
   onHideWriteExtra,
   onGoBack,
@@ -38,6 +40,10 @@ const WriteHeader = ({
         <input placeholder="제목을 입력해주세요" autoFocus onChange={onChangeTitle} value={title} />
       </div>
       <div className="actions">
+        <button className="upload-image" onClick={onUploadClick}>
+          <ImageIcon />
+          <div className="btn-text">업로드</div>
+        </button>
         <div className={cx('button', isEdit ? 'edit' : 'submit')} onClick={onOpenSubmitBox}>
           {isEdit ? '업데이트' : '작성하기'}
         </div>

@@ -2,7 +2,6 @@
 
 import React, { Component, Fragment } from 'react';
 import CodeEditor from 'components/write/CodeEditor/CodeEditor';
-import FloatingImageButton from 'components/write/FloatingImageButton';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { WriteActions } from 'store/actionCreators';
@@ -137,17 +136,6 @@ class CodeEditorContainer extends Component<Props> {
     const { /* items, */ files } = e.dataTransfer;
     if (!files) return;
     this.uploadImage(files[0]);
-    // if (files) {
-    //   const filesArray = [...files];
-    //   const data = new FormData();
-    //   data.append('image', files[0]);
-    //   data.append('post_id', 'ff04fa20-3f2b-11e8-adb7-5344ec582abb');
-    //   axios.post('/files/upload', data, {
-    //     onUploadProgress: (uploadEvent) => {
-    //       console.log(`${uploadEvent.loaded}/${uploadEvent.total}`);
-    //     },
-    //   });
-    // }
   };
 
   componentWillUnmount() {}
@@ -165,7 +153,6 @@ class CodeEditorContainer extends Component<Props> {
           onClearInsertText={onClearInsertText}
           body={body}
           insertText={insertText}
-          imageButton={<FloatingImageButton onClick={this.onUploadClick} />}
         />
         <DropImage
           onDragEnter={onDragEnter}
