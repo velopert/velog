@@ -4,7 +4,9 @@ import { actionCreators as postsActions } from 'store/modules/posts';
 import { actionCreators as profileActions } from 'store/modules/profile';
 import { actionCreators as listingActions } from 'store/modules/listing';
 import { actionCreators as commonActions } from 'store/modules/common';
+import { actionCreators as followActions } from 'store/modules/follow';
 import { bindActionCreators } from 'redux';
+import type { State } from 'store';
 import { type Match } from 'react-router';
 import queryString from 'query-string';
 
@@ -58,16 +60,24 @@ const routes = [
   {
     path: '/@:username',
     exact: true,
-    preload: async (ctx: any, { dispatch }: any, match: Match) => {
+    preload: async (ctx: any, { getState, dispatch }: any, match: Match) => {
       const { username } = match.params;
       const ProfileActions = bindActionCreators(profileActions, dispatch);
       const ListingActions = bindActionCreators(listingActions, dispatch);
-      if (!username) return null;
+      const FollowActions = bindActionCreators(followActions, dispatch);
+
+      await ProfileActions.getProfile(username);
+      const state: State = getState();
+      const { profile } = state.profile;
+
+      if (!username) return Promise.resolve(null);
       const promises = [
-        ProfileActions.getProfile(username),
         ProfileActions.getUserTags(username),
         ListingActions.getUserPosts({ username }),
       ];
+      if (profile) {
+        promises.push(FollowActions.getUserFollow(profile.user_id));
+      }
       return Promise.all(promises);
     },
   },
@@ -78,16 +88,19 @@ const routes = [
       const { username, tag } = match.params;
       const ProfileActions = bindActionCreators(profileActions, dispatch);
       const ListingActions = bindActionCreators(listingActions, dispatch);
+      const FollowActions = bindActionCreators(followActions, dispatch);
       if (!username || !tag) return null;
       await ProfileActions.getTagInfo(tag);
-      const state = getState();
-      const { rawTagName } = state.profile;
-      console.log(rawTagName);
+      await ProfileActions.getProfile(username);
+      const state: State = getState();
+      const { rawTagName, profile } = state.profile;
       const promises = [
-        ProfileActions.getProfile(username),
         ProfileActions.getUserTags(username),
         ListingActions.getUserPosts({ username, tag: rawTagName }),
       ];
+      if (profile) {
+        promises.push(FollowActions.getUserFollow(profile.user_id));
+      }
       return Promise.all(promises);
     },
     stop: true,

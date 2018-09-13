@@ -10,6 +10,7 @@ import throttle from 'lodash/throttle';
 import { withRouter, type ContextRouter } from 'react-router-dom';
 
 import FullscreenLoaderContainer from './FullscreenLoaderContainer';
+import { setup } from '../../lib/progress';
 
 type Props = {
   user: ?UserData,
@@ -52,10 +53,6 @@ class Core extends Component<Props> {
     window.addEventListener('resize', this.onResize);
   };
 
-  integrateAxiosProgressbar = () => {
-    // TODO
-  };
-
   listenHistory = () => {
     const { history } = this.props;
     this.unlisten = history.listen((location, type) => {
@@ -68,12 +65,12 @@ class Core extends Component<Props> {
 
   componentDidMount() {
     this.initialize();
-    this.integrateAxiosProgressbar();
     this.listenHistory();
     CommonActions.changeRoute({
       type: 'PUSH',
       ...this.props.location,
     });
+    setup();
   }
 
   componentWillUnmount() {

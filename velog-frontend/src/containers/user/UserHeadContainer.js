@@ -16,12 +16,14 @@ type Props = OwnProps & {
     [string]: boolean,
   },
   followLoading: boolean,
+  shouldCancel: boolean,
 };
 
 class UserHeadContainer extends Component<Props> {
   initialize = () => {
-    const { profile } = this.props;
+    const { profile, shouldCancel } = this.props;
     if (!profile) return;
+    if (shouldCancel) return;
     FollowActions.getUserFollow(profile.user_id);
   };
 
@@ -73,6 +75,7 @@ export default connect(
     followingUsers: state.follow.users,
     followLoading:
       state.pender.pending['follow/FOLLOW_USER'] || state.pender.pending['follower/UNFOLLOW_USER'],
+    shouldCancel: state.common.ssr && !state.common.router.altered,
   }),
   () => ({}),
 )(UserHeadContainer);

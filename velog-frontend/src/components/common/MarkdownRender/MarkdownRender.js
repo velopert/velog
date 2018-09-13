@@ -189,7 +189,7 @@ class MarkdownRender extends Component<Props, State> {
       if (!dom) return { top: 0, id: '' };
       return { top: dom.getBoundingClientRect().top + scrollTop, id: anchor };
     });
-  }, 500);
+  }, 20);
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevProps.body !== this.props.body) {

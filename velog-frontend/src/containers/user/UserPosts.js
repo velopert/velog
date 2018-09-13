@@ -22,23 +22,34 @@ type Props = OwnProps & {
   prefetching: boolean,
   loading: boolean,
   rawTagName: ?string,
+  shouldCancel: boolean,
 };
 
 class UserPosts extends Component<Props> {
   prevCursor: ?string = null;
 
   initialize = async () => {
-    const { username, tag } = this.props;
-    ListingActions.clearUserPosts();
-    if (tag) {
+    const { username, tag, shouldCancel } = this.props;
+    if (!shouldCancel) {
+      ListingActions.clearUserPosts();
+      if (tag) {
+        try {
+          await ProfileActions.getTagInfo(tag);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      const { rawTagName } = this.props;
       try {
-        await ProfileActions.getTagInfo(tag);
+        await ListingActions.getUserPosts({
+          username,
+          tag: tag ? rawTagName || undefined : undefined,
+        });
       } catch (e) {
         console.log(e);
       }
     }
-    const { rawTagName } = this.props;
-    ListingActions.getUserPosts({ username, tag: tag ? rawTagName || undefined : undefined });
+    this.prefetch();
   };
   componentDidMount() {
     this.initialize();
@@ -106,13 +117,14 @@ class UserPosts extends Component<Props> {
 }
 
 export default connect(
-  ({ listing, pender, profile }: State) => ({
+  ({ listing, pender, profile, common }: State) => ({
     posts: listing.user.posts,
     prefetched: listing.user.prefetched,
     hasEnded: listing.user.end,
     prefetching: pender.pending['listing/PREFETCH_USER_POSTS'],
     loading: pender.pending['listing/GET_USER_POSTS'],
     rawTagName: profile.rawTagName,
+    shouldCancel: common.ssr && !common.router.altered,
   }),
   () => ({}),
 )(UserPosts);

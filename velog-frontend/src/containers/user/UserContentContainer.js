@@ -14,15 +14,18 @@ import UserPostsSubpage from 'pages/user/UserPostsSubpage';
 type Props = {
   match: Match,
   tagCounts: ?(TagCountInfo[]),
+  shouldCancel: boolean,
 };
 
 class UserContentContainer extends Component<Props> {
   initialize = async () => {
+    const { shouldCancel } = this.props;
+    if (shouldCancel) return;
     const { username } = this.props.match.params;
     if (!username) return;
     ProfileActions.initialize();
-    ProfileActions.getUserTags(username);
-    ProfileActions.getProfile(username);
+    await ProfileActions.getUserTags(username);
+    await ProfileActions.getProfile(username);
   };
 
   componentDidMount() {
@@ -59,8 +62,9 @@ class UserContentContainer extends Component<Props> {
 export default compose(
   withRouter,
   connect(
-    ({ profile }: State) => ({
+    ({ profile, common }: State) => ({
       tagCounts: profile.tagCounts,
+      shouldCancel: common.ssr && !common.router.altered,
     }),
     () => ({}),
   ),
