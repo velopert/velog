@@ -91,8 +91,8 @@ const routes = [
       const ListingActions = bindActionCreators(listingActions, dispatch);
       const FollowActions = bindActionCreators(followActions, dispatch);
       if (!username || !tag) return null;
-      await ProfileActions.getTagInfo(tag);
       await ProfileActions.getProfile(username);
+      await ProfileActions.getTagInfo(tag);
       const state: State = getState();
       const { rawTagName, profile } = state.profile;
       const promises = [
