@@ -9,6 +9,7 @@ import type { State } from 'store';
 import type { PostItem } from 'store/modules/listing';
 import throttle from 'lodash/throttle';
 import { getScrollBottom, preventStickBottom } from 'lib/common';
+import { type Profile } from 'store/modules/profile';
 
 type OwnProps = {
   username: string,
@@ -23,6 +24,7 @@ type Props = OwnProps & {
   loading: boolean,
   rawTagName: ?string,
   shouldCancel: boolean,
+  profile: ?Profile,
 };
 
 class UserPosts extends Component<Props> {
@@ -52,7 +54,7 @@ class UserPosts extends Component<Props> {
     this.prefetch();
   };
   componentDidMount() {
-    this.initialize();
+    // this.initialize();
     this.listenScroll();
   }
   componentWillUnmount() {
@@ -60,7 +62,7 @@ class UserPosts extends Component<Props> {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.tag !== this.props.tag || prevProps.username !== this.props.username) {
+    if (prevProps.tag !== this.props.tag || prevProps.profile !== this.props.profile) {
       this.initialize();
     }
   }
@@ -125,6 +127,7 @@ export default connect(
     loading: pender.pending['listing/GET_USER_POSTS'],
     rawTagName: profile.rawTagName,
     shouldCancel: common.ssr && !common.router.altered,
+    profile: profile.profile,
   }),
   () => ({}),
 )(UserPosts);

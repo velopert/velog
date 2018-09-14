@@ -66,6 +66,7 @@ const routes = [
       const ListingActions = bindActionCreators(listingActions, dispatch);
       const FollowActions = bindActionCreators(followActions, dispatch);
 
+      if (!username) return null;
       await ProfileActions.getProfile(username);
       const state: State = getState();
       const { profile } = state.profile;
@@ -75,7 +76,7 @@ const routes = [
         ProfileActions.getUserTags(username),
         ListingActions.getUserPosts({ username }),
       ];
-      if (profile) {
+      if (profile && ctx.state.logged) {
         promises.push(FollowActions.getUserFollow(profile.user_id));
       }
       return Promise.all(promises);
@@ -96,10 +97,12 @@ const routes = [
       const { rawTagName, profile } = state.profile;
       const promises = [
         ProfileActions.getUserTags(username),
-        ListingActions.getUserPosts({ username, tag: rawTagName }),
+        ListingActions.getUserPosts({ username, tag: rawTagName || '' }),
       ];
       if (profile) {
-        promises.push(FollowActions.getUserFollow(profile.user_id));
+        if (ctx.state.logged) {
+          promises.push(FollowActions.getUserFollow(profile.user_id));
+        }
       }
       return Promise.all(promises);
     },

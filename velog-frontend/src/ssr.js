@@ -21,6 +21,7 @@ const serverRender = async (ctx: any) => {
 
   defaultClient.defaults.headers.cookie = '';
   if (token) {
+    ctx.state.logged = true;
     defaultClient.defaults.headers.cookie = `access_token=${token}`;
     promises.push(store.dispatch(userActions.checkUser()));
   }
