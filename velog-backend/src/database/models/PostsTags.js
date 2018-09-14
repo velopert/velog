@@ -31,15 +31,22 @@ PostsTags.associate = function associate() {
 };
 
 // links postId to tagIds
-PostsTags.link = function link(postId: string, tagIds: Array<string>): Promise<*> {
-  const promises = tagIds.map(tagId => PostsTags.build({
-    fk_post_id: postId,
-    fk_tag_id: tagId,
-  }).save());
+PostsTags.link = function link(
+  postId: string,
+  tagIds: Array<string>,
+): Promise<*> {
+  const promises = tagIds.map(tagId =>
+    PostsTags.build({
+      fk_post_id: postId,
+      fk_tag_id: tagId,
+    }).save());
   return Promise.all(promises);
 };
 
-PostsTags.addTagsToPost = async function (postId: string, tags: Array<string>): Promise<*> {
+PostsTags.addTagsToPost = async function (
+  postId: string,
+  tags: Array<string>,
+): Promise<*> {
   try {
     const tagIds = await Tag.bulkGetId(tags);
     await this.bulkCreate(tagIds.map(tagId => ({ fk_post_id: postId, fk_tag_id: tagId })));
@@ -49,7 +56,10 @@ PostsTags.addTagsToPost = async function (postId: string, tags: Array<string>): 
 };
 
 // removes given tags from post
-PostsTags.removeTagsFromPost = async function (postId: string, tags: Array<string>): Promise<*> {
+PostsTags.removeTagsFromPost = async function (
+  postId: string,
+  tags: Array<string>,
+): Promise<*> {
   if (tags.length === 0) return;
   try {
     // get tag ids
@@ -83,7 +93,7 @@ PostsTags.getPostsCount = async ({ userId }: GetPostsCountParams) => {
     WHERE p.fk_user_id = $userId
     AND p.is_temp = FALSE
   ) GROUP BY tag
-  ORDER BY count DESC
+  ORDER BY count DESC, tag
   `;
   try {
     const result = await db.query(query, {

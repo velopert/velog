@@ -43,7 +43,6 @@ export const getTags = async (ctx: Context) => {
   const { id } = ctx.selectedUser;
   try {
     const tags = await PostsTags.getPostsCount({ userId: id });
-    console.log(tags);
     ctx.body = tags;
   } catch (e) {
     ctx.throw(500, e);
