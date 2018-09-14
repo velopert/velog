@@ -12,6 +12,8 @@ import 'prismjs/components/prism-typescript.min';
 import 'prismjs/components/prism-javascript.min';
 import 'prismjs/components/prism-jsx.min';
 import 'prismjs/components/prism-css.min';
+import 'prismjs/components/prism-python.min';
+import 'prismjs/components/prism-go.min';
 import './MarkdownRender.scss';
 
 type Props = {
