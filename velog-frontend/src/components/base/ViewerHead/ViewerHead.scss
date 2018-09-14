@@ -6,8 +6,8 @@
   padding-left: 2rem;
   padding-right: 2rem;
   @include media("<medium") {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     height: 5rem;
   }
   .logo-area {
