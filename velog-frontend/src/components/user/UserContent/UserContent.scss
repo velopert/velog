@@ -2,6 +2,10 @@
 .UserContent {
   display: flex;
   margin-top: 4rem;
+  @include media("<medium") {
+    flex-direction: column;
+    margin-top: 2rem;
+  }
   .tab-wrapper {
     margin-left: 2rem;
     @include media("<medium") {
@@ -10,9 +14,9 @@
     flex: 1;
   }
   .side-wrapper {
-    @include media("<medium") {
-      display: none;
-    }
     width: 15rem;
+    @include media("<medium") {
+      width: 100%;
+    }
   }
 }

@@ -32,8 +32,8 @@ export function setup() {
     return req;
   });
   const responseHandler = (res) => {
-    requests.pop();
     setTimeout(() => {
+      requests.pop();
       if (requests.length === 0) {
         if (timerId) {
           clearTimeout(timerId);
@@ -41,7 +41,7 @@ export function setup() {
         }
         setProgress(100);
       }
-    }, 10);
+    }, 150);
     return res;
   };
   defaultClient.interceptors.response.use(responseHandler, responseHandler);

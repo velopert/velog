@@ -4,7 +4,7 @@ import { type TagCountInfo } from 'store/modules/profile';
 import { NavLink } from 'react-router-dom';
 import { escapeForUrl } from 'lib/common';
 
-import './UserSide.scss';
+import './UserTagView.scss';
 
 type Props = {
   tagCounts: ?(TagCountInfo[]),
@@ -12,8 +12,8 @@ type Props = {
   onSelectTag: (tagName: string) => void,
 };
 
-const UserSide = ({ tagCounts, username, onSelectTag }: Props) => (
-  <div className="UserSide">
+const UserTagView = ({ tagCounts, username, onSelectTag }: Props) => (
+  <div className="UserTagView">
     <section>
       <div className="section-title">태그</div>
       {tagCounts && (
@@ -26,7 +26,7 @@ const UserSide = ({ tagCounts, username, onSelectTag }: Props) => (
           {tagCounts.map(t => (
             <li key={t.tag}>
               <NavLink
-                activeStyle={{ fontWeight: '600' }}
+                activeClassName="active"
                 to={`/@${username}/tags/${escapeForUrl(t.tag)}`}
                 onClick={() => onSelectTag(t.tag)}
               >
@@ -41,4 +41,4 @@ const UserSide = ({ tagCounts, username, onSelectTag }: Props) => (
   </div>
 );
 
-export default UserSide;
+export default UserTagView;

@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import UserContent from 'components/user/UserContent';
-import UserSide from 'components/user/UserSide';
+import UserTagView from 'components/user/UserTagView';
 import UserTab from 'components/user/UserTab';
 import { withRouter, type Match, Route } from 'react-router-dom';
 import { ProfileActions } from 'store/actionCreators';
@@ -48,7 +48,9 @@ class UserContentContainer extends Component<Props> {
 
     return (
       <UserContent
-        side={<UserSide tagCounts={tagCounts} username={username} onSelectTag={this.onSelectTag} />}
+        side={
+          <UserTagView tagCounts={tagCounts} username={username} onSelectTag={this.onSelectTag} />
+        }
       >
         <UserTab username={username}>
           <Route exact path="/@:username" component={UserPostsSubpage} />
