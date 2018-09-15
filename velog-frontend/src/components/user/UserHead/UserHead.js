@@ -47,4 +47,21 @@ const UserHead = ({ username, profile, self, following, onToggleFollow }: Props)
   </div>
 );
 
+UserHead.Placeholder = () => (
+  <div className="UserHead placeholder">
+    <div className="fake-thumbnail" />
+    <div className="user-info">
+      <section className="top">
+        <div className="username">
+          <div className="gray-block _username" />
+        </div>
+      </section>
+      <section className="mini-profile">
+        <div className="gray-block _name" />
+        <div className="gray-block _description" />
+      </section>
+    </div>
+  </div>
+);
+
 export default UserHead;

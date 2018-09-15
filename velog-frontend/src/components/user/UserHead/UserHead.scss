@@ -68,4 +68,36 @@
       }
     }
   }
+  &.placeholder {
+    .fake-thumbnail {
+      width: 10rem;
+      height: 10rem;
+      object-fit: cover;
+      border-radius: 50%;
+      animation: Blink 0.5s ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      background: $oc-gray-2;
+    }
+    .gray-block {
+      animation: Blink 0.5s ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      height: 1em;
+      background: $oc-gray-2;
+      border-radius: 2px;
+      &._username {
+        width: 8rem;
+      }
+      &._name {
+        font-size: 2.5em;
+        width: 4em;
+      }
+      &._description {
+        margin-top: 1.25rem;
+        color: $oc-gray-6;
+        height: 1.3125rem;
+      }
+    }
+  }
 }

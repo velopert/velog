@@ -53,7 +53,8 @@ class UserHeadContainer extends Component<Props> {
   };
   render() {
     const { profile, self, followingUsers, username } = this.props;
-    if (!profile || !username) return null;
+
+    if (!profile || !username) return <UserHead.Placeholder />;
 
     const following = followingUsers[profile.user_id];
 
