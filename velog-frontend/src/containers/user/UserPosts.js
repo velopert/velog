@@ -27,17 +27,28 @@ type Props = OwnProps & {
   profile: ?Profile,
 };
 
-class UserPosts extends Component<Props> {
+type UserPostsState = {
+  loading: boolean,
+};
+
+class UserPosts extends Component<Props, UserPostsState> {
   prevCursor: ?string = null;
 
+  state = {
+    loading: false,
+  };
+
   initialize = async () => {
-    const { username, tag, shouldCancel } = this.props;
+    const { username, tag, shouldCancel, profile } = this.props;
+    if (!profile) return;
     if (!shouldCancel) {
       ListingActions.clearUserPosts();
+      this.setState({ loading: true });
       if (tag) {
         try {
           await ProfileActions.getTagInfo(tag);
         } catch (e) {
+          this.setState({ loading: false });
           console.log(e);
         }
       }
@@ -47,14 +58,16 @@ class UserPosts extends Component<Props> {
           username,
           tag: tag ? rawTagName || undefined : undefined,
         });
+        this.setState({ loading: false });
       } catch (e) {
+        this.setState({ loading: false });
         console.log(e);
       }
     }
     this.prefetch();
   };
   componentDidMount() {
-    // this.initialize();
+    this.initialize();
     this.listenScroll();
   }
   componentWillUnmount() {
@@ -62,7 +75,9 @@ class UserPosts extends Component<Props> {
   }
 
   componentDidUpdate(prevProps) {
+    console.log(prevProps.tag, this.props.tag);
     if (prevProps.tag !== this.props.tag || prevProps.profile !== this.props.profile) {
+      console.log('init!');
       this.initialize();
     }
   }
@@ -109,7 +124,7 @@ class UserPosts extends Component<Props> {
       <PostCardList
         posts={posts}
         oneColumn
-        loading={loading}
+        loading={this.state.loading}
         prefetching={prefetching}
         hasEnded={false}
         hideUsername
@@ -124,7 +139,7 @@ export default connect(
     prefetched: listing.user.prefetched,
     hasEnded: listing.user.end,
     prefetching: pender.pending['listing/PREFETCH_USER_POSTS'],
-    loading: pender.pending['listing/GET_USER_POSTS'],
+    loading: pender.pending['listing/GET_USER_POSTS'] || pender.pending['profile/GET_TAG_INFO'],
     rawTagName: profile.rawTagName,
     shouldCancel: common.ssr && !common.router.altered,
     profile: profile.profile,
