@@ -364,8 +364,8 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
   }
 
   try {
-    const [socialAccount, user] = await Promise.all([
-      User.findUser('email', profile.email),
+    const [user, socialAccount] = await Promise.all([
+      profile.email ? User.findUser('email', profile.email) : Promise.resolve(null),
       SocialAccount.findBySocialId(profile.id.toString()),
     ]);
 
@@ -443,7 +443,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
 
   try {
     const [emailExists, usernameExists] = await Promise.all([
-      User.findUser('email', email),
+      email ? User.findUser('email', email) : Promise.resolve(null),
       User.findUser('username', username),
     ]);
 
@@ -570,7 +570,9 @@ export const socialLogin = async (ctx: Context): Promise<*> => {
     let user = await SocialAccount.findUserBySocialId(socialId);
     if (!user) {
       // if socialaccount not found, try find by email
-      user = await User.findUser('email', profile.email);
+      if (profile.email) {
+        user = await User.findUser('email', profile.email);
+      }
       if (!user) {
         ctx.status = 401;
         ctx.body = {
