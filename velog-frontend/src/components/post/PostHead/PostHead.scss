@@ -1,5 +1,41 @@
 @import "utils";
 .PostHead {
+  &.placeholder {
+    .gray-block {
+      background: $oc-gray-1;
+      border-radius: 2px;
+      height: 1em;
+      animation: Blink 0.5s ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      &._username {
+        width: 7em;
+      }
+      &._description {
+        width: 11em;
+      }
+      &._title {
+        margin-top: 1.875rem;
+        height: 3.2rem;
+      }
+      &._date {
+        margin-top: 1rem;
+        width: 10em;
+      }
+    }
+    .description {
+      margin-top: 0.5rem;
+    }
+    .fake-img {
+      background: $oc-gray-1;
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      animation: Blink 0.5s ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+    }
+  }
   margin-top: 4rem;
   font-size: 1rem;
   @include media("<medium") {

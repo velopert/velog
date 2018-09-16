@@ -31,6 +31,13 @@ type Props = {
 
 class PostViewer extends Component<Props> {
   initialize = async () => {
+    // set scroll to top
+    if (document.body && document.body.scrollTop) {
+      document.body.scrollTop = 0;
+    }
+    if (document.documentElement) {
+      document.documentElement.scrollTop = 0;
+    }
     const { username, urlSlug, shouldCancel } = this.props;
     if (!username || !urlSlug) return;
     try {

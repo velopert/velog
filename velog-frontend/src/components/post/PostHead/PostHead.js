@@ -68,6 +68,32 @@ const PostHead = ({
   );
 };
 
+PostHead.Placeholder = () => (
+  <div className="PostHead placeholder">
+    <div className="userinfo">
+      <div className="user-thumbnail">
+        <div className="fake-img" />
+      </div>
+      <div className="info">
+        <div className="username">
+          <div className="gray-block _username" />
+        </div>
+        <div className="description">
+          <div className="gray-block _description" />
+        </div>
+      </div>
+    </div>
+    <div className="gray-block _title" />
+    <div className="date-and-likes">
+      <div className="date">
+        <div className="gray-block _date" />
+      </div>
+      <div className="placeholder" />
+    </div>
+    <div className="separator" />
+  </div>
+);
+
 /*
 type Props = {
   title: string,

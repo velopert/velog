@@ -35,6 +35,7 @@ const UserTagView = ({ tagCounts, username, onSelectTag }: Props) => (
               </NavLink>
             </li>
           ))}
+          <li className="placer" />
         </ul>
       )}
     </section>

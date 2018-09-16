@@ -1,5 +1,34 @@
 @import "utils";
 .PostContent {
+  &.placeholder {
+    .fake-img {
+      width: 100%;
+      height: 35vh;
+      background: $oc-gray-1;
+      animation: Blink 0.5s ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+    }
+    .gray-block {
+      background: $oc-gray-1;
+      height: 1.85rem;
+      animation: Blink 0.5s ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      @include media("<medium") {
+        height: 1.25rem;
+      }
+    }
+    .gray-block+.gray-block {
+      margin-top: 0.5rem;
+    }
+    .line-breaker {
+      height: 3rem;
+      @include media("<medium") {
+        height: 2rem;
+      }
+    }
+  }
   .post-thumbnail {
     @include media("<medium") {
       margin-left: -1rem;

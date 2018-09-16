@@ -75,9 +75,7 @@ class UserPosts extends Component<Props, UserPostsState> {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(prevProps.tag, this.props.tag);
     if (prevProps.tag !== this.props.tag || prevProps.profile !== this.props.profile) {
-      console.log('init!');
       this.initialize();
     }
   }

@@ -30,4 +30,25 @@ const PostContent = ({ body, onSetToc, onActivateHeading, thumbnail, theme }: Pr
   </div>
 );
 
+PostContent.Placeholder = () => (
+  <div className="PostContent placeholder">
+    <div className="post-thumbnail">
+      <div className="fake-img" />
+    </div>
+    <div className="contents">
+      <div className="gray-block" />
+      <div className="gray-block" />
+      <div className="gray-block" style={{ width: '75%' }} />
+      <div className="line-breaker" />
+      <div className="gray-block" />
+      <div className="gray-block" style={{ width: '40%' }} />
+      <div className="line-breaker" />
+      <div className="gray-block" />
+      <div className="gray-block" />
+      <div className="gray-block" />
+      <div className="gray-block" style={{ width: '40%' }} />
+    </div>
+  </div>
+);
+
 export default PostContent;
