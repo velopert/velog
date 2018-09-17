@@ -73,8 +73,8 @@ export function formatShortDescription(markdown: string): string {
   const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
   return (
     removeMd(replaced)
-      .slice(0, 125)
-      .replace(/#/g, '') + (replaced.length > 125 ? '...' : '')
+      .slice(0, 200)
+      .replace(/#/g, '') + (replaced.length > 200 ? '...' : '')
   );
 }
 

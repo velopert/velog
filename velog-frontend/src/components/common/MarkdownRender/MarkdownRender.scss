@@ -14,9 +14,9 @@
     }
   }
   p {
-    line-height: 1.75em;
-    font-weight: 300;
-    color: rgb(15, 15, 15);
+    line-height: 1.5;
+    font-weight: 400;
+    color: $oc-gray-8;
   }
   strong,
   b {
@@ -96,7 +96,7 @@
   }
   ul,
   ol {
-    font-weight: 300;
+    font-weight: 400;
     margin-top: 1em;
     margin-bottom: 1em;
   }

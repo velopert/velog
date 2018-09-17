@@ -2,9 +2,18 @@
 import React from 'react';
 import type { PostItem } from 'store/modules/listing';
 import './UserPostCardList.scss';
+import UserPostCard from '../UserPostCard';
 
-type Props = {};
+type Props = {
+  posts: PostItem[],
+  username: string,
+};
 
-const UserPostCardList = (props: Props) => <div className="UserPostCardList">UserPostCardList</div>;
+const UserPostCardList = ({ posts, username }: Props) => {
+  const postList = posts.map(post => (
+    <UserPostCard username={username} key={post.id} post={post} />
+  ));
+  return <div className="UserPostCardList">{postList}</div>;
+};
 
 export default UserPostCardList;

@@ -10,6 +10,7 @@ import type { PostItem } from 'store/modules/listing';
 import throttle from 'lodash/throttle';
 import { getScrollBottom, preventStickBottom } from 'lib/common';
 import { type Profile } from 'store/modules/profile';
+import UserPostCardList from 'components/user/UserPostCardList';
 
 type OwnProps = {
   username: string,
@@ -117,17 +118,14 @@ class UserPosts extends Component<Props, UserPostsState> {
   };
 
   render() {
-    const { posts, loading, prefetching } = this.props;
-    return (
-      <PostCardList
-        posts={posts}
-        oneColumn
-        loading={this.state.loading}
-        prefetching={prefetching}
-        hasEnded={false}
-        hideUsername
-      />
-    );
+    const { posts, loading, prefetching, profile } = this.props;
+
+    if (!posts) {
+      // TODO: Show placeholder
+      return null;
+    }
+
+    return <UserPostCardList posts={posts} username={this.props.username} />;
   }
 }
 

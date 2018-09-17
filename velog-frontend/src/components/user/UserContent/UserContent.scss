@@ -14,6 +14,7 @@
     flex: 1;
   }
   .side-wrapper {
+    flex-shrink: 0;
     width: 15rem;
     @include media("<medium") {
       width: 100%;
