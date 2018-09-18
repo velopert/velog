@@ -6,7 +6,7 @@ import * as PostsAPI from 'lib/api/posts';
 import * as SavesAPI from 'lib/api/posts/saves';
 import format from 'date-fns/format';
 
-import { applyPenders, type GenericResponseAction } from 'lib/common';
+import { applyPenders, convertToPlainText, type GenericResponseAction } from 'lib/common';
 
 /* ACTION TYPE */
 const EDIT_FIELD = 'write/EDIT_FIELD';
@@ -455,6 +455,15 @@ const reducer = handleActions(
     },
     [TOGGLE_ADDITIONAL_CONFIG]: (state) => {
       return produce(state, (draft) => {
+        if (!state.submitBox.additional) {
+          // put default values
+          if (state.postData) {
+            draft.meta = state.postData.meta;
+          }
+          if (!draft.meta.short_description) {
+            draft.meta.short_description = convertToPlainText(state.body);
+          }
+        }
         draft.submitBox.additional = !state.submitBox.additional;
       });
     },
@@ -585,6 +594,7 @@ export default applyPenders(reducer, [
         draft.body = payload.data.body;
         draft.title = payload.data.title;
         draft.thumbnail = payload.data.thumbnail;
+        draft.meta = payload.data.meta;
       });
     },
   },

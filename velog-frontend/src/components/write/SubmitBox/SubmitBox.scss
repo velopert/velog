@@ -52,10 +52,11 @@
     .view {
       margin-left: auto;
       font-size: 0.9rem;
-      color: $oc-yellow-6;
+      color: $oc-orange-6;
+      font-weight: 600;
       &:hover {
         cursor: pointer;
-        color: $oc-yellow-5;
+        color: $oc-orange-5;
       }
     }
   }

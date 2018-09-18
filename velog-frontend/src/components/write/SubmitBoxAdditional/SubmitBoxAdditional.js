@@ -57,9 +57,9 @@ const SubmitBoxAdditional = ({
           rows="4"
           onChange={onChangeShortDescription}
           value={
-            meta.short_description ||
+            meta.short_description /* ||
             (realMeta && realMeta.short_description) ||
-            (meta.short_description === null ? convertToPlainText(body) : '')
+            (meta.short_description === null ? convertToPlainText(body) : '') */
           }
         />
       </section>
