@@ -122,7 +122,7 @@ class UserPosts extends Component<Props, UserPostsState> {
 
     if (!posts) {
       // TODO: Show placeholder
-      return null;
+      return <UserPostCardList.Placeholder />;
     }
 
     return <UserPostCardList posts={posts} username={this.props.username} />;

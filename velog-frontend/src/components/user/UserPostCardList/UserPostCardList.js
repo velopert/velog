@@ -16,4 +16,14 @@ const UserPostCardList = ({ posts, username }: Props) => {
   return <div className="UserPostCardList">{postList}</div>;
 };
 
+UserPostCardList.Placeholder = () => {
+  return (
+    <div className="UserPostCardList">
+      <UserPostCard.Placeholder />
+      <UserPostCard.Placeholder />
+      <UserPostCard.Placeholder />
+    </div>
+  );
+};
+
 export default UserPostCardList;

@@ -43,7 +43,7 @@
     margin-top: 0.5rem;
     color: $oc-gray-9;
     font-size: 1rem;
-    span + span {
+    span+span {
       &::before {
         content: "·";
         padding-left: 0.25rem;
@@ -78,7 +78,45 @@
       }
     }
   }
-  & + .UserPostCard {
+  &+.UserPostCard {
     border-top: 1px solid $oc-gray-3;
+  }
+  &.placeholder {
+    .gray-box {
+      background: $oc-gray-1;
+      border-radius: 2px;
+      height: 1em;
+      animation: Blink 0.5s ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      display: block;
+    }
+    .fake-img {
+      height: 300px;
+    }
+    p {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    h2 .gray-box {
+      width: 70%;
+    }
+    p .gray-box {
+      &+.gray-box {
+        margin-top: 0.5rem;
+      }
+    }
+    .card-subinfo-placeholder .gray-box {
+      display: inline-flex;
+      height: 1rem;
+      width: 5rem;
+      margin-right: 0.75rem;
+    }
+    .tags {
+      margin-top: 0.5rem;
+      .tag {
+        width: 3rem;
+      }
+    }
   }
 }

@@ -46,4 +46,30 @@ const UserPostCard = ({ post, username }: Props) => {
   );
 };
 
+UserPostCard.Placeholder = () => {
+  return (
+    <div className="UserPostCard placeholder">
+      <div className="img-wrapper">
+        <div className="fake-img gray-box" />
+      </div>
+      <h2>
+        <span className="gray-box" />
+      </h2>
+      <p>
+        <span className="gray-box" style={{ width: '90%' }} />
+        <span className="gray-box" style={{ width: '100%' }} />
+        <span className="gray-box" style={{ width: '95%' }} />
+      </p>
+      <div className="card-subinfo-placeholder">
+        <span className="gray-box" />
+        <span className="gray-box" />
+      </div>
+      <div className="tags">
+        <div className="tag gray-box" />
+        <div className="tag gray-box" />
+      </div>
+    </div>
+  );
+};
+
 export default UserPostCard;
