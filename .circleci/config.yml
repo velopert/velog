@@ -8,6 +8,8 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:8.12.0
+    environment:
+      CI: false
     working_directory: ~/repo/velog-frontend
     steps:
       - checkout:
