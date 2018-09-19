@@ -4,12 +4,19 @@
   padding-bottom: 2.5rem;
   position: relative;
   color: $oc-gray-9;
+  &:first-child {
+    padding-top: 0;
+  }
   .img-wrapper {
     width: 100%;
     overflow: hidden;
+    margin-bottom: 1rem;
     img {
       width: 100%;
+      object-fit: cover;
+      min-height: 150px;
       height: auto;
+      max-height: 400px;
       &:hover {
         filter: brightness(97%);
       }
@@ -18,7 +25,6 @@
   h2 {
     font-size: 1.375rem;
     margin: 0;
-    margin-top: 1rem;
     font-weight: 600;
     @include media("<medium") {
       font-size: 1.25rem;
