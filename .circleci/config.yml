@@ -41,7 +41,7 @@ jobs:
           path: ~/repo
       - attach_workspace:
           at: ~/repo
-      - run: ls build
+      - run: ls
 workflows:
   version: 2
   build-and-deploy:
