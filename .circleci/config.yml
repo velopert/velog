@@ -27,11 +27,10 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn build
-      - store_artifacts:
-          path: ~/repo/velog-frontend/build
+      # - store_artifacts:
+      #     path: ~/repo/velog-frontend/build
       - persist_to_workspace:
-          root: .
-          paths: build
+          path: ~/repo/velog-frontend/build
   deploy-frontend:
     docker:
       - image: circleci/python:2.7-jessie
