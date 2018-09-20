@@ -14,6 +14,8 @@ jobs:
     steps:
       - checkout:
           path: ~/repo
+      - attach_workspace:
+          at: ~/repo
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
@@ -32,6 +34,10 @@ jobs:
       - image: circleci/python:2.7-jessie
     working_directory: ~/repo/velog-frontend
     steps:
+      - checkout:
+          path: ~/repo
+      - attach_workspace:
+          at: ~/repo
       - run: ls build
 
 workflows:
