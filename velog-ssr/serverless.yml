@@ -11,8 +11,8 @@ provider:
   runtime: nodejs8.10
   region: ap-northeast-2
   environment:
-    REDIS_HOST: ${file(./env.json):REDIS_HOST}
-    REDIS_PASS: ${file(./env.json):REDIS_PASS}
+    REDIS_HOST: ${env:REDIS_HOST}
+    REDIS_PASS: ${env:REDIS_PASS}
 
 functions:
   app:

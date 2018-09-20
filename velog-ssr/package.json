@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_PATH=dist nodemon dist/local.js --watch ./dist",
+    "deploy:local": ". ./scripts/loadenv sls deploy",
     "deploy": "sls deploy"
   },
   "dependencies": {

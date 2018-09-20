@@ -27,8 +27,16 @@ jobs:
       - run: yarn build
       - store_artifacts:
           path: ~/repo/velog-frontend/build
+  deploy-frontend:
+    docker:
+      - image: circleci/python:2.7-jessie
+    working_directory: ~/repo/velog-frontend
+    steps:
+      - run: ls build
+
 workflows:
   version: 2
   build-and-deploy:
     jobs:
       - build-frontend
+      - deploy-frontend

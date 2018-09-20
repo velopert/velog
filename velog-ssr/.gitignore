@@ -13,6 +13,7 @@ src/ssr/render.js
 
 
 .env
+.env.production
 env.json
 
 asset-manifest.json
