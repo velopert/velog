@@ -30,7 +30,9 @@ jobs:
       # - store_artifacts:
       #     path: ~/repo/velog-frontend/build
       - persist_to_workspace:
-          path: ~/repo/velog-frontend/build
+          root: ~/repo
+          paths:
+            - velog-frontend/build
   deploy-frontend:
     docker:
       - image: circleci/python:2.7-jessie
