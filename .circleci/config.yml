@@ -27,12 +27,15 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn build
+      - run: yarn build:server
       # - store_artifacts:
       #     path: ~/repo/velog-frontend/build
       - persist_to_workspace:
           root: ~/repo
           paths:
             - velog-frontend/build
+            - velog-ssr/src/ssr/render.js
+            - velog-ssr/asset-manifest.json
   deploy-frontend:
     docker:
       - image: circleci/python:2.7-jessie
@@ -45,6 +48,29 @@ jobs:
       - run: sudo pip install awscli
       - run: aws s3 sync ./build s3://cdn.velog.io/
       - run: aws cloudfront create-invalidation --distribution-id E1M9D68QZ0CD1F --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico
+  deploy-ssr:
+    docker:
+      - image: circleci/node:8.12.0
+    environment:
+      CI: false
+    working_directory: ~/repo/velog-ssr
+    steps:
+      - checkout:
+          path: ~/repo
+      - attach_workspace:
+          at: ~/repo
+      - restore_cache:
+          keys:
+            - v1-ssr-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-ssr-dependencies-
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-ssr-dependencies-{{ checksum "package.json" }}
+      - run: npm i -g serverless
+      - run: sls deploy
 workflows:
   version: 2
   build-and-deploy:
@@ -53,3 +79,6 @@ workflows:
       - deploy-frontend:
           requires:
             - build-frontend
+      - deploy-ssr:
+          requires:
+            - deploy-frontend
