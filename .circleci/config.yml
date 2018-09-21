@@ -27,6 +27,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn build
+      - run: mkdir ../velog-ssr/dist
       - run: yarn build:server
       # - store_artifacts:
       #     path: ~/repo/velog-frontend/build
