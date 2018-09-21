@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_PATH=dist nodemon dist/local.js --watch ./dist",
+    "deploy:local": ". ./scripts/loadenv sls deploy",
     "deploy": "sls deploy"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "@types/node": "^8.0.57",
     "@types/redis": "^2.8.6",
     "nodemon": "^1.18.3",
+    "serverless": "^1.32.0",
     "serverless-offline": "^3.25.6",
     "serverless-webpack": "^5.1.1",
     "ts-loader": "^4.2.0",
