@@ -70,7 +70,7 @@ jobs:
           paths:
             - node_modules
           key: v1-ssr-dependencies-{{ checksum "package.json" }}
-      - run: npm i -g serverless
+      - run: sudo npm i -g serverless
       - run: sls deploy
 workflows:
   version: 2
