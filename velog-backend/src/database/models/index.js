@@ -18,3 +18,4 @@ export { default as Feed } from './Feed';
 export { default as PostScore } from './PostScore';
 export { default as PostRead } from './PostRead';
 export { default as UserThumbnail } from './UserThumbnail';
+export { default as UrlSlugHistory } from './UrlSlugHistory';

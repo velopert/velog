@@ -19,6 +19,7 @@ import {
   PostScore,
   PostRead,
   UserThumbnail,
+  UrlSlugHistory,
 } from './models';
 import * as views from './views';
 
@@ -41,6 +42,7 @@ export function associate() {
   PostScore.associate();
   PostRead.associate();
   UserThumbnail.associate();
+  UrlSlugHistory.associate();
 }
 export default function sync() {
   associate();
