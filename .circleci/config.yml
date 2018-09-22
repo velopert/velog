@@ -102,7 +102,4 @@ workflows:
       - deploy-ssr:
           requires:
             - deploy-frontend
-<<<<<<< HEAD
-=======
       - deploy-backend
->>>>>>> circleci
