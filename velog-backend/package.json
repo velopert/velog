@@ -8,6 +8,7 @@
     "migrate": "NODE_PATH=src babel-node src/scripts/migrate --plugins transform-es2015-modules-commonjs,transform-object-rest-spread,transform-async-to-generator --presets flow",
     "deploy:dev": "sls deploy --stage dev",
     "deploy": "sls deploy --stage prod",
+    "deploy:local": "./scripts/loadenv sls deploy --stage prod",
     "prettier:watch": "onchange '**/*.js' -- prettier-eslint --write {{changed}}"
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
     "pg-hstore": "^2.3.2",
     "pg-native": "^2.2.0",
     "prettier-eslint-cli": "^4.7.1",
+    "serverless": "^1.32.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-dotenv": "^1.0.0-beta.2",
     "serverless-webpack": "^3.1.1",

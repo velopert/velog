@@ -12,12 +12,12 @@ provider:
   region: ap-northeast-2
   stage: dev
   environment:
-    SECRET_KEY: ${file(./env.json):SECRET_KEY}
-    COCKROACHDB_HOST: ${file(./env.json):COCKROACHDB_HOST}
-    COCKROACHDB_PW: ${file(./env.json):COCKROACHDB_PW}
-    HASH_KEY: ${file(./env.json):HASH_KEY}
-    REDIS_HOST: ${file(./env.json):REDIS_HOST}
-    REDIS_PASS: ${file(./env.json):REDIS_PASS}
+    SECRET_KEY: ${env:SECRET_KEY}
+    COCKROACHDB_HOST: ${env:COCKROACHDB_HOST}
+    COCKROACHDB_PW: ${env:COCKROACHDB_PW}
+    HASH_KEY: ${env:HASH_KEY}
+    REDIS_HOST: ${env:REDIS_HOST}
+    REDIS_PASS: ${env:REDIS_PASS}
     NODE_ENV: "production"
   iamRoleStatements:
     - Effect: "Allow"
