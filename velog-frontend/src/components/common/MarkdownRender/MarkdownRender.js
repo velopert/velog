@@ -111,7 +111,7 @@ class MarkdownRender extends Component<Props, State> {
     setTimeout(this.checkHeight, 500);
   };
 
-  renderMarkdown() {
+  renderMarkdown = throttle(() => {
     const toc = [];
     marked.setOptions({
       renderer: createRenderer(toc),
@@ -132,7 +132,7 @@ class MarkdownRender extends Component<Props, State> {
       html: rendered,
     });
     this.toc = toc;
-  }
+  }, 250);
 
   componentDidMount() {
     if (this.state.html !== '') {
