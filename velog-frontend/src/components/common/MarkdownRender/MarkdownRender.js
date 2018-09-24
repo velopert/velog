@@ -60,6 +60,7 @@ const createRenderer = (arr: any[]) => {
     }
     return `<h${level} id="${suffixed}">${text}</h${level}>`;
   };
+
   return renderer;
 };
 
@@ -70,6 +71,7 @@ class MarkdownRender extends Component<Props, State> {
   el = null;
   timerId = null;
   prevHeight = null;
+  htmlDiv = null;
 
   state = {
     html: '',
@@ -92,6 +94,9 @@ class MarkdownRender extends Component<Props, State> {
       smartLists: true,
       smartypants: false,
       xhtml: false,
+      highlight(code, lang: string) {
+        return Prism.highlight(code, Prism.languages[lang] || Prism.languages.markup, lang);
+      },
     });
     this.state.html = marked(this.props.body);
     this.toc = toc;
@@ -111,7 +116,8 @@ class MarkdownRender extends Component<Props, State> {
     setTimeout(this.checkHeight, 500);
   };
 
-  renderMarkdown = throttle(() => {
+  renderMarkdown = () => {
+    const start = new Date();
     const toc = [];
     marked.setOptions({
       renderer: createRenderer(toc),
@@ -123,34 +129,42 @@ class MarkdownRender extends Component<Props, State> {
       smartLists: true,
       smartypants: false,
       xhtml: false,
+      highlight(code, lang: string) {
+        return Prism.highlight(code, Prism.languages[lang] || Prism.languages.markup, lang);
+      },
     });
     const rendered = marked(this.props.body);
     if (this.props.onSetToc) {
       this.props.onSetToc(toc);
     }
-    this.setState({
-      html: rendered,
-    });
+
     this.toc = toc;
-  }, 300);
+    if (this.htmlDiv) {
+      // morphdom(this.htmlDiv, `<div>${rendered}</div>`);
+      this.htmlDiv.innerHTML = rendered;
+    }
+    const last = new Date();
+    const diff = last.getTime() - start.getTime();
+
+    this.debouncedRender = debounce(this.renderMarkdown, diff * 1.5);
+  };
+
+  debouncedRender = () => {
+    this.renderMarkdown();
+  };
 
   componentDidMount() {
     if (this.state.html !== '') {
-      this.renderPrism();
       this.updatePositions();
       this.checkHeight();
     }
-    this.renderMarkdown();
+    this.debouncedRender();
     this.registerEvent();
+    window.htmlDiv = this.htmlDiv;
   }
 
   componentWillUnmount() {
     this.unregisterEvent();
-  }
-
-  renderPrism() {
-    if (!Prism) return;
-    Prism.highlightAll();
   }
 
   onScroll = () => {
@@ -195,10 +209,9 @@ class MarkdownRender extends Component<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevProps.body !== this.props.body) {
-      this.renderMarkdown();
+      this.debouncedRender();
     }
     if (prevState.html !== this.state.html) {
-      this.renderPrism();
       this.updatePositions();
     }
   }
@@ -210,12 +223,18 @@ class MarkdownRender extends Component<Props, State> {
     return (
       <div
         className={cx('MarkdownRender', theme || 'github')}
-        dangerouslySetInnerHTML={markup}
         id="markdown-render"
         ref={(ref) => {
           this.el = ref;
         }}
-      />
+      >
+        <div
+          ref={(ref) => {
+            this.htmlDiv = ref;
+          }}
+          dangerouslySetInnerHTML={markup}
+        />
+      </div>
     );
   }
 }

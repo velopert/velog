@@ -94,7 +94,7 @@ class CodeEditor extends Component<Props, State> {
     const { top, clientHeight, height } = scrollInfo;
 
     // scroll to bottom
-    if (height - clientHeight - top < 2) {
+    if (height - clientHeight - top < 50) {
       (preview: any).scroll({
         behavior: 'smooth',
         top: preview.scrollHeight,

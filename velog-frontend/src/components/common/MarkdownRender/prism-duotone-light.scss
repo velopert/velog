@@ -22,6 +22,7 @@ pre[class*="language-"] {
   background: #faf8f5;
   color: #728fcb;
 }
+
 pre[class*="language-"]::-moz-selection,
 pre[class*="language-"] ::-moz-selection,
 code[class*="language-"]::-moz-selection,
@@ -29,6 +30,7 @@ code[class*="language-"] ::-moz-selection {
   text-shadow: none;
   background: #faf8f5;
 }
+
 pre[class*="language-"]::selection,
 pre[class*="language-"] ::selection,
 code[class*="language-"]::selection,
@@ -37,15 +39,17 @@ code[class*="language-"] ::selection {
   background: #faf8f5;
 }
 
-// /* Code blocks */
+pre {
+  background: #faf8f5;
+  color: #728fcb;
+}
 
+// /* Code blocks */
 // pre[class*="language-"] {
 //   overflow: auto;
 //   border: 1px solid #ebebeb;
 // }
-
 // /* Inline code */
-
 // :not(pre) > code[class*="language-"] {
 //   border-radius: 0.3em;
 // }
@@ -137,7 +141,7 @@ code.language-scss,
   cursor: help;
 }
 
-pre > code.highlight {
+pre>code.highlight {
   outline: 0.4em solid #896724;
   outline-offset: 0.4em;
 }
@@ -150,7 +154,7 @@ pre > code.highlight {
   border-right-color: #ece8de;
 }
 
-.line-numbers-rows > span:before {
+.line-numbers-rows>span:before {
   color: #cdc4b1;
 }
 
@@ -160,14 +164,6 @@ pre > code.highlight {
 
 .line-highlight {
   background: rgba(45, 32, 6, 0.2);
-  background: -webkit-linear-gradient(
-    left,
-    rgba(45, 32, 6, 0.2) 70%,
-    rgba(45, 32, 6, 0)
-  );
-  background: linear-gradient(
-    to right,
-    rgba(45, 32, 6, 0.2) 70%,
-    rgba(45, 32, 6, 0)
-  );
+  background: -webkit-linear-gradient( left, rgba(45, 32, 6, 0.2) 70%, rgba(45, 32, 6, 0));
+  background: linear-gradient( to right, rgba(45, 32, 6, 0.2) 70%, rgba(45, 32, 6, 0));
 }

@@ -8,8 +8,7 @@
 code[class*="language-"],
 pre[class*="language-"] {
   color: #f8f8f2;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
-  // direction: ltr;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3); // direction: ltr;
   // text-align: left;
   // white-space: pre;
   // word-spacing: normal;
@@ -24,14 +23,22 @@ pre[class*="language-"] {
   // -ms-hyphens: none;
   // hyphens: none;
 }
+
 // pre[class*="language-"] {
 //   overflow: auto;
 //   border-radius: 0.3em;
 // }
-:not(pre)>code[class*="language-"],
+:not(pre) > code[class*="language-"],
 pre[class*="language-"] {
   background: #272822;
 }
+
+pre {
+  color: #f8f8f2;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3); // direction: ltr;
+  background: #272822;
+}
+
 // :not(pre)>code[class*="language-"] {
 //   border-radius: .3em;
 // }

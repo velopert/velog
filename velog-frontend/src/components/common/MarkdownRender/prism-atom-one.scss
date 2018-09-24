@@ -4,11 +4,10 @@
  * @author Lea Verou
  */
 
-code[class*="language-"],
-pre[class*="language-"] {
+code[class*="lang-"],
+pre[class*="lang-"] {
   color: #abb2bf;
-  background: none;
-  // text-align: left;
+  background: none; // text-align: left;
   // white-space: pre;
   // word-spacing: normal;
   // word-break: normal;
@@ -22,52 +21,51 @@ pre[class*="language-"] {
   // hyphens: none;
 }
 
-pre[class*="language-"]::-moz-selection,
-pre[class*="language-"] ::-moz-selection,
-code[class*="language-"]::-moz-selection,
-code[class*="language-"] ::-moz-selection {
+pre[class*="lang-"]::-moz-selection,
+pre[class*="lang-"] ::-moz-selection,
+code[class*="lang-"]::-moz-selection,
+code[class*="lang-"] ::-moz-selection {
   text-shadow: none;
   background: #383e49;
 }
 
-pre[class*="language-"]::selection,
-pre[class*="language-"] ::selection,
-code[class*="language-"]::selection,
-code[class*="language-"] ::selection {
+pre[class*="lang-"]::selection,
+pre[class*="lang-"] ::selection,
+code[class*="lang-"]::selection,
+code[class*="lang-"] ::selection {
   text-shadow: none;
   background: #9aa2b1;
 }
 
 // @media print {
-//   code[class*="language-"],
-//   pre[class*="language-"] {
+//   code[class*="lang-"],
+//   pre[class*="lang-"] {
 //     text-shadow: none;
 //   }
 // }
-
 // /* Code blocks */
-
-// pre[class*="language-"] {
+// pre[class*="lang-"] {
 //   overflow: auto;
 // }
-
-// pre[class*="language-"] {
+// pre[class*="lang-"] {
 //   overflow: auto;
 // }
+:not(pre)>code[class*="lang-"],
+pre[class*="lang-"] {
+  background: #282c34;
+}
 
-:not(pre) > code[class*="language-"],
-pre[class*="language-"] {
+pre {
+  color: #abb2bf;
   background: #282c34;
 }
 
 // /* Inline code */
-
-// :not(pre)>code[class*="language-"] {
+// :not(pre)>code[class*="lang-"] {
 //   padding: 0.1em;
 //   border-radius: 0.3em;
 //   white-space: normal;
 // }
-
 .token.comment,
 .token.prolog,
 .token.doctype,
@@ -105,7 +103,7 @@ pre[class*="language-"] {
 .token.operator,
 .token.entity,
 .token.url,
-.language-css .token.string,
+.lang-css .token.string,
 .style .token.string {
   color: #56b6c2;
 }
@@ -144,7 +142,7 @@ pre.line-numbers {
   counter-reset: linenumber;
 }
 
-pre.line-numbers > code {
+pre.line-numbers>code {
   position: relative;
 }
 
@@ -163,13 +161,13 @@ pre.line-numbers > code {
   user-select: none;
 }
 
-.line-numbers-rows > span {
+.line-numbers-rows>span {
   pointer-events: none;
   display: block;
   counter-increment: linenumber;
 }
 
-.line-numbers-rows > span:before {
+.line-numbers-rows>span:before {
   content: counter(linenumber);
   color: #5c6370;
   display: block;

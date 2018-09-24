@@ -37,6 +37,7 @@ module.exports = {
     'no-mixed-operators': 0,
     'react/no-did-update-set-state': 0,
     camelcase: 0,
+    'import/extensions': 0,
   },
   overrides: {
     files: ['src/*.js'],

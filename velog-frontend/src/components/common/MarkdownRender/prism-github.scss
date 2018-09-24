@@ -19,8 +19,7 @@ $code-colors: (
 code,
 code[class*="language-"],
 pre[class*="language-"] {
-  color: map-get($code-colors, black);
-  // text-align: left;
+  color: map-get($code-colors, black); // text-align: left;
   // white-space: pre;
   // word-spacing: normal;
   // tab-size: 4;
@@ -29,6 +28,7 @@ pre[class*="language-"] {
   // direction: ltr;
   // cursor: text;
 }
+
 // // code blocks
 // pre[class*="language-"] {
 //   overflow: auto;
@@ -55,6 +55,10 @@ pre[class*="language-"] {
 //   border-radius: 0.3em;
 // }
 // token colors
+pre {
+  color: map-get($code-colors, black);
+}
+
 .token {
   &.comment,
   &.prolog,
