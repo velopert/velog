@@ -132,7 +132,7 @@ class MarkdownRender extends Component<Props, State> {
       html: rendered,
     });
     this.toc = toc;
-  }, 250);
+  }, 300);
 
   componentDidMount() {
     if (this.state.html !== '') {

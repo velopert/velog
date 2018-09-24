@@ -5,55 +5,55 @@
  */
 
 // color vars
-$code-colors: ( blue: #183691, teal: #0086b3, black: #333, purple: #a71d5d, maroon: #a71d5d, green: #63a35c, light-gray: #f7f7f7, dark-gray: #969896);
-// base
+$code-colors: (
+  blue: #183691,
+  teal: #0086b3,
+  black: #333,
+  purple: #a71d5d,
+  maroon: #a71d5d,
+  green: #63a35c,
+  light-gray: #f7f7f7,
+  dark-gray: #969896
+);
+// // base
 code,
 code[class*="language-"],
 pre[class*="language-"] {
   color: map-get($code-colors, black);
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  tab-size: 4;
-  hyphens: none;
-  line-height: 1.4;
-  direction: ltr;
-  cursor: text;
+  // text-align: left;
+  // white-space: pre;
+  // word-spacing: normal;
+  // tab-size: 4;
+  // hyphens: none;
+  // line-height: 1.4;
+  // direction: ltr;
+  // cursor: text;
 }
-
-// code blocks
-pre[class*="language-"] {
-  overflow: auto;
-  margin: 1em 0;
-  padding: 1.2em;
-  border-radius: 3px;
-  border: 1px solid $oc-gray-3;
-}
-
-p code,
-li code,
-table code {
-  margin: 0;
-  border-radius: 3px;
-  padding: 0.2em 0;
-  font-size: 85%;
-  &:before,
-  &:after {
-    letter-spacing: -0.2em;
-    content: "\00a0";
-  }
-}
-
-code,
-:not(pre)>code[class*="language-"],
-pre[class*="language-"] {}
-
-// inline code
-:not(pre)>code[class*="language-"] {
-  padding: 0.1em;
-  border-radius: 0.3em;
-}
-
+// // code blocks
+// pre[class*="language-"] {
+//   overflow: auto;
+//   border-radius: 3px;
+//   border: 1px solid $oc-gray-3;
+// }
+// p code,
+// li code,
+// table code {
+//   border-radius: 3px;
+//   &:before,
+//   &:after {
+//     letter-spacing: -0.2em;
+//     content: "\00a0";
+//   }
+// }
+// code,
+// :not(pre) > code[class*="language-"],
+// pre[class*="language-"] {
+// }
+// // inline code
+// :not(pre) > code[class*="language-"] {
+//   padding: 0.1em;
+//   border-radius: 0.3em;
+// }
 // token colors
 .token {
   &.comment,

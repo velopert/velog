@@ -9,39 +9,32 @@ code[class*="language-"],
 pre[class*="language-"] {
   color: #f8f8f2;
   text-shadow: 0 1px rgba(0, 0, 0, 0.3);
-  direction: ltr;
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  word-wrap: normal;
-  line-height: 1.5;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
+  // direction: ltr;
+  // text-align: left;
+  // white-space: pre;
+  // word-spacing: normal;
+  // word-break: normal;
+  // word-wrap: normal;
+  // line-height: 1.5;
+  // -moz-tab-size: 4;
+  // -o-tab-size: 4;
+  // tab-size: 4;
+  // -webkit-hyphens: none;
+  // -moz-hyphens: none;
+  // -ms-hyphens: none;
+  // hyphens: none;
 }
-
-pre[class*="language-"] {
-  padding: 1em;
-  margin: .5em 0;
-  overflow: auto;
-  border-radius: 0.3em;
-}
-
+// pre[class*="language-"] {
+//   overflow: auto;
+//   border-radius: 0.3em;
+// }
 :not(pre)>code[class*="language-"],
 pre[class*="language-"] {
   background: #272822;
 }
-
-:not(pre)>code[class*="language-"] {
-  padding: .1em;
-  border-radius: .3em;
-}
-
+// :not(pre)>code[class*="language-"] {
+//   border-radius: .3em;
+// }
 .token.comment,
 .token.prolog,
 .token.doctype,
@@ -50,11 +43,11 @@ pre[class*="language-"] {
 }
 
 .token.punctuation {
-  color: #F8F8F2;
+  color: #f8f8f2;
 }
 
 .namespace {
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .token.property,
@@ -62,12 +55,12 @@ pre[class*="language-"] {
 .token.constant,
 .token.symbol,
 .token.deleted {
-  color: #F92672;
+  color: #f92672;
 }
 
 .token.boolean,
 .token.number {
-  color: #AE81FF;
+  color: #ae81ff;
 }
 
 .token.selector,
@@ -76,7 +69,7 @@ pre[class*="language-"] {
 .token.char,
 .token.builtin,
 .token.inserted {
-  color: #A6E22E;
+  color: #a6e22e;
 }
 
 .token.operator,
@@ -85,22 +78,22 @@ pre[class*="language-"] {
 .language-css .token.string,
 .style .token.string,
 .token.variable {
-  color: #F8F8F2;
+  color: #f8f8f2;
 }
 
 .token.atrule,
 .token.attr-value,
 .token.function {
-  color: #E6DB74;
+  color: #e6db74;
 }
 
 .token.keyword {
-  color: #F92672;
+  color: #f92672;
 }
 
 .token.regex,
 .token.important {
-  color: #FD971F;
+  color: #fd971f;
 }
 
 .token.important,

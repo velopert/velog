@@ -1,8 +1,8 @@
 @import "utils";
 .MarkdownRender {
-  // text-align: justify;
-  font-size: 1.3125rem;
-  word-break: keep-all;
+  text-align: start;
+  font-size: 1.125rem;
+  word-break: break-all;
   word-wrap: break-word;
   @include common-font();
   color: $oc-gray-8;
@@ -16,7 +16,7 @@
   p {
     line-height: 1.5;
     font-weight: 400;
-    color: $oc-gray-8;
+    color: $oc-gray-7;
   }
   strong,
   b {
@@ -31,6 +31,7 @@
   h4,
   h5,
   h6 {
+    color: $oc-gray-9;
     font-weight: 700;
     margin-top: 2em;
     margin-bottom: 1em;
@@ -91,7 +92,8 @@
     code {
       font-family: "Inconsolata", "D2 Coding", Consolas, Monaco, "Andale Mono",
         "Ubuntu Mono", monospace;
-      font-size: 0.81em;
+      font-size: 0.9em;
+      line-height: 1.5;
     }
   }
   ul,
@@ -223,9 +225,6 @@
     margin-top: 3em;
     margin-bottom: 3em;
     pointer-events: none;
-  }
-  pre[class*="language-"] {
-    font-size: 1.125em;
   }
   blockquote {
     padding-top: 1rem;

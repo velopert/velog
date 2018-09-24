@@ -8,19 +8,18 @@ code[class*="language-"],
 pre[class*="language-"] {
   color: #abb2bf;
   background: none;
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  word-wrap: normal;
-  line-height: 1.5;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
+  // text-align: left;
+  // white-space: pre;
+  // word-spacing: normal;
+  // word-break: normal;
+  // word-wrap: normal;
+  // -moz-tab-size: 4;
+  // -o-tab-size: 4;
+  // tab-size: 4;
+  // -webkit-hyphens: none;
+  // -moz-hyphens: none;
+  // -ms-hyphens: none;
+  // hyphens: none;
 }
 
 pre[class*="language-"]::-moz-selection,
@@ -39,40 +38,35 @@ code[class*="language-"] ::selection {
   background: #9aa2b1;
 }
 
-@media print {
-  code[class*="language-"],
-  pre[class*="language-"] {
-    text-shadow: none;
-  }
-}
+// @media print {
+//   code[class*="language-"],
+//   pre[class*="language-"] {
+//     text-shadow: none;
+//   }
+// }
 
-/* Code blocks */
+// /* Code blocks */
 
-pre[class*="language-"] {
-  padding: 1em;
-  margin: 0.5em 0;
-  overflow: auto;
-}
+// pre[class*="language-"] {
+//   overflow: auto;
+// }
 
-pre[class*="language-"] {
-  padding: 1em;
-  // padding-top: 2em;
-  // padding-bottom: 2em;
-  overflow: auto;
-}
+// pre[class*="language-"] {
+//   overflow: auto;
+// }
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
   background: #282c34;
 }
 
-/* Inline code */
+// /* Inline code */
 
-:not(pre) > code[class*="language-"] {
-  padding: 0.1em;
-  border-radius: 0.3em;
-  white-space: normal;
-}
+// :not(pre)>code[class*="language-"] {
+//   padding: 0.1em;
+//   border-radius: 0.3em;
+//   white-space: normal;
+// }
 
 .token.comment,
 .token.prolog,
