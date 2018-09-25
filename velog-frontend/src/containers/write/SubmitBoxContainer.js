@@ -28,6 +28,7 @@ type Props = {
   additional: boolean,
   meta: Meta,
   username: ?string,
+  urlSlug: ?string,
 };
 
 class SubmitBoxContainer extends Component<Props> {
@@ -143,8 +144,7 @@ class SubmitBoxContainer extends Component<Props> {
     WriteActions.closeSubmitBox();
   };
   onSubmit = async () => {
-    const { categories, tags, body, title, postData, thumbnail, meta } = this.props;
-
+    const { categories, tags, body, title, postData, thumbnail, meta, urlSlug } = this.props;
     try {
       if (postData) {
         // update if the post alreadyy exists
@@ -157,6 +157,7 @@ class SubmitBoxContainer extends Component<Props> {
           is_temp: false,
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
           meta,
+          url_slug: urlSlug,
         });
       } else {
         await WriteActions.writePost({
@@ -168,6 +169,7 @@ class SubmitBoxContainer extends Component<Props> {
           isTemp: false,
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
           meta,
+          urlSlug: urlSlug || escapeForUrl(title),
         });
       }
     } catch (e) {
@@ -176,7 +178,7 @@ class SubmitBoxContainer extends Component<Props> {
   };
 
   onTempSave = async () => {
-    const { postData, title, body, tags, categories, thumbnail } = this.props;
+    const { postData, title, body, tags, categories, thumbnail, urlSlug } = this.props;
 
     const activeCategories = (() => {
       if (!categories || categories.length === 0) return [];
@@ -204,6 +206,7 @@ class SubmitBoxContainer extends Component<Props> {
           is_temp: postData.is_temp,
           thumbnail,
           categories: activeCategories,
+          url_slug: urlSlug,
         });
       }
       if (this.props.postData) {
@@ -226,6 +229,9 @@ class SubmitBoxContainer extends Component<Props> {
   };
   onChangeCodeTheme = (e: SyntheticInputEvent<HTMLSelectElement>) => {
     WriteActions.setMetaValue({ name: 'code_theme', value: e.target.value });
+  };
+  onChangeUrlSlug = (e: SyntheticInputEvent<HTMLSelectElement>) => {
+    WriteActions.changeUrlSlug(e.target.value);
   };
   onConfirmAdditionalConfig = () => {
     WriteActions.toggleAdditionalConfig();
@@ -260,6 +266,7 @@ class SubmitBoxContainer extends Component<Props> {
       additional,
       meta,
       username,
+      urlSlug,
     } = this.props;
 
     const postLink = username && postData && `/@${username}/${postData.url_slug}`;
@@ -288,9 +295,11 @@ class SubmitBoxContainer extends Component<Props> {
             <SubmitBoxAdditional
               body={body}
               meta={meta}
+              urlSlug={urlSlug}
               realMeta={postData && postData.meta}
               onChangeCodeTheme={onChangeCodeTheme}
               onChangeShortDescription={onChangeShortDescription}
+              onChangeUrlSlug={this.onChangeUrlSlug}
               onCancel={onCancelAdditionalConfig}
               onConfirm={onConfirmAdditionalConfig}
             />
@@ -316,6 +325,7 @@ export default connect(
     additional: write.submitBox.additional,
     meta: write.meta,
     username: user.user && user.user.username,
+    urlSlug: write.submitBox.url_slug,
   }),
   () => ({}),
 )(SubmitBoxContainer);

@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .SubmitBoxAdditional {
   textarea {
     resize: none;
@@ -21,5 +21,27 @@
   }
   .select-theme {
     width: 100%;
+  }
+  .url {
+    border-radius: 4px;
+    background: white;
+    display: flex;
+    overflow: hidden;
+    .base {
+      color: $oc-gray-6;
+      padding: 0.5rem;
+      padding-right: 0;
+      font-size: 0.75rem;
+    }
+    input {
+      font-size: 0.75rem;
+      color: $oc-gray-9;
+      border: none;
+      outline: none;
+      min-width: 0px;
+      display: block;
+      flex: 1;
+      font-weight: 600;
+    }
   }
 }

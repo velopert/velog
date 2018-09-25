@@ -11,8 +11,10 @@ type Props = {
   realMeta: ?Meta,
   meta: Meta,
   body: string,
+  urlSlug: ?string,
   onChangeShortDescription(e: SyntheticInputEvent<HTMLInputElement>): void,
   onChangeCodeTheme(e: SyntheticInputEvent<HTMLSelectElement>): void,
+  onChangeUrlSlug(e: SyntheticInputEvent<HTMLSelectElement>): void,
   onCancel(): void,
   onConfirm(): void,
 };
@@ -44,8 +46,10 @@ const SubmitBoxAdditional = ({
   realMeta,
   meta,
   body,
+  urlSlug,
   onChangeShortDescription,
   onChangeCodeTheme,
+  onChangeUrlSlug,
   onCancel,
   onConfirm,
 }: Props) => (
@@ -71,6 +75,13 @@ const SubmitBoxAdditional = ({
           value={meta.code_theme || 'github'}
           onChange={onChangeCodeTheme}
         />
+      </section>
+      <section>
+        <div className="section-title">URL</div>
+        <div className="url">
+          <div className="base">/@velopert/</div>
+          <input value={urlSlug} onChange={onChangeUrlSlug} />
+        </div>
       </section>
     </div>
     <div className="buttons">

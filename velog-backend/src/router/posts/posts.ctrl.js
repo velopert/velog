@@ -171,9 +171,24 @@ export const writePost = async (ctx: Context): Promise<*> => {
     urlSlug,
   }: BodySchema = (ctx.request.body: any);
 
-  const generatedUrlSlug = `${title} ${generateSlugId()}`;
-  const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
-  const replaceDashToSpace = text => text.replace(/-/g, ' ');
+  const uniqueUrlSlug = escapeForUrl(`${title} ${generateSlugId()}`);
+  const userUserSlug = urlSlug ? escapeForUrl(urlSlug) : '';
+
+  let processedSlug = urlSlug ? userUserSlug : uniqueUrlSlug;
+  if (urlSlug) {
+    try {
+      const exists = await Post.checkUrlSlugExistancy({
+        userId: ctx.user.id,
+        urlSlug,
+      });
+      console.log(exists);
+      if (exists > 0) {
+        processedSlug = uniqueUrlSlug;
+      }
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+  }
   // TODO: validate url slug
 
   const uniqueTags: Array<string> = filterUnique(tags); // .map(replaceDashToSpace);
@@ -204,7 +219,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
       is_markdown: isMarkdown,
       is_temp: isTemp,
       fk_user_id: ctx.user.id,
-      url_slug: escapedUrlSlug,
+      url_slug: processedSlug,
       meta,
     }).save();
 

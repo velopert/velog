@@ -113,33 +113,29 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     }
   }
 
-  const generatedUrlSlug = `${title} ${generateSlugId()}`;
-  const escapedUrlSlug = escapeForUrl(urlSlug || generatedUrlSlug);
+  const generatedUrlSlug = escapeForUrl(`${title} ${generateSlugId()}`);
+  const userUrlSlug = escapeForUrl(urlSlug);
 
   const { id } = ctx.params;
 
   // TODO: urlSlug change feature
-  const urlSlugShouldChange = false; // urlSlug !== ctx.post.url_slug || (title && ctx.post.title !== title);
-
+  const urlSlugShouldChange = urlSlug !== ctx.post.url_slug;
+  let processedSlug = urlSlug ? userUrlSlug : generatedUrlSlug;
   // current !== received -> check urlSlugExistancy
   if (urlSlugShouldChange) {
     const exists = await Post.checkUrlSlugExistancy({
       userId: ctx.user.id,
-      urlSlug: escapedUrlSlug,
+      urlSlug: userUrlSlug,
     });
-    if (exists > 1) {
-      ctx.body = {
-        name: 'URL_SLUG_EXISTS',
-      };
-      ctx.status = 409;
-      return;
+    if (exists > 0) {
+      processedSlug = generatedUrlSlug;
     }
   }
 
   const updateQuery = {
     title,
     body,
-    // url_slug: urlSlugShouldChange && escapedUrlSlug,
+    url_slug: urlSlugShouldChange ? processedSlug : undefined,
     thumbnail,
     is_temp: isTemp,
     meta,

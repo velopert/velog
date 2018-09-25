@@ -24,6 +24,7 @@ type Props = {
   changed: boolean,
   uploadUrl: ?string,
   imagePath: ?string,
+  urlSlug: ?string,
 } & ContextRouter;
 
 class WriteHeaderContainer extends Component<Props> {
@@ -144,7 +145,7 @@ class WriteHeaderContainer extends Component<Props> {
   };
 
   onTempSave = async () => {
-    const { postData, title, body, tags, categories, thumbnail } = this.props;
+    const { postData, title, body, tags, categories, thumbnail, urlSlug } = this.props;
 
     const activeCategories = (() => {
       if (!categories || categories.length === 0) return [];
@@ -161,6 +162,7 @@ class WriteHeaderContainer extends Component<Props> {
           isTemp: true,
           thumbnail,
           categories: activeCategories,
+          urlSlug: urlSlug || escapeForUrl(title),
         });
       }
       if (postData && postData.is_temp) {
@@ -172,6 +174,7 @@ class WriteHeaderContainer extends Component<Props> {
           is_temp: postData.is_temp,
           thumbnail,
           categories: activeCategories,
+          url_slug: urlSlug,
         });
       }
       if (this.props.postData) {
@@ -239,6 +242,7 @@ export default compose(
       changed: write.changed,
       uploadUrl: write.upload.uploadUrl,
       imagePath: write.upload.imagePath,
+      urlSlug: write.submitBox.url_slug,
     }),
     () => ({}),
   ),

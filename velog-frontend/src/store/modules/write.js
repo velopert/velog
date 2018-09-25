@@ -6,7 +6,7 @@ import * as PostsAPI from 'lib/api/posts';
 import * as SavesAPI from 'lib/api/posts/saves';
 import format from 'date-fns/format';
 
-import { applyPenders, convertToPlainText, type GenericResponseAction } from 'lib/common';
+import { applyPenders, convertToPlainText, escapeForUrl, type GenericResponseAction } from 'lib/common';
 
 /* ACTION TYPE */
 const EDIT_FIELD = 'write/EDIT_FIELD';
@@ -29,6 +29,7 @@ const DELETE_CATEGORY = 'write/DELETE_CATERGORY';
 const UPDATE_CATEGORY = 'write/UPDATE_CATEGORY';
 const REORDER_CATEGORY = 'write/REORDER_CATEGORY';
 const REORDER_CATEGORIES = 'write/REORDER_CATEGORIES';
+const CHANGE_URL_SLUG = 'write/CHANGE_URL_SLUG';
 const UPDATE_POST = 'write/UPDATE_POST';
 const RESET = 'write/RESET';
 const TEMP_SAVE = 'write/TEMP_SAVE';
@@ -81,6 +82,7 @@ export interface WriteActionCreators {
   updateCategory(payload: MeAPI.UpdateCategoryPayload): any;
   reorderCategory(payload: ReorderCategoryPayload): any;
   reorderCategories(categoryOrders: MeAPI.ReorderCategoryPayload): any;
+  changeUrlSlug(payload: string): any;
   updatePost(payload: PostsAPI.UpdatePostPayload): any;
   reset(): any;
   tempSave(payload: PostsAPI.TempSavePayload): any;
@@ -126,6 +128,7 @@ export const actionCreators = {
   updateCategory: createAction(UPDATE_CATEGORY, MeAPI.updateCategory),
   reorderCategory: createAction(REORDER_CATEGORY),
   reorderCategories: createAction(REORDER_CATEGORIES, MeAPI.reorderCategories),
+  changeUrlSlug: createAction(CHANGE_URL_SLUG, urlSlug => urlSlug),
   updatePost: createAction(UPDATE_POST, PostsAPI.updatePost),
   reset: createAction(RESET),
   tempSave: createAction(TEMP_SAVE, PostsAPI.tempSave),
@@ -180,6 +183,7 @@ export type SubmitBox = {
   tags: string[],
   categories: ?Categories,
   additional: boolean,
+  url_slug: ?string,
 };
 export type CategoryModal = {
   open: boolean,
@@ -253,7 +257,7 @@ type SetMetaValueAction = ActionType<typeof actionCreators.setMetaValue>;
 type ListTempSavesResponseAction = GenericResponseAction<BriefTempSaveInfo[], null>;
 type LoadTempSaveResponseAction = GenericResponseAction<TempSaveData, null>;
 type GetPostByIdResponseAction = GenericResponseAction<PostData, null>;
-
+type ChangeUrlSlugAction = ActionType<typeof actionCreators.changeUrlSlug>;
 
 const initialState: Write = {
   body: '',
@@ -268,6 +272,7 @@ const initialState: Write = {
     categories: null,
     tags: [],
     additional: false,
+    url_slug: null,
   },
   postData: null,
   categoryModal: {
@@ -458,10 +463,14 @@ const reducer = handleActions(
         if (!state.submitBox.additional) {
           // put default values
           if (state.postData) {
-            draft.meta = state.postData.meta;
+            draft.meta = { ...state.postData.meta };
           }
           if (!draft.meta.short_description) {
             draft.meta.short_description = convertToPlainText(state.body);
+          }
+          if (!draft.submitBox.url_slug) {
+            draft.submitBox.url_slug = (state.postData && state.postData.url_slug)
+              || escapeForUrl(state.title);
           }
         }
         draft.submitBox.additional = !state.submitBox.additional;
@@ -477,6 +486,11 @@ const reducer = handleActions(
         ...state,
         meta: initialState.meta,
       };
+    },
+    [CHANGE_URL_SLUG]: (state, { payload }: ChangeUrlSlugAction) => {
+      return produce(state, (draft) => {
+        draft.submitBox.url_slug = payload;
+      });
     },
   },
   initialState,
@@ -522,6 +536,7 @@ export default applyPenders(reducer, [
       return produce(state, (draft) => {
         draft.changed = false;
         draft.postData = data;
+        draft.submitBox.url_slug = data.url_slug;
       });
     },
   },
@@ -543,6 +558,7 @@ export default applyPenders(reducer, [
       return produce(state, (draft) => {
         draft.changed = false;
         draft.postData = data;
+        draft.submitBox.url_slug = data.url_slug;
       });
     },
   },
@@ -591,6 +607,7 @@ export default applyPenders(reducer, [
         draft.changed = false;
         draft.postData = payload.data;
         draft.submitBox.tags = payload.data.tags;
+        draft.submitBox.url_slug = payload.data.url_slug;
         draft.body = payload.data.body;
         draft.title = payload.data.title;
         draft.thumbnail = payload.data.thumbnail;
