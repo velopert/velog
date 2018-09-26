@@ -14,7 +14,7 @@
     }
   }
   p {
-    line-height: 1.5;
+    line-height: 2;
     font-weight: 400;
     color: $oc-gray-7;
   }
@@ -62,15 +62,16 @@
   h6,
   p {
     code {
-      font-size: 1.25em;
-      padding-left: 0.25em;
-      padding-right: 0.25em;
+      padding-left: 0.3em;
+      padding-right: 0.3em;
       padding-top: 0.1em;
       padding-bottom: 0.1em;
       border-radius: 3px;
       background: $oc-gray-1;
       border: 1px solid $oc-gray-4;
       color: $oc-gray-6;
+      margin-left: 0.3em;
+      margin-right: 0.3em;
     }
   }
   p,
@@ -100,10 +101,14 @@
     font-weight: 400;
     margin-top: 1em;
     margin-bottom: 1em;
+    color: $oc-gray-7;
   }
   ul {
     padding-left: 30px;
     line-height: 1.25em;
+  }
+  li+li {
+    margin-top: 0.75em;
   }
   ol {
     line-height: 1.75em;
