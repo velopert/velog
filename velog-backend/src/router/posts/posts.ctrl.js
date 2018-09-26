@@ -39,6 +39,7 @@ import {
   getTrendingPosts,
 } from 'database/rawQuery/trending';
 import redisClient from 'lib/redisClient';
+import UrlSlugHistory from 'database/models/UrlSlugHistory';
 
 const { Op } = Sequelize;
 
@@ -260,11 +261,31 @@ export const writePost = async (ctx: Context): Promise<*> => {
 export const readPost = async (ctx: Context): Promise<*> => {
   const { username, urlSlug } = ctx.params;
   try {
-    const post = await Post.readPost(username, urlSlug);
+    let post = await Post.readPost(username, urlSlug);
     if (!post) {
-      ctx.status = 404;
-      return;
+      // try using urlslugHistory
+      const user = await User.findUser('username', username);
+      if (!user) {
+        ctx.status = 404;
+        return;
+      }
+      const history = await UrlSlugHistory.findOne({
+        where: {
+          url_slug: urlSlug,
+          fk_user_id: user.id,
+        },
+      });
+      if (!history) {
+        ctx.status = 404;
+        return;
+      }
+      post = await Post.readPostById(history.fk_post_id);
+      if (!post) {
+        ctx.status = 404;
+        return;
+      }
     }
+
     const commentsCount = await Comment.getCommentsCount(post.id);
 
     let liked = false;

@@ -18,6 +18,7 @@ import {
   Category,
 } from 'database/models';
 import redisClient from 'lib/redisClient';
+import UrlSlugHistory from 'database/models/UrlSlugHistory';
 
 export const checkPostExistancy = async (
   ctx: Context,
@@ -129,6 +130,18 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     });
     if (exists > 0) {
       processedSlug = generatedUrlSlug;
+    }
+    // create urlSlughistory
+    const history = UrlSlugHistory.build({
+      fk_post_id: ctx.post.id,
+      fk_user_id: ctx.user.id,
+      url_slug: ctx.post.url_slug,
+    });
+
+    try {
+      await history.save();
+    } catch (e) {
+      ctx.throw(500, e);
     }
   }
 

@@ -119,6 +119,7 @@ Post.readPostById = function (id) {
     include: [
       {
         model: User,
+        include: [UserProfile],
         attributes: ['username'],
       },
       Tag,
