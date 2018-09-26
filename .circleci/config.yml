@@ -47,7 +47,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: sudo pip install awscli
-      - run: aws s3 cp ./build s3://cdn.velog.io/
+      - run: aws s3 cp ./build s3://cdn.velog.io/ --recursive
       - run: aws cloudfront create-invalidation --distribution-id E1M9D68QZ0CD1F --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico
   deploy-ssr:
     docker:
