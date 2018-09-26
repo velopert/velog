@@ -1,4 +1,4 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 cd ../
-source <(sed -E -n 's/[^#]+/export &/ p' ./.env.productioen)
+source <(sed -E -n 's/[^#]+/export &/ p' ./.env.production)

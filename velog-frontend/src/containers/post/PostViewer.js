@@ -125,6 +125,7 @@ class PostViewer extends Component<Props> {
         <Helmet>
           <title>{post.title}</title>
           <meta name="description" content={convertToPlainText(post.body)} />
+          <link rel="canonical" href={`https://velog.io/@${post.user.username}/${post.url_slug}`} />
         </Helmet>
         <PostToc
           toc={toc}

@@ -6,7 +6,6 @@ import { check } from './rules';
 const manifest = require('../../asset-manifest.json');
 
 function buildHtml(rendered, state, helmet) {
-  
   const escaped = JSON.stringify(state).replace(/</g, '\\u003c');
 
   const html = `<!DOCTYPE html>
@@ -34,11 +33,15 @@ function buildHtml(rendered, state, helmet) {
   <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.velog.io/favicons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="https://cdn.velog.io/favicons/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.velog.io/favicons/favicon-16x16.png">
-  ${helmet ? `
+  ${
+    helmet
+      ? `
     ${helmet.title.toString()}
     ${helmet.meta.toString()}
     ${helmet.link.toString()}
-  ` : ''}
+  `
+      : ''
+  }
   <link href="${manifest['main.css']}" rel="stylesheet">
 </head>
 
@@ -47,9 +50,13 @@ function buildHtml(rendered, state, helmet) {
   <div id="root">
     ${rendered}
   </div>
-  ${state ? `<script>
+  ${
+    state
+      ? `<script>
     window.__REDUX_STATE__ = ${escaped}
-  </script>` : ''}
+  </script>`
+      : ''
+  }
   <script type="text/javascript" src="${manifest['main.js']}"></script>
 </body>
 
@@ -73,6 +80,19 @@ const ssr = async (ctx: Context) => {
       }
     }
     const { state, html, helmet, context } = await render(ctx);
+
+    const link = helmet && helmet.link.toComponent();
+    if (link && link.length > 0) {
+      for (let i = 0; i < link.length; i += 1) {
+        const { rel, href } = link[0].props;
+        if (rel !== 'canonical') continue;
+        const processedUrl = encodeURI(href.replace('https://velog.io', ''));
+        if (rel === 'canonical' && processedUrl !== ctx.url) {
+          ctx.redirect(processedUrl);
+          return;
+        }
+      }
+    }
     if (context.status) {
       ctx.status = context.status;
     }
@@ -81,7 +101,7 @@ const ssr = async (ctx: Context) => {
     if (token) return;
     const rule = check(ctx.path);
     if (rule) {
-      await redisClient.setCache(ctx.url, body, rule.maxAge); 
+      await redisClient.setCache(ctx.url, body, rule.maxAge);
       ctx.set('Cache-Status', `cached_now (${rule.maxAge})`);
     }
   } catch (e) {
@@ -92,6 +112,6 @@ const ssr = async (ctx: Context) => {
     }
     ctx.body = indexHtml;
   }
-}
+};
 
 export default ssr;
