@@ -230,7 +230,7 @@ class SubmitBoxContainer extends Component<Props> {
   onChangeCodeTheme = (e: SyntheticInputEvent<HTMLSelectElement>) => {
     WriteActions.setMetaValue({ name: 'code_theme', value: e.target.value });
   };
-  onChangeUrlSlug = (e: SyntheticInputEvent<HTMLSelectElement>) => {
+  onChangeUrlSlug = (e: SyntheticInputEvent<HTMLInputElement>) => {
     WriteActions.changeUrlSlug(e.target.value);
   };
   onConfirmAdditionalConfig = () => {
