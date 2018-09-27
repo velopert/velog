@@ -4,6 +4,7 @@ import { Home, Register, Write, Post, User, Saves, Settings, Policy, NotFound } 
 import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
 import { Helmet } from 'react-helmet';
+import Callback from './etc/Callback';
 
 const App = () => (
   <React.Fragment>
@@ -28,7 +29,7 @@ const App = () => (
       <Route path="/saves" component={Saves} />
       <Route path="/settings" component={Settings} />
       <Route path="/policy/:mode(policy|terms)?" component={Policy} />
-      <Route path="/callback" render={() => null} />
+      <Route path="/callback" component={Callback} />
       <Route component={NotFound} />
     </Switch>
     <Core />

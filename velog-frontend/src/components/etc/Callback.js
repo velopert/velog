@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
 
+function isFacebookApp() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
+}
+
 class Callback extends Component {
-  initialize = () => {
-    const { search } = this.props.location;
-    const { provider } = this.props.params;
-
-    const { code } = queryString(search);
-    window.opener.socialAuth = {
-      provider: 'github',
-      code: 'code',
-    };
-  }
-
   componentDidMount() {
-
+    if (isFacebookApp()) {
+      window.alert('죄송합니다. 페이스북 인앱 브라우저는 소셜로그인이 불가능합니다.');
+      window.href = 'https://velog.io/';
+    }
   }
 
   render() {
