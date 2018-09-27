@@ -25,6 +25,9 @@ if (process.env.APP_ENV !== 'server') {
   require('codemirror/mode/clike/clike');
 }
 
+function checkiOS(): boolean {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
 type Props = {
   body: string,
   onEditBody(value: string): any,
@@ -36,6 +39,7 @@ type Props = {
 
 type State = {
   cursor: any,
+  iOS: boolean,
 };
 
 class CodeEditor extends Component<Props, State> {
@@ -47,6 +51,7 @@ class CodeEditor extends Component<Props, State> {
   prevPreviewScrollTop: number;
   state = {
     cursor: null,
+    iOS: false,
   };
 
   insertText = () => {
@@ -144,6 +149,12 @@ class CodeEditor extends Component<Props, State> {
 
   initialize = () => {
     if (!CodeMirror) return;
+    if (checkiOS()) {
+      this.setState({
+        iOS: true,
+      });
+      return;
+    }
     const { onDragEnter, onDragLeave } = this.props;
     this.codeMirror = CodeMirror(this.editor, {
       mode: 'markdown',
@@ -203,6 +214,10 @@ class CodeEditor extends Component<Props, State> {
     }
   };
 
+  onTextareaChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    this.props.onEditBody(e.target.value);
+  };
+
   componentDidMount() {
     this.initialize();
   }
@@ -229,14 +244,23 @@ class CodeEditor extends Component<Props, State> {
   }
 
   render() {
+    const { iOS } = this.state;
     return (
       <div className="CodeEditor material">
-        <div
-          className="editor"
-          ref={(ref) => {
-            this.editor = ref;
-          }}
-        />
+        {iOS ? (
+          <textarea
+            className="ios-fallback"
+            value={this.props.body}
+            onChange={this.onTextareaChange}
+          />
+        ) : (
+          <div
+            className="editor"
+            ref={(ref) => {
+              this.editor = ref;
+            }}
+          />
+        )}
         {/* <textarea ref={(ref) => { this.textarea = ref; }} /> */}
       </div>
     );

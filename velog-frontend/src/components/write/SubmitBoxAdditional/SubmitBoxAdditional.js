@@ -14,7 +14,7 @@ type Props = {
   urlSlug: ?string,
   onChangeShortDescription(e: SyntheticInputEvent<HTMLInputElement>): void,
   onChangeCodeTheme(e: SyntheticInputEvent<HTMLSelectElement>): void,
-  onChangeUrlSlug(e: SyntheticInputEvent<HTMLSelectElement>): void,
+  onChangeUrlSlug(e: SyntheticInputEvent<HTMLInputElement>): void,
   onCancel(): void,
   onConfirm(): void,
 };

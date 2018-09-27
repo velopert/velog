@@ -8,6 +8,17 @@
   &.material {
     background: #263238;
   }
+  .ios-fallback {
+    flex: 1;
+    outline: none;
+    background: transparent;
+    padding: 0.75rem;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-family: "Inconsolata", "D2 Coding", sans-serif;
+  }
   .editor {
     min-width: 0;
     flex: 1;
@@ -29,9 +40,7 @@
       }
       flex: 1;
       height: auto; // font-family: 'D2 coding';
-      font-family: "Inconsolata",
-      "D2 Coding",
-      sans-serif;
+      font-family: "Inconsolata", "D2 Coding", sans-serif;
       font-size: 1.125rem;
       line-height: 1.5;
       @include media("<large") {
