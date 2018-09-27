@@ -25,6 +25,7 @@
     border: 1px solid $oc-gray-2;
     background: white;
     border-radius: 4px;
+    cursor: pointer;
     &.active {
       border: 1px solid $oc-violet-6;
       color: $oc-violet-6;

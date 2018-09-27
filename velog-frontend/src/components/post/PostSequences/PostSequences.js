@@ -3,6 +3,8 @@ import React from 'react';
 import type { PostSequence } from 'store/modules/posts';
 import { convertToPlainText, fromNow } from 'lib/common';
 import { Link } from 'react-router-dom';
+import FakeLink from 'components/common/FakeLink';
+
 import cx from 'classnames';
 
 import './PostSequences.scss';
@@ -21,14 +23,15 @@ type Props = {
 
 const PostSequenceItem = ({ sequence, username, active }: PostSequenceItemProps) => {
   const { title, body, meta, url_slug, created_at } = sequence;
+  const to = `/@${username}/${url_slug}`;
   return (
-    <div className={cx('PostSequenceItem', { active })}>
+    <FakeLink className={cx('PostSequenceItem', { active })} to={to}>
       <div className="date">{fromNow(created_at)}</div>
       <div className="title">
-        <Link to={`/@${username}/${url_slug}`}>{title}</Link>
+        <Link to={to}>{title}</Link>
       </div>
       <p>{(meta && meta.short_description) || body}</p>
-    </div>
+    </FakeLink>
   );
 };
 
