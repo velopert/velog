@@ -17,6 +17,9 @@ const UrlSlugHistory = db.define(
       {
         fields: ['url_slug'],
       },
+      {
+        fields: ['created_at'],
+      },
     ],
   },
 );

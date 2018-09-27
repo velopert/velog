@@ -274,6 +274,7 @@ export const readPost = async (ctx: Context): Promise<*> => {
           url_slug: urlSlug,
           fk_user_id: user.id,
         },
+        order: ['created_at', 'DESC'],
       });
       if (!history) {
         ctx.status = 404;
