@@ -118,14 +118,23 @@ class PostViewer extends Component<Props> {
   render() {
     const { post, toc, activeHeading, username, currentUsername, askRemove, logged } = this.props;
     const { onSetToc, onActivateHeading } = this;
+
     if (!post) return <PostPlaceholder />;
+    const plainTextBody = convertToPlainText(post.body);
 
     return (
       <Fragment>
         <Helmet>
           <title>{post.title}</title>
-          <meta name="description" content={convertToPlainText(post.body)} />
+          <meta name="description" content={plainTextBody} />
           <link rel="canonical" href={`https://velog.io/@${post.user.username}/${post.url_slug}`} />
+          <meta property="og:title" content={post.title} />
+          <meta property="og:description" content={plainTextBody} />
+          {post.thumbnail && <meta property="og:image" content={post.thumbnail} />}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={post.title} />
+          <meta name="twitter:description" content={plainTextBody} />
+          {post.thumbnail && <meta name="twitter:image" content={post.thumbnail} />}
         </Helmet>
         <PostToc
           toc={toc}
