@@ -74,6 +74,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
 
   const schema = Joi.object().keys({
     title: Joi.string()
+      .trim()
       .min(1)
       .max(120),
     body: Joi.string().min(1),
@@ -83,7 +84,10 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     is_temp: Joi.boolean(),
     categories: Joi.array().items(Joi.string()),
     tags: Joi.array().items(Joi.string()),
-    url_slug: Joi.string().max(130),
+    url_slug: Joi.string()
+      .trim()
+      .min(1)
+      .max(130),
     meta: Joi.object(),
   });
 

@@ -134,6 +134,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
   const schema = Joi.object().keys({
     title: Joi.string()
       .required()
+      .trim()
       .min(1)
       .max(120),
     body: Joi.string()
@@ -152,7 +153,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     tags: Joi.array()
       .items(Joi.string())
       .required(),
-    urlSlug: Joi.string().max(130),
+    urlSlug: Joi.string().trim().min(1).max(130),
   });
 
   if (!validateSchema(ctx, schema)) {
