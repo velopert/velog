@@ -219,7 +219,7 @@ class WriteHeaderContainer extends Component<Props> {
           onGoBack={this.onGoBack}
         />
         <Prompt
-          when={changed}
+          when={!!title && changed}
           message={() => '작성중이던 포스트가 있습니다. 정말로 나가시겠습니까?'}
         />
         {changed && <Blocker />}
