@@ -8,7 +8,7 @@ import WriteConfigureThumbnail from 'components/write/WriteConfigureThumbnail';
 import SubmitBoxAdditional from 'components/write/SubmitBoxAdditional/SubmitBoxAdditional';
 import { connect } from 'react-redux';
 import type { State } from 'store';
-import { WriteActions, UserActions } from 'store/actionCreators';
+import { WriteActions, UserActions, BaseActions } from 'store/actionCreators';
 import type { Categories, PostData, Meta } from 'store/modules/write';
 import axios from 'axios';
 import storage from 'lib/storage';
@@ -159,6 +159,10 @@ class SubmitBoxContainer extends Component<Props> {
           meta,
           url_slug: urlSlug,
         });
+        BaseActions.showToast({
+          type: 'success',
+          message: '포스트가 수정됐습니다.',
+        });
       } else {
         await WriteActions.writePost({
           title,
@@ -170,6 +174,10 @@ class SubmitBoxContainer extends Component<Props> {
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
           meta,
           urlSlug: urlSlug || escapeForUrl(title),
+        });
+        BaseActions.showToast({
+          type: 'success',
+          message: '포스트가 작성됐습니다.',
         });
       }
     } catch (e) {

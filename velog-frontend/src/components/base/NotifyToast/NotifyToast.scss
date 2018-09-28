@@ -1,0 +1,50 @@
+@import "utils";
+@keyframes notifyToastAppear {
+  0% {
+    transform: translateY(calc(100% + 1rem));
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes notifyToastDisappear {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(calc(100% + 1rem));
+  }
+}
+
+.NotifyToast {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  &.default {
+  }
+  &.success {
+    border-radius: 1.40625rem;
+    background: $oc-green-4;
+    color: white;
+    min-width: 200px;
+    padding: 0.75rem;
+    padding-left: 1rem;
+    display: flex;
+    justify-content: center;
+    padding-right: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.3125rem;
+    font-weight: 600;
+  }
+  &.error {
+  }
+  &.appear {
+    animation: notifyToastAppear 0.15s ease-in;
+    animation-fill-mode: forwards;
+  }
+  &.disappear {
+    animation: notifyToastDisappear 0.15s ease-in;
+    animation-fill-mode: forwards;
+  }
+}

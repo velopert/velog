@@ -11,6 +11,7 @@ import { withRouter, type ContextRouter } from 'react-router-dom';
 
 import FullscreenLoaderContainer from './FullscreenLoaderContainer';
 import { setup } from '../../lib/progress';
+import NotifyToastContainer from './NotifyToastContainer';
 
 type Props = {
   user: ?UserData,
@@ -82,6 +83,7 @@ class Core extends Component<Props> {
       <Fragment>
         <FullscreenLoaderContainer />
         <NanoBar />
+        <NotifyToastContainer />
       </Fragment>
     );
   }
