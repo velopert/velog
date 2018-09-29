@@ -191,6 +191,14 @@ export const writePost = async (ctx: Context): Promise<*> => {
       ctx.throw(500, e);
     }
   }
+
+  if (processedSlug === '' || processedSlug.replace('.', '') === '') {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'INVALID_URL_SLUG',
+    };
+    return;
+  }
   // TODO: validate url slug
 
   const uniqueTags: Array<string> = filterUnique(tags); // .map(replaceDashToSpace);

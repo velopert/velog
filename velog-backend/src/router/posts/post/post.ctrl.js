@@ -135,6 +135,15 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     if (exists > 0) {
       processedSlug = generatedUrlSlug;
     }
+
+    if (processedSlug === '' || processedSlug.replace('.', '') === '') {
+      ctx.status = 400;
+      ctx.body = {
+        name: 'INVALID_URL_SLUG',
+      };
+      return;
+    }
+
     // create urlSlughistory
     const history = UrlSlugHistory.build({
       fk_post_id: ctx.post.id,
