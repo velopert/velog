@@ -120,6 +120,7 @@ class PostViewer extends Component<Props> {
     const { onSetToc, onActivateHeading } = this;
 
     if (!post) return <PostPlaceholder />;
+    if (!post.user) return <PostPlaceholder />;
     const plainTextBody = convertToPlainText(post.body);
 
     return (
