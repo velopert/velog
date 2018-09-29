@@ -192,7 +192,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     }
   }
 
-  if (processedSlug === '' || processedSlug.replace('.', '') === '') {
+  if (processedSlug === '' || processedSlug.replace(/\./g, '') === '') {
     ctx.status = 400;
     ctx.body = {
       name: 'INVALID_URL_SLUG',
