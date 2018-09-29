@@ -87,3 +87,9 @@ export function generalHash(text: string) {
     .digest('hex');
   return hash;
 }
+
+export function checkEmpty(text: string) {
+  const replaced = text.trim().replace(/\u3164/g, '');
+  if (replaced === '') return true;
+  return false;
+}

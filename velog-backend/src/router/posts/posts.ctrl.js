@@ -10,6 +10,7 @@ import {
   isUUID,
   formatShortDescription,
   generalHash,
+  checkEmpty,
 } from 'lib/common';
 import {
   Category,
@@ -192,6 +193,17 @@ export const writePost = async (ctx: Context): Promise<*> => {
     }
   }
 
+  const stringsToCheck = [title, body, ...tags];
+  for (let i = 0; i < stringsToCheck.length; i++) {
+    if (checkEmpty(stringsToCheck[i])) {
+      ctx.status = 400;
+      ctx.body = {
+        name: 'INVALID_TEXT',
+      };
+      return;
+    }
+  }
+
   if (processedSlug === '' || processedSlug.replace(/\./g, '') === '') {
     ctx.status = 400;
     ctx.body = {
@@ -283,7 +295,7 @@ export const readPost = async (ctx: Context): Promise<*> => {
           url_slug: urlSlug,
           fk_user_id: user.id,
         },
-        order: ['created_at', 'DESC'],
+        order: [['created_at', 'DESC']],
       });
       if (!history) {
         ctx.status = 404;

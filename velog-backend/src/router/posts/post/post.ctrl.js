@@ -8,6 +8,7 @@ import {
   generateSlugId,
   escapeForUrl,
   extractKeys,
+  checkEmpty,
 } from 'lib/common';
 import { diff } from 'json-diff';
 import {
@@ -105,6 +106,17 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     is_temp: isTemp,
     meta,
   }: BodySchema = (ctx.request.body: any);
+
+  const stringsToCheck = [title, body, ...tags];
+  for (let i = 0; i < stringsToCheck.length; i++) {
+    if (checkEmpty(stringsToCheck[i])) {
+      ctx.status = 400;
+      ctx.body = {
+        name: 'INVALID_TEXT',
+      };
+      return;
+    }
+  }
 
   // validate tags
   if (tags) {
