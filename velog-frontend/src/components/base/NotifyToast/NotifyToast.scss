@@ -21,23 +21,23 @@
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  &.default {
-  }
+  border-radius: 1.40625rem;
+  color: white;
+  min-width: 200px;
+  padding: 0.75rem;
+  padding-left: 1rem;
+  display: flex;
+  justify-content: center;
+  padding-right: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.3125rem;
+  font-weight: 600;
+  &.default {}
   &.success {
-    border-radius: 1.40625rem;
     background: $oc-green-4;
-    color: white;
-    min-width: 200px;
-    padding: 0.75rem;
-    padding-left: 1rem;
-    display: flex;
-    justify-content: center;
-    padding-right: 1rem;
-    font-size: 0.875rem;
-    line-height: 1.3125rem;
-    font-weight: 600;
   }
   &.error {
+    background: $oc-red-5;
   }
   &.appear {
     animation: notifyToastAppear 0.15s ease-in;
