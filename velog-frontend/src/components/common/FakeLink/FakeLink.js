@@ -17,7 +17,7 @@ class FakeLink extends Component<Props> {
     }
   };
   render() {
-    const { children, to, history, location, match, ...rest } = this.props;
+    const { children, to, history, location, match, staticContext, ...rest } = this.props;
     return (
       <div {...rest} onClick={this.onClick}>
         {children}
