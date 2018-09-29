@@ -207,7 +207,7 @@ class CodeEditor extends Component<Props, State> {
     // if editing the last line
     const { line } = cursor;
     const last = doc.lastLine();
-    if (line === last) {
+    if (last - line < 5) {
       const preview = document.getElementById('preview');
       if (!preview) return;
       preview.scrollTop = preview.scrollHeight;
