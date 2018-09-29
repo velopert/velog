@@ -136,7 +136,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
       processedSlug = generatedUrlSlug;
     }
 
-    if (processedSlug === '' || processedSlug.replace('.', '') === '') {
+    if (processedSlug === '' || processedSlug.replace(/\./g, '') === '') {
       ctx.status = 400;
       ctx.body = {
         name: 'INVALID_URL_SLUG',
