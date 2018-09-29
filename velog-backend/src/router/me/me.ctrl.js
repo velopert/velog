@@ -6,6 +6,7 @@ import { generate, decode } from 'lib/token';
 
 import Joi from 'joi';
 import User from '../../database/models/User';
+import { checkEmpty } from '../../lib/common';
 
 export const updateProfile = async (ctx: Context): Promise<*> => {
   const { user } = ctx;
@@ -29,6 +30,15 @@ export const updateProfile = async (ctx: Context): Promise<*> => {
   };
 
   const body: BodySchema = (ctx.request.body: any);
+
+  const { display_name } = body;
+  if (display_name && checkEmpty(display_name)) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'INVALID_NAME',
+    };
+    return;
+  }
 
   try {
     const profile = await UserProfile.findOne({

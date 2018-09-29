@@ -175,13 +175,17 @@ class SubmitBoxContainer extends Component<Props> {
           meta,
           urlSlug: urlSlug || escapeForUrl(title),
         });
+
         BaseActions.showToast({
           type: 'success',
           message: '포스트가 작성됐습니다.',
         });
       }
     } catch (e) {
-      console.log(e);
+      BaseActions.showToast({
+        type: 'error',
+        message: '포스트 작성 실패',
+      });
     }
   };
 

@@ -3,7 +3,7 @@ import Joi from 'joi';
 import type { Context, Middleware } from 'koa';
 import db from 'database/db';
 import Comment, { type WriteParams } from 'database/models/Comment';
-import { validateSchema, isUUID } from 'lib/common';
+import { validateSchema, isUUID, checkEmpty } from 'lib/common';
 import PostScore, { TYPES } from 'database/models/PostScore';
 import redisClient from 'lib/redisClient';
 import User from 'database/models/User';
@@ -26,8 +26,16 @@ export const writeComment: Middleware = async (ctx: Context) => {
     return;
   }
 
-
   const { text, reply_to: replyTo }: BodySchema = (ctx.request.body: any);
+
+  if (checkEmpty(text)) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'EMPTY_COMMENT',
+    };
+    return;
+  }
+
   // if (text.trim().length === 0) {
   //   ctx.status = 400;
   //   ctx.body = {

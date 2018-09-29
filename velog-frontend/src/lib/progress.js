@@ -44,5 +44,18 @@ export function setup() {
     }, 150);
     return res;
   };
-  defaultClient.interceptors.response.use(responseHandler, responseHandler);
+  const errorHandler = (response) => {
+    setTimeout(() => {
+      requests.pop();
+      if (requests.length === 0) {
+        if (timerId) {
+          clearTimeout(timerId);
+          timerId = null;
+        }
+        setProgress(100);
+      }
+    }, 150);
+    return Promise.reject(response);
+  };
+  defaultClient.interceptors.response.use(responseHandler, errorHandler);
 }

@@ -533,6 +533,7 @@ export default applyPenders(reducer, [
   {
     type: WRITE_POST,
     onSuccess: (state: Write, { payload: { data } }) => {
+      if (!data) return state;
       return produce(state, (draft) => {
         draft.changed = false;
         draft.postData = data;
