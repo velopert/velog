@@ -1,7 +1,7 @@
 import * as Koa from 'koa';
 import * as compress from 'koa-compress';
 import router from './router';
-// import ssr from './ssr';
+import ssr from './ssr';
 import redisClient from './lib/redisClient';
 
 class Server {

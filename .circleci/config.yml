@@ -70,7 +70,8 @@ jobs:
           paths:
             - node_modules
           key: v1-ssr-dependencies-{{ checksum "package.json" }}
-      - run: tree ../ -I node_modules
+      - run: ls src/ssr
+      - run: ls
       - run: yarn deploy
   deploy-backend:
     docker:
