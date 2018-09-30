@@ -10,6 +10,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: ap-northeast-2
+  stage: prod
   environment:
     REDIS_HOST: ${env:REDIS_HOST}
     REDIS_PASS: ${env:REDIS_PASS}
