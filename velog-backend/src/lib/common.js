@@ -89,7 +89,7 @@ export function generalHash(text: string) {
 }
 
 export function checkEmpty(text: string) {
-  const replaced = text.trim().replace(/([\u3164\u115F\u1160\uFFA0]+)/g, '');
+  const replaced = text.trim().replace(/([\u3164\u115F\u1160\uFFA0\u200B]+)/g, '');
   if (replaced === '') return true;
   return false;
 }
