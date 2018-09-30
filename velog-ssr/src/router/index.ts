@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { Context } from 'koa';
-import { indexHtml } from '../ssr/index';
+// import { indexHtml } from '../ssr/index';
 import axios from 'axios';
 import redisClient from '../lib/redisClient';
 
@@ -8,11 +8,11 @@ const router = new Router();
 
 let serviceWorkerCache = null;
 
-router.get('/check', (ctx) => {
+router.get('/check', ctx => {
   ctx.body = {
     version: '1.0.0-alpha.0',
     redis_connected_time: redisClient.connectedTime,
-  }
+  };
 });
 
 router.get('/ping', async (ctx: Context) => {
@@ -23,11 +23,10 @@ router.get('/ping', async (ctx: Context) => {
   } catch (e) {
     console.log(e);
   }
-
 });
 
 router.get('/index.html', (ctx: Context) => {
-  ctx.body = indexHtml;
+  // ctx.body = indexHtml;
 });
 
 router.get('/manifest.json', (ctx: Context) => {
@@ -61,6 +60,6 @@ router.get('/service-worker.js', async (ctx: Context) => {
   } catch (e) {
     ctx.throw(500, e);
   }
-})
+});
 
 export default router;
