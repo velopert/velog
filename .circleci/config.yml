@@ -71,7 +71,7 @@ jobs:
             - node_modules
           key: v1-ssr-dependencies-{{ checksum "package.json" }}
       - run: mkdir dist
-      - run: chmod 755 src/ssr/render.js
+      - run: chmod 777 src/ssr/render.js
       - run: yarn deploy
   deploy-backend:
     docker:
