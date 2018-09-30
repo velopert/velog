@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { Context } from 'koa';
-// import { indexHtml } from '../ssr/index';
+import { indexHtml } from '../ssr/index';
 import axios from 'axios';
 import redisClient from '../lib/redisClient';
 
