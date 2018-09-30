@@ -72,6 +72,7 @@ jobs:
           key: v1-ssr-dependencies-{{ checksum "package.json" }}
       - run: ls src/ssr
       - run: ls
+      - run: chmod 777 src/ssr/render.js
       - run: yarn deploy
   deploy-backend:
     docker:
