@@ -1,11 +1,9 @@
-// import render from './render.js';
+import render from './render.js';
 import { Context } from 'koa';
 import redisClient from '../lib/redisClient';
 import { check } from './rules';
 
 const manifest = require('../../asset-manifest.json');
-
-console.log(manifest);
 
 function buildHtml(rendered, state, helmet) {
   const escaped = JSON.stringify(state).replace(/</g, '\\u003c');
@@ -70,49 +68,49 @@ function buildHtml(rendered, state, helmet) {
 export const indexHtml = buildHtml('', null, null);
 
 const ssr = async (ctx: Context) => {
-  // const token = ctx.cookies.get('access_token');
-  // try {
-  //   // check cache
-  //   if (!token) {
-  //     const cache = await redisClient.getCache(ctx.url);
-  //     if (cache && process.env.DISABLE_CACHE !== 'true') {
-  //       ctx.set('Cache-Status', 'cached');
-  //       ctx.body = cache;
-  //       return;
-  //     }
-  //   }
-  //   const { state, html, helmet, context } = await render(ctx);
-  //   const link = helmet && helmet.link.toComponent();
-  //   if (link && link.length > 0) {
-  //     for (let i = 0; i < link.length; i += 1) {
-  //       const { rel, href } = link[0].props;
-  //       if (rel !== 'canonical') continue;
-  //       const processedUrl = encodeURI(href.replace('https://velog.io', ''));
-  //       if (rel === 'canonical' && processedUrl !== ctx.url) {
-  //         ctx.redirect(processedUrl);
-  //         return;
-  //       }
-  //     }
-  //   }
-  //   if (context.status) {
-  //     ctx.status = context.status;
-  //   }
-  //   const body = buildHtml(html, state, helmet);
-  //   ctx.body = body;
-  //   if (token) return;
-  //   const rule = check(ctx.path);
-  //   if (rule) {
-  //     await redisClient.setCache(ctx.url, body, rule.maxAge);
-  //     ctx.set('Cache-Status', `cached_now (${rule.maxAge})`);
-  //   }
-  // } catch (e) {
-  //   console.log(e);
-  //   if (e.response && e.response.status === 404) {
-  //     ctx.status = 404;
-  //     ctx.redirect('/404');
-  //   }
-  //   ctx.body = indexHtml;
-  // }
+  const token = ctx.cookies.get('access_token');
+  try {
+    // check cache
+    if (!token) {
+      const cache = await redisClient.getCache(ctx.url);
+      if (cache && process.env.DISABLE_CACHE !== 'true') {
+        ctx.set('Cache-Status', 'cached');
+        ctx.body = cache;
+        return;
+      }
+    }
+    const { state, html, helmet, context } = await render(ctx);
+    const link = helmet && helmet.link.toComponent();
+    if (link && link.length > 0) {
+      for (let i = 0; i < link.length; i += 1) {
+        const { rel, href } = link[0].props;
+        if (rel !== 'canonical') continue;
+        const processedUrl = encodeURI(href.replace('https://velog.io', ''));
+        if (rel === 'canonical' && processedUrl !== ctx.url) {
+          ctx.redirect(processedUrl);
+          return;
+        }
+      }
+    }
+    if (context.status) {
+      ctx.status = context.status;
+    }
+    const body = buildHtml(html, state, helmet);
+    ctx.body = body;
+    if (token) return;
+    const rule = check(ctx.path);
+    if (rule) {
+      await redisClient.setCache(ctx.url, body, rule.maxAge);
+      ctx.set('Cache-Status', `cached_now (${rule.maxAge})`);
+    }
+  } catch (e) {
+    console.log(e);
+    if (e.response && e.response.status === 404) {
+      ctx.status = 404;
+      ctx.redirect('/404');
+    }
+    ctx.body = indexHtml;
+  }
 };
 
 export default ssr;
