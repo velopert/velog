@@ -43,7 +43,12 @@ const PostCard = ({
       {(!oneColumn || thumbnail) && (
         <Link to={link} className={cx('thumbnail-wrapper')}>
           {thumbnail ? (
-            <img src={thumbnail} alt={title} />
+            <img
+              src={`https://thumb.velog.io/resize?url=${thumbnail}&width=${
+                oneColumn ? '768' : '512'
+              }`}
+              alt={title}
+            />
           ) : (
             <div className="image-placeholder">
               <ImageIcon />
