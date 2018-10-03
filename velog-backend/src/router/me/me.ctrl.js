@@ -1,12 +1,11 @@
 // @flow
 import type { Context } from 'koa';
 import UserProfile from 'database/models/UserProfile';
-import { validateSchema } from 'lib/common';
+import { validateSchema, checkEmpty } from 'lib/common';
 import { generate, decode } from 'lib/token';
 
 import Joi from 'joi';
 import User from '../../database/models/User';
-import { checkEmpty } from '../../lib/common';
 
 export const updateProfile = async (ctx: Context): Promise<*> => {
   const { user } = ctx;
