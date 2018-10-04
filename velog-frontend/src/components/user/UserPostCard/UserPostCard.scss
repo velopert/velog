@@ -10,7 +10,11 @@
   .img-wrapper {
     width: 100%;
     overflow: hidden;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    @include media("<large") {
+      margin-bottom: 1rem;
+    }
+    display: block;
     img {
       width: 100%;
       object-fit: cover;

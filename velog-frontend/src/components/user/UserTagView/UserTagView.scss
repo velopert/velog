@@ -34,13 +34,14 @@
       li {
         @include media("<medium") {
           a {
+            display: block;
             padding: 0.25rem 0.5rem;
             background: $oc-gray-0;
             border: 1px solid $oc-gray-4;
             border-radius: 4px;
             font-weight: 500;
           }
-          &+li {
+          & + li {
             margin-left: 0.5rem;
           }
         }
@@ -65,7 +66,7 @@
       }
     }
   }
-  section+section {
+  section + section {
     margin-top: 1.5rem;
   }
 }
