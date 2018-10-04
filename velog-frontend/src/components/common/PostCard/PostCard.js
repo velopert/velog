@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import ImageIcon from 'react-icons/lib/io/image';
-import { fromNow } from 'lib/common';
+import { fromNow, resizeImage } from 'lib/common';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
@@ -43,12 +43,7 @@ const PostCard = ({
       {(!oneColumn || thumbnail) && (
         <Link to={link} className={cx('thumbnail-wrapper')}>
           {thumbnail ? (
-            <img
-              src={`https://thumb.velog.io/resize?url=${thumbnail}&width=${
-                oneColumn ? '768' : '512'
-              }`}
-              alt={title}
-            />
+            <img src={resizeImage(thumbnail, oneColumn ? 768 : 512)} alt={title} />
           ) : (
             <div className="image-placeholder">
               <ImageIcon />
@@ -60,7 +55,7 @@ const PostCard = ({
       <div className="card-content">
         {!oneColumn && (
           <Link className="user-thumbnail-wrapper" to={`/@${username}`}>
-            <img src={userThumbnail || defaultThumbnail} alt={username} />
+            <img src={resizeImage(userThumbnail || defaultThumbnail, 128)} alt={username} />
           </Link>
         )}
         <div className="content-head">

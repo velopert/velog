@@ -5,7 +5,7 @@ import type { Categories } from 'store/modules/posts';
 import PostLikeButton from 'components/post/PostLikeButton';
 import { Link } from 'react-router-dom';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
-import { fromNow } from 'lib/common';
+import { fromNow, resizeImage } from 'lib/common';
 import PostActionButtons from '../PostActionButtons';
 import './PostHead.scss';
 
@@ -47,7 +47,7 @@ const PostHead = ({
     <div className="PostHead">
       <div className="userinfo">
         <Link to={userLink} className="user-thumbnail">
-          <img src={user.thumbnail || defaultThumbnail} alt="user-thumbnail" />
+          <img src={resizeImage(user.thumbnail || defaultThumbnail, 128)} alt="user-thumbnail" />
         </Link>
         <div className="info">
           <Link to={userLink} className="username">

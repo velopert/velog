@@ -3,7 +3,7 @@ import React from 'react';
 import type { PostItem } from 'store/modules/listing';
 import Truncate from 'react-truncate';
 import { Link } from 'react-router-dom';
-import { escapeForUrl, fromNow } from 'lib/common';
+import { escapeForUrl, fromNow, resizeImage } from 'lib/common';
 import './UserPostCard.scss';
 
 type Props = {
@@ -24,7 +24,7 @@ const UserPostCard = ({ post, username }: Props) => {
     <div className="UserPostCard">
       {thumbnail && (
         <Link to={link} className="img-wrapper">
-          <img src={thumbnail} alt={`${title} Thumbnail`} />
+          <img src={resizeImage(thumbnail, 768)} alt={`${title} Thumbnail`} />
         </Link>
       )}
       <h2>

@@ -4,6 +4,7 @@ import defaultThumbnail from 'static/images/default_thumbnail.png';
 import Button from 'components/common/Button';
 import { type Profile } from 'store/modules/profile';
 import { Helmet } from 'react-helmet';
+import { resizeImage } from 'lib/common';
 import './UserHead.scss';
 
 type Props = {
@@ -23,7 +24,7 @@ const UserHead = ({ username, profile, self, following, onToggleFollow, rawTagNa
         <title>{title}</title>
         <meta name="description" content={profile.short_bio} />
       </Helmet>
-      <img src={profile.thumbnail || defaultThumbnail} alt="thumbnail" />
+      <img src={resizeImage(profile.thumbnail || defaultThumbnail, 256)} alt="thumbnail" />
       <div className="user-info">
         <section className="top">
           {!self &&

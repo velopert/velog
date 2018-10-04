@@ -100,3 +100,7 @@ export function convertToPlainText(markdown: string): string {
     .slice(0, 150)
     .replace(/#/g, '');
 }
+
+export function resizeImage(url: string, width?: number = 256) {
+  return `https://thumb.velog.io/resize?url=${url}&width=${width}`;
+}
