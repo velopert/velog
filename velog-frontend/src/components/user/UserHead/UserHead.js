@@ -11,41 +11,45 @@ type Props = {
   profile: Profile,
   self: boolean,
   following: ?boolean,
+  rawTagName: ?string,
   onToggleFollow: () => void,
 };
 
-const UserHead = ({ username, profile, self, following, onToggleFollow }: Props) => (
-  <div className="UserHead">
-    <Helmet>
-      <title>{`${username} (${profile.display_name}) | velog`}</title>
-      <meta name="description" content={profile.short_bio} />
-    </Helmet>
-    <img src={profile.thumbnail || defaultThumbnail} alt="thumbnail" />
-    <div className="user-info">
-      <section className="top">
-        {!self &&
-          following !== undefined && (
-            <div className="subscribe-wrapper">
-              {following ? (
-                <Button className="subscribe" theme="gray" onClick={onToggleFollow}>
-                  구독중
-                </Button>
-              ) : (
-                <Button className="subscribe" onClick={onToggleFollow}>
-                  구독하기
-                </Button>
-              )}
-            </div>
-          )}
-        <div className="username">@{username}</div>
-      </section>
-      <section className="mini-profile">
-        <h2>{profile.display_name}</h2>
-        <p>{profile.short_bio}</p>
-      </section>
+const UserHead = ({ username, profile, self, following, onToggleFollow, rawTagName }: Props) => {
+  const title = `${username} (${profile.display_name})${rawTagName ? ` #${rawTagName}` : ''}`;
+  return (
+    <div className="UserHead">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={profile.short_bio} />
+      </Helmet>
+      <img src={profile.thumbnail || defaultThumbnail} alt="thumbnail" />
+      <div className="user-info">
+        <section className="top">
+          {!self &&
+            following !== undefined && (
+              <div className="subscribe-wrapper">
+                {following ? (
+                  <Button className="subscribe" theme="gray" onClick={onToggleFollow}>
+                    구독중
+                  </Button>
+                ) : (
+                  <Button className="subscribe" onClick={onToggleFollow}>
+                    구독하기
+                  </Button>
+                )}
+              </div>
+            )}
+          <div className="username">@{username}</div>
+        </section>
+        <section className="mini-profile">
+          <h2>{profile.display_name}</h2>
+          <p>{profile.short_bio}</p>
+        </section>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 UserHead.Placeholder = () => (
   <div className="UserHead placeholder">

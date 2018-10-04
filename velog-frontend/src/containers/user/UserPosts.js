@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PostCardList from 'components/common/PostCardList/PostCardList';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -11,6 +11,7 @@ import throttle from 'lodash/throttle';
 import { getScrollBottom, preventStickBottom } from 'lib/common';
 import { type Profile } from 'store/modules/profile';
 import UserPostCardList from 'components/user/UserPostCardList';
+import { Helmet } from 'react-helmet';
 
 type OwnProps = {
   username: string,
@@ -118,14 +119,28 @@ class UserPosts extends Component<Props, UserPostsState> {
   };
 
   render() {
-    const { posts, loading, prefetching, profile } = this.props;
+    const { posts, loading, prefetching, profile, rawTagName } = this.props;
 
     if (!posts) {
       // TODO: Show placeholder
       return <UserPostCardList.Placeholder />;
     }
 
-    return <UserPostCardList posts={posts} username={this.props.username} />;
+    return (
+      <Fragment>
+        {rawTagName ? (
+          <Helmet>
+            <meta
+              name="description"
+              content={`${this.props.username}님이 작성하신 #${rawTagName} 관련 포스트 ${
+                posts.length
+              }개를 읽어보세요.`}
+            />
+          </Helmet>
+        ) : null}
+        <UserPostCardList posts={posts} username={this.props.username} />
+      </Fragment>
+    );
   }
 }
 

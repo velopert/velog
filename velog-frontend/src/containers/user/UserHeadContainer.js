@@ -18,6 +18,7 @@ type Props = OwnProps & {
   followLoading: boolean,
   shouldCancel: boolean,
   logged: boolean,
+  rawTagName: ?string,
 };
 
 class UserHeadContainer extends Component<Props> {
@@ -52,7 +53,7 @@ class UserHeadContainer extends Component<Props> {
     FollowActions.followUser(user_id);
   };
   render() {
-    const { profile, self, followingUsers, username } = this.props;
+    const { profile, self, followingUsers, username, rawTagName } = this.props;
 
     if (!profile || !username) return <UserHead.Placeholder />;
 
@@ -65,6 +66,7 @@ class UserHeadContainer extends Component<Props> {
         self={self}
         following={following}
         onToggleFollow={this.onToggleFollow}
+        rawTagName={rawTagName}
       />
     );
   }
@@ -79,6 +81,7 @@ export default connect(
       state.pender.pending['follow/FOLLOW_USER'] || state.pender.pending['follower/UNFOLLOW_USER'],
     shouldCancel: state.common.ssr && !state.common.router.altered,
     logged: !!state.user.user,
+    rawTagName: state.profile.rawTagName,
   }),
   () => ({}),
 )(UserHeadContainer);
