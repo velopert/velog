@@ -123,12 +123,15 @@ class PostViewer extends Component<Props> {
     if (!post.user) return <PostPlaceholder />;
     const plainTextBody = convertToPlainText(post.body);
 
+    const url = `https://velog.io/@${post.user.username}/${post.url_slug}`;
     return (
       <Fragment>
         <Helmet>
           <title>{post.title}</title>
           <meta name="description" content={plainTextBody} />
-          <link rel="canonical" href={`https://velog.io/@${post.user.username}/${post.url_slug}`} />
+          <link rel="canonical" href={url} />
+          <meta property="og:url" content={url} />
+          <meta property="og:type" content="article" />
           <meta property="og:title" content={post.title} />
           <meta property="og:description" content={plainTextBody} />
           {post.thumbnail && <meta property="og:image" content={post.thumbnail} />}
