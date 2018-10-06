@@ -19,7 +19,7 @@
         height: 1.25rem;
       }
     }
-    .gray-block+.gray-block {
+    .gray-block + .gray-block {
       margin-top: 0.5rem;
     }
     .line-breaker {
@@ -41,7 +41,7 @@
     margin-bottom: 3rem;
   }
   .contents {
-    pre[class*="language-"] {
+    pre {
       margin-top: 2rem;
       margin-bottom: 2rem;
       @include media("<medium") {
