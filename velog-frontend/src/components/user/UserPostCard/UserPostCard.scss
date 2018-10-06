@@ -4,6 +4,7 @@
   padding-bottom: 2.5rem;
   position: relative;
   color: $oc-gray-9;
+  @include common-font();
   &:first-child {
     padding-top: 0;
   }
