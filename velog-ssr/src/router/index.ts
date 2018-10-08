@@ -75,4 +75,14 @@ router.get('/sitemaps/:filename', async ctx => {
   }
 });
 
+router.get('/robots.txt', ctx => {
+  ctx.body = `User-agent: *
+Allow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+Sitemap: https://velog.io/sitemaps/index.xml`;
+});
+
 export default router;
