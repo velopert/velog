@@ -71,8 +71,8 @@ jobs:
             - node_modules
           key: v1-ssr-dependencies-{{ checksum "package.json" }}
       - run: mkdir dist
-      - run: chmod 777 src/ssr/render.js
       - run: yarn deploy
+      - run: curl https://api.velog.io/internal/flush?key=$INTERNAL_KEY
   deploy-backend:
     docker:
       - image: circleci/node:8.12.0
