@@ -8,11 +8,11 @@ const router = new Router();
 
 let serviceWorkerCache = null;
 
-router.get('/check', (ctx) => {
+router.get('/check', ctx => {
   ctx.body = {
     version: '1.0.0-alpha.0',
     redis_connected_time: redisClient.connectedTime,
-  }
+  };
 });
 
 router.get('/ping', async (ctx: Context) => {
@@ -23,7 +23,6 @@ router.get('/ping', async (ctx: Context) => {
   } catch (e) {
     console.log(e);
   }
-
 });
 
 router.get('/index.html', (ctx: Context) => {
@@ -61,6 +60,19 @@ router.get('/service-worker.js', async (ctx: Context) => {
   } catch (e) {
     ctx.throw(500, e);
   }
-})
+});
+
+router.get('/sitemaps/:filename', async ctx => {
+  const { filename } = ctx.params;
+  try {
+    const response = await axios.get(
+      `https://api.velog.io/sitemaps/${filename}`
+    );
+    ctx.set('Content-Type', 'text/xml');
+    ctx.body = response.data;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+});
 
 export default router;
