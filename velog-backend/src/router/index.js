@@ -12,6 +12,7 @@ import me from './me';
 import feeds from './feeds';
 import users from './users';
 import common from './common';
+import sitemaps from './sitemaps';
 import Post from '../database/models/Post';
 import { getTagsList } from '../database/rawQuery/tags';
 
@@ -24,6 +25,7 @@ router.use('/files', files.routes());
 router.use('/feeds', feeds.routes());
 router.use('/users', users.routes());
 router.use('/common', common.routes());
+router.use('/sitemaps', sitemaps.routes());
 
 router.get('/check', (ctx: Context) => {
   console.log('avoiding cold start...');

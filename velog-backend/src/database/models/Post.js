@@ -2,7 +2,6 @@
 import Sequelize from 'sequelize';
 import db from 'database/db';
 import { User, Tag, Category, UserProfile } from 'database/models';
-import moment from 'moment';
 import pick from 'lodash/pick';
 import { formatShortDescription } from 'lib/common';
 
