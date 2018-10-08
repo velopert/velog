@@ -82,7 +82,7 @@ export const postsSitemap: Middleware = async (ctx) => {
     const data = await getPostsOfMonth(ctx.params.month);
     const links: Link[] = data.map(r => ({
       location: `https://velog.io/@${r.username}/${encodeURI(r.url_slug)}`,
-      lastmod: format(r.updated_at, 'YYYY-MM-DDThh:mmTZD'),
+      lastmod: format(r.updated_at, 'YYYY-MM-DDThh:mmZ'),
       priority: 0.5,
       changefreq: 'weekly',
     }));
