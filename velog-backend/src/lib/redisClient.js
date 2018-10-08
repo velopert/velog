@@ -41,6 +41,13 @@ class RedisClient {
     this.client.del(key);
     console.log('removing key %s', key);
   }
+  async flushall() {
+    if (!this.connected || !this.client) {
+      await this.connect();
+    }
+    if (!this.client) return;
+    return this.client.flushall();
+  }
 }
 
 const redisClient = new RedisClient();
