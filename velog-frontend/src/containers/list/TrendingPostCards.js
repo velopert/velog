@@ -41,6 +41,10 @@ class TrendingPostCards extends Component<Props> {
   };
 
   initialize = async () => {
+    if (this.props.posts && this.props.posts.length > 0) {
+      // do not fetch post data when already exists
+      return;
+    }
     try {
       if (!this.props.shouldCancel) {
         await ListingActions.getTrendingPosts();

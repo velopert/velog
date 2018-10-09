@@ -27,6 +27,8 @@ type Props = OwnProps & {
   rawTagName: ?string,
   shouldCancel: boolean,
   profile: ?Profile,
+  currentUsername: ?string,
+  currentTag: ?string,
 };
 
 type UserPostsState = {
@@ -41,7 +43,15 @@ class UserPosts extends Component<Props, UserPostsState> {
   };
 
   initialize = async () => {
-    const { username, tag, shouldCancel, profile } = this.props;
+    const { username, tag, shouldCancel, profile, posts, currentUsername, currentTag } = this.props;
+    if (
+      currentUsername === username && // check username
+      posts && // check post length
+      posts.length > 0 &&
+      (tag === currentTag || (!tag && !currentTag)) // tag equals (or both undefined/null)
+    ) {
+      return;
+    }
     if (!profile) return;
     if (!shouldCancel) {
       ListingActions.clearUserPosts();
@@ -154,6 +164,8 @@ export default connect(
     rawTagName: profile.rawTagName,
     shouldCancel: common.ssr && !common.router.altered,
     profile: profile.profile,
+    currentUsername: listing.user.currentUsername,
+    currentTag: listing.user.currentTag,
   }),
   () => ({}),
 )(UserPosts);

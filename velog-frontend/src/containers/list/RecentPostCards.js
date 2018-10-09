@@ -42,6 +42,10 @@ class RecentPostCards extends Component<Props> {
 
   initialize = async () => {
     try {
+      if (this.props.posts && this.props.posts.length > 0) {
+        // do not fetch post data when already exists
+        return;
+      }
       if (!this.props.shouldCancel) {
         await ListingActions.getRecentPosts();
       }

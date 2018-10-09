@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import type { State } from 'store';
-import { WriteActions } from 'store/actionCreators';
+import { WriteActions, BaseActions } from 'store/actionCreators';
 import WriteHeader from 'components/write/WriteHeader/WriteHeader';
 import type { PostData, Category } from 'store/modules/write';
 import { Prompt, withRouter, type ContextRouter } from 'react-router-dom';
@@ -180,6 +180,11 @@ class WriteHeaderContainer extends Component<Props> {
       if (this.props.postData) {
         await WriteActions.tempSave({ title, body, postId: this.props.postData.id });
       }
+
+      BaseActions.showToast({
+        type: 'success',
+        message: '포스트가 임시저장 되었습니다',
+      });
     } catch (e) {
       console.log(e);
     }
@@ -198,7 +203,7 @@ class WriteHeaderContainer extends Component<Props> {
   };
 
   render() {
-    const { onChangeTitle, onOpenSubmitBox, onTempSave, onShowWriteExtra, onHideWriteExtra } = this;
+    const { onChangeTitle, onOpenSubmitBox, onShowWriteExtra, onHideWriteExtra } = this;
     const { title, postData, writeExtraOpen, changed } = this.props;
     return (
       <Fragment>

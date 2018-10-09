@@ -25,11 +25,19 @@ export const actionCreators = {
   prefetchRecentPosts: createAction(PREFETCH_RECENT_POSTS, PostsAPI.getPublicPosts),
   revealPrefetched: createAction(REVEAL_PREFETCHED, (type: string) => type),
   clearUserPosts: createAction(CLEAR_USER_POSTS),
-  getUserPosts: createAction(GET_USER_POSTS, PostsAPI.getUserPosts),
+  getUserPosts: createAction(
+    GET_USER_POSTS,
+    PostsAPI.getUserPosts,
+    (meta: { username: string, tag?: string }) => meta,
+  ),
   prefetchUserPosts: createAction(PREFETCH_USER_POSTS, PostsAPI.getUserPosts),
   getTrendingPosts: createAction(GET_TRENDING_POSTS, PostsAPI.getTrendingPosts),
   prefetchTrendingPosts: createAction(PREFETCH_TRENDING_POSTS, PostsAPI.getTrendingPosts),
-  getTagPosts: createAction(GET_TAG_POSTS, PostsAPI.getPublicPostsByTag),
+  getTagPosts: createAction(
+    GET_TAG_POSTS,
+    PostsAPI.getPublicPostsByTag,
+    (meta: { tag: string }) => meta,
+  ),
   prefetchTagPosts: createAction(PREFETCH_TAG_POSTS, PostsAPI.getPublicPostsByTag),
   clearTagPosts: createAction(CLEAR_TAG_POSTS),
   getTempPosts: createAction(GET_TEMP_POSTS, PostsAPI.getTempPosts),
@@ -69,8 +77,8 @@ export type ListingSet = {
 export type Listing = {
   trending: ListingSet,
   recent: ListingSet,
-  user: ListingSet,
-  tag: ListingSet,
+  user: ListingSet & { currentUsername: ?string, currentTag: ?string },
+  tag: ListingSet & { currentTag: ?string },
   temp: ListingSet,
 };
 
@@ -80,6 +88,7 @@ type PostsResponseAction = {
   payload: {
     data: PostItem[],
   },
+  meta: any,
 };
 type RemoveTempPostAction = ActionType<typeof actionCreators.removeTempPost>;
 
@@ -109,8 +118,8 @@ const initialListingSet = {
 const initialState: Listing = {
   trending: initialListingSet,
   recent: initialListingSet,
-  user: initialListingSet,
-  tag: initialListingSet,
+  user: { ...initialListingSet, currentUsername: null, currentTag: null },
+  tag: { ...initialListingSet, currentTag: null },
   temp: initialListingSet,
 };
 
@@ -132,6 +141,8 @@ const reducer = handleActions(
           posts: null,
           prefetched: null,
           end: false,
+          currentUsername: null,
+          currentTag: null,
         };
       });
     },
@@ -141,6 +152,7 @@ const reducer = handleActions(
           posts: null,
           prefetched: null,
           end: false,
+          currentTag: null,
         };
       });
     },
@@ -187,6 +199,7 @@ export default applyPenders(reducer, [
           end: action.payload.data.length < 20,
           posts: action.payload.data,
           prefetched: null,
+          currentTag: action.meta.tag,
         };
       });
     },
@@ -238,6 +251,10 @@ export default applyPenders(reducer, [
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       return produce(state, (draft) => {
         draft.user.posts = action.payload.data;
+        draft.user.currentUsername = action.meta.username;
+        if (action.meta.tag) {
+          draft.user.currentTag = action.meta.tag;
+        }
         if (action.payload.data.length < 20) {
           draft.user.end = true;
         }

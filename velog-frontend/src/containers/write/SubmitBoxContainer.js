@@ -165,7 +165,7 @@ class SubmitBoxContainer extends Component<Props> {
         });
         BaseActions.showToast({
           type: 'success',
-          message: '포스트가 수정됐습니다.',
+          message: '포스트가 수정됐습니다',
         });
       } else {
         await WriteActions.writePost({
@@ -182,7 +182,7 @@ class SubmitBoxContainer extends Component<Props> {
 
         BaseActions.showToast({
           type: 'success',
-          message: '포스트가 작성됐습니다.',
+          message: '포스트가 작성됐습니다',
         });
       }
 
@@ -235,6 +235,11 @@ class SubmitBoxContainer extends Component<Props> {
       if (this.props.postData) {
         await WriteActions.tempSave({ title, body, postId: this.props.postData.id });
       }
+
+      BaseActions.showToast({
+        type: 'success',
+        message: '포스트가 임시저장 되었습니다',
+      });
     } catch (e) {
       console.log(e);
     }
