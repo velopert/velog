@@ -4,6 +4,7 @@ import Joi from 'joi';
 import type { Middleware } from 'koa';
 import removeMd from 'remove-markdown';
 import crypto from 'crypto';
+import axios from 'axios';
 
 export const primaryUUID = {
   type: Sequelize.UUID,
@@ -90,7 +91,16 @@ export function generalHash(text: string) {
 
 export function checkEmpty(text: string) {
   if (!text) return true;
-  const replaced = text.trim().replace(/([\u3164\u115F\u1160\uFFA0\u200B\u0001-\u0008\u000B-\u000C\u000E-\u001F]+)/g, '');
+  const replaced = text
+    .trim()
+    .replace(
+      /([\u3164\u115F\u1160\uFFA0\u200B\u0001-\u0008\u000B-\u000C\u000E-\u001F]+)/g,
+      '',
+    );
   if (replaced === '') return true;
   return false;
+}
+
+export function refreshSitemap() {
+  return axios.get('https://google.com/ping?sitemap=https://velog.io/sitemaps/index.xml');
 }

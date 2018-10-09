@@ -11,6 +11,7 @@ import {
   formatShortDescription,
   generalHash,
   checkEmpty,
+  refreshSitemap,
 } from 'lib/common';
 import {
   Category,
@@ -259,24 +260,27 @@ export const writePost = async (ctx: Context): Promise<*> => {
 
     ctx.body = serialized;
 
-    if (!isTemp) {
-      const tagData = tagIds.map((tagId, index) => ({
-        id: tagId,
-        name: uniqueTags[index],
-      }));
-      createFeeds({
-        postId,
-        userId: ctx.user.id,
-        username: ctx.user.username,
-        tags: tagData,
+    setTimeout(() => {
+      if (!isTemp) {
+        const tagData = tagIds.map((tagId, index) => ({
+          id: tagId,
+          name: uniqueTags[index],
+        }));
+        createFeeds({
+          postId,
+          userId: ctx.user.id,
+          username: ctx.user.username,
+          tags: tagData,
+        });
+      }
+      redisClient.remove('/recent');
+      redisClient.remove(`/@${ctx.user.username}`);
+      tags.forEach((tag) => {
+        redisClient.remove(`/tags/${tag}`);
+        redisClient.remove(`/@${ctx.user.username}/tags/${tag}`);
       });
-    }
-    redisClient.remove('/recent');
-    redisClient.remove(`/@${ctx.user.username}`);
-    tags.forEach((tag) => {
-      redisClient.remove(`/tags/${tag}`);
-      redisClient.remove(`/@${ctx.user.username}/tags/${tag}`);
-    });
+      refreshSitemap();
+    }, 0);
   } catch (e) {
     ctx.throw(500, e);
   }
