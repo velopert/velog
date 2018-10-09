@@ -13,6 +13,9 @@ import type { Categories, PostData, Meta } from 'store/modules/write';
 import axios from 'axios';
 import storage from 'lib/storage';
 import { escapeForUrl } from 'lib/common';
+import { withRouter, type ContextRouter } from 'react-router-dom';
+import { compose } from 'redux';
+
 
 type Props = {
   open: boolean,
@@ -29,7 +32,7 @@ type Props = {
   meta: Meta,
   username: ?string,
   urlSlug: ?string,
-};
+} & ContextRouter;
 
 class SubmitBoxContainer extends Component<Props> {
   initialize = async () => {
@@ -182,6 +185,12 @@ class SubmitBoxContainer extends Component<Props> {
           message: '포스트가 작성됐습니다.',
         });
       }
+
+      // redirect to post after success
+      if (!this.props.username || !this.props.postData) return;
+      const postUrl = `/@${this.props.username}/${this.props.postData &&
+        this.props.postData.url_slug}`;
+      this.props.history.push(postUrl);
     } catch (e) {
       BaseActions.showToast({
         type: 'error',
@@ -324,22 +333,26 @@ class SubmitBoxContainer extends Component<Props> {
   }
 }
 
-export default connect(
-  ({ write, user }: State) => ({
-    open: write.submitBox.open,
-    categories: write.submitBox.categories,
-    tags: write.submitBox.tags,
-    body: write.body,
-    title: write.title,
-    postData: write.postData,
-    uploadUrl: write.upload.uploadUrl,
-    imagePath: write.upload.imagePath,
-    uploadId: write.upload.id,
-    thumbnail: write.thumbnail,
-    additional: write.submitBox.additional,
-    meta: write.meta,
-    username: user.user && user.user.username,
-    urlSlug: write.submitBox.url_slug,
-  }),
-  () => ({}),
-)(SubmitBoxContainer);
+const enhance = compose(
+  connect(
+    ({ write, user }: State) => ({
+      open: write.submitBox.open,
+      categories: write.submitBox.categories,
+      tags: write.submitBox.tags,
+      body: write.body,
+      title: write.title,
+      postData: write.postData,
+      uploadUrl: write.upload.uploadUrl,
+      imagePath: write.upload.imagePath,
+      uploadId: write.upload.id,
+      thumbnail: write.thumbnail,
+      additional: write.submitBox.additional,
+      meta: write.meta,
+      username: user.user && user.user.username,
+      urlSlug: write.submitBox.url_slug,
+    }),
+    () => ({}),
+  ),
+  withRouter,
+);
+export default enhance(SubmitBoxContainer);
