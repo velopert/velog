@@ -154,7 +154,10 @@ export const writePost = async (ctx: Context): Promise<*> => {
     tags: Joi.array()
       .items(Joi.string())
       .required(),
-    urlSlug: Joi.string().trim().min(1).max(130),
+    urlSlug: Joi.string()
+      .trim()
+      .min(1)
+      .max(130),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -282,7 +285,9 @@ export const writePost = async (ctx: Context): Promise<*> => {
 export const readPost = async (ctx: Context): Promise<*> => {
   const { username, urlSlug } = ctx.params;
   try {
+    console.time('readPost');
     let post = await Post.readPost(username, urlSlug);
+    console.timeEnd('readPost');
     if (!post) {
       // try using urlslugHistory
       const user = await User.findUser('username', username);
@@ -301,21 +306,26 @@ export const readPost = async (ctx: Context): Promise<*> => {
         ctx.status = 404;
         return;
       }
+      console.time('readPostById');
       post = await Post.readPostById(history.fk_post_id);
+      console.timeEnd('readPostById');
       if (!post) {
         ctx.status = 404;
         return;
       }
     }
 
+    console.time('getCommentsCount');
     const commentsCount = await Comment.getCommentsCount(post.id);
-
+    console.timeEnd('getCommentsCount');
     let liked = false;
     if (ctx.user) {
+      console.time('checkLikeExists');
       const exists = await PostLike.checkExists({
         userId: ctx.user.id,
         postId: post.id,
       });
+      console.timeEnd('checkLikeExists');
       liked = !!exists;
     }
 
@@ -324,39 +334,39 @@ export const readPost = async (ctx: Context): Promise<*> => {
       comments_count: commentsCount,
       liked,
     });
-    const hash = generalHash(ctx.request.ip);
-    const userId = ctx.user ? ctx.user.id : null;
 
-    const postRead = await PostRead.findOne({
-      where: {
+    setTimeout(async () => {
+      const hash = generalHash(ctx.request.ip);
+      const userId = ctx.user ? ctx.user.id : null;
+
+      const postRead = await PostRead.findOne({
+        where: {
+          ip_hash: hash,
+          fk_post_id: post.id,
+          created_at: {
+            // $FlowFixMe
+            [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000),
+          },
+        },
+      });
+      if (postRead) {
+        return;
+      }
+      await PostRead.create({
         ip_hash: hash,
         fk_post_id: post.id,
-        created_at: {
-          // $FlowFixMe
-          [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000),
-        },
-      },
-    });
-
-    if (postRead) {
-      return;
-    }
-
-    await PostRead.create({
-      ip_hash: hash,
-      fk_post_id: post.id,
-      fk_user_id: userId,
-    });
-
-    await post.increment('views', { by: 1 });
-    if (post.views % 10 === 0) {
-      await PostScore.create({
-        type: TYPES.READ,
-        fk_user_id: null,
-        fk_post_id: post.id,
-        score: 0.125,
+        fk_user_id: userId,
       });
-    }
+      await post.increment('views', { by: 1 });
+      if (post.views % 10 === 0) {
+        await PostScore.create({
+          type: TYPES.READ,
+          fk_user_id: null,
+          fk_post_id: post.id,
+          score: 0.125,
+        });
+      }
+    }, 5);
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -469,7 +479,6 @@ export const listTrendingPosts = async (ctx: Context) => {
   }
 };
 
-
 export const listSequences = async (ctx: Context) => {
   const { post_id } = ctx.query;
   console.log(ctx.query);
@@ -482,7 +491,15 @@ export const listSequences = async (ctx: Context) => {
   }
   try {
     const post = await Post.findById(post_id, {
-      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'fk_user_id', 'created_at'],
+      attributes: [
+        'id',
+        'title',
+        'body',
+        'meta',
+        'url_slug',
+        'fk_user_id',
+        'created_at',
+      ],
       raw: true,
     });
     if (!post) {
