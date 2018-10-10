@@ -5,7 +5,7 @@ import UserTagView from 'components/user/UserTagView';
 import UserTab from 'components/user/UserTab';
 import { withRouter, type Match, Route } from 'react-router-dom';
 import { ProfileActions } from 'store/actionCreators';
-import { type TagCountInfo } from 'store/modules/profile';
+import { type TagCountInfo, type Profile } from 'store/modules/profile';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { compose } from 'redux';
@@ -15,6 +15,7 @@ type Props = {
   match: Match,
   tagCounts: ?(TagCountInfo[]),
   shouldCancel: boolean,
+  profile: ?Profile,
 };
 
 class UserContentContainer extends Component<Props> {
@@ -23,6 +24,7 @@ class UserContentContainer extends Component<Props> {
     if (shouldCancel) return;
     const { username } = this.props.match.params;
     if (!username) return;
+    if (username === (this.props.profile && this.props.profile.username)) return;
     ProfileActions.initialize();
     await ProfileActions.getUserTags(username);
     await ProfileActions.getProfile(username);
@@ -65,6 +67,7 @@ export default compose(
   withRouter,
   connect(
     ({ profile, common }: State) => ({
+      profile: profile.profile,
       tagCounts: profile.tagCounts,
       shouldCancel: common.ssr && !common.router.altered,
     }),

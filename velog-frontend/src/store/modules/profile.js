@@ -29,6 +29,7 @@ export type Profile = {
   display_name: string,
   thumbnail: ?string,
   short_bio: string,
+  username: string,
 };
 
 type TagData = {
