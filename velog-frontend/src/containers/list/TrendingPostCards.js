@@ -32,7 +32,9 @@ class TrendingPostCards extends Component<Props> {
     if (lastId === this.prevCursor) return;
     this.prevCursor = lastId;
     try {
-      await ListingActions.prefetchTrendingPosts(lastId);
+      await ListingActions.prefetchTrendingPosts(
+        (this.props.posts && this.props.posts.length) || 0,
+      );
     } catch (e) {
       console.log(e);
     }

@@ -75,6 +75,9 @@ export type ListingSet = {
 };
 
 export type Listing = {
+  trendingMap: {
+    [id: string]: boolean,
+  },
   trending: ListingSet,
   recent: ListingSet,
   user: ListingSet & { currentUsername: ?string, currentTag: ?string },
@@ -99,7 +102,7 @@ export interface ListingActionCreators {
   getUserPosts(payload: PostsAPI.GetUserPostsPayload): any;
   prefetchUserPosts(payload: PostsAPI.GetUserPostsPayload): any;
   getTrendingPosts(): any;
-  prefetchTrendingPosts(cursor: string): any;
+  prefetchTrendingPosts(offset: number): any;
   getTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
   prefetchTagPosts(payload: PostsAPI.GetPublicPostsByTagPayload): any;
   getTempPosts(payload: PostsAPI.GetTempPostsPayload): any;
@@ -116,6 +119,7 @@ const initialListingSet = {
 };
 
 const initialState: Listing = {
+  trendingMap: {},
   trending: initialListingSet,
   recent: initialListingSet,
   user: { ...initialListingSet, currentUsername: null, currentTag: null },
@@ -220,6 +224,9 @@ export default applyPenders(reducer, [
     type: GET_TRENDING_POSTS,
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       return produce(state, (draft) => {
+        action.payload.data.forEach((post) => {
+          draft.trendingMap[post.id] = true;
+        });
         draft.trending = {
           end: false,
           posts: action.payload.data,
@@ -233,7 +240,11 @@ export default applyPenders(reducer, [
     onSuccess: (state: Listing, action: PostsResponseAction) => {
       const { data } = action.payload;
       return produce(state, (draft) => {
-        draft.trending.prefetched = data;
+        const filtered = data.filter(post => !state.trendingMap[post.id]);
+        draft.trending.prefetched = filtered;
+        filtered.forEach((post) => {
+          draft.trendingMap[post.id] = true;
+        });
         if (data && data.length === 0) {
           draft.trending.end = true;
         }

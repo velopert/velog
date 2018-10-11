@@ -14,20 +14,19 @@ type TrendingPostRow = {
 
 // credits to SeniorDev778 dev
 export const getTrendingPosts = async (
-  cursor: ?CursorPayload,
+  offset?: number = 0,
 ): Promise<TrendingPostRow[]> => {
   const query = `SELECT fk_post_id AS post_id, SUM(score) AS score FROM post_scores
   WHERE created_at > now()::DATE - 14
   AND fk_post_id IS NOT NULL
-  ${cursor ? 'AND fk_post_id > $id' : ''}
   GROUP BY fk_post_id
-  ${cursor ? 'HAVING SUM(score) <= $score' : ''}
   ORDER BY score DESC, fk_post_id ASC
+  OFFSET $offset
   LIMIT 20`;
 
   try {
     const rows = await db.query(query, {
-      bind: cursor || {},
+      bind: { offset },
       type: Sequelize.QueryTypes.SELECT,
     });
     return rows;

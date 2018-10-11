@@ -24,6 +24,7 @@ module.exports = {
     camelcase: 0,
     'no-mixed-operators': 0,
     'max-len': 0,
+    'no-restricted-globals': 0,
   },
   plugins: ['flowtype'],
 };

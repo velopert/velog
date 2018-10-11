@@ -37,7 +37,6 @@ import { TYPES } from 'database/models/PostScore';
 import db from 'database/db';
 import { getCommentCountsOfPosts } from 'database/rawQuery/comments';
 import {
-  getTrendingPostScore,
   getTrendingPosts,
 } from 'database/rawQuery/trending';
 import redisClient from 'lib/redisClient';
@@ -441,31 +440,19 @@ export const listPosts = async (ctx: Context): Promise<*> => {
 };
 
 export const listTrendingPosts = async (ctx: Context) => {
-  const { option, cursor } = ctx.query;
+  const { option } = ctx.query;
+  if (isNaN(ctx.query.offset || 0)) {
+    ctx.body = {
+      type: 'INVALID_OFFSET',
+    };
+    ctx.status = 400;
+    return;
+  }
+  const offset = parseInt(ctx.query.offset || 0, 10);
+
   // check cursor
   try {
-    let score = 0;
-    if (cursor) {
-      if (!isUUID(cursor)) {
-        ctx.body = 'NOT_UUID';
-        ctx.status = 400;
-        return;
-      }
-      score = await getTrendingPostScore(cursor);
-      if (!score) {
-        ctx.body = {
-          type: 'INVALID_CURSOR_ID',
-        };
-        ctx.status = 400;
-        return;
-      }
-    }
-    const postIds = await getTrendingPosts(cursor
-      ? {
-        id: cursor,
-        score,
-      }
-      : null);
+    const postIds = await getTrendingPosts(offset || 0);
     if (!postIds || postIds.length === 0) {
       ctx.body = [];
       return;

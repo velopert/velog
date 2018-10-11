@@ -27,7 +27,6 @@ export const getPostsOfMonth = async (
   try {
     const rows = await db.query(query, {
       type: Sequelize.QueryTypes.SELECT,
-      bind: { month },
     });
     return rows;
   } catch (e) {
