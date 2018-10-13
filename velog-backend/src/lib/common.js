@@ -104,3 +104,16 @@ export function checkEmpty(text: string) {
 export function refreshSitemap() {
   return axios.get('https://google.com/ping?sitemap=https://velog.io/sitemaps/index.xml');
 }
+
+export function normalize(array: any[], key: string) {
+  const byId = {};
+  const allIds = [];
+  array.forEach((item) => {
+    byId[item[key]] = item;
+    allIds.push(item[key]);
+  });
+  return {
+    byId,
+    allIds,
+  };
+}

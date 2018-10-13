@@ -2,11 +2,6 @@
 import Sequelize from 'sequelize';
 import db from 'database/db';
 
-type CursorPayload = {
-  id: string,
-  score: number,
-};
-
 type TrendingPostRow = {
   post_id: string,
   score: number,

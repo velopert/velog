@@ -7,6 +7,7 @@ const user = new Router();
 
 user.get('/', usersCtrl.getProfile);
 user.get('/tags', usersCtrl.getTags);
-
+user.get('/history', usersCtrl.getHistory);
 users.use('/@:username', usersCtrl.getUser, user.routes());
+
 export default users;
