@@ -2,7 +2,6 @@
 .SavePostCard {
   border: 1px solid $oc-gray-3;
   color: $oc-gray-9;
-  @include common-font();
   .img-wrapper {
     padding-top: 52.63%;
     position: relative;

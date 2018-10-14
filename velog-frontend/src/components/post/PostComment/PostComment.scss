@@ -22,7 +22,7 @@
           text-decoration: underline;
         }
       }
-      button + button {
+      button+button {
         margin-left: 0.5rem;
       }
     }
@@ -48,6 +48,7 @@
     }
   }
   .comment-body {
+    font-family: "Noto Serif KR", sans-serif;
     color: $oc-gray-9;
     margin-top: 1rem;
     line-height: 1.5rem;
@@ -113,6 +114,6 @@
   }
 }
 
-.PostComment + .PostComment {
+.PostComment+.PostComment {
   border-top: 1px solid $oc-gray-2;
 }

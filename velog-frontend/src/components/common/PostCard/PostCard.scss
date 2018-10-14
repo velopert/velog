@@ -18,20 +18,19 @@
     margin-top: 1.25rem;
     margin-bottom: 1.25rem;
   }
-  @include media("<medium") {
-  }
+  @include media("<medium") {}
   &.one-column {
     box-shadow: none;
     border: 1px solid $oc-gray-3;
     width: calc(100% - 1.75rem);
-    & + & {
+    &+& {
       margin-top: 2.5rem;
     }
     .card-content {
       box-shadow: none;
     }
   }
-  & > .thumbnail-wrapper {
+  &>.thumbnail-wrapper {
     width: 100%;
     padding-top: 52.63%;
     position: relative;
@@ -120,7 +119,6 @@
       h3 {
         display: block;
         margin: 0;
-        @include common-font();
         font-size: 1.25rem;
         line-height: 2rem;
         max-height: 4rem;
@@ -131,7 +129,7 @@
         font-size: 0.875rem;
         margin-top: 0.5rem;
         color: #8aa6c1;
-        span + span::before {
+        span+span::before {
           color: $oc-gray-5;
           padding-left: 0.25rem;
           padding-right: 0.25rem;
@@ -146,7 +144,6 @@
       overflow-y: hidden;
       word-break: break-all;
       color: #4c657d;
-      @include common-font();
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
