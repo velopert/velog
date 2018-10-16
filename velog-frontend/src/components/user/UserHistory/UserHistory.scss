@@ -5,6 +5,9 @@
   .HistoryItem {
     padding-top: 2rem;
     padding-bottom: 2rem;
+    & + .HistoryItem {
+      border-top: 1px solid $oc-gray-2;
+    }
     .message {
       display: flex;
       align-items: center;
@@ -72,8 +75,8 @@
       }
       .comment-text {
         font-family: "Noto Serif KR", sans-serif;
-        padding-top: 1rem;
-        padding-left: 2rem;
+        padding-top: 0.5rem;
+        padding-left: 1.5rem;
       }
     }
   }

@@ -12,7 +12,7 @@ import {
 } from 'database/models';
 import { pick } from 'lodash';
 import { getUserHistory } from 'database/rawQuery/users';
-import { normalize } from 'lib/common';
+import { normalize, formatShortDescription } from 'lib/common';
 
 const { Op } = Sequelize;
 
@@ -84,7 +84,6 @@ export const getHistory: KoaRouter$Middleware = async (ctx) => {
       include: [
         {
           model: Post,
-          attributes: ['title', 'fk_user_id', 'url_slug', 'thumbnail'],
           include: [
             {
               model: User,
@@ -104,13 +103,6 @@ export const getHistory: KoaRouter$Middleware = async (ctx) => {
       include: [
         {
           model: Post,
-          attributes: [
-            'title',
-            'fk_user_id',
-            'url_slug',
-            'thumbnail',
-            'created_at',
-          ],
           include: [
             {
               model: User,
@@ -131,6 +123,9 @@ export const getHistory: KoaRouter$Middleware = async (ctx) => {
       ...pick(row, ['id', 'text']),
       post: {
         ...pick(row.post, ['title', 'url_slug', 'thumbnail', 'created_at']),
+        short_description:
+          row.post.meta.short_description ||
+          formatShortDescription(row.post.body),
         user: {
           username: row.post.user.username,
           ...pick(row.post.user.user_profile, ['display_name', 'thumbnail']),

@@ -11,6 +11,7 @@ const SET_RAW_TAG_NAME = 'profile/SET_RAW_TAG_NAME';
 const GET_TAG_INFO = 'profile/GET_TAG_INFO';
 const INITIALIZE = 'profile/INITIALIZE';
 const SET_SIDE_VISIBILITY = 'profile/SET_SIDE_VISIBILITY';
+const GET_USER_HISTORY = 'profile/GET_USER_HISTORY';
 
 export const actionCreators = {
   initialize: createAction(INITIALIZE),
@@ -19,6 +20,7 @@ export const actionCreators = {
   setRawTagName: createAction(SET_RAW_TAG_NAME, (tagName: string) => tagName),
   getTagInfo: createAction(GET_TAG_INFO, CommonAPI.getTagInfo),
   setSideVisibility: createAction(SET_SIDE_VISIBILITY, (visible: boolean) => visible),
+  getUserHistory: createAction(GET_USER_HISTORY, UsersAPI.getHistory),
 };
 
 export type TagCountInfo = {
@@ -53,13 +55,33 @@ type ProfileResponseAction = {
   },
 };
 
+export type UserHistoryItem = {
+  id: string,
+  created: string,
+  type: 'comment' | 'like',
+  text: ?string,
+  post: {
+    title: string,
+    url_slug: string,
+    thumbnail: string,
+    short_description: string,
+    user: {
+      username: string,
+      display_name: string,
+      thumbnail: string,
+    },
+  },
+};
+
 type SetRawTagNameAction = ActionType<typeof actionCreators.setRawTagName>;
 type GetTagInfoResponseAction = GenericResponseAction<TagData, string>;
 type SetSideVisibilityAction = ActionType<typeof actionCreators.setSideVisibility>;
+type GetUserHistoryResponseAction = GenericResponseAction<UserHistoryItem[], any>;
 
 export type ProfileState = {
   tagCounts: ?(TagCountInfo[]),
   profile: ?Profile,
+  userHistory: ?(UserHistoryItem[]),
   rawTagName: ?string,
   side: boolean,
 };
@@ -68,6 +90,7 @@ const initialState = {
   tagCounts: null,
   profile: null,
   rawTagName: null,
+  userHistory: null,
   side: true,
 };
 
@@ -121,6 +144,15 @@ export default applyPenders(reducer, [
       return {
         ...state,
         rawTagName: payload.data.name,
+      };
+    },
+  },
+  {
+    type: GET_USER_HISTORY,
+    onSuccess: (state: ProfileState, { payload }: GetUserHistoryResponseAction) => {
+      return {
+        ...state,
+        userHistory: payload.data,
       };
     },
   },
