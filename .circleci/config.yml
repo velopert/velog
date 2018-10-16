@@ -98,10 +98,19 @@ workflows:
   build-and-deploy:
     jobs:
       - build-frontend
+          filters:
+            branches:
+              only: master
       - deploy-frontend:
+          filters:
+            branches:
+              only: master
           requires:
             - build-frontend
       - deploy-ssr:
+          filters:
+            branches:
+              only: master
           requires:
             - deploy-frontend
       - deploy-backend
