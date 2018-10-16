@@ -10,6 +10,7 @@ const GET_PROFILE = 'profile/GET_PROFILE';
 const SET_RAW_TAG_NAME = 'profile/SET_RAW_TAG_NAME';
 const GET_TAG_INFO = 'profile/GET_TAG_INFO';
 const INITIALIZE = 'profile/INITIALIZE';
+const SET_SIDE_VISIBILITY = 'profile/SET_SIDE_VISIBILITY';
 
 export const actionCreators = {
   initialize: createAction(INITIALIZE),
@@ -17,6 +18,7 @@ export const actionCreators = {
   getProfile: createAction(GET_PROFILE, UsersAPI.getProfile),
   setRawTagName: createAction(SET_RAW_TAG_NAME, (tagName: string) => tagName),
   getTagInfo: createAction(GET_TAG_INFO, CommonAPI.getTagInfo),
+  setSideVisibility: createAction(SET_SIDE_VISIBILITY, (visible: boolean) => visible),
 };
 
 export type TagCountInfo = {
@@ -25,7 +27,7 @@ export type TagCountInfo = {
 };
 
 export type Profile = {
-  user_id: string,
+  id: string,
   display_name: string,
   thumbnail: ?string,
   short_bio: string,
@@ -53,26 +55,35 @@ type ProfileResponseAction = {
 
 type SetRawTagNameAction = ActionType<typeof actionCreators.setRawTagName>;
 type GetTagInfoResponseAction = GenericResponseAction<TagData, string>;
+type SetSideVisibilityAction = ActionType<typeof actionCreators.setSideVisibility>;
 
 export type ProfileState = {
   tagCounts: ?(TagCountInfo[]),
   profile: ?Profile,
   rawTagName: ?string,
+  side: boolean,
 };
 
 const initialState = {
   tagCounts: null,
   profile: null,
   rawTagName: null,
+  side: true,
 };
 
 const reducer = handleActions(
   {
-    [INITIALIZE]: () => initialState,
+    [INITIALIZE]: state => ({ ...initialState, side: state.side }),
     [SET_RAW_TAG_NAME]: (state, { payload }: SetRawTagNameAction) => {
       return {
         ...state,
         rawTagName: payload,
+      };
+    },
+    [SET_SIDE_VISIBILITY]: (state, { payload }: SetSideVisibilityAction) => {
+      return {
+        ...state,
+        side: payload,
       };
     },
   },

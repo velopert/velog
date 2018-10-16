@@ -25,7 +25,7 @@ const App = () => (
       <Route path="/write" component={Write} />
       <Route exact path="/@:username/" component={User} />
       <Route exact path="/@:username/tags/:tag" component={User} />
-      <Route exact path="/@:username/:tab(collections|popular)" component={User} />
+      <Route exact path="/@:username/:tab(history)" component={User} />
       <Route path="/@:username/:urlSlug" component={Post} />
       <Route path="/posts/preview/:id" component={Post} />
       <Route path="/saves" component={Saves} />

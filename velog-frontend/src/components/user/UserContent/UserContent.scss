@@ -1,17 +1,48 @@
 @import "utils";
 .UserContent {
-  display: flex;
-  margin-top: 4rem;
+  .tabs {
+    margin-bottom: 4rem;
+    font-size: 1.3125rem;
+    color: $oc-gray-8;
+    display: flex;
+    justify-content: center;
+    @include media("<large") {
+      border-top: 16px solid $oc-gray-2;
+      margin-bottom: 2rem;
+      margin-left: -1rem;
+      margin-right: -1rem;
+      border-bottom: 1px solid $oc-gray-2;
+    }
+    a {
+      width: 6rem;
+      display: flex;
+      justify-content: center;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 0.5rem;
+      @include media("<large") {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        flex: 1;
+      }
+      &.active {
+        border-bottom: 2px solid $oc-violet-4;
+        color: $oc-violet-5;
+        font-weight: 600;
+      }
+    }
+    a+a {
+      margin-left: 1rem;
+    }
+  }
+  margin-top: 3rem;
   @include media("<medium") {
-    flex-direction: column;
+    .content {
+      flex-direction: column;
+    }
     margin-top: 2rem;
   }
-  .tab-wrapper {
-    margin-left: 2rem;
-    @include media("<medium") {
-      margin-left: 0;
-    }
-    flex: 1;
+  .content {
+    display: flex;
   }
   .side-wrapper {
     flex-shrink: 0;
@@ -19,5 +50,14 @@
     @include media("<medium") {
       width: 100%;
     }
+  }
+  .side-wrapper+.tab-wrapper {
+    margin-left: 2rem;
+    @include media("<medium") {
+      margin-left: 0;
+    }
+  }
+  .tab-wrapper {
+    flex: 1;
   }
 }

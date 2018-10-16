@@ -2,21 +2,22 @@
 import React, { Component } from 'react';
 import UserContent from 'components/user/UserContent';
 import UserTagView from 'components/user/UserTagView';
-import UserTab from 'components/user/UserTab';
-import { withRouter, type Match, Route } from 'react-router-dom';
+import { withRouter, type Match, type ContextRouter, Route } from 'react-router-dom';
 import { ProfileActions } from 'store/actionCreators';
 import { type TagCountInfo, type Profile } from 'store/modules/profile';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import { compose } from 'redux';
 import UserPostsSubpage from 'pages/user/UserPostsSubpage';
+import UserHistorySubpage from '../../pages/user/UserHistorySubpage';
 
 type Props = {
   match: Match,
   tagCounts: ?(TagCountInfo[]),
   shouldCancel: boolean,
   profile: ?Profile,
-};
+  side: boolean,
+} & ContextRouter;
 
 class UserContentContainer extends Component<Props> {
   initialize = async () => {
@@ -45,19 +46,23 @@ class UserContentContainer extends Component<Props> {
   }
 
   render() {
-    const { match, tagCounts } = this.props;
+    const { match, tagCounts, side, location } = this.props;
     const username = match.params.username || '';
 
+    const type = match.params.tab || 'posts';
     return (
       <UserContent
+        type={type}
+        username={username}
         side={
-          <UserTagView tagCounts={tagCounts} username={username} onSelectTag={this.onSelectTag} />
+          side && (
+            <UserTagView tagCounts={tagCounts} username={username} onSelectTag={this.onSelectTag} />
+          )
         }
       >
-        <UserTab username={username}>
-          <Route exact path="/@:username" component={UserPostsSubpage} />
-          <Route path="/@:username/tags/:tag" component={UserPostsSubpage} />
-        </UserTab>
+        <Route exact path="/@:username" component={UserPostsSubpage} />
+        <Route path="/@:username/history" component={UserHistorySubpage} />
+        <Route path="/@:username/tags/:tag" component={UserPostsSubpage} />
       </UserContent>
     );
   }
@@ -70,6 +75,7 @@ export default compose(
       profile: profile.profile,
       tagCounts: profile.tagCounts,
       shouldCancel: common.ssr && !common.router.altered,
+      side: profile.side,
     }),
     () => ({}),
   ),

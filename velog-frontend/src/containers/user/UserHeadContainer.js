@@ -26,7 +26,7 @@ class UserHeadContainer extends Component<Props> {
     const { profile, shouldCancel, logged } = this.props;
     if (!profile || !logged) return;
     if (shouldCancel) return;
-    FollowActions.getUserFollow(profile.user_id);
+    FollowActions.getUserFollow(profile.id);
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -43,21 +43,21 @@ class UserHeadContainer extends Component<Props> {
     const { profile, followingUsers, followLoading } = this.props;
     if (!profile || followLoading) return;
 
-    const { user_id } = profile;
-    const following = followingUsers[user_id];
+    const { id } = profile;
+    const following = followingUsers[id];
 
     if (following) {
-      FollowActions.unfollowUser(user_id);
+      FollowActions.unfollowUser(id);
       return;
     }
-    FollowActions.followUser(user_id);
+    FollowActions.followUser(id);
   };
   render() {
     const { profile, self, followingUsers, username, rawTagName } = this.props;
 
     if (!profile || !username) return <UserHead.Placeholder />;
 
-    const following = followingUsers[profile.user_id];
+    const following = followingUsers[profile.id];
 
     return (
       <UserHead

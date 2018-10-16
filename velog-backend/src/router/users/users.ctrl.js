@@ -43,7 +43,7 @@ export const getProfile = async (ctx: Context) => {
   try {
     const profile = await ctx.selectedUser.getProfile();
     ctx.body = {
-      user_id: ctx.selectedUser.id,
+      id: ctx.selectedUser.id,
       ...pick(profile, ['display_name', 'short_bio', 'thumbnail']),
       username: ctx.params.username,
     };

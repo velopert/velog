@@ -77,7 +77,7 @@ const routes = [
         ListingActions.getUserPosts({ username }),
       ];
       if (profile && ctx.state.logged) {
-        promises.push(FollowActions.getUserFollow(profile.user_id));
+        promises.push(FollowActions.getUserFollow(profile.id));
       }
       return Promise.all(promises);
     },
@@ -101,7 +101,7 @@ const routes = [
       ];
       if (profile) {
         if (ctx.state.logged) {
-          promises.push(FollowActions.getUserFollow(profile.user_id));
+          promises.push(FollowActions.getUserFollow(profile.id));
         }
       }
       return Promise.all(promises);
