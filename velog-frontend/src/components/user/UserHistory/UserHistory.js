@@ -1,7 +1,9 @@
 // @flow
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import CommentIcon from 'react-icons/lib/fa/comment';
 import HeartIcon from 'react-icons/lib/fa/heart';
+import FakeLink from 'components/common/FakeLink';
 import { type UserHistoryItem } from 'store/modules/profile';
 import './UserHistory.scss';
 
@@ -11,9 +13,10 @@ type HistoryItemProps = {
 };
 
 const HistoryItem = ({ item, username }: HistoryItemProps) => {
+  const url = `/@${item.post.user.username}/${item.post.url_slug}`;
   const { type } = item;
   return (
-    <div className="HistoryItem">
+    <FakeLink className="HistoryItem" to={url}>
       {type === 'comment' ? (
         <div className="message">
           <CommentIcon className="comment" />@{username}님이 댓글을 남기셨습니다.
@@ -34,7 +37,9 @@ const HistoryItem = ({ item, username }: HistoryItemProps) => {
           </Fragment>
         )}
         <div className="post-info">
-          <h4>{item.post.title}</h4>
+          <h4>
+            <Link to={url}>{item.post.title}</Link>
+          </h4>
           <p>
             {item.post.short_description.slice(0, 150)}
             {item.post.short_description.length >= 150 && '...'}
@@ -47,7 +52,7 @@ const HistoryItem = ({ item, username }: HistoryItemProps) => {
           <div className="comment-text">{item.text}</div>
         </div>
       )}
-    </div>
+    </FakeLink>
   );
 };
 

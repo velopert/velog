@@ -3,9 +3,10 @@
   width: 768px;
   margin: 0 auto;
   .HistoryItem {
+    cursor: pointer;
     padding-top: 2rem;
     padding-bottom: 2rem;
-    & + .HistoryItem {
+    &+.HistoryItem {
       border-top: 1px solid $oc-gray-2;
     }
     .message {

@@ -12,6 +12,8 @@ const GET_TAG_INFO = 'profile/GET_TAG_INFO';
 const INITIALIZE = 'profile/INITIALIZE';
 const SET_SIDE_VISIBILITY = 'profile/SET_SIDE_VISIBILITY';
 const GET_USER_HISTORY = 'profile/GET_USER_HISTORY';
+const REVEAL_PREFETCHED_HISTORY = 'profile/REVEAL_PREFETCHED_HISTORY';
+const PREFETCH_USER_HISTORY = 'profile/PREFETCH_USER_HISTORY';
 
 export const actionCreators = {
   initialize: createAction(INITIALIZE),
@@ -21,6 +23,8 @@ export const actionCreators = {
   getTagInfo: createAction(GET_TAG_INFO, CommonAPI.getTagInfo),
   setSideVisibility: createAction(SET_SIDE_VISIBILITY, (visible: boolean) => visible),
   getUserHistory: createAction(GET_USER_HISTORY, UsersAPI.getHistory),
+  revealPrefetchedHistory: createAction(REVEAL_PREFETCHED_HISTORY),
+  prefetchUserHistory: createAction(PREFETCH_USER_HISTORY, UsersAPI.getHistory),
 };
 
 export type TagCountInfo = {
@@ -82,6 +86,7 @@ export type ProfileState = {
   tagCounts: ?(TagCountInfo[]),
   profile: ?Profile,
   userHistory: ?(UserHistoryItem[]),
+  prefetchedHistory: ?(UserHistoryItem[]),
   rawTagName: ?string,
   side: boolean,
 };
@@ -91,6 +96,7 @@ const initialState = {
   profile: null,
   rawTagName: null,
   userHistory: null,
+  prefetchedHistory: null,
   side: true,
 };
 
@@ -108,6 +114,13 @@ const reducer = handleActions(
         ...state,
         side: payload,
       };
+    },
+    [REVEAL_PREFETCHED_HISTORY]: (state) => {
+      return produce(state, (draft) => {
+        if (!draft.userHistory || !draft.prefetchedHistory) return;
+        draft.userHistory = draft.userHistory.concat(draft.prefetchedHistory);
+        draft.prefetchedHistory = null;
+      });
     },
   },
   initialState,
@@ -149,10 +162,27 @@ export default applyPenders(reducer, [
   },
   {
     type: GET_USER_HISTORY,
+    onPending: (state: ProfileState) => {
+      return {
+        ...state,
+        prefetchedHistory: null,
+      };
+    },
     onSuccess: (state: ProfileState, { payload }: GetUserHistoryResponseAction) => {
       return {
         ...state,
         userHistory: payload.data,
+      };
+    },
+  },
+  {
+    type: PREFETCH_USER_HISTORY,
+    onSuccess: (state: ProfileState, { payload }: GetUserHistoryResponseAction) => {
+      const currentIdList = (state.userHistory || []).map(item => item.id);
+      const filtered = payload.data.filter(item => currentIdList.indexOf(item.id) === -1);
+      return {
+        ...state,
+        prefetchedHistory: filtered,
       };
     },
   },
