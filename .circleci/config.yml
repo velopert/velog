@@ -97,7 +97,7 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build-frontend
+      - build-frontend:
           filters:
             branches:
               only: master
@@ -113,4 +113,7 @@ workflows:
               only: master
           requires:
             - deploy-frontend
-      - deploy-backend
+      - deploy-backend:
+          filters:
+            branches:
+              only: master
