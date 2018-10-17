@@ -6,21 +6,22 @@ import { type UserHistoryItem } from 'store/modules/profile';
 import './UserHistory.scss';
 
 type HistoryItemProps = {
+  username: string,
   item: UserHistoryItem,
 };
 
-const HistoryItem = ({ item }: HistoryItemProps) => {
+const HistoryItem = ({ item, username }: HistoryItemProps) => {
   const { type } = item;
   return (
     <div className="HistoryItem">
       {type === 'comment' ? (
         <div className="message">
-          <CommentIcon className="comment" />@velopert님이 댓글을 남기셨습니다.
+          <CommentIcon className="comment" />@{username}님이 댓글을 남기셨습니다.
         </div>
       ) : (
         <div className="message">
           <HeartIcon className="heart" />
-          @velopert님이 이 포스트를 좋아합니다.
+          @{username}님이 이 포스트를 좋아합니다.
         </div>
       )}
       <div className="mini-postcard">
