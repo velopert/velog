@@ -12,7 +12,7 @@ const {
   POSTGRES_PW,
 } = process.env;
 const db: Sequelize = new Sequelize('velog', POSTGRES_USER, POSTGRES_PW, {
-  host: 'localhost',
+  host: POSTGRES_HOST || '',
   dialect: 'postgres',
   define: {
     underscored: true,

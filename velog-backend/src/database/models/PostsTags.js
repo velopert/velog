@@ -92,7 +92,7 @@ PostsTags.getPostsCount = async ({ userId }: GetPostsCountParams) => {
     INNER JOIN posts AS p ON p.id = pt.fk_post_id
     WHERE p.fk_user_id = $userId
     AND p.is_temp = FALSE
-  ) GROUP BY tag
+  ) as q GROUP BY tag
   ORDER BY count DESC, tag
   `;
   try {
