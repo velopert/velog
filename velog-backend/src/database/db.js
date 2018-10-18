@@ -1,28 +1,26 @@
 // @flow
-import SequelizeCockroach from 'sequelize-cockroachdb';
-import type Sequelize from 'sequelize';
+import Sequelize from 'sequelize';
 import pg from 'pg';
 
 (pg: any).defaults.parseInt8 = true; // fixes issue: umbers returning as string.
 
-const { COCKROACHDB_HOST, COCKROACHDB_PW } = process.env;
-const db: Sequelize = new SequelizeCockroach('velog', 'velog', COCKROACHDB_PW, {
-  host: COCKROACHDB_HOST,
+const {
+  COCKROACHDB_HOST,
+  COCKROACHDB_PW,
+  POSTGRES_HOST,
+  POSTGRES_USER,
+  POSTGRES_PW,
+} = process.env;
+const db: Sequelize = new Sequelize('velog', POSTGRES_USER, POSTGRES_PW, {
+  host: 'localhost',
   dialect: 'postgres',
-  port: 26257,
-  logging: process.env.NODE_ENV === 'development',
-  ssl: true,
-  dialectOptions: {
-    ssl: true,
-    supportBigNumbers: true,
-  },
   define: {
     underscored: true,
   },
   pool: {
     max: 5,
     min: 0,
-    acquire: 10000,
+    acquire: 30000,
     idle: 10000,
   },
 });
