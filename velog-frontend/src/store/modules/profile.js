@@ -89,6 +89,7 @@ export type ProfileState = {
   prefetchedHistory: ?(UserHistoryItem[]),
   rawTagName: ?string,
   side: boolean,
+  historyEnd: false,
 };
 
 const initialState = {
@@ -98,6 +99,7 @@ const initialState = {
   userHistory: null,
   prefetchedHistory: null,
   side: true,
+  historyEnd: false,
 };
 
 const reducer = handleActions(
@@ -172,6 +174,7 @@ export default applyPenders(reducer, [
       return {
         ...state,
         userHistory: payload.data,
+        historyEnd: payload.data.length < 20,
       };
     },
   },
@@ -183,6 +186,7 @@ export default applyPenders(reducer, [
       return {
         ...state,
         prefetchedHistory: filtered,
+        historyEnd: payload.data.length < 20,
       };
     },
   },

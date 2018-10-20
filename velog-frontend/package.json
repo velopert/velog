@@ -61,7 +61,7 @@
     "react-router-dom": "^4.2.2",
     "react-tooltip": "^3.4.3",
     "react-truncate": "^2.4.0",
-    "recompose": "^0.26.0",
+    "recompose": "^0.30.0",
     "redux": "^3.7.2",
     "redux-actions": "^2.4.0",
     "redux-pender": "^1.2.1",
