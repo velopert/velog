@@ -43,8 +43,8 @@ const HistoryItem = onlyUpdateForKeys(['item', 'username'])(
               <Link to={url}>{item.post.title}</Link>
             </h4>
             <p>
-              {item.post.short_description.slice(0, 150)}
-              {item.post.short_description.length >= 150 && '...'}
+              {item.post.short_description && item.post.short_description.slice(0, 150)}
+              {item.post.short_description && item.post.short_description.length >= 150 && '...'}
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@ const HistoryItem = onlyUpdateForKeys(['item', 'username'])(
   },
 );
 
-HistoryItem.Placeholder = () => {
+const HistoryItemPlaceholder = () => {
   return (
     <div className="HistoryItem placeholder">
       <div className="message gray-box" style={{ width: '60%' }} />
@@ -103,10 +103,10 @@ class UserHistory extends Component<Props> {
         {this.renderList()}
         {this.props.loading && (
           <Fragment>
-            <HistoryItem.Placeholder />
-            <HistoryItem.Placeholder />
-            <HistoryItem.Placeholder />
-            <HistoryItem.Placeholder />
+            <HistoryItemPlaceholder />
+            <HistoryItemPlaceholder />
+            <HistoryItemPlaceholder />
+            <HistoryItemPlaceholder />
           </Fragment>
         )}
       </div>

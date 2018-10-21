@@ -26,10 +26,14 @@ const rules = [
     maxAge: 60 * 10,
   },
   {
+    path: '/@:username/history',
+    maxAge: 60 * 60 * 3,
+  },
+  {
     path: '/@:username/:urlSlug',
     maxAge: 60 * 60 * 3,
   },
-]
+];
 
 export function check(path) {
   return rules.find(r => pathToRegexp(r.path).exec(path) !== null);

@@ -109,6 +109,30 @@ const routes = [
     stop: true,
   },
   {
+    path: '/@:username/history',
+    exact: true,
+    preload: async (ctx: any, { dispatch, getState }: any, match: Match) => {
+      const { username } = match.params;
+      const ProfileActions = bindActionCreators(profileActions, dispatch);
+      const FollowActions = bindActionCreators(followActions, dispatch);
+      if (!username) return null;
+      await ProfileActions.getProfile(username);
+      const state: State = getState();
+      const { profile } = state.profile;
+      const promises = [
+        ProfileActions.getUserTags(username),
+        ProfileActions.getUserHistory({ username }),
+      ];
+      if (profile) {
+        if (ctx.state.logged) {
+          promises.push(FollowActions.getUserFollow(profile.id));
+        }
+      }
+      return Promise.all(promises);
+    },
+    stop: true,
+  },
+  {
     path: '/@:username/:urlSlug',
     component: Post,
     preload: async (ctx: any, { dispatch, getState }: any, match: Match) => {
