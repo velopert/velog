@@ -10,9 +10,10 @@ const {
   POSTGRES_HOST,
   POSTGRES_USER,
   POSTGRES_PW,
+  APP_ENV,
 } = process.env;
 const db: Sequelize = new Sequelize('velog', POSTGRES_USER, POSTGRES_PW, {
-  host: POSTGRES_HOST || '',
+  host: APP_ENV === 'local' ? 'localhost' : POSTGRES_HOST || '',
   dialect: 'postgres',
   define: {
     underscored: true,
