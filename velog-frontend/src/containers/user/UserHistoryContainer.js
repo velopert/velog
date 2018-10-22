@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { ProfileActions } from 'store/actionCreators';
 import UserHistory from 'components/user/UserHistory/UserHistory';
@@ -9,6 +9,7 @@ import { type State } from 'store';
 import { type UserHistoryItem, type Profile } from 'store/modules/profile';
 import throttle from 'lodash/throttle';
 import { getScrollBottom, preventStickBottom } from 'lib/common';
+import { Helmet } from 'react-helmet';
 
 type Props = {
   userHistory: ?(UserHistoryItem[]),
@@ -82,13 +83,24 @@ class UserHistoryContainer extends Component<Props> {
   }
 
   render() {
-    const { userHistory, match, loading, prefetching } = this.props;
+    const { profile, userHistory, match, loading, prefetching } = this.props;
     return (
-      <UserHistory
-        data={userHistory}
-        username={match.params.username || ''}
-        loading={loading || prefetching}
-      />
+      <Fragment>
+        {profile && (
+          <Helmet>
+            <title>{`${profile.username} (${profile.display_name}) 활동 기록 - velog`}</title>
+            <meta
+              name="description"
+              content={`${profile.username}님이 벨로그에서 관심 있어 한 포스트들을 확인하세요.`}
+            />
+          </Helmet>
+        )}
+        <UserHistory
+          data={userHistory}
+          username={match.params.username || ''}
+          loading={loading || prefetching}
+        />
+      </Fragment>
     );
   }
 }
