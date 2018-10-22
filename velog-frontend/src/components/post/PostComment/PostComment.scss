@@ -48,18 +48,46 @@
     }
   }
   .comment-body {
-    font-family: "Noto Serif KR", sans-serif;
-    color: $oc-gray-9;
-    margin-top: 1rem;
-    line-height: 1.5rem;
-    white-space: pre-wrap;
+    .MarkdownRender {
+      font-size: 1rem;
+      @include media("<medium") {
+        font-size: 0.875rem;
+      }
+      p+p {
+        margin-top: 1rem;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: $oc-gray-9;
+        font-weight: 700;
+        line-height: 1.5;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        & code {
+          font-weight: 600;
+        }
+      }
+      p,
+      blockquote,
+      table,
+      pre {
+        margin: 0.5rem 0;
+      }
+      blockquote {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+    }
     &.deleted {
       color: $oc-gray-6;
       font-style: italic;
     }
   }
   .replies-button {
-    margin-top: 1rem;
     display: inline-flex;
     align-items: center;
     padding: 0.875rem;

@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 .PostCommentInput {
   textarea {
     width: 100%;
@@ -11,6 +11,7 @@
     resize: none;
     color: $oc-gray-9;
     display: block;
+    line-height: 1.5;
   }
   .button-wrapper {
     margin-top: 1rem;

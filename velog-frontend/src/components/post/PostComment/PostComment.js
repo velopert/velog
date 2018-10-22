@@ -8,6 +8,8 @@ import type { Comment, SubcommentsMap } from 'store/modules/posts';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
 import { Link } from 'react-router-dom';
 import { fromNow } from 'lib/common';
+import MarkdownRender from 'components/common/MarkdownRender';
+
 import cx from 'classnames';
 
 import './PostComment.scss';
@@ -197,7 +199,7 @@ class PostComment extends Component<Props, State> {
                 deleted: comment === null,
               })}
             >
-              {comment || '삭제된 댓글입니다.'}
+              {comment ? <MarkdownRender body={comment} /> : '삭제된 댓글입니다.'}
             </div>
           </Fragment>
         )}
