@@ -6,6 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_PATH=src APP_ENV=local nodemon --inspect src/local --exec babel-node --plugins transform-es2015-modules-commonjs,transform-object-rest-spread,transform-async-to-generator --presets flow",
     "migrate": "NODE_PATH=src babel-node src/scripts/migrate --plugins transform-es2015-modules-commonjs,transform-object-rest-spread,transform-async-to-generator --presets flow",
+    "migrate:dev": "NODE_PATH=src APP_ENV=local babel-node src/scripts/migrate --plugins transform-es2015-modules-commonjs,transform-object-rest-spread,transform-async-to-generator --presets flow",
     "deploy:dev": "sls deploy --stage dev",
     "deploy": "sls deploy --stage prod",
     "deploy:local": ". ./scripts/loadenv && sls deploy --stage prod",

@@ -103,8 +103,7 @@ class WriteHeaderContainer extends Component<Props> {
           title,
           body,
           tags,
-          isMarkdown: true,
-          isTemp: true,
+          is_temp: true,
           categories: activeCategories,
           thumbnail,
         });
@@ -158,11 +157,10 @@ class WriteHeaderContainer extends Component<Props> {
           title,
           body,
           tags,
-          isMarkdown: true,
-          isTemp: true,
+          is_temp: true,
           thumbnail,
           categories: activeCategories,
-          urlSlug: urlSlug || escapeForUrl(title),
+          url_slug: urlSlug || escapeForUrl(title),
         });
       }
       if (postData && postData.is_temp) {

@@ -5,12 +5,11 @@ import queryString from 'query-string';
 export type WritePostPayload = {
   title: string,
   body: string,
-  isMarkdown: boolean,
-  isTemp: boolean,
+  is_temp: boolean,
   tags: Array<string>,
   categories: Array<string>,
   thumbnail: ?string,
-  urlSlug?: ?string,
+  url_slug?: ?string,
 };
 
 export const writePost = (payload: WritePostPayload) => axios.post('/posts', payload);

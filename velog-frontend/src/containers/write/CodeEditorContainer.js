@@ -85,8 +85,7 @@ class CodeEditorContainer extends Component<Props> {
           title,
           body,
           tags,
-          isMarkdown: true,
-          isTemp: true,
+          is_temp: true,
           categories: activeCategories,
           thumbnail,
         });

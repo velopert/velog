@@ -75,11 +75,10 @@ class SubmitBoxContainer extends Component<Props> {
           title,
           body,
           tags,
-          isMarkdown: true,
-          isTemp: true,
+          is_temp: true,
           thumbnail,
           categories: activeCategories,
-          urlSlug: urlSlug || escapeForUrl(title),
+          url_slug: urlSlug || escapeForUrl(title),
         });
       } catch (e) {
         console.log(e);
@@ -173,11 +172,10 @@ class SubmitBoxContainer extends Component<Props> {
           thumbnail,
           body,
           tags,
-          isMarkdown: true,
-          isTemp: false,
+          is_temp: false,
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
           meta,
-          urlSlug: urlSlug || escapeForUrl(title),
+          url_slug: urlSlug || escapeForUrl(title),
         });
 
         BaseActions.showToast({
@@ -213,11 +211,10 @@ class SubmitBoxContainer extends Component<Props> {
           title,
           body,
           tags,
-          isMarkdown: true,
-          isTemp: true,
+          is_temp: true,
           thumbnail,
           categories: activeCategories,
-          urlSlug: urlSlug || escapeForUrl(title),
+          url_slug: urlSlug || escapeForUrl(title),
         });
       }
       if (postData && postData.is_temp) {

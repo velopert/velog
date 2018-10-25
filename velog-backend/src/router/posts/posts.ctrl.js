@@ -122,14 +122,13 @@ export const writePost = async (ctx: Context): Promise<*> => {
   type BodySchema = {
     title: string,
     body: string,
-    shortDescription: string,
     thumbnail: string,
-    isMarkdown: boolean,
-    isTemp: boolean,
+    is_temp: boolean,
     meta: any,
     categories: Array<string>,
     tags: Array<string>,
-    urlSlug: string,
+    url_slug: string,
+    is_private: ?boolean, // until update
   };
 
   const schema = Joi.object().keys({
@@ -141,12 +140,11 @@ export const writePost = async (ctx: Context): Promise<*> => {
     body: Joi.string()
       .required()
       .min(1),
-    shortDescription: Joi.string(),
     thumbnail: Joi.string()
       .uri()
       .allow(null),
-    isMarkdown: Joi.boolean().required(),
-    isTemp: Joi.boolean().required(),
+    is_temp: Joi.boolean().required(),
+    is_private: Joi.boolean(),
     meta: Joi.object(),
     categories: Joi.array()
       .items(Joi.string())
@@ -154,7 +152,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     tags: Joi.array()
       .items(Joi.string())
       .required(),
-    urlSlug: Joi.string()
+    url_slug: Joi.string()
       .trim()
       .min(1)
       .max(130),
@@ -167,25 +165,24 @@ export const writePost = async (ctx: Context): Promise<*> => {
   const {
     title,
     body,
-    shortDescription,
     thumbnail,
-    isMarkdown,
-    isTemp,
+    is_temp,
+    is_private,
     meta,
     categories,
     tags,
-    urlSlug,
+    url_slug,
   }: BodySchema = (ctx.request.body: any);
 
   const uniqueUrlSlug = escapeForUrl(`${title} ${generateSlugId()}`);
-  const userUserSlug = urlSlug ? escapeForUrl(urlSlug) : '';
+  const userUserSlug = url_slug ? escapeForUrl(url_slug) : '';
 
-  let processedSlug = urlSlug ? userUserSlug : uniqueUrlSlug;
-  if (urlSlug) {
+  let processedSlug = url_slug ? userUserSlug : uniqueUrlSlug;
+  if (url_slug) {
     try {
       const exists = await Post.checkUrlSlugExistancy({
         userId: ctx.user.id,
-        urlSlug,
+        urlSlug: url_slug,
       });
       console.log(exists);
       if (exists > 0) {
@@ -239,12 +236,12 @@ export const writePost = async (ctx: Context): Promise<*> => {
     const post = await Post.build({
       title,
       body,
-      short_description: shortDescription,
       thumbnail,
-      is_markdown: isMarkdown,
-      is_temp: isTemp,
+      is_markdown: true,
       fk_user_id: ctx.user.id,
       url_slug: processedSlug,
+      is_temp,
+      is_private: (is_private || false),
       meta,
     }).save();
 
@@ -260,7 +257,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     ctx.body = serialized;
 
     setTimeout(() => {
-      if (!isTemp) {
+      if (!is_temp) {
         const tagData = tagIds.map((tagId, index) => ({
           id: tagId,
           name: uniqueTags[index],
@@ -391,6 +388,7 @@ export const listPosts = async (ctx: Context): Promise<*> => {
   const {
     category, tag, cursor, is_temp,
   } = ctx.query;
+  const userId = ctx.user ? ctx.user.id : null;
 
   const query = {
     username,
@@ -398,6 +396,7 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     tag,
     cursor,
     isTemp: is_temp === 'true',
+    userId,
   };
 
   if (cursor && !isUUID(cursor)) {

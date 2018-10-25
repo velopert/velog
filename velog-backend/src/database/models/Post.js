@@ -47,6 +47,10 @@ const Post = db.define(
       defaultValue: 0,
       type: Sequelize.INTEGER,
     },
+    is_private: {
+      defaultValue: true,
+      type: Sequelize.BOOLEAN,
+    },
   },
   {
     indexes: [
@@ -55,6 +59,12 @@ const Post = db.define(
       },
       {
         fields: ['created_at'],
+      },
+      {
+        fields: ['is_private'],
+      },
+      {
+        fields: ['is_temp'],
       },
     ],
   },
@@ -114,6 +124,7 @@ Post.readPostById = function (id) {
       'likes',
       'is_temp',
       'meta',
+      'is_private',
     ],
     include: [
       {
@@ -136,6 +147,7 @@ type PostsQueryInfo = {
   categoryUrlSlug: ?string,
   cursor: ?string,
   isTemp: ?boolean,
+  userId: ?boolean,
 };
 
 Post.listPosts = async function ({
@@ -144,6 +156,7 @@ Post.listPosts = async function ({
   tag,
   cursor,
   isTemp,
+  userId,
 }: PostsQueryInfo) {
   // find post with cursor
   let cursorData = null;
@@ -174,6 +187,7 @@ Post.listPosts = async function ({
     : ''
 }
     WHERE true
+    AND (p.is_private = false OR (p.is_private = true AND p.fk_user_id = $userId))
     ${isTemp ? 'AND p.is_temp = true' : 'AND p.is_temp = false'}
     ${username ? 'AND u.username = $username' : ''}
     ${tag ? 'AND t.name = $tag' : ''}
@@ -193,6 +207,7 @@ Post.listPosts = async function ({
     username,
     category: categoryUrlSlug,
     cursor,
+    userId,
     time,
   };
   try {
@@ -361,6 +376,7 @@ export const serializePost = (data: any) => {
     is_temp,
     user,
     meta,
+    is_private,
   } = data;
   const tags = data.tags.map(tag => tag.name);
   const categories = data.categories.map(category => ({
@@ -388,6 +404,7 @@ export const serializePost = (data: any) => {
     },
     meta,
     liked,
+    is_private,
   };
 };
 
