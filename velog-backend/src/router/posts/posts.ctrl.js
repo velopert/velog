@@ -36,9 +36,7 @@ import removeMd from 'remove-markdown';
 import { TYPES } from 'database/models/PostScore';
 import db from 'database/db';
 import { getCommentCountsOfPosts } from 'database/rawQuery/comments';
-import {
-  getTrendingPosts,
-} from 'database/rawQuery/trending';
+import { getTrendingPosts } from 'database/rawQuery/trending';
 import redisClient from 'lib/redisClient';
 import UrlSlugHistory from 'database/models/UrlSlugHistory';
 
@@ -241,7 +239,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
       fk_user_id: ctx.user.id,
       url_slug: processedSlug,
       is_temp,
-      is_private: (is_private || false),
+      is_private: is_private || false,
       meta,
     }).save();
 
@@ -287,6 +285,13 @@ export const readPost = async (ctx: Context): Promise<*> => {
   try {
     console.time('readPost');
     let post = await Post.readPost(username, urlSlug);
+    if (
+      post.is_private === true &&
+      (ctx.user && ctx.user.username) !== username
+    ) {
+      ctx.status = 404;
+      return;
+    }
     console.timeEnd('readPost');
     if (!post) {
       // try using urlslugHistory
@@ -460,14 +465,15 @@ export const listTrendingPosts = async (ctx: Context) => {
     }
     console.time('readPostsByIds');
     const posts = await Post.readPostsByIds(postIds.map(postId => postId.post_id));
+    const filtered = posts.filter(p => !p.is_private);
     console.timeEnd('readPostsByIds');
-    const data = posts
+    const data = filtered
       .map(serializePost)
       .map(post => ({ ...post, body: formatShortDescription(post.body) }));
 
     // retrieve commentCounts and inject
     console.time('getCommentCounts');
-    const commentCounts = await getCommentCountsOfPosts(posts.map(p => p.id));
+    const commentCounts = await getCommentCountsOfPosts(filtered.map(p => p.id));
     console.timeEnd('getCommentCounts');
     ctx.body = injectCommentCounts(data, commentCounts);
   } catch (e) {
@@ -477,7 +483,6 @@ export const listTrendingPosts = async (ctx: Context) => {
 
 export const listSequences = async (ctx: Context) => {
   const { post_id } = ctx.query;
-  console.log(ctx.query);
   if (!isUUID(post_id)) {
     ctx.status = 400;
     ctx.body = {
@@ -515,6 +520,22 @@ export const listSequences = async (ctx: Context) => {
           [Op.gt]: post.created_at,
         },
         is_temp: false,
+
+        // is_private=false or ownPost
+        // $FlowFixMe
+        [Op.or]: {
+          is_private: false,
+          // $FlowFixMe
+          ...(ctx.user
+            ? {
+              // $FlowFixMe
+              [Op.and]: {
+                is_private: true,
+                fk_user_id: ctx.user.id,
+              },
+            }
+            : {}),
+        },
       },
       raw: true,
       limit: 4,
@@ -530,6 +551,20 @@ export const listSequences = async (ctx: Context) => {
           [Op.lt]: post.created_at,
         },
         is_temp: false,
+        // $FlowFixMe
+        [Op.or]: {
+          is_private: false,
+          // $FlowFixMe
+          ...(ctx.user
+            ? {
+              // $FlowFixMe
+              [Op.and]: {
+                is_private: true,
+                fk_user_id: ctx.user.id,
+              },
+            }
+            : {}),
+        },
       },
       limit: 4,
       raw: true,

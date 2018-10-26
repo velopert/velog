@@ -25,6 +25,7 @@ type Props = {
   uploadUrl: ?string,
   imagePath: ?string,
   urlSlug: ?string,
+  isPrivate: boolean,
 } & ContextRouter;
 
 class WriteHeaderContainer extends Component<Props> {
@@ -93,7 +94,7 @@ class WriteHeaderContainer extends Component<Props> {
 
     if (!this.props.postData) {
       await WriteActions.setTempData();
-      const { title, body, tags, categories, thumbnail } = this.props;
+      const { title, body, tags, categories, thumbnail, isPrivate } = this.props;
       const activeCategories = (() => {
         if (!categories || categories.length === 0) return [];
         return categories.filter(c => c.active).map(c => c.id);
@@ -106,6 +107,7 @@ class WriteHeaderContainer extends Component<Props> {
           is_temp: true,
           categories: activeCategories,
           thumbnail,
+          is_private: isPrivate,
         });
       } catch (e) {
         console.log(e);
@@ -144,7 +146,7 @@ class WriteHeaderContainer extends Component<Props> {
   };
 
   onTempSave = async () => {
-    const { postData, title, body, tags, categories, thumbnail, urlSlug } = this.props;
+    const { postData, title, body, tags, categories, thumbnail, urlSlug, isPrivate } = this.props;
 
     const activeCategories = (() => {
       if (!categories || categories.length === 0) return [];
@@ -161,6 +163,7 @@ class WriteHeaderContainer extends Component<Props> {
           thumbnail,
           categories: activeCategories,
           url_slug: urlSlug || escapeForUrl(title),
+          is_private: isPrivate,
         });
       }
       if (postData && postData.is_temp) {
@@ -173,6 +176,7 @@ class WriteHeaderContainer extends Component<Props> {
           thumbnail,
           categories: activeCategories,
           url_slug: urlSlug,
+          is_private: isPrivate,
         });
       }
       if (this.props.postData) {
@@ -246,6 +250,7 @@ export default compose(
       uploadUrl: write.upload.uploadUrl,
       imagePath: write.upload.imagePath,
       urlSlug: write.submitBox.url_slug,
+      isPrivate: write.submitBox.is_private,
     }),
     () => ({}),
   ),

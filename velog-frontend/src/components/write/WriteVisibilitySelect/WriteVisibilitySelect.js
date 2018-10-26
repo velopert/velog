@@ -6,41 +6,30 @@ import cx from 'classnames';
 
 import './WriteVisibilitySelect.scss';
 
-type Props = {};
+type Props = {
+  isPrivate: boolean,
+  onSelect: (isPrivate: boolean) => any,
+};
 type State = {
   selected: 'public' | 'private',
 };
 
 class WriteVisibilitySelect extends Component<Props, State> {
-  state = {
-    selected: 'public',
-  };
-  handleSelect = (selected: 'public' | 'private') => {
-    this.setState({
-      selected,
-    });
-  };
   render() {
-    const { selected } = this.state;
+    const { isPrivate, onSelect } = this.props;
     return (
       <div className="WriteVisibilitySelect">
-        <div
-          className={cx('item', { active: selected === 'public' })}
-          onClick={() => this.handleSelect('public')}
-        >
+        <div className={cx('item', { active: !isPrivate })} onClick={() => onSelect(false)}>
           <div className="item-content">
             <GlobeIcon />전체 공개
           </div>
         </div>
-        <div
-          className={cx('item', { active: selected === 'private' })}
-          onClick={() => this.handleSelect('private')}
-        >
+        <div className={cx('item', { active: isPrivate })} onClick={() => onSelect(true)}>
           <div className="item-content">
             <LockIcon />나만 보기
           </div>
         </div>
-        <div className={cx('active-slider', { right: this.state.selected === 'private' })} />
+        <div className={cx('active-slider', { right: isPrivate })} />
       </div>
     );
   }

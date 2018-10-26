@@ -10,6 +10,7 @@ export type WritePostPayload = {
   categories: Array<string>,
   thumbnail: ?string,
   url_slug?: ?string,
+  is_private: boolean,
 };
 
 export const writePost = (payload: WritePostPayload) => axios.post('/posts', payload);
@@ -24,6 +25,7 @@ export type UpdatePostPayload = {
   thumbnail?: string,
   is_temp: boolean,
   thumbnail: ?string,
+  is_private: boolean,
 };
 
 export const updatePost = ({ id, ...payload }: UpdatePostPayload) =>

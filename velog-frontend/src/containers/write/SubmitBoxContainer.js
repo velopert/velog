@@ -15,7 +15,7 @@ import storage from 'lib/storage';
 import { escapeForUrl } from 'lib/common';
 import { withRouter, type ContextRouter } from 'react-router-dom';
 import { compose } from 'redux';
-
+import WriteVisibilitySelect from 'components/write/WriteVisibilitySelect';
 
 type Props = {
   open: boolean,
@@ -32,6 +32,7 @@ type Props = {
   meta: Meta,
   username: ?string,
   urlSlug: ?string,
+  isPrivate: boolean,
 } & ContextRouter;
 
 class SubmitBoxContainer extends Component<Props> {
@@ -65,7 +66,7 @@ class SubmitBoxContainer extends Component<Props> {
     // temp save post if not released
     if (!this.props.postData) {
       await WriteActions.setTempData(); // nextTick
-      const { title, body, tags, categories, thumbnail, urlSlug } = this.props;
+      const { title, body, tags, categories, thumbnail, urlSlug, isPrivate } = this.props;
       const activeCategories = (() => {
         if (!categories || categories.length === 0) return [];
         return categories.filter(c => c.active).map(c => c.id);
@@ -79,6 +80,7 @@ class SubmitBoxContainer extends Component<Props> {
           thumbnail,
           categories: activeCategories,
           url_slug: urlSlug || escapeForUrl(title),
+          is_private: isPrivate,
         });
       } catch (e) {
         console.log(e);
@@ -147,7 +149,17 @@ class SubmitBoxContainer extends Component<Props> {
     WriteActions.closeSubmitBox();
   };
   onSubmit = async () => {
-    const { categories, tags, body, title, postData, thumbnail, meta, urlSlug } = this.props;
+    const {
+      categories,
+      tags,
+      body,
+      title,
+      postData,
+      thumbnail,
+      meta,
+      urlSlug,
+      isPrivate,
+    } = this.props;
     try {
       if (postData) {
         // update if the post alreadyy exists
@@ -161,6 +173,7 @@ class SubmitBoxContainer extends Component<Props> {
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
           meta,
           url_slug: urlSlug,
+          is_private: isPrivate,
         });
         BaseActions.showToast({
           type: 'success',
@@ -176,6 +189,7 @@ class SubmitBoxContainer extends Component<Props> {
           categories: categories ? categories.filter(c => c.active).map(c => c.id) : [],
           meta,
           url_slug: urlSlug || escapeForUrl(title),
+          is_private: isPrivate,
         });
 
         BaseActions.showToast({
@@ -198,7 +212,7 @@ class SubmitBoxContainer extends Component<Props> {
   };
 
   onTempSave = async () => {
-    const { postData, title, body, tags, categories, thumbnail, urlSlug } = this.props;
+    const { postData, title, body, tags, categories, thumbnail, urlSlug, isPrivate } = this.props;
 
     const activeCategories = (() => {
       if (!categories || categories.length === 0) return [];
@@ -215,6 +229,7 @@ class SubmitBoxContainer extends Component<Props> {
           thumbnail,
           categories: activeCategories,
           url_slug: urlSlug || escapeForUrl(title),
+          is_private: isPrivate,
         });
       }
       if (postData && postData.is_temp) {
@@ -227,6 +242,7 @@ class SubmitBoxContainer extends Component<Props> {
           thumbnail,
           categories: activeCategories,
           url_slug: urlSlug,
+          is_private: isPrivate,
         });
       }
       if (this.props.postData) {
@@ -263,6 +279,9 @@ class SubmitBoxContainer extends Component<Props> {
     console.log(this.props.meta.code_theme);
     storage.set('codeTheme', this.props.meta.code_theme);
   };
+  onSelectVisibility = (isPrivate: boolean) => {
+    WriteActions.setVisibility(isPrivate);
+  };
 
   render() {
     const {
@@ -292,6 +311,7 @@ class SubmitBoxContainer extends Component<Props> {
       meta,
       username,
       urlSlug,
+      isPrivate,
     } = this.props;
 
     const postLink = username && postData && `/@${username}/${postData.url_slug}`;
@@ -308,6 +328,9 @@ class SubmitBoxContainer extends Component<Props> {
             onUploadClick={onUploadClick}
             onClearThumbnail={onClearThumbnail}
           />
+        }
+        visibilitySelect={
+          <WriteVisibilitySelect onSelect={this.onSelectVisibility} isPrivate={isPrivate} />
         }
         visible={open}
         onClose={onClose}
@@ -352,6 +375,7 @@ const enhance = compose(
       meta: write.meta,
       username: user.user && user.user.username,
       urlSlug: write.submitBox.url_slug,
+      isPrivate: write.submitBox.is_private,
     }),
     () => ({}),
   ),

@@ -23,6 +23,7 @@ type Props = {
   onToggleAdditionalConfig(): void,
   additional: Node | false,
   postLink: ?string,
+  visibilitySelect: Node,
 };
 
 type State = {
@@ -79,6 +80,7 @@ class SubmitBox extends Component<Props, State> {
       additional,
       postLink,
       onTempSave,
+      visibilitySelect,
     } = this.props;
     const { animating } = this.state;
 
@@ -127,9 +129,7 @@ class SubmitBox extends Component<Props, State> {
                 </button>
               </div>
               <div className="between">
-                <div className="visibility-select">
-                  <WriteVisibilitySelect />
-                </div>
+                <div className="visibility-select">{visibilitySelect}</div>
                 <div className="open-options">
                   <a onClick={onToggleAdditionalConfig}>추가설정</a>
                 </div>

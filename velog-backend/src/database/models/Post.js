@@ -88,6 +88,7 @@ Post.readPost = function (username: string, urlSlug: string) {
       'is_markdown',
       'created_at',
       'updated_at',
+      'is_private',
       'url_slug',
       'likes',
       'meta',
