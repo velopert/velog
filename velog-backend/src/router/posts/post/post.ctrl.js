@@ -71,6 +71,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     thumbnail: string,
     is_temp: boolean,
     meta: any,
+    is_private: boolean,
   };
 
   const schema = Joi.object().keys({
@@ -90,6 +91,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
       .min(1)
       .max(130),
     meta: Joi.object(),
+    is_private: Joi.boolean(),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -105,6 +107,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     thumbnail,
     is_temp: isTemp,
     meta,
+    is_private,
   }: BodySchema = (ctx.request.body: any);
 
   const stringsToCheck = [title, body, ...tags];
@@ -131,7 +134,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   }
 
   const generatedUrlSlug = escapeForUrl(`${title} ${generateSlugId()}`);
-  const userUrlSlug = escapeForUrl(urlSlug);
+  const userUrlSlug = escapeForUrl(urlSlug || '');
 
   const { id } = ctx.params;
 
@@ -177,6 +180,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     thumbnail,
     is_temp: isTemp,
     meta,
+    is_private: (is_private || false),
   };
 
   Object.keys(updateQuery).forEach((key) => {

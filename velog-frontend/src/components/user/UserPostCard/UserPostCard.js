@@ -4,6 +4,7 @@ import type { PostItem } from 'store/modules/listing';
 import Truncate from 'react-truncate';
 import { Link } from 'react-router-dom';
 import { escapeForUrl, fromNow, resizeImage } from 'lib/common';
+import LockIcon from 'react-icons/lib/md/lock';
 import './UserPostCard.scss';
 
 type Props = {
@@ -12,7 +13,17 @@ type Props = {
 };
 
 const UserPostCard = ({ post, username }: Props) => {
-  const { title, body, thumbnail, meta, tags, created_at, comments_count, url_slug } = post;
+  const {
+    title,
+    body,
+    thumbnail,
+    meta,
+    tags,
+    created_at,
+    comments_count,
+    url_slug,
+    is_private,
+  } = post;
 
   const sliced = (() => {
     const content = meta.short_description || body;
@@ -26,6 +37,11 @@ const UserPostCard = ({ post, username }: Props) => {
         <Link to={link} className="img-wrapper">
           <img src={resizeImage(thumbnail, 768)} alt={`${title} Thumbnail`} />
         </Link>
+      )}
+      {is_private && (
+        <div className="private">
+          <LockIcon />비공개
+        </div>
       )}
       <h2>
         <Link to={link}>{title}</Link>

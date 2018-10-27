@@ -15,6 +15,7 @@ import { convertToPlainText } from 'lib/common';
 import PostPlaceholder from 'components/post/PostPlaceholder';
 import throttle from 'lodash/throttle';
 
+
 type Props = {
   username: ?string,
   urlSlug: ?string,
@@ -158,6 +159,7 @@ class PostViewer extends Component<Props> {
           ownPost={currentUsername === username}
           onAskRemove={this.onToggleAskRemove}
           logged={logged}
+          isPrivate={post.is_private}
         />
         <PostContent
           thumbnail={post.thumbnail}

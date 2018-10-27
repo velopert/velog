@@ -36,9 +36,7 @@ import removeMd from 'remove-markdown';
 import { TYPES } from 'database/models/PostScore';
 import db from 'database/db';
 import { getCommentCountsOfPosts } from 'database/rawQuery/comments';
-import {
-  getTrendingPosts,
-} from 'database/rawQuery/trending';
+import { getTrendingPosts } from 'database/rawQuery/trending';
 import redisClient from 'lib/redisClient';
 import UrlSlugHistory from 'database/models/UrlSlugHistory';
 
@@ -122,14 +120,13 @@ export const writePost = async (ctx: Context): Promise<*> => {
   type BodySchema = {
     title: string,
     body: string,
-    shortDescription: string,
     thumbnail: string,
-    isMarkdown: boolean,
-    isTemp: boolean,
+    is_temp: boolean,
     meta: any,
     categories: Array<string>,
     tags: Array<string>,
-    urlSlug: string,
+    url_slug: string,
+    is_private: ?boolean, // until update
   };
 
   const schema = Joi.object().keys({
@@ -141,12 +138,11 @@ export const writePost = async (ctx: Context): Promise<*> => {
     body: Joi.string()
       .required()
       .min(1),
-    shortDescription: Joi.string(),
     thumbnail: Joi.string()
       .uri()
       .allow(null),
-    isMarkdown: Joi.boolean().required(),
-    isTemp: Joi.boolean().required(),
+    is_temp: Joi.boolean().required(),
+    is_private: Joi.boolean(),
     meta: Joi.object(),
     categories: Joi.array()
       .items(Joi.string())
@@ -154,7 +150,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     tags: Joi.array()
       .items(Joi.string())
       .required(),
-    urlSlug: Joi.string()
+    url_slug: Joi.string()
       .trim()
       .min(1)
       .max(130),
@@ -167,25 +163,24 @@ export const writePost = async (ctx: Context): Promise<*> => {
   const {
     title,
     body,
-    shortDescription,
     thumbnail,
-    isMarkdown,
-    isTemp,
+    is_temp,
+    is_private,
     meta,
     categories,
     tags,
-    urlSlug,
+    url_slug,
   }: BodySchema = (ctx.request.body: any);
 
   const uniqueUrlSlug = escapeForUrl(`${title} ${generateSlugId()}`);
-  const userUserSlug = urlSlug ? escapeForUrl(urlSlug) : '';
+  const userUserSlug = url_slug ? escapeForUrl(url_slug) : '';
 
-  let processedSlug = urlSlug ? userUserSlug : uniqueUrlSlug;
-  if (urlSlug) {
+  let processedSlug = url_slug ? userUserSlug : uniqueUrlSlug;
+  if (url_slug) {
     try {
       const exists = await Post.checkUrlSlugExistancy({
         userId: ctx.user.id,
-        urlSlug,
+        urlSlug: url_slug,
       });
       console.log(exists);
       if (exists > 0) {
@@ -239,12 +234,12 @@ export const writePost = async (ctx: Context): Promise<*> => {
     const post = await Post.build({
       title,
       body,
-      short_description: shortDescription,
       thumbnail,
-      is_markdown: isMarkdown,
-      is_temp: isTemp,
+      is_markdown: true,
       fk_user_id: ctx.user.id,
       url_slug: processedSlug,
+      is_temp,
+      is_private: is_private || false,
       meta,
     }).save();
 
@@ -260,7 +255,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     ctx.body = serialized;
 
     setTimeout(() => {
-      if (!isTemp) {
+      if (!is_temp) {
         const tagData = tagIds.map((tagId, index) => ({
           id: tagId,
           name: uniqueTags[index],
@@ -290,6 +285,13 @@ export const readPost = async (ctx: Context): Promise<*> => {
   try {
     console.time('readPost');
     let post = await Post.readPost(username, urlSlug);
+    if (
+      post.is_private === true &&
+      (ctx.user && ctx.user.username) !== username
+    ) {
+      ctx.status = 404;
+      return;
+    }
     console.timeEnd('readPost');
     if (!post) {
       // try using urlslugHistory
@@ -391,6 +393,7 @@ export const listPosts = async (ctx: Context): Promise<*> => {
   const {
     category, tag, cursor, is_temp,
   } = ctx.query;
+  const userId = ctx.user ? ctx.user.id : null;
 
   const query = {
     username,
@@ -398,6 +401,7 @@ export const listPosts = async (ctx: Context): Promise<*> => {
     tag,
     cursor,
     isTemp: is_temp === 'true',
+    userId,
   };
 
   if (cursor && !isUUID(cursor)) {
@@ -461,14 +465,15 @@ export const listTrendingPosts = async (ctx: Context) => {
     }
     console.time('readPostsByIds');
     const posts = await Post.readPostsByIds(postIds.map(postId => postId.post_id));
+    const filtered = posts.filter(p => !p.is_private);
     console.timeEnd('readPostsByIds');
-    const data = posts
+    const data = filtered
       .map(serializePost)
       .map(post => ({ ...post, body: formatShortDescription(post.body) }));
 
     // retrieve commentCounts and inject
     console.time('getCommentCounts');
-    const commentCounts = await getCommentCountsOfPosts(posts.map(p => p.id));
+    const commentCounts = await getCommentCountsOfPosts(filtered.map(p => p.id));
     console.timeEnd('getCommentCounts');
     ctx.body = injectCommentCounts(data, commentCounts);
   } catch (e) {
@@ -478,7 +483,6 @@ export const listTrendingPosts = async (ctx: Context) => {
 
 export const listSequences = async (ctx: Context) => {
   const { post_id } = ctx.query;
-  console.log(ctx.query);
   if (!isUUID(post_id)) {
     ctx.status = 400;
     ctx.body = {
@@ -516,6 +520,22 @@ export const listSequences = async (ctx: Context) => {
           [Op.gt]: post.created_at,
         },
         is_temp: false,
+
+        // is_private=false or ownPost
+        // $FlowFixMe
+        [Op.or]: {
+          is_private: false,
+          // $FlowFixMe
+          ...(ctx.user
+            ? {
+              // $FlowFixMe
+              [Op.and]: {
+                is_private: true,
+                fk_user_id: ctx.user.id,
+              },
+            }
+            : {}),
+        },
       },
       raw: true,
       limit: 4,
@@ -531,6 +551,20 @@ export const listSequences = async (ctx: Context) => {
           [Op.lt]: post.created_at,
         },
         is_temp: false,
+        // $FlowFixMe
+        [Op.or]: {
+          is_private: false,
+          // $FlowFixMe
+          ...(ctx.user
+            ? {
+              // $FlowFixMe
+              [Op.and]: {
+                is_private: true,
+                fk_user_id: ctx.user.id,
+              },
+            }
+            : {}),
+        },
       },
       limit: 4,
       raw: true,

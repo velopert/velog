@@ -21,7 +21,7 @@
     border-radius: 4px;
     padding: 0.5rem 0.75rem;
     background: white;
-    @include material-shadow(2, 0.75);
+    // @include material-shadow(2, 0.75);
     color: $oc-gray-8;
     display: flex;
     align-items: center;

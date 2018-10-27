@@ -1,0 +1,49 @@
+@import "utils";
+.WriteVisibilitySelect {
+  background: $oc-gray-0;
+  ;
+  display: flex;
+  font-size: 0.875rem;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  .item {
+    cursor: pointer;
+    color: $oc-gray-5;
+    font-weight: 600;
+    transition: 0.125s color ease-in;
+    &.active {
+      color: white;
+    }
+    .item-content {
+      z-index: 2;
+      align-items: center;
+      display: flex;
+    }
+    &:hover {
+      background: white;
+    }
+    padding: 0.25rem;
+    width: 90px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    svg {
+      font-size: 0.75rem;
+      margin-right: 0.25rem;
+    }
+  }
+  .active-slider {
+    z-index: 1;
+    background: $oc-violet-4;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 90px;
+    transition: 0.125s transform ease-in;
+    &.right {
+      transform: translate(90px);
+    }
+  }
+}

@@ -1,9 +1,7 @@
-@import 'utils';
-
+@import "utils";
 .InputTags {
   .input-button {
-    display: flex;
-    @include material-shadow(2, 0.75);
+    display: flex; // @include material-shadow(2, 0.75);
     input {
       font-size: 1rem;
       padding: 0.5rem;
@@ -13,7 +11,7 @@
     }
     .button {
       flex: 2;
-      background: darken($oc-gray-6, 15%);
+      background: #65707b;
       color: white;
       font-weight: 600;
       border-top-right-radius: 2px;
@@ -23,7 +21,7 @@
       user-select: none;
       cursor: pointer;
       &:hover {
-        background: $oc-gray-6
+        background: $oc-gray-6;
       }
       &:active {
         background: darken($oc-gray-6, 20%);
@@ -50,8 +48,7 @@
       display: flex;
       background: $oc-gray-2;
       font-weight: 500;
-      word-break: break-all;
-      @include material-shadow(2, 0.75);
+      word-break: break-all; // @include material-shadow(2, 0.75);
       border-radius: 6px;
       .remove {
         font-size: 0.9rem;

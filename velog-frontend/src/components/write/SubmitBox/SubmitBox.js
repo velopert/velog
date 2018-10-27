@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import './SubmitBox.scss';
 import SubmitBoxAdditional from '../SubmitBoxAdditional';
+import WriteVisibilitySelect from '../WriteVisibilitySelect';
 
 type Props = {
   isEditing: boolean,
@@ -22,6 +23,7 @@ type Props = {
   onToggleAdditionalConfig(): void,
   additional: Node | false,
   postLink: ?string,
+  visibilitySelect: Node,
 };
 
 type State = {
@@ -78,6 +80,7 @@ class SubmitBox extends Component<Props, State> {
       additional,
       postLink,
       onTempSave,
+      visibilitySelect,
     } = this.props;
     const { animating } = this.state;
 
@@ -125,8 +128,11 @@ class SubmitBox extends Component<Props, State> {
                   {isEdit ? '업데이트' : '작성하기'}
                 </button>
               </div>
-              <div className="open-options">
-                <a onClick={onToggleAdditionalConfig}>추가설정</a>
+              <div className="between">
+                <div className="visibility-select">{visibilitySelect}</div>
+                <div className="open-options">
+                  <a onClick={onToggleAdditionalConfig}>추가설정</a>
+                </div>
               </div>
             </div>
           </Fragment>

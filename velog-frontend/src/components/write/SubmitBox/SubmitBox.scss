@@ -29,8 +29,7 @@
     width: calc(100vw - 1rem);
   }
   padding: 1.5rem;
-  z-index: z("submit-box");
-  @include material-shadow(2, 1);
+  z-index: z("submit-box"); // @include material-shadow(2, 1);
   color: white; // transition: transform 0.075s ease-in;
   // transform-origin: top right;
   // transform: scale(1);
@@ -45,6 +44,7 @@
   .title {
     display: flex;
     align-items: center;
+    margin-bottom: 1rem;
     .text {
       font-size: 1.25rem;
       font-weight: 600;
@@ -62,9 +62,9 @@
   }
   .sections {
     margin-top: 0.5rem;
-    section {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    section + section {
+      margin-top: 1rem;
     }
     .section-title {
       font-size: 0.8rem;
@@ -99,7 +99,6 @@
     user-select: none;
     margin: -1.5rem;
     padding: 1.5rem;
-    padding-bottom: 1rem;
     margin-top: 0rem;
     background: $oc-gray-8;
     .buttons {
@@ -111,8 +110,7 @@
         flex: 1;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
-        border-radius: 4px;
-        @include material-shadow(2, 0.75);
+        border-radius: 4px; // @include material-shadow(2, 0.75);
         font-weight: 500;
         font-size: 0.9rem;
         &.gray {
@@ -147,12 +145,17 @@
         margin-left: 1rem;
       }
     }
+    .between {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .open-options {
       text-align: right;
       font-size: 0.9rem;
       color: $oc-orange-7;
       display: block;
-      margin-top: 1rem;
       margin-right: 0.125rem;
       font-weight: 600;
       a {

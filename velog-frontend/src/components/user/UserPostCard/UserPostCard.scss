@@ -4,8 +4,25 @@
   padding-bottom: 2.5rem;
   position: relative;
   color: $oc-gray-9;
-  &:first-child {
-    padding-top: 0;
+  @include media(">=medium") {
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+  .private {
+    display: inline-flex;
+    background: $oc-gray-6;
+    color: white;
+    border-radius: 13px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    line-height: 1.5;
+    align-items: center;
+    svg {
+      margin-right: 4px;
+    }
+    margin-bottom: 0.5rem;
   }
   .img-wrapper {
     width: 100%;

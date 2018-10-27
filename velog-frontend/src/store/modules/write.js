@@ -39,6 +39,7 @@ const SET_INSERT_TEXT = 'write/SET_INSERT_TEXT';
 const SET_UPLOAD_STATUS = 'write/SET_UPLOAD_STATUS';
 const SET_UPLOAD_PROGRESS = 'write/SET_UPLOAD_PROGRESS';
 const CREATE_UPLOAD_URL = 'write/CREATE_UPLOAD_URL';
+const SET_VISIBILITY = 'write/SET_VISIBILITY';
 
 const SHOW_WRITE_EXTRA = 'write/SHOW_WRITE_EXTRA';
 const HIDE_WRITE_EXTRA = 'write/HIDE_WRITE_EXTRA';
@@ -92,6 +93,7 @@ export interface WriteActionCreators {
   setUploadStatus(uploading: boolean): any;
   setUploadProgress(progress: number): any;
   createUploadUrl(payload: PostsAPI.CreateUploadUrlPayload): any;
+  setVisibility(isPrivate: boolean): any;
   showWriteExtra(): any;
   hideWriteExtra(): any;
   setLayoutMode(mode: string): any;
@@ -142,6 +144,7 @@ export const actionCreators = {
   setUploadStatus: createAction(SET_UPLOAD_STATUS, (uploading: boolean) => uploading),
   setUploadProgress: createAction(SET_UPLOAD_PROGRESS, (progress: number) => progress),
   createUploadUrl: createAction(CREATE_UPLOAD_URL, PostsAPI.createUploadUrl),
+  setVisibility: createAction(SET_VISIBILITY, (isPrivate: boolean) => isPrivate),
   showWriteExtra: createAction(SHOW_WRITE_EXTRA),
   hideWriteExtra: createAction(HIDE_WRITE_EXTRA),
   setLayoutMode: createAction(SET_LAYOUT_MODE),
@@ -184,6 +187,7 @@ export type SubmitBox = {
   categories: ?Categories,
   additional: boolean,
   url_slug: ?string,
+  is_private: boolean,
 };
 export type CategoryModal = {
   open: boolean,
@@ -208,6 +212,7 @@ export type PostData = {
   categories: { id: string, name: string }[],
   url_slug: string,
   meta: Meta,
+  is_private: boolean,
 };
 
 export type Upload = {
@@ -258,6 +263,7 @@ type ListTempSavesResponseAction = GenericResponseAction<BriefTempSaveInfo[], nu
 type LoadTempSaveResponseAction = GenericResponseAction<TempSaveData, null>;
 type GetPostByIdResponseAction = GenericResponseAction<PostData, null>;
 type ChangeUrlSlugAction = ActionType<typeof actionCreators.changeUrlSlug>;
+type SetVisibilityAction = ActionType<typeof actionCreators.setVisibility>;
 
 const initialState: Write = {
   body: '',
@@ -273,6 +279,7 @@ const initialState: Write = {
     tags: [],
     additional: false,
     url_slug: null,
+    is_private: false,
   },
   postData: null,
   categoryModal: {
@@ -492,6 +499,11 @@ const reducer = handleActions(
         draft.submitBox.url_slug = payload;
       });
     },
+    [SET_VISIBILITY]: (state, { payload }: SetVisibilityAction) => {
+      return produce(state, (draft) => {
+        draft.submitBox.is_private = payload;
+      });
+    },
   },
   initialState,
 );
@@ -613,6 +625,7 @@ export default applyPenders(reducer, [
         draft.title = payload.data.title;
         draft.thumbnail = payload.data.thumbnail;
         draft.meta = payload.data.meta;
+        draft.submitBox.is_private = payload.data.is_private;
       });
     },
   },
