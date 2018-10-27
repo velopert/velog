@@ -11,6 +11,9 @@ export const getTagsList = async (sortBy: string): Promise<TagRow[]> => {
   const query = `SELECT tags.name AS name, posts_count FROM (
     SELECT fk_tag_id, COUNT(fk_post_id) AS posts_count FROM posts_tags
     INNER JOIN tags ON tags.id = fk_tag_id
+    INNER JOIN posts ON posts.id = fk_post_id
+    WHERE posts.is_private = FALSE
+    AND posts.is_temp = FALSE
     GROUP BY fk_tag_id
   ) AS q
   INNER JOIN tags ON q.fk_tag_id = tags.id
