@@ -80,8 +80,8 @@
     border-bottom-left-radius: 4px;
     background: white;
     border-bottom-right-radius: 4px;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
     color: $oc-gray-8;
@@ -107,14 +107,33 @@
       }
     }
     .content-head {
+      position: relative;
       height: 8.5rem;
       padding-bottom: 1.5rem;
       border-bottom: 1px solid $oc-gray-2;
-      .username {
-        font-size: 0.875rem;
-        font-weight: 600;
+      .between {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .username {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: $oc-violet-5;
+        }
+        .private {
+          background: $oc-gray-6;
+          color: white;
+          border-radius: 13px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          padding: 4px 12px;
+          line-height: 1.5;
+          align-items: center;
+          svg {
+            margin-right: 4px;
+          }
+        }
         margin-bottom: 0.5rem;
-        color: $oc-violet-5;
       }
       h3 {
         display: block;

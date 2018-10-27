@@ -96,6 +96,7 @@ export type PostData = {
   body: string,
   thumbnail: ?string,
   is_markdown: boolean,
+  is_private: boolean,
   created_at: string,
   updated_at: string,
   tags: string[],

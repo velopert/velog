@@ -48,12 +48,25 @@
     margin: 0;
     font-weight: 600;
   }
+  .private {
+    display: inline-flex;
+    background: $oc-gray-6;
+    color: white;
+    border-radius: 13px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    line-height: 1.5;
+    align-items: center;
+    svg {
+      margin-right: 4px;
+    }
+  }
   h1 {
     font-family: "Noto Serif KR", sans-serif;
     margin: 0;
     font-size: 2.5em;
     line-height: 3.2rem;
-    margin-top: 0.75em;
   }
   .date {
     font-size: 1.125em;
@@ -73,6 +86,7 @@
     }
     display: flex;
     margin-top: 1em;
+    margin-bottom: 2rem;
     align-items: center;
     .user-thumbnail {
       flex-shrink: 0;

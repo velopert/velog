@@ -69,6 +69,7 @@ const PostCardList = ({
       urlSlug={post.url_slug}
       oneColumn={oneColumn}
       commentsCount={post.comments_count}
+      isPrivate={post.is_private}
       hideUsername={hideUsername}
     />
   ));

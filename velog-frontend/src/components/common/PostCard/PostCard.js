@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
 import { shouldUpdate } from 'recompose';
+import LockIcon from 'react-icons/lib/md/lock';
 
 import 'moment/locale/ko';
 import './PostCard.scss';
@@ -22,6 +23,7 @@ type Props = {
   oneColumn?: boolean,
   commentsCount: number,
   hideUsername?: boolean,
+  isPrivate: boolean,
 };
 
 const PostCard = ({
@@ -35,6 +37,7 @@ const PostCard = ({
   oneColumn,
   commentsCount,
   hideUsername,
+  isPrivate,
 }: Props) => {
   const formattedDate = fromNow(date);
   const link = `/@${username}/${urlSlug}`;
@@ -59,11 +62,18 @@ const PostCard = ({
           </Link>
         )}
         <div className="content-head">
-          {!hideUsername && (
-            <Link to={`/@${username}`} className="username">
-              {username}
-            </Link>
-          )}
+          <div className="between">
+            {!hideUsername && (
+              <Link to={`/@${username}`} className="username">
+                {username}
+              </Link>
+            )}
+            {isPrivate && (
+              <div className="private">
+                <LockIcon />비공개
+              </div>
+            )}
+          </div>
           <h3>
             <Link to={`/@${username}/${urlSlug}`}>{title}</Link>
           </h3>

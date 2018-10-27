@@ -6,6 +6,7 @@ import PostLikeButton from 'components/post/PostLikeButton';
 import { Link } from 'react-router-dom';
 import defaultThumbnail from 'static/images/default_thumbnail.png';
 import { fromNow, resizeImage } from 'lib/common';
+import LockIcon from 'react-icons/lib/md/lock';
 import PostActionButtons from '../PostActionButtons';
 import './PostHead.scss';
 
@@ -26,6 +27,8 @@ type Props = {
   onAskRemove: () => void,
   date: string,
   logged: boolean,
+
+  isPrivate: boolean,
 };
 
 const PostHead = ({
@@ -40,6 +43,7 @@ const PostHead = ({
   onToggleLike,
   onAskRemove,
   logged,
+  isPrivate,
 }: Props) => {
   const userLink = `/@${user.username}`;
 
@@ -56,6 +60,11 @@ const PostHead = ({
           <div className="description">{user.short_bio}</div>
         </div>
       </div>
+      {isPrivate && (
+        <div className="private">
+          <LockIcon />비공개
+        </div>
+      )}
       <h1>{title}</h1>
       <div className="date-and-likes">
         <div className="date">{fromNow(date)}</div>
