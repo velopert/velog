@@ -52,6 +52,7 @@ export type PostItem = {
   thumbnail: ?string,
   is_markdown: boolean,
   is_private: boolean,
+  released_at: string,
   created_at: string,
   updated_at: string,
   tags: string[],

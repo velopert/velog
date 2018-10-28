@@ -15,7 +15,6 @@ import { convertToPlainText } from 'lib/common';
 import PostPlaceholder from 'components/post/PostPlaceholder';
 import throttle from 'lodash/throttle';
 
-
 type Props = {
   username: ?string,
   urlSlug: ?string,
@@ -148,7 +147,7 @@ class PostViewer extends Component<Props> {
         />
         <PostHead
           id={post.id}
-          date={post.created_at}
+          date={post.released_at}
           title={post.title}
           tags={post.tags}
           categories={post.categories}

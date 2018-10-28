@@ -95,6 +95,7 @@ Post.readPost = function (username: string, urlSlug: string) {
       'is_markdown',
       'created_at',
       'updated_at',
+      'released_at',
       'is_private',
       'url_slug',
       'likes',
@@ -128,6 +129,7 @@ Post.readPostById = function (id) {
       'is_markdown',
       'created_at',
       'updated_at',
+      'released_at',
       'url_slug',
       'likes',
       'is_temp',
@@ -176,7 +178,7 @@ Post.listPosts = async function ({
       throw e;
     }
   }
-  const cursorDate = cursorData && cursorData.created_at;
+  const cursorDate = cursorData && cursorData.released_at;
   const time = cursorDate && new Date(cursorDate).toISOString();
 
   // reusable query for COUNT & SELECT
@@ -204,7 +206,7 @@ Post.listPosts = async function ({
   cursor
     ? `
       AND p.id != $cursor
-      AND p.created_at <= $time
+      AND p.released_at <= $time
     `
     : ''
 }
@@ -228,9 +230,9 @@ Post.listPosts = async function ({
     if (!count) return { count: 0, data: null };
 
     const rows = await db.query(
-      `SELECT DISTINCT p.id, p.created_at FROM posts p
+      `SELECT DISTINCT p.id, p.released_at FROM posts p
       ${query}
-      ORDER BY created_at DESC
+      ORDER BY released_at DESC
       LIMIT 20
     `,
       { bind: bindVariables, type: Sequelize.QueryTypes.SELECT },
@@ -253,7 +255,7 @@ Post.listPosts = async function ({
           $or: postIds,
         },
       },
-      order: [['created_at', 'DESC']],
+      order: [['released_at', 'DESC']],
     });
     // posts = await Promise.all();
     return {
@@ -295,7 +297,7 @@ Post.readPostsByIds = async (postIds) => {
         $or: postIds,
       },
     },
-    order: [['created_at', 'DESC']],
+    order: [['released_at', 'DESC']],
   });
 
   const flatData = {};
@@ -309,7 +311,7 @@ Post.listPublicPosts = function ({ tag, page, option }: PublicPostsQueryInfo) {
   const limit = 20;
   return Post.findAndCountAll({
     distinct: 'id',
-    order: [['created_at', 'DESC']],
+    order: [['released_at', 'DESC']],
     include: [
       {
         model: Tag,
@@ -377,6 +379,7 @@ export const serializePost = (data: any) => {
     is_markdown,
     created_at,
     updated_at,
+    released_at,
     url_slug,
     liked,
     likes,
@@ -400,6 +403,7 @@ export const serializePost = (data: any) => {
     is_markdown,
     created_at,
     updated_at,
+    released_at,
     tags,
     categories,
     url_slug,

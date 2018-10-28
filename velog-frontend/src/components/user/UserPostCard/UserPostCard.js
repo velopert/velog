@@ -19,7 +19,7 @@ const UserPostCard = ({ post, username }: Props) => {
     thumbnail,
     meta,
     tags,
-    created_at,
+    released_at,
     comments_count,
     url_slug,
     is_private,
@@ -48,7 +48,7 @@ const UserPostCard = ({ post, username }: Props) => {
       </h2>
       <p>{sliced}</p>
       <div className="card-subinfo">
-        <span>{fromNow(created_at)}</span>
+        <span>{fromNow(released_at)}</span>
         <span>{comments_count}개의 댓글</span>
       </div>
       <div className="tags">
