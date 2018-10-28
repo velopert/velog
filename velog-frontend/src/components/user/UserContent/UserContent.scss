@@ -1,4 +1,4 @@
-@import "utils";
+@import 'utils';
 .UserContent {
   .tabs {
     margin-bottom: 4rem;
@@ -6,7 +6,7 @@
     color: $oc-gray-8;
     display: flex;
     justify-content: center;
-    @include media("<large") {
+    @include media('<large') {
       border-top: 16px solid $oc-gray-2;
       margin-bottom: 2rem;
       margin-left: -1rem;
@@ -19,7 +19,7 @@
       justify-content: center;
       border-bottom: 2px solid transparent;
       padding-bottom: 0.5rem;
-      @include media("<large") {
+      @include media('<large') {
         padding-top: 1rem;
         padding-bottom: 1rem;
         flex: 1;
@@ -30,12 +30,12 @@
         font-weight: 600;
       }
     }
-    a+a {
+    a + a {
       margin-left: 1rem;
     }
   }
   margin-top: 3rem;
-  @include media("<medium") {
+  @include media('<large') {
     .content {
       flex-direction: column;
     }
@@ -47,13 +47,13 @@
   .side-wrapper {
     flex-shrink: 0;
     width: 15rem;
-    @include media("<medium") {
+    @include media('<large') {
       width: 100%;
     }
   }
-  .side-wrapper+.tab-wrapper {
+  .side-wrapper + .tab-wrapper {
     margin-left: 2rem;
-    @include media("<medium") {
+    @include media('<large') {
       margin-left: 0;
     }
   }

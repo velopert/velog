@@ -19,7 +19,7 @@
       .placer {
         display: none;
       }
-      @include media("<medium") {
+      @include media("<large") {
         display: flex;
         overflow-x: scroll;
         padding-bottom: 1rem;
@@ -32,7 +32,7 @@
         }
       }
       li {
-        @include media("<medium") {
+        @include media("<large") {
           a {
             display: block;
             padding: 0.25rem 0.5rem;
@@ -41,7 +41,7 @@
             border-radius: 4px;
             font-weight: 500;
           }
-          & + li {
+          &+li {
             margin-left: 0.5rem;
           }
         }
@@ -56,7 +56,7 @@
         .active {
           color: $oc-violet-5;
           font-weight: 800;
-          @include media("<medium") {
+          @include media("<large") {
             border: 1px solid $oc-violet-4;
             background: white;
             font-weight: 500;
@@ -66,7 +66,7 @@
       }
     }
   }
-  section + section {
+  section+section {
     margin-top: 1.5rem;
   }
 }
