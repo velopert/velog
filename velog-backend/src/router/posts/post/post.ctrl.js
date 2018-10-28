@@ -181,6 +181,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     is_temp: isTemp,
     meta,
     is_private: (is_private || false),
+    released_at: (!isTemp && ctx.post.is_temp) ? new Date() : undefined,
   };
 
   Object.keys(updateQuery).forEach((key) => {
