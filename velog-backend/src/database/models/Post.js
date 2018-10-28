@@ -51,6 +51,10 @@ const Post = db.define(
       defaultValue: true,
       type: Sequelize.BOOLEAN,
     },
+    released_at: {
+      defaultValue: Sequelize.fn('NOW'),
+      type: Sequelize.DATE,
+    },
   },
   {
     indexes: [
@@ -65,6 +69,9 @@ const Post = db.define(
       },
       {
         fields: ['is_temp'],
+      },
+      {
+        fields: ['released_at'],
       },
     ],
   },
