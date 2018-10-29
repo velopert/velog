@@ -285,13 +285,6 @@ export const readPost = async (ctx: Context): Promise<*> => {
   try {
     console.time('readPost');
     let post = await Post.readPost(username, urlSlug);
-    if (
-      post.is_private === true &&
-      (ctx.user && ctx.user.username) !== username
-    ) {
-      ctx.status = 404;
-      return;
-    }
     console.timeEnd('readPost');
     if (!post) {
       // try using urlslugHistory
@@ -315,6 +308,13 @@ export const readPost = async (ctx: Context): Promise<*> => {
       post = await Post.readPostById(history.fk_post_id);
       console.timeEnd('readPostById');
       if (!post) {
+        ctx.status = 404;
+        return;
+      }
+      if (
+        post.is_private === true &&
+        (ctx.user && ctx.user.username) !== username
+      ) {
         ctx.status = 404;
         return;
       }
