@@ -22,6 +22,7 @@ export const getPostsOfMonth = async (
   INNER JOIN users ON p.fk_user_id = users.id
   WHERE date_trunc('month', p.created_at) = '${month}-01 00:00:00'
   AND is_temp = FALSE
+  AND is_private = FALSE
   ORDER BY created_at`;
 
   try {
