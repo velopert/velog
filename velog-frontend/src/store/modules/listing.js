@@ -18,6 +18,7 @@ const CLEAR_TAG_POSTS = 'listing/CLEAR_TAG_POSTS';
 const GET_TEMP_POSTS = 'listing/GET_TEMP_POSTS';
 const PREFETCH_TEMP_POSTS = 'listing/PREFETCH_TEMP_POSTS';
 const REMOVE_TEMP_POST = 'listing/REMOVE_TEMP_POST';
+const FLUSH_LIST = 'listing/FLUSH_LIST';
 
 // potential improvement :: remove duplicates
 export const actionCreators = {
@@ -43,6 +44,7 @@ export const actionCreators = {
   getTempPosts: createAction(GET_TEMP_POSTS, PostsAPI.getTempPosts),
   prefetchTempPosts: createAction(PREFETCH_TEMP_POSTS, PostsAPI.getTempPosts),
   removeTempPost: createAction(REMOVE_TEMP_POST, (postId: string) => postId),
+  flushList: createAction(FLUSH_LIST),
 };
 
 export type PostItem = {
@@ -112,6 +114,7 @@ export interface ListingActionCreators {
   clearTagPosts(): any;
   clearUserPosts(): any;
   removeTempPost(postId: string): any;
+  flushList(): any;
 }
 
 const initialListingSet = {
@@ -167,6 +170,9 @@ const reducer = handleActions(
         if (!draft.temp.posts) return;
         draft.temp.posts = draft.temp.posts.filter(p => p.id !== payload);
       });
+    },
+    [FLUSH_LIST]: (state) => {
+      return initialState;
     },
   },
   initialState,

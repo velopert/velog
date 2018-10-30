@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import type { State } from 'store';
-import { WriteActions, BaseActions } from 'store/actionCreators';
+import { WriteActions, BaseActions, ListingActions } from 'store/actionCreators';
 import WriteHeader from 'components/write/WriteHeader/WriteHeader';
 import type { PostData, Category } from 'store/modules/write';
 import { Prompt, withRouter, type ContextRouter } from 'react-router-dom';
@@ -48,6 +48,7 @@ class WriteHeaderContainer extends Component<Props> {
     if (this.timer) {
       clearInterval(this.timer);
     }
+    ListingActions.flushList();
   }
 
   autoTempSave = () => {
