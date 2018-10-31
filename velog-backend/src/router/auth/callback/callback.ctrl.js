@@ -1,7 +1,10 @@
 // @flow
 import type { Middleware } from 'koa';
 import axios from 'axios';
+import crypto from 'crypto';
+import redisClient from 'lib/redisClient';
 
+// https://github.com/login/oauth/authorize?scope=user:email&client_id=f51c5f7d1098d4a1cbdf
 // memo: http://localhost:4000/auth/callback/github?next=https://velog.io/&code=906e127c5d573424a53e
 export const githubCallback: Middleware = async (ctx) => {
   try {
@@ -18,9 +21,26 @@ export const githubCallback: Middleware = async (ctx) => {
         },
       },
     );
+    const hash = crypto.randomBytes(40).toString('hex');
+    const msg = await redisClient.set(
+      hash,
+      response.data.access_token,
+      'EX',
+      30,
+    );
+    let nextUrl =
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000/'
+        : 'https://velog.io/';
+    nextUrl += `?type=github&key=${hash}`;
+    ctx.redirect(nextUrl);
     ctx.body = response.data;
   } catch (e) {
     ctx.status = 401;
     // redirect to velog
   }
+};
+
+export const getToken: Middleware = async (ctx) => {
+  // github, facebook, google
 };

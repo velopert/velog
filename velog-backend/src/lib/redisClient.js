@@ -48,6 +48,20 @@ class RedisClient {
     if (!this.client) return;
     return this.client.flushall();
   }
+  async set(key: string, value: string, mode: 'PX' | 'EX', duration: number) {
+    if (!this.connected || !this.client) {
+      await this.connect();
+    }
+    return new Promise((resolve, reject) => {
+      if (!this.client) return reject();
+      this.client.set(key, value, mode, duration, (err, reply) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(reply);
+      });
+    });
+  }
 }
 
 const redisClient = new RedisClient();
