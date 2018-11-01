@@ -21,6 +21,8 @@ const AUTOCOMPLETE_REGISTER_FORM = 'auth/AUTOCOMPLETE_REGISTER_FORM';
 const SET_ERROR = 'auth/SET_ERROR';
 const SET_NEXT_URL = 'auth/SET_NEXT_URL';
 
+const GET_PROVIDER_TOKEN = 'auth/GET_PROVIDER_TOKEN';
+
 /* ACTION CREATOR */
 const setEmailInput = createAction(SET_EMAIL_INPUT, (value: string) => value);
 const sendAuthEmail = createAction(SEND_AUTH_EMAIL, AuthAPI.sendAuthEmail);
@@ -57,20 +59,27 @@ const autoCompleteRegisterForm = createAction(
   (payload: AutoCompleteFormPayload) => payload,
 );
 
+const getProviderToken = createAction(
+  GET_PROVIDER_TOKEN,
+  AuthAPI.getProviderToken,
+  meta => meta.type,
+);
+
 /* ACTION FLOW TYPE */
 type SetEmailInputAction = ActionType<typeof setEmailInput>;
-type SendAuthEmailAction = ActionType<typeof sendAuthEmail>;
-type GetCodeAction = ActionType<typeof getCode>;
 type ChangeRegisterFormAction = ActionType<typeof changeRegisterForm>;
-type LocalRegisterAction = ActionType<typeof localRegister>;
-type CodeLoginAction = ActionType<typeof codeLogin>;
-type SocialLoginAction = ActionType<typeof socialLogin>;
-type VerifySocialAction = ActionType<typeof verifySocial>;
-type SocialRegisterAction = ActionType<typeof socialRegister>;
-type SocialVelogLoginAction = ActionType<typeof socialVelogLogin>;
 type AutoCompleteRegisterForm = ActionType<typeof autoCompleteRegisterForm>;
 type SetErrorAction = ActionType<typeof setError>;
 type SetNextUrlAction = ActionType<typeof setNextUrl>;
+type GetProviderTokenResponseAction = {
+  type: string,
+  payload: {
+    data: {
+      token: string,
+    },
+  },
+  meta: string,
+};
 
 /* ACTION CREATORS INTERFACE */
 export interface AuthActionCreators {
@@ -87,6 +96,7 @@ export interface AuthActionCreators {
   autoCompleteRegisterForm(payload: AutoCompleteFormPayload): any;
   setError(payload: ErrorType): any;
   setNextUrl(payload: string): any;
+  getProviderToken(key: AuthAPI.GetProviderTokenPayload): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -104,6 +114,7 @@ export const actionCreators: AuthActionCreators = {
   autoCompleteRegisterForm,
   setError,
   setNextUrl,
+  getProviderToken,
 };
 
 /* STATE TYPES */
@@ -150,6 +161,10 @@ export type Auth = {
     payload: any,
   },
   nextUrl: ?string,
+  tokenData: {
+    type: ?string,
+    token: ?string,
+  },
 };
 
 /* INITIAL STATE */
@@ -170,6 +185,10 @@ const initialState: Auth = {
   verifySocialResult: null,
   error: null,
   nextUrl: null,
+  tokenData: {
+    type: null,
+    token: null,
+  },
 };
 
 /* REDUCER */
@@ -317,6 +336,22 @@ export default applyPenders(reducer, [
     onFailure: (state: Auth, { payload: { response } }) => {
       return produce(state, (draft) => {
         draft.error = response.data;
+      });
+    },
+  },
+  {
+    type: GET_PROVIDER_TOKEN,
+    onSuccess: (state: Auth, { payload: { data }, meta }: GetProviderTokenResponseAction) => {
+      const { token } = data;
+      // return {
+      //   ...state,
+      //   providerToken: token,
+      // };
+      return produce(state, (draft) => {
+        draft.tokenData = {
+          type: meta,
+          token,
+        };
       });
     },
   },

@@ -28,11 +28,19 @@ export const githubCallback: Middleware = async (ctx) => {
       'EX',
       30,
     );
+
+    // memo:
+    /*
+      1. check isUser
+        Yes: setcookie,
+          redirect to /callback?logged=1
+        No: ...
+    */
     let nextUrl =
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000/'
         : 'https://velog.io/';
-    nextUrl += `?type=github&key=${hash}`;
+    nextUrl += `callback?type=github&key=${hash}`;
     ctx.redirect(nextUrl);
     ctx.body = response.data;
   } catch (e) {
@@ -43,4 +51,17 @@ export const githubCallback: Middleware = async (ctx) => {
 
 export const getToken: Middleware = async (ctx) => {
   // github, facebook, google
+  const { key } = ctx.query;
+  try {
+    const token = await redisClient.get(key);
+    if (!token) {
+      ctx.status = 400;
+      return;
+    }
+    ctx.body = {
+      token,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };

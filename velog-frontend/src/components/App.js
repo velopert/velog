@@ -4,7 +4,7 @@ import { Home, Register, Write, Post, User, Saves, Settings, Policy, NotFound } 
 import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
 import { Helmet } from 'react-helmet';
-import Callback from './etc/Callback';
+import Callback from 'containers/etc/Callback';
 
 const App = () => (
   <React.Fragment>
