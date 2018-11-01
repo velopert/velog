@@ -48,7 +48,7 @@ class WriteHeaderContainer extends Component<Props> {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    ListingActions.flushList();
+    // ListingActions.flushList();
   }
 
   autoTempSave = () => {

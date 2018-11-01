@@ -8,7 +8,7 @@ import WriteConfigureThumbnail from 'components/write/WriteConfigureThumbnail';
 import SubmitBoxAdditional from 'components/write/SubmitBoxAdditional/SubmitBoxAdditional';
 import { connect } from 'react-redux';
 import type { State } from 'store';
-import { WriteActions, UserActions, BaseActions } from 'store/actionCreators';
+import { WriteActions, UserActions, BaseActions, ListingActions } from 'store/actionCreators';
 import type { Categories, PostData, Meta } from 'store/modules/write';
 import axios from 'axios';
 import storage from 'lib/storage';
@@ -202,7 +202,10 @@ class SubmitBoxContainer extends Component<Props> {
       if (!this.props.username || !this.props.postData) return;
       const postUrl = `/@${this.props.username}/${this.props.postData &&
         this.props.postData.url_slug}`;
-      this.props.history.push(postUrl);
+      ListingActions.flushList();
+      setTimeout(() => {
+        this.props.history.push(postUrl);
+      });
     } catch (e) {
       BaseActions.showToast({
         type: 'error',

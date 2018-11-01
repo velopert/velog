@@ -311,14 +311,15 @@ export const readPost = async (ctx: Context): Promise<*> => {
         ctx.status = 404;
         return;
       }
-      if (
-        post.is_private === true &&
-        (ctx.user && ctx.user.username) !== username
-      ) {
-        ctx.status = 404;
-        return;
-      }
     }
+    if (
+      post.is_private === true &&
+      (ctx.user && ctx.user.username) !== username
+    ) {
+      ctx.status = 404;
+      return;
+    }
+
 
     console.time('getCommentsCount');
     const commentsCount = await Comment.getCommentsCount(post.id);
