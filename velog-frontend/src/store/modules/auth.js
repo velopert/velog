@@ -348,6 +348,10 @@ export default applyPenders(reducer, [
       //   providerToken: token,
       // };
       return produce(state, (draft) => {
+        draft.socialAuthResult = {
+          accessToken: token,
+          provider: meta,
+        };
         draft.tokenData = {
           type: meta,
           token,
