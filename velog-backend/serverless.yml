@@ -22,16 +22,18 @@ provider:
     POSTGRES_HOST: ${env:POSTGRES_HOST}
     POSTGRES_USER: ${env:POSTGRES_USER}
     POSTGRES_PW: ${env:POSTGRES_PW}
-    NODE_ENV: "production"
+    GITHUB_ID: ${env:GITHUB_ID}
+    GITHUB_SECRET: ${env:GITHUB_SECRET}
+    NODE_ENV: 'production'
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "ec2:CreateNetworkInterface"
-        - "ec2:DescribeNetworkInterfaces"
-        - "ec2:DetachNetworkInterface"
-        - "ec2:DeleteNetworkInterface"
-        - "ses:SendEmail"
-      Resource: "*"
+        - 'ec2:CreateNetworkInterface'
+        - 'ec2:DescribeNetworkInterfaces'
+        - 'ec2:DetachNetworkInterface'
+        - 'ec2:DeleteNetworkInterface'
+        - 'ses:SendEmail'
+      Resource: '*'
 
 functions:
   api:
@@ -41,7 +43,7 @@ functions:
           path: /
           method: ANY
           cors:
-            origin: "https://velog.io"
+            origin: 'https://velog.io'
             headers:
               - Cookie
               - Content-Type
@@ -55,7 +57,7 @@ functions:
           path: /{any+} # this matches any path, the token 'any' doesn't mean anything special
           method: ANY
           cors:
-            origin: "https://velog.io"
+            origin: 'https://velog.io'
             headers:
               - Cookie
               - Content-Type
@@ -76,5 +78,5 @@ functions:
 custom:
   apigwBinary:
     types: #list of mime-types
-      - "multipart/form-data"
-      - "application/x-www-form-urlencoded"
+      - 'multipart/form-data'
+      - 'application/x-www-form-urlencoded'
