@@ -43,6 +43,7 @@ export const githubCallback: Middleware = async (ctx) => {
     ctx.redirect(nextUrl);
     ctx.body = response.data;
   } catch (e) {
+    console.log(e);
     ctx.status = 401;
     // redirect to velog
     let nextUrl =
