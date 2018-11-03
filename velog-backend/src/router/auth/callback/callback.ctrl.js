@@ -8,11 +8,12 @@ import redisClient from 'lib/redisClient';
 // memo: http://localhost:4000/auth/callback/github?next=https://velog.io/&code=906e127c5d573424a53e
 export const githubCallback: Middleware = async (ctx) => {
   try {
+    const { GITHUB_ID, GITHUB_SECRET } = process.env;
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
       {
-        client_id: 'f51c5f7d1098d4a1cbdf',
-        client_secret: '78ff1213c152f3c5f63953796cda33cde44658a7',
+        client_id: GITHUB_ID,
+        client_secret: GITHUB_SECRET,
         code: ctx.query.code,
       },
       {
@@ -21,13 +22,11 @@ export const githubCallback: Middleware = async (ctx) => {
         },
       },
     );
+    if (response.data.error) {
+      throw new Error(response.data.error);
+    }
     const hash = crypto.randomBytes(40).toString('hex');
-    const msg = await redisClient.set(
-      hash,
-      response.data.access_token,
-      'EX',
-      30,
-    );
+    await redisClient.set(hash, response.data.access_token, 'EX', 30);
 
     // memo:
     /*
@@ -46,6 +45,12 @@ export const githubCallback: Middleware = async (ctx) => {
   } catch (e) {
     ctx.status = 401;
     // redirect to velog
+    let nextUrl =
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000/'
+        : 'https://velog.io/';
+    nextUrl += 'callback?error=1';
+    ctx.redirect(nextUrl);
   }
 };
 

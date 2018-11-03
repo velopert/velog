@@ -37,6 +37,9 @@ class Callback extends Component<Props, CallbackState> {
     const { type, key } = query;
     if (!type || !key) {
       // error
+      this.setState({
+        badRequest: true,
+      });
       return;
     }
     try {
