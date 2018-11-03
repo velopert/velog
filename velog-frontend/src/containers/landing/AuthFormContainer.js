@@ -45,7 +45,7 @@ class AuthFormContainer extends Component<Props> {
   onSocialLogin = async (provider: string) => {
     if (provider === 'github') {
       window.location.replace(
-        'https://github.com/login/oauth/authorize?scope=user:email&client_id=f51c5f7d1098d4a1cbdf',
+        'https://github.com/login/oauth/authorize?scope=user:email&client_id=7c3902d881910d52ae3e',
       );
       return;
     }
