@@ -44,12 +44,10 @@ class AuthFormContainer extends Component<Props> {
 
   onSocialLogin = async (provider: string) => {
     if (provider === 'github') {
-      const clientId =
-        process.env.NODE_ENV === 'development'
-          ? process.env.GITHUB_ID_DEV
-          : process.env.GITHUB_ID_PROD;
       window.location.replace(
-        `https://github.com/login/oauth/authorize?scope=user:email&client_id=${clientId}`,
+        `https://github.com/login/oauth/authorize?scope=user:email&client_id=${
+          process.env.GITHUB_ID
+        }`,
       );
       return;
     }
