@@ -54,7 +54,7 @@
     "fb": "^2.0.0",
     "filesize": "^3.6.1",
     "github": "^13.1.0",
-    "googleapis": "^23.0.0",
+    "googleapis": "^34.0.0",
     "joi": "^13.0.2",
     "json-diff": "^0.5.2",
     "jsonwebtoken": "^8.1.0",

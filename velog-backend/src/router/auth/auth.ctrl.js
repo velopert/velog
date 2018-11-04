@@ -349,6 +349,7 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
   try {
     profile = await getSocialProfile(provider, accessToken);
   } catch (e) {
+    console.log(e);
     ctx.status = 401;
     ctx.body = {
       name: 'WRONG_CREDENTIAL',

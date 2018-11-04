@@ -24,6 +24,8 @@ provider:
     POSTGRES_PW: ${env:POSTGRES_PW}
     GITHUB_ID: ${env:GITHUB_ID}
     GITHUB_SECRET: ${env:GITHUB_SECRET}
+    GOOGLE_ID: ${env:GOOGLE_ID}
+    GOOGLE_SECRET: ${env:GOOGLE_SECRET}
     NODE_ENV: 'production'
   iamRoleStatements:
     - Effect: 'Allow'

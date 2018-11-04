@@ -34,7 +34,7 @@ class Callback extends Component<Props, CallbackState> {
 
   initialize = async () => {
     const query = queryString.parse(this.props.location.search);
-    const { type, key } = query;
+    const { type, key, next } = query;
     if (!type || !key) {
       // error
       this.setState({
@@ -68,7 +68,7 @@ class Callback extends Component<Props, CallbackState> {
         const { user } = authResult;
         UserActions.setUser(user);
         storage.set(keys.user, user);
-        this.props.history.push('/trending');
+        this.props.history.push(next || '/trending');
         return;
       }
 

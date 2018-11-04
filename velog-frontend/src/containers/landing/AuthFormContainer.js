@@ -44,10 +44,12 @@ class AuthFormContainer extends Component<Props> {
 
   onSocialLogin = async (provider: string) => {
     if (provider === 'github') {
+      const redirectUri = `${process.env.API_HOST || ''}/auth/callback/github?next=${this.props.nextUrl ||
+        '/trending'}`;
       window.location.replace(
         `https://github.com/login/oauth/authorize?scope=user:email&client_id=${
-          process.env.GITHUB_ID
-        }`,
+          process.env.GITHUB_ID || ''
+        }&redirect_uri=${redirectUri}`,
       );
       return;
     }

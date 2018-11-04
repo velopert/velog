@@ -1,6 +1,6 @@
 // @flow
 import GithubAPI from 'github';
-import GoogleAPI from 'googleapis';
+import { google } from 'googleapis';
 import FacebookAPI from 'fb';
 
 export type Profile = {
@@ -54,7 +54,10 @@ const profileGetters = {
     });
   },
   google(accessToken: string): Promise<Profile> {
-    const plus = GoogleAPI.plus('v1');
+    const plus = google.plus({
+      version: 'v1',
+      auth: process.env.GOOGLE_SECRET,
+    });
     return new Promise((resolve, reject) => {
       plus.people.get(
         {
@@ -66,9 +69,10 @@ const profileGetters = {
             reject(err);
             return;
           }
+          console.log(auth.data);
           const {
             id, image, emails, displayName,
-          } = auth;
+          } = auth.data;
 
           const profile = {
             id,
