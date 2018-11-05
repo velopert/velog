@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { type State } from 'store';
 import { type VerifySocialResult, type AuthResult } from 'store/modules/auth';
 import storage, { keys } from 'lib/storage';
-import { AuthActions, UserActions } from '../../store/actionCreators';
+import { AuthActions, UserActions, BaseActions } from '../../store/actionCreators';
 import BadRequest from '../../pages/errors/BadRequest';
 
 function isFacebookApp() {
@@ -63,6 +63,7 @@ class Callback extends Component<Props, CallbackState> {
       // login if account already exists
       if (this.props.verifySocialResult.exists) {
         await AuthActions.socialVelogLogin(socialPayload);
+        BaseActions.exitLanding();
         const { authResult } = this.props;
         if (!authResult) return;
         const { user } = authResult;

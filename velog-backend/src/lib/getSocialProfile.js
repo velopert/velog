@@ -27,8 +27,6 @@ const profileGetters = {
           id, avatar_url: thumbnail, email, name,
         } = res.data;
 
-        console.log(res.data);
-
         const profile = {
           id,
           thumbnail,
@@ -69,7 +67,6 @@ const profileGetters = {
             reject(err);
             return;
           }
-          console.log(auth.data);
           const {
             id, image, emails, displayName,
           } = auth.data;

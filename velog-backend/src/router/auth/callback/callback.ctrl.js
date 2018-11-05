@@ -10,11 +10,6 @@ const baseUrl =
     ? 'http://localhost:3000/'
     : 'https://velog.io/';
 
-const callbackUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:4000/auth/callback/google'
-    : 'https://api.velog.io/auth/callback/google';
-
 // https://github.com/login/oauth/authorize?scope=user:email&client_id=f51c5f7d1098d4a1cbdf
 // memo: http://localhost:4000/auth/callback/github?next=https://velog.io/&code=906e127c5d573424a53e
 export const githubCallback: Middleware = async (ctx) => {
@@ -88,6 +83,12 @@ export const getToken: Middleware = async (ctx) => {
 const { GOOGLE_ID, GOOGLE_SECRET } = process.env;
 
 export const redirectGoogleLogin: Middleware = (ctx) => {
+  const { next } = ctx.query;
+  const callbackUrl =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:4000/auth/callback/google'
+      : 'https://api.velog.io/auth/callback/google';
+
   if (!GOOGLE_ID || !GOOGLE_SECRET) {
     console.log('Google ENVVAR is missing');
     ctx.throw(500);
@@ -101,12 +102,19 @@ export const redirectGoogleLogin: Middleware = (ctx) => {
 
   const url = oauth2Client.generateAuthUrl({
     scope: ['https://www.googleapis.com/auth/userinfo.email'],
+    state: JSON.stringify({ next: next || '/trending' }),
   });
+
+  console.log(url);
   ctx.redirect(url);
 };
 
 export const googleCallback: Middleware = async (ctx) => {
-  const { code } = ctx.query;
+  const { code, state } = ctx.query;
+  const callbackUrl =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:4000/auth/callback/google'
+      : 'https://api.velog.io/auth/callback/google';
   if (!code) {
     ctx.redirect(`${baseUrl}/?callback?error=1`);
   }
@@ -130,8 +138,12 @@ export const googleCallback: Middleware = async (ctx) => {
     const { access_token } = tokens;
     const hash = crypto.randomBytes(40).toString('hex');
     await redisClient.set(hash, access_token, 'EX', 30);
-    const nextUrl = encodeURI(`${baseUrl}callback?type=google&key=${hash}`);
-    ctx.redirect(nextUrl);
+    let nextUrl = `${baseUrl}callback?type=google&key=${hash}`;
+    if (state) {
+      const { next } = JSON.parse(state);
+      nextUrl += `&next=${next}`;
+    }
+    ctx.redirect(encodeURI(nextUrl));
   } catch (e) {
     ctx.throw(500, e);
   }

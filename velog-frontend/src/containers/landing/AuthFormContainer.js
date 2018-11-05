@@ -43,14 +43,19 @@ class AuthFormContainer extends Component<Props> {
   };
 
   onSocialLogin = async (provider: string) => {
+    const nextUrl = this.props.nextUrl || '/trending';
+
     if (provider === 'github') {
-      const redirectUri = `${process.env.API_HOST || ''}/auth/callback/github?next=${this.props.nextUrl ||
-        '/trending'}`;
+      const redirectUri = `${process.env.API_HOST || ''}/auth/callback/github?next=${nextUrl}`;
       window.location.replace(
-        `https://github.com/login/oauth/authorize?scope=user:email&client_id=${
-          process.env.GITHUB_ID || ''
-        }&redirect_uri=${redirectUri}`,
+        `https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env
+          .GITHUB_ID || ''}&redirect_uri=${redirectUri}`,
       );
+      return;
+    }
+    if (provider === 'google') {
+      const googleLoginUrl = `${process.env.API_HOST || ''}/auth/callback/google/login?next=${nextUrl}`;
+      window.location.replace(googleLoginUrl);
       return;
     }
     BaseActions.setFullscreenLoader(true);
