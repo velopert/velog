@@ -4,10 +4,11 @@ import axios from 'axios';
 import crypto from 'crypto';
 import redisClient from 'lib/redisClient';
 import { google } from 'googleapis';
+import qs from 'qs';
 
 const baseUrl =
   process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000/'
+    ? 'https://localhost:3000/'
     : 'https://velog.io/';
 
 // https://github.com/login/oauth/authorize?scope=user:email&client_id=f51c5f7d1098d4a1cbdf
@@ -56,7 +57,7 @@ export const githubCallback: Middleware = async (ctx) => {
     // redirect to velog
     let nextUrl =
       process.env.NODE_ENV === 'development'
-        ? 'http://localhost:3000/'
+        ? 'https://localhost:3000/'
         : 'https://velog.io/';
     nextUrl += 'callback?error=1';
     ctx.redirect(nextUrl);
@@ -117,6 +118,7 @@ export const googleCallback: Middleware = async (ctx) => {
       : 'https://api.velog.io/auth/callback/google';
   if (!code) {
     ctx.redirect(`${baseUrl}/?callback?error=1`);
+    return;
   }
 
   if (!GOOGLE_ID || !GOOGLE_SECRET) {
@@ -139,6 +141,64 @@ export const googleCallback: Middleware = async (ctx) => {
     const hash = crypto.randomBytes(40).toString('hex');
     await redisClient.set(hash, access_token, 'EX', 30);
     let nextUrl = `${baseUrl}callback?type=google&key=${hash}`;
+    if (state) {
+      const { next } = JSON.parse(state);
+      nextUrl += `&next=${next}`;
+    }
+    ctx.redirect(encodeURI(nextUrl));
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+const { FACEBOOK_ID, FACEBOOK_SECRET } = process.env;
+
+export const redirectFacebookLogin: Middleware = (ctx) => {
+  const { next } = ctx.query;
+  if (!FACEBOOK_ID) {
+    ctx.throw(500, 'Facebook ID is missing');
+    return;
+  }
+  const state = JSON.stringify({ next: next || '/trending' });
+  const callbackUrl =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:4000/auth/callback/facebook'
+      : 'https://api.velog.io/auth/callback/facebook';
+  const authUrl = `https://www.facebook.com/v3.2/dialog/oauth?client_id=${FACEBOOK_ID}&redirect_uri=${callbackUrl}&state=${state}`;
+  ctx.redirect(encodeURI(authUrl));
+};
+
+export const facebookCallback: Middleware = async (ctx) => {
+  const { code, state } = ctx.query;
+  const callbackUrl =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:4000/auth/callback/facebook'
+      : 'https://api.velog.io/auth/callback/facebook';
+  if (!code) {
+    ctx.redirect(`${baseUrl}/?callback?error=1`);
+    return;
+  }
+
+  if (!FACEBOOK_ID || !FACEBOOK_SECRET) {
+    console.log('Facebook ENVVAR is missing');
+    ctx.throw(500);
+  }
+
+  try {
+    const response = await axios.get(`https://graph.facebook.com/v3.2/oauth/access_token?${qs.stringify({
+      client_id: FACEBOOK_ID,
+      redirect_uri: callbackUrl,
+      client_secret: FACEBOOK_SECRET,
+      code,
+    })}`);
+    const { access_token } = response.data;
+    if (!access_token) {
+      ctx.redirect(`${baseUrl}/?callback?error=1`);
+      return;
+    }
+    const hash = crypto.randomBytes(40).toString('hex');
+    await redisClient.set(hash, access_token, 'EX', 30);
+    let nextUrl = `${baseUrl}callback?type=facebook&key=${hash}`;
     if (state) {
       const { next } = JSON.parse(state);
       nextUrl += `&next=${next}`;

@@ -26,7 +26,6 @@
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
-    "hellojs": "next",
     "html-webpack-plugin": "2.29.0",
     "immer": "^1.1.3",
     "immutable": "^3.8.2",
@@ -78,21 +77,20 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "finalize": "yarn build && yarn build:server && yarn deploy && yarn invalidate",
+    "finalize":
+      "yarn build && yarn build:server && yarn deploy && yarn invalidate",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "build:server": "node scripts/build.server.js && cp ../velog-ssr/src/ssr/render.js ../velog-ssr/dist/ssr/render.js && cp ./build/asset-manifest.json ../velog-ssr/",
+    "build:server":
+      "node scripts/build.server.js && cp ../velog-ssr/src/ssr/render.js ../velog-ssr/dist/ssr/render.js && cp ./build/asset-manifest.json ../velog-ssr/",
     "test": "node scripts/test.js --env=jsdom",
     "deploy": "aws s3 sync ./build s3://cdn.velog.io/",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E1M9D68QZ0CD1F --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
+    "invalidate":
+      "aws cloudfront create-invalidation --distribution-id E1M9D68QZ0CD1F --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,mjs}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
@@ -102,11 +100,10 @@
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)":
+        "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
@@ -121,9 +118,7 @@
     ]
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",

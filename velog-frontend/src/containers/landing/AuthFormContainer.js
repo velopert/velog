@@ -43,8 +43,8 @@ class AuthFormContainer extends Component<Props> {
   };
 
   onSocialLogin = async (provider: string) => {
+    // TODO: refactoring
     const nextUrl = this.props.nextUrl || '/trending';
-
     if (provider === 'github') {
       const redirectUri = `${process.env.API_HOST || ''}/auth/callback/github?next=${nextUrl}`;
       window.location.replace(
@@ -54,55 +54,16 @@ class AuthFormContainer extends Component<Props> {
       return;
     }
     if (provider === 'google') {
-      const googleLoginUrl = `${process.env.API_HOST || ''}/auth/callback/google/login?next=${nextUrl}`;
+      const googleLoginUrl = `${process.env.API_HOST ||
+        ''}/auth/callback/google/login?next=${nextUrl}`;
       window.location.replace(googleLoginUrl);
       return;
     }
-    BaseActions.setFullscreenLoader(true);
-    try {
-      await AuthActions.socialLogin(provider);
-    } catch (e) {
-      BaseActions.setFullscreenLoader(false);
-      return;
-      // TODO: handle social login error
+    if (provider === 'facebook') {
+      const facebookLogin = `${process.env.API_HOST ||
+        ''}/auth/callback/facebook/login?next=${nextUrl}`;
+      window.location.replace(facebookLogin);
     }
-
-    try {
-      // CHECK ACCOUNT EXISTANCY
-      const { socialAuthResult } = this.props;
-      if (!socialAuthResult) return;
-      const { accessToken } = socialAuthResult;
-      await AuthActions.verifySocial({ accessToken, provider });
-
-      const { verifySocialResult } = this.props;
-      if (!verifySocialResult) return;
-      const { exists } = verifySocialResult;
-
-      if (exists) {
-        // exists -> login
-        await AuthActions.socialVelogLogin({ accessToken, provider });
-        const { authResult } = this.props;
-        if (!authResult) return;
-        const { user } = authResult;
-        UserActions.setUser(user);
-        storage.set(keys.user, user);
-        BaseActions.exitLanding();
-        if (this.props.nextUrl) {
-          this.props.history.push(this.props.nextUrl);
-        }
-      } else {
-        // does not exist -> enroute to register, auto complete
-        const { email, name } = verifySocialResult;
-        if (!email || !name) {
-          // TODO
-        }
-        AuthActions.autoCompleteRegisterForm({ email: email || '', name: name || '' });
-        this.props.history.push('/register');
-      }
-    } catch (e) {
-      // TODO: verify error
-    }
-    BaseActions.setFullscreenLoader(false);
   };
 
   onExitLanding = () => {
