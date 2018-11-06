@@ -35,6 +35,10 @@ export const tempSave = async (ctx: Context): Promise<*> => {
       is_release,
     }).save();
 
+    // 1. count all postHistory by fk_post_id
+    // 2. if count > 20, get 10th data
+    // 3. remove every data before 10th data.
+
     ctx.body = extractKeys(postHistory, [
       'id',
       'title',
@@ -42,6 +46,15 @@ export const tempSave = async (ctx: Context): Promise<*> => {
       'created_at',
       'is_release',
     ]);
+
+    setTimeout(async () => {
+      const count = await PostHistory.count({
+        where: {
+          fk_post_id: id,
+        },
+      });
+      console.log(count);
+    }, 0);
   } catch (e) {
     ctx.throw(500, e);
   }
