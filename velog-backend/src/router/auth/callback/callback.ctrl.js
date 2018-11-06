@@ -164,7 +164,7 @@ export const redirectFacebookLogin: Middleware = (ctx) => {
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:4000/auth/callback/facebook'
       : 'https://api.velog.io/auth/callback/facebook';
-  const authUrl = `https://www.facebook.com/v3.2/dialog/oauth?client_id=${FACEBOOK_ID}&redirect_uri=${callbackUrl}&state=${state}`;
+  const authUrl = `https://www.facebook.com/v3.2/dialog/oauth?client_id=${FACEBOOK_ID}&redirect_uri=${callbackUrl}&state=${state}&scope=email,public_profile`;
   ctx.redirect(encodeURI(authUrl));
 };
 
