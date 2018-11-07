@@ -3,6 +3,10 @@ import type { Context, Middleware } from 'koa';
 import Joi from 'joi';
 import { validateSchema, extractKeys, isUUID } from 'lib/common';
 import PostHistory from 'database/models/PostHistory';
+import Sequelize from 'sequelize';
+
+// const Op = Sequelize.Op;
+const { Op } = Sequelize;
 
 export const tempSave = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -53,7 +57,24 @@ export const tempSave = async (ctx: Context): Promise<*> => {
           fk_post_id: id,
         },
       });
-      console.log(count);
+      if (count < 20) return;
+      const tenth = await PostHistory.findOne({
+        where: {
+          fk_post_id: id,
+        },
+        order: [['created_at', 'DESC']],
+        offset: 10,
+      });
+      if (!tenth) return;
+      await PostHistory.destroy({
+        where: {
+          fk_post_id: id,
+          created_at: {
+            // $FlowFixMe
+            [Op.lte]: tenth.created_at,
+          },
+        },
+      });
     }, 0);
   } catch (e) {
     ctx.throw(500, e);
