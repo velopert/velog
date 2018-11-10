@@ -14,6 +14,7 @@ import { Helmet } from 'react-helmet';
 import { convertToPlainText } from 'lib/common';
 import PostPlaceholder from 'components/post/PostPlaceholder';
 import throttle from 'lodash/throttle';
+import PostLeftSticker from '../../components/post/PostLeftSticker/PostLeftSticker';
 
 type Props = {
   username: ?string,
@@ -141,6 +142,7 @@ class PostViewer extends Component<Props> {
           <meta name="twitter:description" content={plainTextBody} />
           {post.thumbnail && <meta name="twitter:image" content={post.thumbnail} />}
         </Helmet>
+        <PostLeftSticker />
         <PostToc
           toc={toc}
           activeHeading={activeHeading}

@@ -1,0 +1,14 @@
+@import 'utils';
+.PostLeftSticker {
+  position: absolute;
+  width: 5rem;
+  left: -8rem;
+  top: 5.5rem;
+  padding-top: 1rem;
+  .wrapper {
+    &.fixed {
+      position: fixed;
+      top: 1rem;
+    }
+  }
+}
