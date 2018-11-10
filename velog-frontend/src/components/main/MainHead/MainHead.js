@@ -19,7 +19,6 @@ const MainHead = ({ logged, onLogin, rightArea }: Props) => (
     <div className="spacer" />
     <Link to="/" className="mobile-logo">
       velog
-      <div className="badge">alpha</div>
     </Link>
     <div className="right-area">
       {rightArea || (
