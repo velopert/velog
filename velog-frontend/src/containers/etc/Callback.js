@@ -83,10 +83,6 @@ class Callback extends Component<Props, CallbackState> {
     }
   };
   componentDidMount() {
-    if (isFacebookApp()) {
-      window.alert('죄송합니다. 페이스북 인앱 브라우저는 소셜로그인이 불가능합니다.');
-      window.href = 'https://velog.io/';
-    }
     this.initialize();
   }
 

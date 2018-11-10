@@ -76,7 +76,9 @@ function getClientEnvironment(publicUrl) {
             ? process.env.GITHUB_ID_DEV
             : process.env.GITHUB_ID_PROD,
         API_HOST:
-          process.env.NODE_ENV === 'development' ? 'http://localhost:4000' : 'https://api.velog.io',
+          process.env.NODE_ENV === 'development'
+            ? 'http://localhost:4000'
+            : 'https://api.velog.io',
       },
     );
   // Stringify all values so we can feed into Webpack DefinePlugin

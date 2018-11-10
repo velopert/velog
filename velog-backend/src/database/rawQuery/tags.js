@@ -13,6 +13,7 @@ export const getTagsList = async (sortBy: string): Promise<TagRow[]> => {
     INNER JOIN tags ON tags.id = fk_tag_id
     INNER JOIN posts ON posts.id = fk_post_id
     WHERE posts.is_private = FALSE
+    AND posts.is_private = FALSE
     AND posts.is_temp = FALSE
     GROUP BY fk_tag_id
   ) AS q

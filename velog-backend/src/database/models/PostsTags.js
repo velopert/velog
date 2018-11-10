@@ -80,9 +80,10 @@ PostsTags.removeTagsFromPost = async function (
 // retrieves user's postCount per tag
 type GetPostsCountParams = {
   userId: string,
+  ownPost: boolean,
 };
 
-PostsTags.getPostsCount = async ({ userId }: GetPostsCountParams) => {
+PostsTags.getPostsCount = async ({ userId, ownPost }: GetPostsCountParams) => {
   // TODO: IMPLEMENT IS_VISIBLE
   const query = `
   SELECT COUNT(post_id) AS count, tag FROM (
@@ -91,6 +92,7 @@ PostsTags.getPostsCount = async ({ userId }: GetPostsCountParams) => {
     INNER JOIN tags AS t ON t.id = pt.fk_tag_id
     INNER JOIN posts AS p ON p.id = pt.fk_post_id
     WHERE p.fk_user_id = $userId
+    ${ownPost ? '' : 'AND p.is_private = false'}
     AND p.is_temp = FALSE
   ) as q GROUP BY tag
   ORDER BY count DESC, tag

@@ -26,6 +26,8 @@ provider:
     GITHUB_SECRET: ${env:GITHUB_SECRET}
     GOOGLE_ID: ${env:GOOGLE_ID}
     GOOGLE_SECRET: ${env:GOOGLE_SECRET}
+    FACEBOOK_ID: ${env:FACEBOOK_ID}
+    FACEBOOK_SECRET: ${env:FACEBOOK_SECRET}
     NODE_ENV: 'production'
   iamRoleStatements:
     - Effect: 'Allow'

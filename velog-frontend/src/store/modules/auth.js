@@ -3,7 +3,6 @@ import { createAction, handleActions, type ActionType } from 'redux-actions';
 import produce from 'immer';
 import { pender } from 'redux-pender';
 import * as AuthAPI from 'lib/api/auth';
-import * as socialAuth from 'lib/socialAuth';
 import { applyPenders } from 'lib/common';
 
 /* ACTION TYPE */
@@ -13,7 +12,6 @@ const CHANGE_REGISTER_FORM = 'auth/CHANGE_REGISTER_FORM';
 const GET_CODE = 'auth/GET_CODE';
 const LOCAL_REGISTER = 'auth/LOCAL_REGISTER';
 const CODE_LOGIN = 'auth/CODE_LOGIN';
-const SOCIAL_LOGIN = 'auth/SOCIAL_LOGIN';
 const VERIFY_SOCIAL = 'auth/VERIFY_SOCIAL';
 const SOCIAL_REGISTER = 'auth/SOCIAL_REGISTER';
 const SOCIAL_VELOG_LOGIN = 'auth/SOCIAL_VELOG_LOGIN';
@@ -36,11 +34,6 @@ const changeRegisterForm = createAction(
 
 const localRegister = createAction(LOCAL_REGISTER, AuthAPI.localRegister);
 const codeLogin = createAction(CODE_LOGIN, AuthAPI.codeLogin);
-const socialLogin = createAction(
-  SOCIAL_LOGIN,
-  (provider: string) => socialAuth[provider](),
-  provider => provider,
-);
 const verifySocial = createAction(VERIFY_SOCIAL, AuthAPI.verifySocial);
 const socialRegister = createAction(SOCIAL_REGISTER, AuthAPI.socialRegister);
 const socialVelogLogin = createAction(SOCIAL_VELOG_LOGIN, AuthAPI.socialLogin);
@@ -89,7 +82,6 @@ export interface AuthActionCreators {
   getCode(code: string): any;
   localRegister(payload: AuthAPI.LocalRegisterPayload): any;
   codeLogin(code: string): any;
-  socialLogin(provider: string): any;
   verifySocial(payload: AuthAPI.VerifySocialPayload): any;
   socialRegister(payload: AuthAPI.SocialRegisterPayload): any;
   socialVelogLogin(payload: AuthAPI.SocialLoginPayload): any;
@@ -107,7 +99,6 @@ export const actionCreators: AuthActionCreators = {
   getCode,
   localRegister,
   codeLogin,
-  socialLogin,
   verifySocial,
   socialRegister,
   socialVelogLogin,
@@ -280,19 +271,6 @@ export default applyPenders(reducer, [
         draft.authResult = {
           user,
           token,
-        };
-      });
-    },
-  },
-  {
-    type: SOCIAL_LOGIN,
-    onSuccess: (state: Auth, { payload: response, meta: provider }) => {
-      if (!response) return state;
-      const { access_token: accessToken } = response.authResponse;
-      return produce(state, (draft) => {
-        draft.socialAuthResult = {
-          accessToken,
-          provider,
         };
       });
     },

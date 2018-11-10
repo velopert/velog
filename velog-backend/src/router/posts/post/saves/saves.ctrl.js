@@ -3,6 +3,10 @@ import type { Context, Middleware } from 'koa';
 import Joi from 'joi';
 import { validateSchema, extractKeys, isUUID } from 'lib/common';
 import PostHistory from 'database/models/PostHistory';
+import Sequelize from 'sequelize';
+
+// const Op = Sequelize.Op;
+const { Op } = Sequelize;
 
 export const tempSave = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -35,6 +39,10 @@ export const tempSave = async (ctx: Context): Promise<*> => {
       is_release,
     }).save();
 
+    // 1. count all postHistory by fk_post_id
+    // 2. if count > 20, get 10th data
+    // 3. remove every data before 10th data.
+
     ctx.body = extractKeys(postHistory, [
       'id',
       'title',
@@ -42,6 +50,32 @@ export const tempSave = async (ctx: Context): Promise<*> => {
       'created_at',
       'is_release',
     ]);
+
+    setTimeout(async () => {
+      const count = await PostHistory.count({
+        where: {
+          fk_post_id: id,
+        },
+      });
+      if (count < 20) return;
+      const tenth = await PostHistory.findOne({
+        where: {
+          fk_post_id: id,
+        },
+        order: [['created_at', 'DESC']],
+        offset: 10,
+      });
+      if (!tenth) return;
+      await PostHistory.destroy({
+        where: {
+          fk_post_id: id,
+          created_at: {
+            // $FlowFixMe
+            [Op.lte]: tenth.created_at,
+          },
+        },
+      });
+    }, 0);
   } catch (e) {
     ctx.throw(500, e);
   }

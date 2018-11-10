@@ -23,7 +23,7 @@ class MainSidebar extends Component<Props> {
     return (
       <aside className="MainSidebar">
         <Link to="/" className="logo">
-          velog <div className="badge">alpha</div>
+          velog
         </Link>
 
         <ul className="menu">
