@@ -54,8 +54,9 @@ export const getProfile = async (ctx: Context) => {
 
 export const getTags = async (ctx: Context) => {
   const { id } = ctx.selectedUser;
+  const ownPost = ctx.user && ctx.user.id === id;
   try {
-    const tags = await PostsTags.getPostsCount({ userId: id });
+    const tags = await PostsTags.getPostsCount({ userId: id, ownPost });
     ctx.body = tags;
   } catch (e) {
     ctx.throw(500, e);
