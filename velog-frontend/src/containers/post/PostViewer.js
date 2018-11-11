@@ -142,7 +142,12 @@ class PostViewer extends Component<Props> {
           <meta name="twitter:description" content={plainTextBody} />
           {post.thumbnail && <meta name="twitter:image" content={post.thumbnail} />}
         </Helmet>
-        <PostLeftSticker />
+        <PostLeftSticker
+          logged={logged}
+          likes={post.likes}
+          liked={post.liked}
+          onToggleLike={this.onToggleLike}
+        />
         <PostToc
           toc={toc}
           activeHeading={activeHeading}
