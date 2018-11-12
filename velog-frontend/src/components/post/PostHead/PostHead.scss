@@ -122,6 +122,11 @@
     .placeholder {
       flex: 1;
     }
+    .PostLikeButton {
+      @include media(">=large") {
+        display: none;
+      }
+    }
   }
   .separator {
     width: 100%;

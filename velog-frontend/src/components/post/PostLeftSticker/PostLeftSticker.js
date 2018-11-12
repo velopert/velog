@@ -8,19 +8,25 @@ import FacebookIcon from 'react-icons/lib/fa/facebook-official';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import ExitIcon from 'react-icons/lib/md/close';
 import Tooltip from 'react-tooltip';
+import withClickOutside from 'react-onclickoutside';
 
 import cx from 'classnames';
 import './PostLeftSticker.scss';
+import { shareFacebook, shareTwitter } from '../../../lib/share';
 
 type Props = {
   likes: number,
   liked: boolean,
   onToggleLike: () => void,
   logged: boolean,
+  url: string,
+  title: string,
 };
+
 type State = {
   fixed: boolean,
   openShare: boolean,
+  justLiked: boolean,
 };
 
 class PostLeftSticker extends Component<Props, State> {
@@ -29,6 +35,11 @@ class PostLeftSticker extends Component<Props, State> {
   state = {
     fixed: false,
     openShare: false,
+    justLiked: false,
+  };
+  handleClickOutside = () => {
+    if (!this.state.openShare) return;
+    this.onToggleShareButton();
   };
   componentDidMount() {
     if (!this.element.current) return;
@@ -47,18 +58,33 @@ class PostLeftSticker extends Component<Props, State> {
       openShare: !this.state.openShare,
     });
   };
+  onFacebookShare = () => {
+    this.onToggleShareButton();
+    shareFacebook(`https://velog.io${this.props.url}`);
+  };
+  onTwitterShare = () => {
+    this.onToggleShareButton();
+    shareTwitter(`https://velog.io${this.props.url}`, this.props.title);
+  };
+  componentDidUpdate(prevProps: Props) {
+    if (!prevProps.liked && this.props.liked) {
+      this.setState({
+        justLiked: true,
+      });
+    }
+  }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.onScroll);
   }
   render() {
     const { likes, liked, logged, onToggleLike } = this.props;
-    const { fixed, openShare } = this.state;
+    const { fixed, openShare, justLiked } = this.state;
     return (
       <div className="PostLeftSticker" ref={this.element}>
         <div className={cx('wrapper', { fixed })}>
           <button
             onClick={onToggleLike}
-            className={cx('circle like', { liked })}
+            className={cx('circle like', { liked, justLiked: liked && justLiked })}
             {...(logged
               ? {}
               : {
@@ -73,10 +99,10 @@ class PostLeftSticker extends Component<Props, State> {
           </button>
           {openShare && (
             <Fragment>
-              <button className="circle share">
+              <button className="circle share" onClick={this.onFacebookShare}>
                 <FacebookIcon />
               </button>
-              <button className="circle share">
+              <button className="circle share" onClick={this.onTwitterShare}>
                 <TwitterIcon />
               </button>
             </Fragment>
@@ -88,4 +114,4 @@ class PostLeftSticker extends Component<Props, State> {
   }
 }
 
-export default PostLeftSticker;
+export default withClickOutside(PostLeftSticker);

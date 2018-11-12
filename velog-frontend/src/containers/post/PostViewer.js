@@ -147,6 +147,8 @@ class PostViewer extends Component<Props> {
           likes={post.likes}
           liked={post.liked}
           onToggleLike={this.onToggleLike}
+          url={this.props.match.url}
+          title={post.title}
         />
         <PostToc
           toc={toc}

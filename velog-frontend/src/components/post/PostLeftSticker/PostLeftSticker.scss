@@ -17,6 +17,9 @@
   left: -7rem;
   top: 5.5rem;
   padding-top: 1rem;
+  @include media('<large') {
+    display: none;
+  }
   .wrapper {
     border-radius: 2rem;
     padding: 0.5rem;
@@ -45,9 +48,11 @@
           color: white;
           background: $oc-violet-4;
         }
-        &.liked {
+        &.justLiked {
           animation: justLiked 0.25s ease-in;
           animation-fill-mode: forwards;
+        }
+        &.liked {
           background: $oc-violet-4;
           color: white;
           &:hover {
@@ -64,7 +69,7 @@
         }
       }
     }
-    .circle+.circle {
+    .circle + .circle {
       margin-top: 0.5rem;
     }
     .likes-count {
