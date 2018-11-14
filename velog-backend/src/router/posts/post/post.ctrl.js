@@ -258,7 +258,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   } catch (e) {
     ctx.throw(500, e);
   }
-  redisClient.remove(`/@${ctx.user.username}/${ctx.post.url_slug}`);
+  redisClient.remove(`/@${ctx.user.username}/${encodeURI(ctx.post.url_slug)}`);
 };
 
 export const readPost = async (ctx: Context): Promise<*> => {
