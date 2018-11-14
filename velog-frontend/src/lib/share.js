@@ -9,7 +9,7 @@ export const shareFacebook = (href: string) => {
 
 export const shareTwitter = (href: string, text: string) => {
   window.open(
-    `https://twitter.com/share?url=${encodeURI(href)}&text=${text}&hashtags=velog`,
+    `https://twitter.com/share?url=${encodeURI(encodeURI(href))}&text=${text}&hashtags=velog`,
     'sharer',
     'toolbar=0,status=0,width=626,height=436',
   );
