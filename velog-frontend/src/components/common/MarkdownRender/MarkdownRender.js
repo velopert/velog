@@ -33,6 +33,14 @@ function stripHtml(text: string): string {
   return text.replace(regex, '');
 }
 
+function customTag(text: string) {
+  const youtubeRegex = /!youtube\[(.*?)\]/g;
+  const r = youtubeRegex.exec(text);
+  if (!r) return text;
+  const [_, code] = r;
+  return `<iframe class="youtube" src="https://www.youtube.com/embed/${code}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+}
+
 const createRenderer = (arr: any[]) => {
   const renderer = new marked.Renderer();
   const linkRenderer = renderer.link;
@@ -60,6 +68,9 @@ const createRenderer = (arr: any[]) => {
       }
     }
     return `<h${level} id="${suffixed}">${text}</h${level}>`;
+  };
+  renderer.paragraph = function paragraph(text) {
+    return `<p>${customTag(text)}</p>\n`;
   };
 
   return renderer;

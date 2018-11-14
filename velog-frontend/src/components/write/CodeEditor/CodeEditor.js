@@ -183,8 +183,31 @@ class CodeEditor extends Component<Props, State> {
     this.codeMirror.on('scroll', this.onScroll);
     this.codeMirror.on('dragenter', (event, e) => onDragEnter(e));
     this.codeMirror.on('dragleave', (event, e) => onDragLeave(e));
-    this.codeMirror.on('paste', (event, e) => {
+    this.codeMirror.on('paste', (editor, e) => {
       const { items } = e.clipboardData || e.originalEvent.clipboardData;
+      if (e.clipboardData) {
+        const text = e.clipboardData.getData('Text');
+        const iframeRegex = /^<iframe.*src="(.*?)".*<\/iframe>$/;
+        const r = iframeRegex.exec(text);
+        if (r) {
+          const [_, url] = r;
+          // check youtube, github .....
+          const selection = editor.getSelection();
+          const specialTag = `!youtube[${url.replace('https://www.youtube.com/embed/', '')}]`;
+          if (selection.length > 0) {
+            editor.replaceSelection(specialTag);
+          } else {
+            const doc = editor.getDoc();
+            const cursor = doc.getCursor();
+            const pos = {
+              line: cursor.line,
+              ch: cursor.ch,
+            };
+            doc.replaceRange(specialTag, pos);
+          }
+          e.preventDefault();
+        }
+      }
       if (items.length !== 2) return;
       if (items[1].kind !== 'file') return;
       e.preventDefault();

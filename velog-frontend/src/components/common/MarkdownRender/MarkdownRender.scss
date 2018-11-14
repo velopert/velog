@@ -227,6 +227,16 @@
     margin-bottom: 3em;
     pointer-events: none;
   }
+  .youtube {
+    display: block;
+    margin: auto;
+    width: 768px;
+    max-width: 100%;
+    height: 430px;
+    @include media("<768px") {
+      height: 300px;
+    }
+  }
   blockquote {
     padding-top: 1rem;
     padding-bottom: 1rem;

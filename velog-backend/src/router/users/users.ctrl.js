@@ -13,6 +13,7 @@ import {
 import { pick } from 'lodash';
 import { getUserHistory } from 'database/rawQuery/users';
 import { normalize, formatShortDescription } from 'lib/common';
+import { type Middleware } from 'koa-router';
 
 const { Op } = Sequelize;
 
@@ -63,7 +64,7 @@ export const getTags = async (ctx: Context) => {
   }
 };
 
-export const getHistory: KoaRouter$Middleware = async (ctx) => {
+export const getHistory = async (ctx: Context) => {
   const { id } = ctx.selectedUser;
   if (isNaN(ctx.query.offset || 0)) {
     ctx.body = {
