@@ -28,6 +28,47 @@ if (process.env.APP_ENV !== 'server') {
 function checkiOS(): boolean {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
+
+const checker = {
+  youtube: (text) => {
+    const regex = /^<iframe.*src="https:\/\/www.youtube.com\/embed\/(.*?)".*<\/iframe>$/;
+    const result = regex.exec(text);
+    if (!result) return null;
+    return result[1];
+  },
+  twitter: (text: string) => {
+    if (!/^<blockquote class="twitter-tweet/.test(text)) return null;
+    const regex = /href="(.*?)"/g;
+    const links = [];
+    let match = regex.exec(text);
+    while (match) {
+      links.push(match[1]);
+      match = regex.exec(text);
+    }
+    const code = /twitter.com\/(.*?)\?/.exec(links[links.length - 1])[1];
+    return code;
+  },
+  codesandbox: (text) => {
+    const regex = /^<iframe src="https:\/\/codesandbox.io\/embed\/(.*?)".*<\/iframe>$/;
+    const result = regex.exec(text);
+    if (!result) return null;
+    return result[1];
+  },
+};
+
+const checkEmbed = (text) => {
+  const keys = Object.keys(checker);
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
+    const fn = checker[keys[i]];
+    const code = fn(text);
+    if (code) {
+      return `!${key}[${code}]`;
+    }
+  }
+  return null;
+};
+
 type Props = {
   body: string,
   onEditBody(value: string): any,
@@ -187,26 +228,22 @@ class CodeEditor extends Component<Props, State> {
       const { items } = e.clipboardData || e.originalEvent.clipboardData;
       if (e.clipboardData) {
         const text = e.clipboardData.getData('Text');
-        const iframeRegex = /^<iframe.*src="(.*?)".*<\/iframe>$/;
-        const r = iframeRegex.exec(text);
-        if (r) {
-          const [_, url] = r;
-          // check youtube, github .....
-          const selection = editor.getSelection();
-          const specialTag = `!youtube[${url.replace('https://www.youtube.com/embed/', '')}]`;
-          if (selection.length > 0) {
-            editor.replaceSelection(specialTag);
-          } else {
-            const doc = editor.getDoc();
-            const cursor = doc.getCursor();
-            const pos = {
-              line: cursor.line,
-              ch: cursor.ch,
-            };
-            doc.replaceRange(specialTag, pos);
-          }
-          e.preventDefault();
+        const check = checkEmbed(text);
+        if (!check) return;
+        const selection = editor.getSelection();
+        if (selection.length > 0) {
+          editor.replaceSelection(check);
+        } else {
+          const doc = editor.getDoc();
+          const cursor = doc.getCursor();
+          const pos = {
+            line: cursor.line,
+            ch: cursor.ch,
+          };
+          doc.replaceRange(check, pos);
         }
+        e.preventDefault();
+        return;
       }
       if (items.length !== 2) return;
       if (items[1].kind !== 'file') return;

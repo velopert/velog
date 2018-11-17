@@ -105,3 +105,20 @@ export function resizeImage(url: string, width?: number = 256) {
   if (url.indexOf('data:image/') !== -1) return url;
   return `https://thumb.velog.io/resize?url=${url}&width=${width}`;
 }
+
+export function loadScript(url: string) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.onload = function onload() {
+      resolve();
+    };
+    script.onerror = function onerror() {
+      reject();
+    };
+    script.src = url;
+    if (!document || !document.head) return;
+    document.head.appendChild(script);
+  });
+}
+
+window.loadScript = loadScript;

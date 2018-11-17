@@ -6,7 +6,7 @@ import throttle from 'lodash/throttle';
 import Prism from 'prismjs';
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
-import { escapeForUrl, getScrollTop } from 'lib/common';
+import { escapeForUrl, getScrollTop, loadScript } from 'lib/common';
 import 'prismjs/components/prism-bash.min';
 import 'prismjs/components/prism-typescript.min';
 import 'prismjs/components/prism-javascript.min';
@@ -33,13 +33,26 @@ function stripHtml(text: string): string {
   return text.replace(regex, '');
 }
 
-function customTag(text: string) {
-  const youtubeRegex = /!youtube\[(.*?)\]/g;
-  const r = youtubeRegex.exec(text);
-  if (!r) return text;
-  const [_, code] = r;
-  return `<iframe class="youtube" src="https://www.youtube.com/embed/${code}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+function checkCustomLexer(text: string) {
+  const checkCode = /<code>(.*?)<\/code>/;
+  if (checkCode.test(text)) return null;
+  const regex = /!(youtube|twitter|codesandbox)\[(.*?)\]/;
+  const match = regex.exec(text);
+  if (!match) return null;
+  return {
+    type: match[1],
+    code: match[2],
+  };
 }
+
+const lexers = {
+  youtube: code =>
+    `<iframe class="youtube" src="https://www.youtube.com/embed/${code}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
+  twitter: code =>
+    `<div class="twitter-wrapper"><blockquote class="twitter-tweet" data-lang="ko"><a href="https://twitter.com/${code}"></a></blockquote></div>`,
+  codesandbox: code =>
+    `<iframe src="https://codesandbox.io/embed/${code}" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>`,
+};
 
 const createRenderer = (arr: any[]) => {
   const renderer = new marked.Renderer();
@@ -70,7 +83,15 @@ const createRenderer = (arr: any[]) => {
     return `<h${level} id="${suffixed}">${text}</h${level}>`;
   };
   renderer.paragraph = function paragraph(text) {
-    return `<p>${customTag(text)}</p>\n`;
+    const processed = (() => {
+      const check = checkCustomLexer(text);
+      if (!check) return text;
+      return text.replace(
+        /!(youtube|twitter|codesandbox)\[(.*?)\]/,
+        lexers[check.type](check.code),
+      );
+    })();
+    return `<p>${processed}</p>\n`;
   };
 
   return renderer;
@@ -84,6 +105,7 @@ class MarkdownRender extends Component<Props, State> {
   timerId = null;
   prevHeight = null;
   htmlDiv = null;
+  loadTwitter = false;
 
   state = {
     html: '',
@@ -154,6 +176,9 @@ class MarkdownRender extends Component<Props, State> {
     if (this.htmlDiv) {
       // morphdom(this.htmlDiv, `<div>${rendered}</div>`);
       this.htmlDiv.innerHTML = rendered;
+      if (rendered.indexOf('class="twitter-tweet"') > -1) {
+        loadScript('https://platform.twitter.com/widgets.js');
+      }
     }
     const last = new Date();
     const diff = last.getTime() - start.getTime();
