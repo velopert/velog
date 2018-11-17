@@ -120,5 +120,3 @@ export function loadScript(url: string) {
     document.head.appendChild(script);
   });
 }
-
-window.loadScript = loadScript;
