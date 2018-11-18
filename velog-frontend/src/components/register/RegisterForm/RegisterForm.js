@@ -21,7 +21,8 @@ type Props = {
 };
 
 const errorMap = {
-  DUPLICATED_ACCOUNT: (payload: string) => '이미 존재하는 아이디입니다.',
+  DUPLICATED_ACCOUNT: (payload: string) =>
+    `이미 존재하는 ${payload === 'email' ? '이메일' : '아이디'}입니다.`,
   FIELD_RULE: (payload: string) => {
     const rules = {
       displayName: '이름을 1~40자로 입력하세요.',
@@ -62,18 +63,17 @@ const RegisterForm = ({
           placeholder="이름을 입력하세요"
           onChange={onChange}
         />
-        {!hideEmail && (
-          <LabelInput
-            type="email"
-            value={email}
-            name="email"
-            required
-            label="이메일"
-            placeholder="이메일을 입력하세요"
-            onChange={onChange}
-            disabled={!emailEditable}
-          />
-        )}
+        <LabelInput
+          type="email"
+          value={email}
+          name="email"
+          required
+          label="이메일"
+          placeholder="이메일을 입력하세요"
+          onChange={onChange}
+          disabled={!emailEditable}
+        />
+
         <LabelInput
           value={username}
           name="username"
@@ -90,8 +90,17 @@ const RegisterForm = ({
           onChange={onChange}
         />
         <div className="agreement">
-          다음 버튼을 누르면 <span>서비스 이용약관</span>과 <span>개인정보취급방침</span>에 동의하는
-          것을 인정합니다.
+          다음 버튼을 누르면{' '}
+          <span>
+            <a href="https://velog.io/policy/terms" target="_blank" rel="noopener noreferrer">
+              서비스 이용약관
+            </a>
+          </span>과{' '}
+          <span>
+            <a href="https://velog.io/policy" target="_blank" rel="noopener noreferrer">
+              개인정보취급방침
+            </a>
+          </span>에 동의하는 것을 인정합니다.
         </div>
         {error && <div className="error">{printError(error)}</div>}
         <div className="button-wrapper">

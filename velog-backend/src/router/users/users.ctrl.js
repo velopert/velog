@@ -13,7 +13,7 @@ import {
 import { pick } from 'lodash';
 import { getUserHistory } from 'database/rawQuery/users';
 import { normalize, formatShortDescription } from 'lib/common';
-import { type Middleware } from 'koa-router';
+import { type Middleware } from 'koa';
 
 const { Op } = Sequelize;
 

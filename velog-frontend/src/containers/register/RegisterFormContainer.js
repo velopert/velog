@@ -71,9 +71,11 @@ class RegisterFormContainer extends Component<Props> {
       history,
       isSocial,
       socialAuthResult,
+      email,
     } = this.props;
 
     const form = {
+      fallbackEmail: email,
       displayName,
       username,
       shortBio,

@@ -366,7 +366,9 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
 
   try {
     const [user, socialAccount] = await Promise.all([
-      profile.email ? User.findUser('email', profile.email) : Promise.resolve(null),
+      profile.email
+        ? User.findUser('email', profile.email)
+        : Promise.resolve(null),
       SocialAccount.findBySocialId(profile.id.toString()),
     ]);
 
@@ -381,20 +383,20 @@ export const verifySocial = async (ctx: Context): Promise<*> => {
 
 export const socialRegister = async (ctx: Context): Promise<*> => {
   type BodySchema = {
-    fallbackEmail: string,
     accessToken: string,
     form: {
       displayName: string,
       username: string,
       shortBio: string,
+      fallbackEmail: string,
     },
   };
 
   const schema = Joi.object().keys({
-    fallbackEmail: Joi.string(),
     accessToken: Joi.string().required(),
     form: Joi.object()
       .keys({
+        fallbackEmail: Joi.string(),
         displayName: Joi.string()
           .min(1)
           .max(40),
@@ -423,8 +425,7 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
   }
 
   const { provider } = ctx.params;
-  const { accessToken, form, fallbackEmail }: BodySchema = (ctx.request
-    .body: any);
+  const { accessToken, form }: BodySchema = (ctx.request.body: any);
 
   let profile = null;
 
@@ -439,12 +440,17 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
   }
 
   const { id, thumbnail, email } = profile;
-  const { displayName, username, shortBio } = form;
+  const {
+    displayName, username, shortBio, fallbackEmail,
+  } = form;
   const socialId = id.toString();
+
+  const fallbackedEmail = email || fallbackEmail;
+  console.log(fallbackedEmail);
 
   try {
     const [emailExists, usernameExists] = await Promise.all([
-      email ? User.findUser('email', email) : Promise.resolve(null),
+      fallbackedEmail ? User.findUser('email', fallbackedEmail) : Promise.resolve(null),
       User.findUser('username', username),
     ]);
 
@@ -469,7 +475,8 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
 
     const user: UserModel = await User.build({
       username,
-      email: email || fallbackEmail,
+      email: fallbackedEmail,
+      is_certified: !!email,
     }).save();
 
     let uploadedThumbnail = null;

@@ -9,6 +9,7 @@ type RegisterForm = {
   username: string,
   shortBio: string,
   displayName: string,
+  fallbackEmail?: string,
 };
 export type LocalRegisterPayload = {
   registerToken: string,
