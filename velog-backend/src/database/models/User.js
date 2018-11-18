@@ -30,6 +30,9 @@ const User = db.define(
       type: Sequelize.STRING,
       unique: true,
     },
+    is_certified: {
+      type: Sequelize.BOOLEAN,
+    },
   },
   {
     indexes: [
