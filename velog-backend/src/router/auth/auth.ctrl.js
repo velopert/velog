@@ -7,6 +7,7 @@ import User from 'database/models/User';
 import UserProfile from 'database/models/UserProfile';
 import EmailAuth from 'database/models/EmailAuth';
 import SocialAccount from 'database/models/SocialAccount';
+import EmailCert from 'database/models/EmailCert';
 import { generate, decode } from 'lib/token';
 import getSocialProfile, { type Profile } from 'lib/getSocialProfile';
 
@@ -17,6 +18,27 @@ import downloadImage from 'lib/downloadImage';
 import AWS from 'aws-sdk';
 
 const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
+
+
+async function sendCertEmail(userId, email) {
+  const emailCert = await EmailCert.build({
+    fk_user_id: userId,
+  }).save();
+  await sendMail({
+    to: email,
+    subject: 'Velog 이메일 인증',
+    from: 'Velog <verification@velog.io>',
+    body: `a href="https://velog.io"><img src="https://i.imgur.com/xtxnddg.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
+<div style="max-width: 100%; width: 400px; margin: 0 auto; padding: 1rem; text-align: justify; background: #f8f9fa; border: 1px solid #dee2e6; box-sizing: border-box; border-radius: 4px; color: #868e96; margin-top: 0.5rem; box-sizing: border-box; text-align: center;">
+  안녕하세요! velog 이메일 인증을 진행하시려면 <br/>다음 버튼을 눌러주세요.
+</div>
+
+<a href="https://velog.io/certify?code=${emailCert.code}" style="text-decoration: none; width: 400px; text-align:center; display:block; margin: 0 auto; margin-top: 1rem; background: #845ef7; padding-top: 1rem; color: white; font-size: 1.25rem; padding-bottom: 1rem; font-weight: 600; border-radius: 4px;">이메일 인증</a>
+
+<div style="text-align: center; margin-top: 1rem; color: #868e96; font-size: 0.85rem;"><div>혹은, 다음 링크를 열어주세요:<br/> <a style="color: #b197fc;" href="https://velog.io/certify?code=${emailCert.code}">https://velog.io/certify?code=${emailCert.code}</a></div><br/><div>이 링크는 24시간동안 유효합니다. </div></div>`,
+  });
+  return emailCert;
+}
 
 export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   type BodySchema = {
@@ -478,6 +500,12 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
       email: fallbackedEmail,
       is_certified: !!email,
     }).save();
+
+    if (!email) {
+      setTimeout(() => {
+        sendCertEmail(user.id, fallbackedEmail);
+      }, 0);
+    }
 
     let uploadedThumbnail = null;
     try {

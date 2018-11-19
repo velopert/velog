@@ -7,6 +7,7 @@ import UserPosts from 'containers/user/UserPosts';
 type Props = ContextRouter & {};
 
 const UserPostsSubpage = ({ match }: Props) => {
+  // $FlowFixMe
   return <UserPosts username={match.params.username} tag={match.params.tag} />;
 };
 

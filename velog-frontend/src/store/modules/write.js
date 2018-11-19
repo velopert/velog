@@ -313,6 +313,7 @@ const reducer = handleActions(
         draft.changed = true;
       });
     },
+    // $FlowFixMe
     [SET_THUMBNAIL]: (state, { payload }: SetThumbnailAction) => {
       return produce(state, (draft) => {
         draft.thumbnail = payload;

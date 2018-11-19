@@ -77,6 +77,7 @@ const initialState: CommonState = {
 
 const reducer = handleActions(
   {
+    // $FlowFixMe
     [SET_TAG_INFO]: (state, { payload }: SetTagInfoAction) => {
       return produce(state, (draft) => {
         draft.tags.selected = payload;

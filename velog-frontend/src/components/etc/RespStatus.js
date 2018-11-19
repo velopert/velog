@@ -13,6 +13,7 @@ const RespStatus = ({ code, children }: Props) => {
       // $FlowFixMe
       render={({ staticContext }) => {
         if (staticContext) {
+          // $FlowFixMe
           staticContext.status = code;
         }
         return children;

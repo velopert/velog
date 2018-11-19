@@ -32,6 +32,7 @@ const UserMenu = ({ onClick, onLogout, username }: Props) => {
   );
 };
 
+// $FlowFixMe
 export default withClickOutside(UserMenu, {
   handleClickOutside(instance) {
     return instance.props.onClickOutside;

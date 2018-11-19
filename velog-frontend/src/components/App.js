@@ -5,6 +5,7 @@ import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
 import { Helmet } from 'react-helmet';
 import Callback from 'containers/etc/Callback';
+import EmailCertifyContainer from '../containers/etc/EmailCertifyContainer';
 
 const App = () => (
   <React.Fragment>
@@ -32,6 +33,7 @@ const App = () => (
       <Route path="/settings" component={Settings} />
       <Route path="/policy/:mode(policy|terms)?" component={Policy} />
       <Route path="/callback" component={Callback} />
+      <Route path="/certify" component={EmailCertifyContainer} />
       <Route component={NotFound} />
     </Switch>
     <Core />
