@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 import db from 'database/db';
 import shortid from 'shortid';
 
-const EmailAuth = db.define(
+const EmailCert = db.define(
   'email_cert',
   {
     id: {
@@ -17,6 +17,10 @@ const EmailAuth = db.define(
       defaultValue: shortid.generate,
     },
     fk_user_id: Sequelize.UUID,
+    status: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     freezeTableName: true,
@@ -29,4 +33,4 @@ const EmailAuth = db.define(
   },
 );
 
-export default EmailAuth;
+export default EmailCert;

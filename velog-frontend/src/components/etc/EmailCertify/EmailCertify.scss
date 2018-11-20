@@ -10,6 +10,9 @@
     align-items: center;
     .check {
       font-size: 3.5rem;
+      @include media('>=large') {
+        font-size: 7rem;
+      }
       color: $oc-violet-5;
     }
     .description {
@@ -18,7 +21,8 @@
       font-size: 1.5rem;
       color: $oc-gray-9;
     }
-    button {
+    a {
+      display: block;
       padding: 1rem;
       padding-left: 3rem;
       padding-right: 3rem;

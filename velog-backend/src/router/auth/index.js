@@ -23,5 +23,6 @@ auth.post(
 );
 auth.post('/login/:provider(github|facebook|google)', authCtrl.socialLogin);
 auth.use('/callback', callback.routes());
+auth.post('/certify', authCtrl.certifyEmail);
 
 export default auth;

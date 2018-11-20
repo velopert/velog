@@ -49,3 +49,5 @@ export type GetProviderTokenPayload = { key: string, type: string };
 
 export const getProviderToken = (payload: GetProviderTokenPayload) =>
   axios.get(`/auth/callback/token?key=${payload.key}`);
+
+export const certifyEmail = (code: string) => axios.post(`/auth/certify?code=${code}`);

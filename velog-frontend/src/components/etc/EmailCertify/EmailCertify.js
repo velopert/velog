@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { Link } from 'react-router-dom';
 import CheckIcon from 'react-icons/lib/md/check';
 import './EmailCertify.scss';
 
@@ -11,7 +12,7 @@ const EmailCertify = () => {
           <CheckIcon />
         </div>
         <div className="description">이메일 인증이 완료되었습니다</div>
-        <button>홈으로 이동</button>
+        <Link to="/">홈으로 이동</Link>
       </div>
     </div>
   );
