@@ -1,31 +1,30 @@
-// @flow
 import Sequelize from 'sequelize';
 import db from 'database/db';
-import shortid from 'shortid';
-import { User } from 'database/models';
+import User from 'database/models/User';
 
-const EmailCert = db.define(
-  'email_cert',
+const UserMeta = db.define(
+  'user_meta',
   {
     id: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV1,
       primaryKey: true,
     },
-    code: {
-      type: Sequelize.STRING,
-      unique: true,
-      defaultValue: shortid.generate,
+    fk_user_id: {
+      type: Sequelize.UUID,
     },
-    fk_user_id: Sequelize.UUID,
-    status: {
+    email_notification: {
+      defaultValue: false,
       type: Sequelize.BOOLEAN,
-      defaultValue: true,
+    },
+    email_promotion: {
+      defaultValue: false,
+      type: Sequelize.BOOLEAN,
     },
   },
   {
     freezeTableName: true,
-    tableName: 'email_cert',
+    tableName: 'user_meta',
     indexes: [
       {
         fields: ['fk_user_id'],
@@ -34,12 +33,12 @@ const EmailCert = db.define(
   },
 );
 
-EmailCert.associate = function associate() {
-  EmailCert.belongsTo(User, {
+UserMeta.associate = function associate() {
+  UserMeta.belongsTo(User, {
     foreignKey: 'fk_user_id',
     onDelete: 'CASCADE',
     onUpdate: 'restrict',
   });
 };
 
-export default EmailCert;
+export default UserMeta;

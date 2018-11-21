@@ -20,6 +20,8 @@ import {
   PostRead,
   UserThumbnail,
   UrlSlugHistory,
+  EmailCert,
+  UserMeta,
 } from './models';
 import * as views from './views';
 
@@ -43,6 +45,8 @@ export function associate() {
   PostRead.associate();
   UserThumbnail.associate();
   UrlSlugHistory.associate();
+  EmailCert.associate();
+  UserMeta.associate();
 }
 export default function sync() {
   associate();
