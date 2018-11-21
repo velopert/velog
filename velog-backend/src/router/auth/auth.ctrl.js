@@ -277,6 +277,7 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
     const user: User = await User.build({
       username,
       email,
+      is_certified: true,
     }).save();
 
     await UserProfile.build({
