@@ -6,6 +6,7 @@ import Core from 'containers/base/Core';
 import { Helmet } from 'react-helmet';
 import Callback from 'containers/etc/Callback';
 import EmailCertifyContainer from '../containers/etc/EmailCertifyContainer';
+import CustomError from '../pages/errors/CustomError';
 
 const App = () => (
   <React.Fragment>
@@ -22,6 +23,7 @@ const App = () => (
       <Route exact path="/" component={Home} />
       <Route path="/:mode(trending|recent|collections|tags|stored)" component={Home} />
       <Route path="/register" component={Register} />
+      <Route path="/error" component={CustomError} />
       <Route path="/email-login" component={EmailLogin} />
       <Route path="/write" component={Write} />
       <Route exact path="/@:username/" component={User} />
