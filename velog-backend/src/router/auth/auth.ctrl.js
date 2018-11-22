@@ -16,6 +16,7 @@ import type { UserProfileModel } from 'database/models/UserProfile';
 import type { EmailAuthModel } from 'database/models/EmailAuth';
 import downloadImage from 'lib/downloadImage';
 import AWS from 'aws-sdk';
+import UserMeta from '../../database/models/UserMeta';
 
 const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
@@ -303,6 +304,14 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
       },
       token,
     };
+
+
+    setTimeout(() => {
+      UserMeta.build({
+        fk_user_id: user.id,
+        email_notification: true,
+      }).save();
+    }, 0);
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -572,6 +581,13 @@ export const socialRegister = async (ctx: Context): Promise<*> => {
       },
       token,
     };
+
+    setTimeout(() => {
+      UserMeta.build({
+        fk_user_id: user.id,
+        email_notification: true,
+      }).save();
+    }, 0);
   } catch (e) {
     ctx.throw(500, e);
   }
