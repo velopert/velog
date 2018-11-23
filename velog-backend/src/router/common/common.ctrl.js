@@ -46,11 +46,6 @@ export const getTagInfo: Middleware = async (ctx) => {
 };
 
 export const unsubscribeEmail: Middleware = async (ctx) => {
-  const a = await generateUnsubscribeToken(
-    'a7c64060-ef2b-11e8-af5e-3d4864a8db09',
-    'email_notification',
-  );
-  console.log(a);
   const { token } = ctx.query;
   const host = getHost();
   if (!token) {
