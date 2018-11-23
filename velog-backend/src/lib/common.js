@@ -5,6 +5,7 @@ import type { Middleware } from 'koa';
 import removeMd from 'remove-markdown';
 import crypto from 'crypto';
 import axios from 'axios';
+import { generate } from './token';
 
 export const primaryUUID = {
   type: Sequelize.UUID,
@@ -117,4 +118,23 @@ export function normalize(array: any[], key: string) {
     byId,
     allIds,
   };
+}
+
+export function generateUnsubscribeToken(userId: string, metaField: string) {
+  return generate(
+    {
+      user_id: userId,
+      meta_field: metaField,
+    },
+    {
+      subject: 'unsubscribe-email',
+      expiresIn: null,
+    },
+  );
+}
+
+export function getHost() {
+  return process.env.NODE_ENV === 'development'
+    ? 'https://localhost:3000/'
+    : 'https://velog.io/';
 }

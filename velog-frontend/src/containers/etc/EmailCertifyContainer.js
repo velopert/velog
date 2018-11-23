@@ -4,7 +4,7 @@ import { certifyEmail } from 'lib/api/auth';
 import queryString from 'query-string';
 import ErrorInfo from 'components/etc/ErrorInfo/ErrorInfo';
 import { type ContextRouter } from 'react-router-dom';
-import EmailCertify from '../../components/etc/EmailCertify';
+import SuccessInfo from '../../components/etc/SuccessInfo/SuccessInfo';
 
 type ErrorData = {
   code: number,
@@ -69,7 +69,7 @@ class EmailCertifyContainer extends Component<Props, State> {
   render() {
     const { processed, error } = this.state;
     if (error) return <ErrorInfo {...error} />;
-    if (processed) return <EmailCertify />;
+    if (processed) return <SuccessInfo message="이메일 인증이 완료되었습니다" />;
     return null;
   }
 }

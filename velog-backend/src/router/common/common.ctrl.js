@@ -2,7 +2,9 @@
 import type { Middleware, Context } from 'koa';
 import Tag from 'database/models/Tag';
 import Post from 'database/models/Post';
+import UserMeta from 'database/models/UserMeta';
 import { generate, decode } from 'lib/token';
+import { generateUnsubscribeToken, getHost } from 'lib/common';
 import {
   getTagsList,
   getPostsCountByTagId,
@@ -43,19 +45,30 @@ export const getTagInfo: Middleware = async (ctx) => {
   }
 };
 
-/* SAMPLE TOKEN
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjcxNDM5OTAtZWU2My0xMWU4LWE0ZDAtNjNiZDc2ODBiOTRiIiwibWV0YV9maWVsZCI6ImVtYWlsX25vdGlmaWNhdGlvbiIsImlhdCI6MTU0Mjg5ODIwNSwiZXhwIjoxNTQzNTAzMDA1LCJpc3MiOiJ2ZWxvZy5pbyIsInN1YiI6InVuc3Vic2NyaWJlLWVtYWlsIn0.eRgZ0E-SCQy44kuJo9mb0f-UyQyyjs8oiNF9pVLxiIU
-*/
 export const unsubscribeEmail: Middleware = async (ctx) => {
+  const a = await generateUnsubscribeToken(
+    'a7c64060-ef2b-11e8-af5e-3d4864a8db09',
+    'email_notification',
+  );
+  console.log(a);
   const { token } = ctx.query;
+  const host = getHost();
   if (!token) {
-    ctx.redirect('https://velog.io/error');
+    ctx.redirect(`${host}/error`);
     return;
   }
   try {
     const decoded = await decode(token);
-    ctx.redirect('https://velog.io/success');
+    const { user_id, meta_field } = decoded;
+    const userMeta = await UserMeta.findOne({
+      where: {
+        fk_user_id: user_id,
+      },
+    });
+    userMeta[meta_field] = false;
+    await userMeta.save();
+    ctx.redirect(`${host}success?type=unsubscribe_email`);
   } catch (e) {
-    ctx.redirect('https://velog.io/error');
+    ctx.redirect(`${host}error`);
   }
 };

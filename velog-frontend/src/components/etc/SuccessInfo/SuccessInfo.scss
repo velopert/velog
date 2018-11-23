@@ -1,0 +1,57 @@
+@import 'utils';
+.SuccessInfo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .center-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include media('<medium') {
+      padding: 1rem;
+    }
+    .check {
+      font-size: 3.5rem;
+      @include media('>=large') {
+        font-size: 7rem;
+      }
+      color: $oc-violet-5;
+    }
+    .description {
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+      font-size: 1.5rem;
+      color: $oc-gray-9;
+      @include media('<medium') {
+        font-size: 1.125rem;
+      }
+    }
+    a {
+      display: block;
+      padding: 1rem;
+      padding-left: 3rem;
+      padding-right: 3rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: $oc-violet-5;
+      color: white;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: 0.125s all ease-in;
+      @include media('<medium') {
+        font-size: 1rem;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+        text-align: center;
+      }
+      &:hover {
+        background: $oc-violet-4;
+      }
+      &:active {
+        transform: scale(1.15);
+      }
+    }
+  }
+}
