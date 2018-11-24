@@ -75,7 +75,7 @@ class RegisterFormContainer extends Component<Props> {
     } = this.props;
 
     const form = {
-      fallbackEmail: email,
+      ...(isSocial ? { fallbackEmail: email } : {}),
       displayName,
       username,
       shortBio,
