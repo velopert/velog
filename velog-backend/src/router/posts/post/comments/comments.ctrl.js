@@ -7,6 +7,7 @@ import { validateSchema, isUUID, checkEmpty } from 'lib/common';
 import PostScore, { TYPES } from 'database/models/PostScore';
 import redisClient from 'lib/redisClient';
 import User from 'database/models/User';
+import sendMail from 'lib/sendMail';
 
 export const writeComment: Middleware = async (ctx: Context) => {
   type BodySchema = {
@@ -101,6 +102,78 @@ export const writeComment: Middleware = async (ctx: Context) => {
   } catch (e) {
     ctx.throw(e);
   }
+
+  setTimeout(async () => {
+    if (ctx.post.fk_user_id === ctx.user.id) return;
+    // find user
+    const user = await User.findById(ctx.post.fk_user_id);
+    if (!user.is_certified) return;
+    const result = await sendMail({
+      to: user.email,
+      subject: `Re: ${ctx.post.title}`,
+      from: 'Velog <public.velopert@gmail.com>',
+      body: `<a href="https://velog.io"
+  ><img
+    src="https://i.imgur.com/xtxnddg.png"
+    style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
+/></a>
+<div style="max-width: 100%; width: 600px; margin: 0 auto;">
+  <div style="font-weight: 400; margin: 0; font-size: 1.25rem; color: #868e96;">
+    포스트에 새 댓글이 달렸습니다.
+  </div>
+  <div style="margin-top: 0.5rem;">
+    <a href="#" style="color: #495057; text-decoration: none"
+      >포스트 제목제목 제목제목 제목</a
+    >
+  </div>
+  <div style="font-weight: 400; margin-top: 0.5rem; font-size: 1.75rem;"></div>
+  <div
+    style="width: 100%; height: 1px; background: #e9ecef; margin-top: 2rem; margin-bottom: 2rem;"
+  ></div>
+  <div style="display:-webkit-flex;display:-ms-flexbox;display:flex;">
+    <div>
+      <a href="#">
+        <img
+          style="height: 64px; width: 64px; display: block; border-radius: 32px;"
+          src="https://thumb.velog.io/resize?url=https://images.velog.io/profiles/velopert/thumbnails/1536400727.98.png&width=128"
+        />
+      </a>
+    </div>
+    <div style="flex: 1; margin-left: 1.5rem; color: #495057;">
+      <div style="margin-bottom: 0.5rem;">
+        <a
+          href="#"
+          style="text-decoration: none; color: #212529; font-weight: 600;"
+          >velopert</a
+        >
+      </div>
+      <div style="margin: 0; color: #495057;">
+        댓글 내용이 어떻게 보면 엄청나게 길어질수도있고 아닐수도 있긴한데
+        생각해보니까.. 마크다운을 렌더링하게 될 가능성도 있긴 하겠군 ;; ㄷ ㄷ
+      </div>
+      <div style="font-size: 0.875rem; color: #adb5bd; margin-top: 1.5rem">
+        2018년 11월 24일
+      </div>
+      <a
+        href="#"
+        style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
+        >답글 달기</a
+      >
+    </div>
+  </div>
+  <div
+    style="width: 100%; height: 1px; background: #e9ecef; margin-top: 4rem; margin-bottom: 1rem;"
+  ></div>
+  <div style="font-size: 0.875rem; color: #adb5bd; font-style: italic;">
+    댓글 알림을 이메일로 수신하는 것을 원하지 않는다면 이
+    <a href="#" style="color: inherit">링크</a>를 눌러주세요.
+  </div>
+</div>
+`,
+    });
+    console.log(result);
+    console.log(user.email, user.is_certified);
+  }, 0);
 };
 
 export const getCommentList: Middleware = async (ctx: Context) => {
