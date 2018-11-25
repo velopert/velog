@@ -67,6 +67,7 @@
     "koa-router": "^7.3.0",
     "lodash": "^4.17.4",
     "mailgun-js": "^0.13.1",
+    "marked": "^0.5.2",
     "mime-types": "^2.1.18",
     "nodemon": "^1.12.1",
     "pg": "^7.4.1",
