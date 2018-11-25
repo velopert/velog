@@ -27,8 +27,8 @@ async function sendCertEmail(userId, email) {
   await sendMail({
     to: email,
     subject: 'Velog 이메일 인증',
-    from: 'Velog <verification@velog.io>',
-    body: `<a href="https://velog.io"><img src="https://i.imgur.com/xtxnddg.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
+    from: 'Velog <verify@velog.io>',
+    body: `<a href="https://velog.io"><img src="https://images.velog.io/email-logo.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
 <div style="max-width: 100%; width: 400px; margin: 0 auto; padding: 1rem; text-align: justify; background: #f8f9fa; border: 1px solid #dee2e6; box-sizing: border-box; border-radius: 4px; color: #868e96; margin-top: 0.5rem; box-sizing: border-box; text-align: center;">
   안녕하세요! velog 이메일 인증을 진행하시려면 <br/>다음 버튼을 눌러주세요.
 </div>
@@ -90,8 +90,8 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
     await sendMail({
       to: email,
       subject: `Velog ${emailKeywords.text}`,
-      from: 'Velog <verification@velog.io>',
-      body: `<a href="https://velog.io"><img src="https://i.imgur.com/xtxnddg.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
+      from: 'Velog <verify@velog.io>',
+      body: `<a href="https://velog.io"><img src="https://images.velog.io/email-logo.png" style="display: block; width: 128px; margin: 0 auto;"/></a>
       <div style="max-width: 100%; width: 400px; margin: 0 auto; padding: 1rem; text-align: justify; background: #f8f9fa; border: 1px solid #dee2e6; box-sizing: border-box; border-radius: 4px; color: #868e96; margin-top: 0.5rem; box-sizing: border-box;">
         <b style="black">안녕하세요! </b>${
   emailKeywords.text
