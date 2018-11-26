@@ -1,8 +1,7 @@
 // @flow
 import Joi from 'joi';
 import type { Context, Middleware } from 'koa';
-import db from 'database/db';
-import Comment, { type WriteParams } from 'database/models/Comment';
+import Comment from 'database/models/Comment';
 import {
   validateSchema,
   isUUID,
@@ -16,6 +15,12 @@ import UserProfile from 'database/models/UserProfile';
 import sendMail from 'lib/sendMail';
 import marked from 'marked';
 import format from 'date-fns/format';
+import UserMeta from 'database/models/UserMeta';
+
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
 
 export const writeComment: Middleware = async (ctx: Context) => {
   type BodySchema = {
@@ -45,12 +50,6 @@ export const writeComment: Middleware = async (ctx: Context) => {
     return;
   }
 
-  // if (text.trim().length === 0) {
-  //   ctx.status = 400;
-  //   ctx.body = {
-  //     name: 'EMPTY_COMMENT',
-  //   };
-  // }
   // if user is replying to another comment,
   let level = 0;
   let processedReplyTo = replyTo;
@@ -113,24 +112,35 @@ export const writeComment: Middleware = async (ctx: Context) => {
   }
 
   setTimeout(async () => {
-    if (ctx.post.fk_user_id === ctx.user.id) return;
-    // find user
-    const user = await User.findById(ctx.post.fk_user_id);
     const writerProfile = await UserProfile.findOne({
       where: { fk_user_id: ctx.user.id },
     });
-    if (!user.is_certified) return;
+    const user = await User.findById(ctx.post.fk_user_id);
     const postLink = `https://velog.io/@${user.username}/${ctx.post.url_slug}`;
-    const unsubscribeToken = await generateUnsubscribeToken(
-      ctx.user.id,
-      'email_notification',
-    );
-    const unsubscribeUrl = `https://api.velog.io/common/email/unsubscribe?token=${unsubscribeToken}`;
-    const result = await sendMail({
-      to: user.email,
-      subject: `Re: ${ctx.post.title}`,
-      from: 'Velog <notify@velog.io>',
-      body: `<a href="https://velog.io"
+    // send email to post writer
+    (async () => {
+      if (ctx.post.fk_user_id === ctx.user.id) return;
+      // find user
+      // email not certified
+      if (!user.is_certified) return;
+      // check email_notification status
+      const userMeta = await UserMeta.findOne({
+        where: {
+          fk_user_id: ctx.post.fk_user_id,
+        },
+      });
+      if (!userMeta.email_notification) return;
+      // create unsubscribe link
+      const unsubscribeToken = await generateUnsubscribeToken(
+        ctx.user.id,
+        'email_notification',
+      );
+      const unsubscribeUrl = `https://api.velog.io/common/email/unsubscribe?token=${unsubscribeToken}`;
+      await sendMail({
+        to: user.email,
+        subject: `Re: ${ctx.post.title}`,
+        from: 'Velog <notify@velog.io>',
+        body: `<a href="https://velog.io"
   ><img
     src="https://images.velog.io/email-logo.png"
     style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
@@ -140,7 +150,7 @@ export const writeComment: Middleware = async (ctx: Context) => {
     포스트에 새 댓글이 달렸습니다.
   </div>
   <div style="margin-top: 0.5rem;">
-    <a href="${postLink}" style="color: #495057; text-decoration: none"
+    <a href="${postLink}" style="color: #495057; text-decoration: none; font-weight: 600; font-size: 1.125rem;"
       >${ctx.post.title}</a
     >
   </div>
@@ -150,7 +160,7 @@ export const writeComment: Middleware = async (ctx: Context) => {
   ></div>
   <div style="display:-webkit-flex;display:-ms-flexbox;display:flex;">
     <div>
-      <a href="#">
+      <a href="https://velog.io/@${ctx.user.username}">
         <img
           style="height: 64px; width: 64px; display: block; border-radius: 32px;"
           src="${writerProfile.thumbnail}"
@@ -160,7 +170,7 @@ export const writeComment: Middleware = async (ctx: Context) => {
     <div style="flex: 1; margin-left: 1.5rem; color: #495057;">
       <div style="margin-bottom: 0.5rem;">
         <a
-          href="#"
+          href="https://velog.io/@${ctx.user.username}"
           style="text-decoration: none; color: #212529; font-weight: 600;"
           >${ctx.user.username}</a
         >
@@ -186,8 +196,107 @@ export const writeComment: Middleware = async (ctx: Context) => {
     <a href="${unsubscribeUrl}" style="color: inherit">링크</a>를 눌러주세요.
   </div>
 </div>
+<div>
+<br/>
+<br/>
+<br/>
+velog | support@velog.io</div>
 `,
-    });
+      });
+    })();
+    // send email to replyTo owner
+    (async () => {
+      if (!replyTo) return;
+      const originalComment = await Comment.findById(replyTo, {
+        include: [User],
+      });
+      // email not certified
+      if (!originalComment.user.is_certified) return;
+      const userMeta = await UserMeta.findOne({
+        where: {
+          fk_user_id: originalComment.fk_user_id,
+        },
+      });
+      // check email_notification status
+      if (!userMeta.email_notification) return;
+      // create unsubscribe link
+      const unsubscribeToken = await generateUnsubscribeToken(
+        originalComment.fk_user_id,
+        'email_notification',
+      );
+      const unsubscribeUrl = `https://api.velog.io/common/email/unsubscribe?token=${unsubscribeToken}`;
+      await sendMail({
+        to: originalComment.user.email,
+        subject: `Re: ${ctx.post.title} | 답글 알림`,
+        from: 'Velog <notify@velog.io>',
+        body: `<a href="https://velog.io"
+  ><img
+    src="https://images.velog.io/email-logo.png"
+    style="display: block; width: 128px; margin: 0 auto; margin-bottom: 1rem;"
+/></a>
+<div style="max-width: 100%; width: 600px; margin: 0 auto;">
+  <div style="font-weight: 400; margin: 0; font-size: 1.25rem; color: #868e96;">
+    내가 쓴 댓글에 답글이 달렸습니다
+  </div>
+  <div style="margin-top: 0.5rem;">
+    <a href="${postLink}" style="color: #495057; text-decoration: none; font-weight: 600; font-size: 1.125rem;"
+      >${ctx.post.title}</a
+    >
+  </div>
+  <div style="font-weight: 600; margin-top: 1.5rem; font-size: 1rem; color: #495057;">내가 쓴 댓글:</div>
+  <div style="font-weight: 400; font-size: 0.875rem; color: #495057;">${marked(originalComment.text)}</div>
+  <div style="font-size: 0.875rem; color: #adb5bd; margin-top: 1.5rem">
+    ${format(originalComment.created_at, 'YYYY년 MM월 DD일')}
+  </div>
+  <div
+    style="width: 100%; height: 1px; background: #e9ecef; margin-top: 2rem; margin-bottom: 2rem;"
+  ></div>
+  <div style="display:-webkit-flex;display:-ms-flexbox;display:flex;">
+    <div>
+      <a href="https://velog.io/@${ctx.user.username}">
+        <img
+          style="height: 64px; width: 64px; display: block; border-radius: 32px;"
+          src="${writerProfile.thumbnail}"
+        />
+      </a>
+    </div>
+    <div style="flex: 1; margin-left: 1.5rem; color: #495057;">
+      <div style="margin-bottom: 0.5rem;">
+        <a
+          href="https://velog.io/@${ctx.user.username}"
+          style="text-decoration: none; color: #212529; font-weight: 600;"
+          >${ctx.user.username}</a
+        >
+      </div>
+      <div style="margin: 0; color: #495057;">
+        ${marked(text)}
+      </div>
+      <div style="font-size: 0.875rem; color: #adb5bd; margin-top: 1.5rem">
+        ${format(new Date(), 'YYYY년 MM월 DD일')}
+      </div>
+      <a
+        href="${postLink}"
+        style="outline: none; border: none; background: #845ef7; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 1rem; font-weight: 600; display: inline-block; background: #845ef7; padding-left: 1rem; padding-right: 1rem; align-items: center; margin-top: 1rem; border-radius: 4px; text-decoration: none;"
+        >답글 달기</a
+      >
+    </div>
+  </div>
+  <div
+    style="width: 100%; height: 1px; background: #e9ecef; margin-top: 4rem; margin-bottom: 1rem;"
+  ></div>
+  <div style="font-size: 0.875rem; color: #adb5bd; font-style: italic;">
+    댓글 알림을 이메일로 수신하는 것을 원하지 않는다면 이
+    <a href="${unsubscribeUrl}" style="color: inherit">링크</a>를 눌러주세요.
+  </div>
+</div>
+<div>
+<br/>
+<br/>
+<br/>
+velog | support@velog.io</div>
+`,
+      });
+    })();
   }, 0);
 };
 
