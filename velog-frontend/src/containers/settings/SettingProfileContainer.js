@@ -29,7 +29,7 @@ class SettingProfileContainer extends Component<Props> {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.user !== this.props.user) {
+    if (!prevProps.user && this.props.user) {
       this.initialize();
     }
   }

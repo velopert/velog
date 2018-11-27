@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import SettingSection from 'components/settings/SettingSection/SettingSection';
 import SettingProfileContainer from './SettingProfileContainer';
 import SettingsEtcContainer from './SettingsEtcContainer';
+import SettingEmailContainer from './SettingEmailContainer';
 
 type Props = {};
 
@@ -15,6 +16,9 @@ class SettingSections extends Component<Props> {
       <Fragment>
         <SettingSection name="프로필">
           <SettingProfileContainer />
+        </SettingSection>
+        <SettingSection name="이메일">
+          <SettingEmailContainer />
         </SettingSection>
         <SettingSection name="기타">
           <SettingsEtcContainer />

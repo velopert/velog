@@ -10,5 +10,6 @@ me.use('/follow', follow.routes());
 me.patch('/profile', meCtrl.updateProfile);
 me.get('/unregister-token', meCtrl.generateUnregisterToken);
 me.post('/unregister', meCtrl.unregister);
+me.get('/email-info', meCtrl.getEmailInfo);
 
 export default me;

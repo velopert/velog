@@ -6,6 +6,7 @@ import { generate, decode } from 'lib/token';
 
 import Joi from 'joi';
 import User from '../../database/models/User';
+import UserMeta from '../../database/models/UserMeta';
 
 export const updateProfile = async (ctx: Context): Promise<*> => {
   const { user } = ctx;
@@ -105,9 +106,33 @@ export const unregister = async (ctx: Context) => {
     const user = await User.findById(id);
     await user.destroy();
     ctx.cookies.set('access_token', '');
-    // 탈퇴처리
+    // process unregister
     ctx.status = 204;
   } catch (e) {
     ctx.status = 400;
+  }
+};
+
+export const getEmailInfo = async (ctx: Context) => {
+  try {
+    const user = await User.findById(ctx.user.id);
+    const userMeta = await UserMeta.findOne({
+      where: {
+        fk_user_id: ctx.user.id,
+      },
+    });
+
+    const { email_notification, email_promotion } = userMeta;
+    const { email, is_certified } = user;
+    ctx.body = {
+      email: null,
+      is_certified,
+      permissions: {
+        email_notification,
+        email_promotion,
+      },
+    };
+  } catch (e) {
+    ctx.throw(500, e);
   }
 };

@@ -8,6 +8,7 @@ import {
   type UpdateProfilePayload,
   generateUnregisterToken,
   unregister,
+  getEmailInfo,
 } from 'lib/api/me';
 import produce from 'immer';
 import { type Profile } from './profile';
@@ -18,6 +19,7 @@ const CREATE_THUMBNAIL_SIGNED_URL = 'settings/CREATE_THUMBNAIL_SIGNED_URL'; // c
 const ASK_UNREGISTER = 'settings/ASK_UNREGISTER';
 const GENERATE_UNREGISTER_TOKEN = 'settings/GENERATE_UNREGISTER_TOKEN';
 const UNREGISTER = 'settings/UNREGISTER';
+const GET_EMAIL_INFO = 'settings/GET_EMAIL_INFO';
 
 export const actionCreators = {
   getProfile: createAction(GET_PROFILE, getProfile),
@@ -26,12 +28,22 @@ export const actionCreators = {
   askUnregister: createAction(ASK_UNREGISTER, (open: boolean) => open),
   generateUnregisterToken: createAction(GENERATE_UNREGISTER_TOKEN, generateUnregisterToken),
   unregister: createAction(UNREGISTER, unregister),
+  getEmailInfo: createAction(GET_EMAIL_INFO, getEmailInfo),
 };
 
 export type UploadInfo = {
   url: string,
   image_path: string,
   id: string,
+};
+
+export type EmailInfoData = {
+  email: string | null,
+  is_certified: boolean,
+  permissions: {
+    email_notification: boolean,
+    email_promotion: boolean,
+  },
 };
 
 type AskUnregisterAction = ActionType<typeof actionCreators.askUnregister>;
@@ -42,10 +54,12 @@ type GenerateUnregisterTokenResponseAction = GenericResponseAction<
   { unregister_token: string },
   void,
 >;
+type GetMailInfoResponseAction = GenericResponseAction<EmailInfoData, void>;
 
 export type SettingsState = {
   profile: ?Profile,
   uploadInfo: ?UploadInfo,
+  emailInfo: ?EmailInfoData,
   askUnregister: boolean,
   unregisterToken: ?string,
 };
@@ -55,6 +69,7 @@ const initialState: SettingsState = {
   uploadInfo: null,
   askUnregister: false,
   unregisterToken: null,
+  emailInfo: null,
 };
 
 const reducer = handleActions(
@@ -103,6 +118,15 @@ export default applyPenders(reducer, [
       return {
         ...state,
         unregisterToken: action.payload.data.unregister_token,
+      };
+    },
+  },
+  {
+    type: GET_EMAIL_INFO,
+    onSuccess: (state: SettingsState, action: GetMailInfoResponseAction) => {
+      return {
+        ...state,
+        emailInfo: action.payload.data,
       };
     },
   },

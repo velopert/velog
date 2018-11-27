@@ -50,3 +50,5 @@ export const unregister = (unregisterToken: string) =>
   axios.post('/me/unregister', {
     unregister_token: unregisterToken,
   });
+
+export const getEmailInfo = () => axios.get('/me/email-info');
