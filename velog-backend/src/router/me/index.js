@@ -11,5 +11,7 @@ me.patch('/profile', meCtrl.updateProfile);
 me.get('/unregister-token', meCtrl.generateUnregisterToken);
 me.post('/unregister', meCtrl.unregister);
 me.get('/email-info', meCtrl.getEmailInfo);
+me.patch('/email', meCtrl.changeEmail);
+me.post('/resend-certmail', meCtrl.resendCertmail);
 
 export default me;

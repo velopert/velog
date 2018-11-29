@@ -9,6 +9,8 @@ import {
   generateUnregisterToken,
   unregister,
   getEmailInfo,
+  changeEmail,
+  resendCertmail,
 } from 'lib/api/me';
 import produce from 'immer';
 import { type Profile } from './profile';
@@ -20,6 +22,8 @@ const ASK_UNREGISTER = 'settings/ASK_UNREGISTER';
 const GENERATE_UNREGISTER_TOKEN = 'settings/GENERATE_UNREGISTER_TOKEN';
 const UNREGISTER = 'settings/UNREGISTER';
 const GET_EMAIL_INFO = 'settings/GET_EMAIL_INFO';
+const CHANGE_EMAIL = 'settings/CHANGE_EMAIL';
+const RESEND_CERTMAIL = 'settings/RESEND_CERTMAIL';
 
 export const actionCreators = {
   getProfile: createAction(GET_PROFILE, getProfile),
@@ -29,6 +33,8 @@ export const actionCreators = {
   generateUnregisterToken: createAction(GENERATE_UNREGISTER_TOKEN, generateUnregisterToken),
   unregister: createAction(UNREGISTER, unregister),
   getEmailInfo: createAction(GET_EMAIL_INFO, getEmailInfo),
+  changeEmail: createAction(CHANGE_EMAIL, changeEmail),
+  resendCertmail: createAction(RESEND_CERTMAIL, resendCertmail),
 };
 
 export type UploadInfo = {

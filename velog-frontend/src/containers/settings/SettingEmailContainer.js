@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import type { UserData } from 'store/modules/user';
 import type { EmailInfoData } from 'store/modules/settings';
 import type { State } from 'store';
-import { SettingsActions } from 'store/actionCreators';
+import { SettingsActions, BaseActions } from 'store/actionCreators';
 
 import SettingEmail from '../../components/settings/SettingEmail';
 
@@ -14,6 +14,7 @@ type Props = {
 };
 
 class SettingEmailContainer extends Component<Props> {
+  lastRequestTime: ?number = null;
   initialize = async () => {
     const { user } = this.props;
     if (!user) return;
@@ -31,9 +32,34 @@ class SettingEmailContainer extends Component<Props> {
       this.initialize();
     }
   }
+
+  onResendCertmail = async () => {
+    const current = new Date().getTime();
+
+    if (current - (this.lastRequestTime || 0) < 1000 * 15) {
+      BaseActions.showToast({ type: 'error', message: '잠시 후 요청해주세요.' });
+      return;
+    }
+    await SettingsActions.resendCertmail();
+    BaseActions.showToast({ type: 'success', message: '인증 메일을 재발송했습니다.' });
+    this.lastRequestTime = current;
+  };
+
+  onChangeEmail = async (email: string) => {
+    await SettingsActions.changeEmail(email);
+    await this.initialize();
+    BaseActions.showToast({ type: 'success', message: '이메일이 변경되었습니다.' });
+  };
+
   render() {
     if (!this.props.emailInfo) return null;
-    return <SettingEmail emailInfo={this.props.emailInfo} />;
+    return (
+      <SettingEmail
+        emailInfo={this.props.emailInfo}
+        onChangeEmail={this.onChangeEmail}
+        onResendCertmail={this.onResendCertmail}
+      />
+    );
   }
 }
 

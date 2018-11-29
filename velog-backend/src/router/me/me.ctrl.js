@@ -1,12 +1,13 @@
 // @flow
 import type { Context } from 'koa';
 import UserProfile from 'database/models/UserProfile';
-import { validateSchema, checkEmpty } from 'lib/common';
+import { validateSchema, checkEmpty, sendCertEmail } from 'lib/common';
 import { generate, decode } from 'lib/token';
 
 import Joi from 'joi';
 import User from '../../database/models/User';
 import UserMeta from '../../database/models/UserMeta';
+import EmailCert from '../../database/models/EmailCert';
 
 export const updateProfile = async (ctx: Context): Promise<*> => {
   const { user } = ctx;
@@ -125,13 +126,89 @@ export const getEmailInfo = async (ctx: Context) => {
     const { email_notification, email_promotion } = userMeta;
     const { email, is_certified } = user;
     ctx.body = {
-      email: null,
+      email,
       is_certified,
       permissions: {
         email_notification,
         email_promotion,
       },
     };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const changeEmail = async (ctx: Context) => {
+  // validate email
+  const schema = Joi.object().keys({
+    email: Joi.string()
+      .email()
+      .required(),
+  });
+  const result = Joi.validate(ctx.request.body, schema);
+  if (result.error) {
+    ctx.body = {
+      name: 'WRONG_EMAIL',
+    };
+    ctx.status = 400;
+    return;
+  }
+
+  // parse email from reqbody
+  const { email } = ((ctx.request.body: any): { email: string });
+
+  try {
+    // get user
+    const user = await User.findById(ctx.user.id);
+    // do duplication check
+    const exists = await User.findOne({
+      where: {
+        email,
+      },
+    });
+    if (exists) {
+      ctx.status = 409;
+      ctx.body = {
+        name: 'EMAIL_EXISTS',
+      };
+      return;
+    }
+
+    // change email
+    user.email = email;
+    user.is_certified = false;
+    await user.save();
+    // list all email certs and disable status
+    await EmailCert.update(
+      {
+        status: false,
+      },
+      {
+        where: {
+          fk_user_id: ctx.user.id,
+          status: true,
+        },
+      },
+    );
+    sendCertEmail(ctx.user.id, email);
+    ctx.status = 204;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const resendCertmail = async (ctx: Context) => {
+  try {
+    const user = await User.findById(ctx.user.id);
+    if (user.is_certified) {
+      ctx.status = 409;
+      ctx.body = {
+        name: 'ALREADY_CERTIFIED',
+      };
+      return;
+    }
+    sendCertEmail(ctx.user.id, user.email);
+    ctx.status = 204;
   } catch (e) {
     ctx.throw(500, e);
   }
