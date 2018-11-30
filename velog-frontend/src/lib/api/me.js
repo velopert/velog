@@ -54,3 +54,10 @@ export const unregister = (unregisterToken: string) =>
 export const getEmailInfo = () => axios.get('/me/email-info');
 export const changeEmail = (email: string) => axios.patch('/me/email', { email });
 export const resendCertmail = () => axios.post('/me/resend-certmail');
+
+export type SaveEmailPermissionsPayload = {
+  email_notification: boolean,
+  email_promotion: boolean,
+};
+export const saveEmailPermissions = (payload: SaveEmailPermissionsPayload) =>
+  axios.patch('/me/email-permissions', payload);

@@ -1,0 +1,42 @@
+@import 'utils';
+
+.Toggler {
+  display: flex;
+  align-items: center;
+  & + .Toggler {
+    margin-top: 0.5rem;
+  }
+
+  .toggle-box {
+    background: $oc-gray-3;
+    height: 32px;
+    width: 56px;
+    border-radius: 16px;
+    position: relative;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    transition: 0.125s ease-in background;
+    .circle {
+      transition: 0.125s ease-in transform;
+      background: white;
+      width: 24px;
+      height: 24px;
+      top: 4px;
+      left: 4px;
+      border-radius: 12px;
+      position: absolute;
+    }
+
+    &.active {
+      background: $oc-violet-6;
+      .circle {
+        transform: translate(24px);
+      }
+    }
+  }
+  .text {
+    font-size: 0.875rem;
+    color: $oc-gray-9;
+    font-weight: 600;
+  }
+}

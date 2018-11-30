@@ -2,13 +2,16 @@
 import React, { Component, Fragment } from 'react';
 import type { EmailInfoData } from 'store/modules/settings';
 import WarningIcon from 'react-icons/lib/md/warning';
+import Toggler from 'components/common/Toggler';
 import cx from 'classnames';
 import './SettingEmail.scss';
 
 type Props = {
   emailInfo: EmailInfoData,
+  onSaveEmailPermissions: () => Promise<any>,
   onChangeEmail: (email: string) => Promise<any>,
   onResendCertmail: () => Promise<any>,
+  onUpdateEmailPermission: (payload: { name: string, value: boolean }) => void,
 };
 
 type State = {
@@ -62,8 +65,12 @@ class SettingEmail extends Component<Props, State> {
     });
   };
 
+  onChangeToggler = (event: { name: string, value: boolean }) => {
+    this.props.onUpdateEmailPermission(event);
+  };
+
   render() {
-    const { emailInfo } = this.props;
+    const { emailInfo, onSaveEmailPermissions } = this.props;
     const { edit, email } = this.state;
     return (
       <div className="SettingEmail">
@@ -106,6 +113,27 @@ class SettingEmail extends Component<Props, State> {
             </div>
           </Fragment>
         )}
+        {!edit &&
+          emailInfo.is_certified && (
+            <section>
+              <h5>이메일 수신 설정</h5>
+              <div className="togglers">
+                <Toggler
+                  name="email_notification"
+                  text="댓글 알림"
+                  value={emailInfo.permissions.email_notification}
+                  onChange={this.onChangeToggler}
+                />
+                <Toggler
+                  name="email_promotion"
+                  text="이벤트 및 프로모션"
+                  value={emailInfo.permissions.email_promotion}
+                  onChange={this.onChangeToggler}
+                />
+              </div>
+              <button onClick={onSaveEmailPermissions}>이메일 수신 설정 저장</button>
+            </section>
+          )}
       </div>
     );
   }

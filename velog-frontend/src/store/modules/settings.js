@@ -11,6 +11,7 @@ import {
   getEmailInfo,
   changeEmail,
   resendCertmail,
+  saveEmailPermissions,
 } from 'lib/api/me';
 import produce from 'immer';
 import { type Profile } from './profile';
@@ -24,6 +25,8 @@ const UNREGISTER = 'settings/UNREGISTER';
 const GET_EMAIL_INFO = 'settings/GET_EMAIL_INFO';
 const CHANGE_EMAIL = 'settings/CHANGE_EMAIL';
 const RESEND_CERTMAIL = 'settings/RESEND_CERTMAIL';
+const UPDATE_EMAIL_PERMISSION = 'settings/UPDATE_EMAIL_PERMISSION';
+const SAVE_EMAIL_PERMISSIONS = 'settings/SAVE_EMAIL_PERMISSIONS';
 
 export const actionCreators = {
   getProfile: createAction(GET_PROFILE, getProfile),
@@ -35,6 +38,11 @@ export const actionCreators = {
   getEmailInfo: createAction(GET_EMAIL_INFO, getEmailInfo),
   changeEmail: createAction(CHANGE_EMAIL, changeEmail),
   resendCertmail: createAction(RESEND_CERTMAIL, resendCertmail),
+  updateEmailPermission: createAction(
+    UPDATE_EMAIL_PERMISSION,
+    (payload: { name: string, value: boolean }) => payload,
+  ),
+  saveEmailPermissions: createAction(SAVE_EMAIL_PERMISSIONS, saveEmailPermissions),
 };
 
 export type UploadInfo = {
@@ -61,6 +69,7 @@ type GenerateUnregisterTokenResponseAction = GenericResponseAction<
   void,
 >;
 type GetMailInfoResponseAction = GenericResponseAction<EmailInfoData, void>;
+type UpdateEmailPermissionAction = ActionType<typeof actionCreators.updateEmailPermission>;
 
 export type SettingsState = {
   profile: ?Profile,
@@ -85,6 +94,12 @@ const reducer = handleActions(
         ...state,
         askUnregister: payload,
       };
+    },
+    [UPDATE_EMAIL_PERMISSION]: (state, { payload }: UpdateEmailPermissionAction) => {
+      return produce(state, (draft) => {
+        if (!draft.emailInfo) return;
+        draft.emailInfo.permissions[payload.name] = payload.value;
+      });
     },
   },
   initialState,

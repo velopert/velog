@@ -213,3 +213,32 @@ export const resendCertmail = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+export const updateEmailPermissions = async (ctx: Context) => {
+  // validate request body
+  const schema = Joi.object().keys({
+    email_notification: Joi.boolean().required(),
+    email_promotion: Joi.boolean().required(),
+  });
+  const result = Joi.validate(ctx.request.body, schema);
+  if (result.error) {
+    ctx.status = 400;
+    return;
+  }
+  const permissions: {
+    email_notification: boolean,
+    email_promotion: boolean,
+  } = (ctx.request.body: any);
+
+  try {
+    const userMeta = await UserMeta.findOne({
+      where: {
+        fk_user_id: ctx.user.id,
+      },
+    });
+    await userMeta.update(permissions);
+    ctx.status = 204;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};

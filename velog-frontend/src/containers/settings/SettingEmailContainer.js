@@ -51,6 +51,17 @@ class SettingEmailContainer extends Component<Props> {
     BaseActions.showToast({ type: 'success', message: '이메일이 변경되었습니다.' });
   };
 
+  onUpdateEmailPermission = (payload: { name: string, value: boolean }) => {
+    SettingsActions.updateEmailPermission(payload);
+  };
+
+  onSaveEmailPermissions = async () => {
+    const { emailInfo } = this.props;
+    if (!emailInfo) return;
+    await SettingsActions.saveEmailPermissions(emailInfo.permissions);
+    BaseActions.showToast({ type: 'success', message: '이메일 수신 설정이 저장되었습니다.' });
+  };
+
   render() {
     if (!this.props.emailInfo) return null;
     return (
@@ -58,6 +69,8 @@ class SettingEmailContainer extends Component<Props> {
         emailInfo={this.props.emailInfo}
         onChangeEmail={this.onChangeEmail}
         onResendCertmail={this.onResendCertmail}
+        onUpdateEmailPermission={this.onUpdateEmailPermission}
+        onSaveEmailPermissions={this.onSaveEmailPermissions}
       />
     );
   }
