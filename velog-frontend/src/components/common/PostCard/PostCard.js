@@ -43,15 +43,9 @@ const PostCard = ({
   const link = `/@${username}/${urlSlug}`;
   return (
     <div className={cx('PostCard', { 'one-column': oneColumn, empty: !thumbnail })}>
-      {(!oneColumn || thumbnail) && (
+      {thumbnail && (
         <Link to={link} className={cx('thumbnail-wrapper')}>
-          {thumbnail ? (
-            <img src={resizeImage(thumbnail, oneColumn ? 768 : 512)} alt={title} />
-          ) : (
-            <div className="image-placeholder">
-              <ImageIcon />
-            </div>
-          )}
+          {thumbnail && <img src={resizeImage(thumbnail, oneColumn ? 768 : 512)} alt={title} />}
           <div className="white-mask" />
         </Link>
       )}
