@@ -9,18 +9,21 @@ import TwitterIcon from 'react-icons/lib/fa/twitter';
 import ExitIcon from 'react-icons/lib/md/close';
 import Tooltip from 'react-tooltip';
 import withClickOutside from 'react-onclickoutside';
+import LinkIcon from 'react-icons/lib/md/link';
 
 import cx from 'classnames';
 import './PostLeftSticker.scss';
-import { shareFacebook, shareTwitter } from '../../../lib/share';
+import { shareFacebook, shareTwitter, copyText } from '../../../lib/share';
 
 type Props = {
   likes: number,
   liked: boolean,
   onToggleLike: () => void,
+  informCopy: () => void,
   logged: boolean,
   url: string,
   title: string,
+  username: string,
 };
 
 type State = {
@@ -64,7 +67,15 @@ class PostLeftSticker extends Component<Props, State> {
   };
   onTwitterShare = () => {
     this.onToggleShareButton();
-    shareTwitter(`https://velog.io${this.props.url}`, this.props.title);
+    shareTwitter(
+      `https://velog.io${this.props.url}`,
+      `${this.props.username}님이 작성하신 "${this.props.title}" 포스트를 읽어보세요.`,
+    );
+  };
+  onCopy = () => {
+    this.onToggleShareButton();
+    copyText(`https://velog.io${this.props.url}`);
+    this.props.informCopy();
   };
   componentDidUpdate(prevProps: Props) {
     if (!prevProps.liked && this.props.liked) {
@@ -104,6 +115,9 @@ class PostLeftSticker extends Component<Props, State> {
               </button>
               <button className="circle share" onClick={this.onTwitterShare}>
                 <TwitterIcon />
+              </button>
+              <button className="circle share" onClick={this.onCopy}>
+                <LinkIcon />
               </button>
             </Fragment>
           )}

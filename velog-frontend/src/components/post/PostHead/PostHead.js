@@ -9,6 +9,7 @@ import { fromNow, resizeImage } from 'lib/common';
 import LockIcon from 'react-icons/lib/md/lock';
 import PostActionButtons from '../PostActionButtons';
 import './PostHead.scss';
+import PostMobileShare from '../PostMobileShare/PostMobileShare';
 
 type Props = {
   id: string,
@@ -27,8 +28,9 @@ type Props = {
   onAskRemove: () => void,
   date: string,
   logged: boolean,
-
+  url: string,
   isPrivate: boolean,
+  informCopy: () => void,
 };
 
 const PostHead = ({
@@ -44,6 +46,8 @@ const PostHead = ({
   onAskRemove,
   logged,
   isPrivate,
+  url,
+  informCopy,
 }: Props) => {
   const userLink = `/@${user.username}`;
 
@@ -69,6 +73,7 @@ const PostHead = ({
       <div className="date-and-likes">
         <div className="date">{fromNow(date)}</div>
         <div className="placeholder" />
+        <PostMobileShare url={url} title={title} username={user.username} informCopy={informCopy} />
         <PostLikeButton onClick={onToggleLike} liked={liked} likes={likes} disabled={!logged} />
       </div>
       <div className="separator" />

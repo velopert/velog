@@ -1,0 +1,72 @@
+@import "utils";
+
+@keyframes slideFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  75% {
+    opacity: 1;
+    transform: translateX(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@keyframes slideToRight {
+  0% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  25% {
+    opacity: 1;
+    transform: translateX(-8px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+.PostMobileShare {
+  display: flex;
+  .buttons {
+    display: flex;
+    &.appear {
+      animation: slideFromRight 0.15s ease-in;
+      animation-fill-mode: forwards;
+    }
+    &.disappear {
+      animation: slideToRight 0.15s ease-in;
+      animation-fill-mode: forwards;
+    }
+  }
+  button {
+    background: white;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid $oc-gray-6;
+    color: $oc-gray-6;
+    border-radius: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    font-size: 1.125rem;
+    &:hover {
+      border: 1px solid $oc-gray-9;
+      color: $oc-gray-9;
+    }
+    &.open {
+      color: $oc-red-5;
+      border: 1px solid $oc-red-5;
+      &:hover {
+        border: 1px solid $oc-red-7;
+        color: $oc-red-7;
+      }
+    }
+  }
+}

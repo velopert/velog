@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import PostHead from 'components/post/PostHead';
 import PostContent from 'components/post/PostContent';
 import PostTags from 'components/post/PostTags';
-import { PostsActions, CommonActions, ListingActions } from 'store/actionCreators';
+import { PostsActions, CommonActions, ListingActions, BaseActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import type { State } from 'store';
 import type { PostData, TocItem } from 'store/modules/posts';
@@ -117,6 +117,13 @@ class PostViewer extends Component<Props> {
     }
   }
 
+  informCopy = () => {
+    BaseActions.showToast({
+      message: '링크가 복사되었습니다',
+      type: 'success',
+    });
+  };
+
   render() {
     const { post, toc, activeHeading, username, currentUsername, askRemove, logged } = this.props;
     const { onSetToc, onActivateHeading } = this;
@@ -149,6 +156,8 @@ class PostViewer extends Component<Props> {
           onToggleLike={this.onToggleLike}
           url={this.props.match.url}
           title={post.title}
+          username={post.user.username}
+          informCopy={this.informCopy}
         />
         <PostToc
           toc={toc}
@@ -169,6 +178,8 @@ class PostViewer extends Component<Props> {
           onAskRemove={this.onToggleAskRemove}
           logged={logged}
           isPrivate={post.is_private}
+          url={this.props.match.url}
+          informCopy={this.informCopy}
         />
         <PostContent
           thumbnail={post.thumbnail}
