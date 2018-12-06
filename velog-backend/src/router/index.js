@@ -2,9 +2,6 @@
 import Router from 'koa-router';
 import type { Context } from 'koa';
 import needsAuth from 'lib/middlewares/needsAuth';
-import downloadImage from 'lib/downloadImage';
-import crypto from 'crypto';
-import { PostReadcounts } from 'database/views';
 import auth from './auth';
 import posts from './posts';
 import files from './files';
@@ -15,8 +12,7 @@ import common from './common';
 import sitemaps from './sitemaps';
 import internal from './internal';
 import atom from './atom';
-import Post from '../database/models/Post';
-import { getTagsList } from '../database/rawQuery/tags';
+import search from './search/search';
 
 const router: Router = new Router();
 
@@ -30,11 +26,12 @@ router.use('/common', common.routes());
 router.use('/sitemaps', sitemaps.routes());
 router.use('/internal', internal.routes());
 router.use('/atom', atom.routes());
+router.use('/search', search.routes());
 
 router.get('/check', (ctx: Context) => {
   console.log('avoiding cold start...');
   ctx.body = {
-    version: '1.0.0-alpha.0',
+    version: '1.0.0',
     origin: ctx.origin,
     env: process.env.NODE_ENV,
   };

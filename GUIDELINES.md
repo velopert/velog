@@ -61,7 +61,11 @@ $ psql postgres
 psql (10.4)
 Type "help" for help.
 
-postgres=# CREATE DATABASE velog;
+postgres=# CREATE DATABASE velog
+  LC_COLLATE 'C'
+  LC_CTYPE 'C'
+  ENCODING 'UTF8'
+  TEMPLATE template0;
 CREATE DATABASE
 postgres=# CREATE USER velog WITH ENCRYPTED PASSWORD 'velogpw';
 CREATE ROLE

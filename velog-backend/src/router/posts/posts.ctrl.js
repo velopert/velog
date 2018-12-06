@@ -457,25 +457,19 @@ export const listTrendingPosts = async (ctx: Context) => {
 
   // check cursor
   try {
-    console.time('getTrendingPosts');
     const postIds = await getTrendingPosts(offset || 0);
-    console.timeEnd('getTrendingPosts');
     if (!postIds || postIds.length === 0) {
       ctx.body = [];
       return;
     }
-    console.time('readPostsByIds');
     const posts = await Post.readPostsByIds(postIds.map(postId => postId.post_id));
     const filtered = posts.filter(p => !p.is_private);
-    console.timeEnd('readPostsByIds');
     const data = filtered
       .map(serializePost)
       .map(post => ({ ...post, body: formatShortDescription(post.body) }));
 
     // retrieve commentCounts and inject
-    console.time('getCommentCounts');
     const commentCounts = await getCommentCountsOfPosts(filtered.map(p => p.id));
-    console.timeEnd('getCommentCounts');
     ctx.body = injectCommentCounts(data, commentCounts);
   } catch (e) {
     ctx.throw(500, e);
