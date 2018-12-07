@@ -3,17 +3,37 @@ import type { Context } from 'koa';
 import Post, { serializePost } from 'database/models/Post';
 import { searchPosts, countSearchPosts } from 'database/rawQuery/search';
 import { formatShortDescription } from 'lib/common';
+import User from 'database/models/User';
 
 export const publicSearch = async (ctx: Context) => {
-  const { q } = ctx.query;
+  const { q, username } = ctx.query;
   const transformed = `${q.replace(/ /, '|')}:*`;
+  if (!q) {
+    ctx.status = 400;
+    return;
+  }
   try {
+    const user =
+      username &&
+      (await User.findOne({
+        where: {
+          username,
+        },
+      }));
+    const fk_user_id = null || (user && user.id);
+    const authorized = !!(
+      fk_user_id && (ctx.user && ctx.user.id) === fk_user_id
+    );
     const [count, searchResult] = await Promise.all([
       countSearchPosts({
         tsquery: transformed,
+        fk_user_id,
+        authorized,
       }),
       searchPosts({
         tsquery: transformed,
+        fk_user_id,
+        authorized,
       }),
     ]);
 
