@@ -6,6 +6,19 @@
   @include media("<large") {
     padding: 1rem;
   }
+  .button-area {
+    .desktop {
+      @include media("<medium") {
+        display: none;
+      }
+    }
+    .mobile {
+      display: none;
+      @include media("<medium") {
+        display: inline;
+      }
+    }
+  }
   .mobile-logo {
     @include media(">=large") {
       display: none;

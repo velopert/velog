@@ -1,0 +1,24 @@
+@import "utils";
+
+.SearchBox {
+  border-radius: 30px;
+  border: 1px solid $oc-violet-6;
+  display: flex;
+  align-items: center;
+  color: $oc-violet-6;
+  padding-left: 1rem;
+  svg {
+    font-size: 2rem;
+  }
+  input {
+    color: inherit;
+    background: none;
+    outline: none;
+    border: none;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.5rem;
+    margin-left: 1rem;
+    flex: 1;
+  }
+}

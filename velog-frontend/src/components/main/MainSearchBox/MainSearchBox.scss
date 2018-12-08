@@ -1,0 +1,41 @@
+@import "utils";
+
+.MainSearchBox {
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  .gray-rect {
+    transition: 0.125s all ease-in;
+    border-radius: 4px;
+    display: flex;
+    padding-left: 0.5rem;
+    background: $oc-gray-1;
+    border: 1px solid $oc-gray-3;
+    align-items: center;
+    color: $oc-gray-8;
+    svg {
+      font-size: 1.5rem;
+    }
+    input {
+      background: none;
+      border: none;
+      outline: none;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      font-size: 0.875rem;
+      flex: 1;
+      margin-left: 0.5rem;
+      color: inherit;
+    }
+  }
+
+  &.focus {
+    svg {
+      cursor: pointer;
+    }
+    .gray-rect {
+      border: 1px solid $oc-violet-6;
+      color: $oc-violet-6;
+      background: white;
+    }
+  }
+}

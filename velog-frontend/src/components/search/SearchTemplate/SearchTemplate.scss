@@ -1,0 +1,12 @@
+@import "utils";
+.SearchTemplate {
+  width: 768px;
+  margin: 0 auto;
+  margin-top: 4rem;
+  @include media("<medium") {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 1rem;
+  }
+}

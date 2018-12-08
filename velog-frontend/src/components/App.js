@@ -8,6 +8,7 @@ import Callback from 'containers/etc/Callback';
 import EmailCertifyContainer from '../containers/etc/EmailCertifyContainer';
 import CustomError from '../pages/errors/CustomError';
 import Success from '../pages/Success';
+import Search from '../pages/Search';
 
 const App = () => (
   <React.Fragment>
@@ -38,6 +39,7 @@ const App = () => (
       <Route path="/policy/:mode(policy|terms)?" component={Policy} />
       <Route path="/callback" component={Callback} />
       <Route path="/certify" component={EmailCertifyContainer} />
+      <Route path="/search" component={Search} />
       <Route component={NotFound} />
     </Switch>
     <Core />

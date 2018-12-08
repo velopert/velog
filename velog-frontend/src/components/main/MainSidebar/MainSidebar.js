@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import TempIcon from 'react-icons/lib/md/priority-high';
 import TrendingIcon from 'react-icons/lib/md/trending-up';
 import RecentIcon from 'react-icons/lib/md/access-time';
@@ -14,6 +14,7 @@ import './MainSidebar.scss';
 
 type Props = {
   url: string,
+  searchBox: Node,
 };
 
 class MainSidebar extends Component<Props> {
@@ -25,7 +26,7 @@ class MainSidebar extends Component<Props> {
         <Link to="/" className="logo">
           velog
         </Link>
-
+        {this.props.searchBox}
         <ul className="menu">
           <MainMenuItem
             icon={<TrendingIcon />}
