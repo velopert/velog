@@ -4,5 +4,6 @@ import { publicSearch } from './search.ctrl';
 
 const search = new Router();
 
-search.get('/public', publicSearch);
+search.get('/', publicSearch);
+
 export default search;

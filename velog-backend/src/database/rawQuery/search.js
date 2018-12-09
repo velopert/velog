@@ -26,7 +26,7 @@ export const searchPosts = async ({
     return `AND posts.fk_user_id = '${fk_user_id}' AND posts.is_private = false`;
   })();
   const query = `
-SELECT id, ts_rank(tsv, TO_TSQUERY($tsquery)) * 1000 + coalesce(total_score) AS rank
+SELECT id, ts_rank(tsv, TO_TSQUERY($tsquery)) * 250 + coalesce(total_score) AS rank
 FROM posts 
 LEFT JOIN (select fk_post_id, SUM(score) as total_score from post_scores group by fk_post_id) as q on q.fk_post_id = posts.id 
 WHERE tsv @@ TO_TSQUERY($tsquery)

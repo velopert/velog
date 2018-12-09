@@ -12,6 +12,7 @@ import { actionCreators as profileActions } from './modules/profile';
 import { actionCreators as followActions } from './modules/follow';
 import { actionCreators as commonActions } from './modules/common';
 import { actionCreators as settingsActions } from './modules/settings';
+import { actionCreators as searchActions } from './modules/search';
 
 const { dispatch } = store;
 
@@ -29,3 +30,4 @@ export const SettingsActions: typeof settingsActions = bindActionCreators(
   settingsActions,
   dispatch,
 );
+export const SearchActions: typeof searchActions = bindActionCreators(searchActions, dispatch);
