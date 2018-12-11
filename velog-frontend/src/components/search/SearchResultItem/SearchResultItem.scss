@@ -1,7 +1,20 @@
 @import "utils";
 
+@keyframes searchResultItemAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0px);
+  }
+}
+
 .SearchResultItem {
   color: $oc-gray-9;
+  animation: searchResultItemAppear 0.15s ease-in-out;
+  animation-fill-mode: forwards;
   .userinfo {
     display: flex;
     align-items: center;
@@ -10,9 +23,10 @@
       height: 3rem;
       object-fit: cover;
       border-radius: 1.5rem;
+      box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
     }
     .username {
-      margin-left: 0.5rem;
+      margin-left: 1rem;
       font-weight: 600;
       font-size: 0.875rem;
     }
@@ -40,6 +54,10 @@
   h3 {
     font-size: 1.75rem;
     margin-top: 1rem;
+    &:hover {
+      text-decoration: underline;
+      color: $oc-violet-5;
+    }
   }
   p {
     margin-top: 0.5rem;
@@ -49,6 +67,17 @@
   }
   .subinfo {
     margin-top: 0.75rem;
+  }
+  @include media("<medium") {
+    h3 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+    .subinfo {
+      font-size: 0.875rem;
+    }
   }
 }
 

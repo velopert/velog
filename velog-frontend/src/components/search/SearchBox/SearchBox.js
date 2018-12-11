@@ -2,16 +2,35 @@
 import React, { Component } from 'react';
 import SearchIcon from 'react-icons/lib/io/ios-search';
 import debounce from 'lodash/debounce';
+import { withRouter, type ContextRouter } from 'react-router-dom';
+import queryString from 'query-string';
+
 import './SearchBox.scss';
 
 type Props = {
   onSearch(keyword: string): any,
-};
+} & ContextRouter;
+
 type State = { value: string };
 class SearchBox extends Component<Props, State> {
   state = {
     value: '',
   };
+
+  constructor(props: Props) {
+    super(props);
+    const { q } = queryString.parse(this.props.location.search);
+    if (q) {
+      this.state.value = q;
+    }
+  }
+
+  componentDidMount() {
+    const { value } = this.state;
+    if (value) {
+      this.onSearch();
+    }
+  }
 
   onSearch = () => {
     const { value } = this.state;
@@ -52,4 +71,4 @@ class SearchBox extends Component<Props, State> {
   }
 }
 
-export default SearchBox;
+export default withRouter(SearchBox);

@@ -11,7 +11,7 @@ type Props = {
     count: number,
     data: PostItem[],
   },
-  hasNext: boolean,
+  onSearchNext: () => any,
 };
 
 class SearchResults extends Component<Props> {
@@ -21,12 +21,14 @@ class SearchResults extends Component<Props> {
     return result.data.map(post => <SearchResultItem post={post} key={post.id} />);
   }
   render() {
+    const { result, onSearchNext } = this.props;
+    if (!result) return null;
     return (
       <div className="SearchResults">
         {this.renderList()}
-        {this.props.hasNext && (
-          <Button fullWidth large theme="transparent" className="more-btn">
-            109개의 검색결과 더보기
+        {result.count > result.data.length && (
+          <Button fullWidth large theme="transparent" className="more-btn" onClick={onSearchNext}>
+            {result.count - result.data.length}개의 검색결과 더보기
           </Button>
         )}
       </div>

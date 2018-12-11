@@ -7,6 +7,7 @@ import produce from 'immer';
 import { type PostItem } from './listing';
 
 const PUBLIC_SEARCH = 'search/PUBLIC_SEARCH';
+const NEXT_PUBLIC_SEARCH = 'search/NEXT_PUBLIC_SEARCH';
 const INITIALIZE = 'search/INITIALIZE';
 
 export const actionCreators = {
@@ -15,6 +16,12 @@ export const actionCreators = {
     SearchAPI.search,
     (meta: SearchAPI.SearchParams) => meta,
   ),
+  nextPublicSearch: createAction(
+    NEXT_PUBLIC_SEARCH,
+    SearchAPI.search,
+    (meta: SearchAPI.SearchParams) => meta,
+  ),
+  initialize: createAction(INITIALIZE),
 };
 
 type PublicSearchPending = {
@@ -67,6 +74,26 @@ export default applyPenders(reducer, [
         ...state,
         result: action.payload.data,
       };
+    },
+  },
+  {
+    type: NEXT_PUBLIC_SEARCH,
+    onPending: (state: SearchState, action: PublicSearchPending) => {
+      const { meta } = action;
+      return produce(state, (draft) => {
+        if (!meta.page) return;
+        draft.currentPage = meta.page;
+      });
+    },
+    onSuccess: (state: SearchState, action: PublicSearchResponse) => {
+      const { data: result } = action.payload;
+      return produce(state, (draft) => {
+        if (!draft.result) return;
+        // $FlowFixMe
+        draft.result.data = draft.result.data.concat(result.data);
+        // $FlowFixMe
+        draft.result.count = result.count;
+      });
     },
   },
 ]);

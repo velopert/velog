@@ -4,7 +4,9 @@ import cx from 'classnames';
 import SearchIcon from 'react-icons/lib/md/search';
 import './MainSearchBox.scss';
 
-type Props = {};
+type Props = {
+  onSearch: (keyword: string) => void,
+};
 
 type State = {
   value: string,
@@ -48,7 +50,7 @@ class MainSearchBox extends Component<Props, State> {
 
   onKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      console.log('[SEARCH]', this.state.value);
+      this.props.onSearch(this.state.value);
     }
   };
 

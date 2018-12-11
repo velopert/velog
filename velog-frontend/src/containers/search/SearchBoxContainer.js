@@ -5,8 +5,13 @@ import { SearchActions } from 'store/actionCreators';
 
 type Props = {};
 class SearchBoxContainer extends Component<Props> {
+  componentDidMount() {}
   onSearch = (keyword: string) => {
-    if (!keyword) return null;
+    if (!keyword) {
+      SearchActions.initialize();
+      return null;
+    }
+    SearchActions.initialize();
     return SearchActions.publicSearch({
       q: keyword,
     });

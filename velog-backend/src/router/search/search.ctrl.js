@@ -6,9 +6,10 @@ import { formatShortDescription } from 'lib/common';
 import User from 'database/models/User';
 
 export const publicSearch = async (ctx: Context) => {
-  const { q, username } = ctx.query;
+  const { q, username, page } = ctx.query;
   const transformed = `${q.replace(/ /, '|')}:*`;
-  if (!q) {
+  const parsedPage = parseInt(page || 1, 10);
+  if (!q || isNaN(parsedPage)) {
     ctx.status = 400;
     return;
   }
@@ -34,6 +35,7 @@ export const publicSearch = async (ctx: Context) => {
         tsquery: transformed,
         fk_user_id,
         authorized,
+        page: parsedPage,
       }),
     ]);
 
