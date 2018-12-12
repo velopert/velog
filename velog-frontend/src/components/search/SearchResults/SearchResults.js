@@ -25,6 +25,9 @@ class SearchResults extends Component<Props> {
     if (!result) return null;
     return (
       <div className="SearchResults">
+        <div className="count">
+          총 <b>{result.count}개</b>의 포스트를 찾았습니다.
+        </div>
         {this.renderList()}
         {result.count > result.data.length && (
           <Button fullWidth large theme="transparent" className="more-btn" onClick={onSearchNext}>

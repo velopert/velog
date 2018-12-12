@@ -65,6 +65,7 @@ class SearchBox extends Component<Props, State> {
           value={value}
           onChange={this.onChange}
           onKeyPress={this.onKeyPress}
+          autoFocus
         />
       </div>
     );

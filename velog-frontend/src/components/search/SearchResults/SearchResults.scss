@@ -2,7 +2,15 @@
 
 .SearchResults {
   margin-top: 3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 9rem;
+  .count {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: $oc-gray-8;
+    b {
+      color: $oc-gray-9;
+    }
+  }
   .more-btn {
     margin-top: 3rem;
     color: $oc-violet-5;

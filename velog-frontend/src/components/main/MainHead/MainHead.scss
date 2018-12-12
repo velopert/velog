@@ -7,6 +7,23 @@
     padding: 1rem;
   }
   .button-area {
+    .search-btn {
+      display: none;
+      @include media("<large") {
+        display: flex;
+      }
+      color: $oc-violet-6;
+      font-size: 2rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 1.25rem;
+
+      align-items: center;
+      justify-content: center;
+      &:active {
+        background: $oc-gray-1;
+      }
+    }
     .desktop {
       @include media("<medium") {
         display: none;
