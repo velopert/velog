@@ -105,7 +105,7 @@ class SubmitBoxContainer extends Component<Props> {
         },
       });
       if (!this.props.imagePath) return;
-      WriteActions.setThumbnail(`https://images.velog.io/${this.props.imagePath}`);
+      WriteActions.setThumbnail(encodeURI(`https://images.velog.io/${this.props.imagePath}`));
     } catch (e) {
       console.log(e);
     }
