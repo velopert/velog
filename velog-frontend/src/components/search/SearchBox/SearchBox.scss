@@ -7,10 +7,13 @@
   align-items: center;
   color: $oc-violet-6;
   padding-left: 1rem;
+  padding-right: 0.5rem;
+  flex-shrink: none;
   svg {
     font-size: 2rem;
   }
   input {
+    min-width: 0;
     color: inherit;
     background: none;
     outline: none;
@@ -20,5 +23,9 @@
     font-size: 1.5rem;
     margin-left: 1rem;
     flex: 1;
+
+    @include media("<medium") {
+      font-size: 1.25rem;
+    }
   }
 }

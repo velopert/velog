@@ -13,6 +13,7 @@ type Props = {
 
 type State = { value: string };
 class SearchBox extends Component<Props, State> {
+  input = React.createRef();
   state = {
     value: '',
   };
@@ -53,6 +54,9 @@ class SearchBox extends Component<Props, State> {
   onKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       this.onSearch();
+      const input = this.input.current;
+      if (!input) return;
+      input.blur();
     }
   };
   render() {
@@ -66,6 +70,8 @@ class SearchBox extends Component<Props, State> {
           onChange={this.onChange}
           onKeyPress={this.onKeyPress}
           autoFocus
+          type="search"
+          ref={this.input}
         />
       </div>
     );
