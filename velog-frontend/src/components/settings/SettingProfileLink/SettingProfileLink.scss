@@ -1,0 +1,37 @@
+@import "utils";
+.SettingProfileLink {
+  color: $oc-gray-9;
+  .label {
+    font-weight: 600;
+  }
+  .input-wrapper {
+    margin-top: 0.5rem;
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid $oc-gray-4;
+    font-size: 1.125rem;
+    align-items: center;
+    line-height: 2.5rem;
+    .template-url {
+      padding-left: 0.875rem;
+      padding-right: 0.875rem;
+      background: $oc-gray-0;
+      color: $oc-gray-6;
+    }
+    input {
+      margin-left: 0.875rem;
+      color: inherit;
+      line-height: inherit;
+      font-weight: 600;
+      font-size: inherit;
+      border: none;
+      outline: none;
+      flex: 1;
+      min-width: 0;
+    }
+  }
+  & + .SettingProfileLink {
+    margin-top: 1.5rem;
+  }
+}

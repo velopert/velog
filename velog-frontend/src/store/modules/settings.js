@@ -71,8 +71,19 @@ type GenerateUnregisterTokenResponseAction = GenericResponseAction<
 type GetMailInfoResponseAction = GenericResponseAction<EmailInfoData, void>;
 type UpdateEmailPermissionAction = ActionType<typeof actionCreators.updateEmailPermission>;
 
+export type ProfileLinks = {
+  url?: string,
+  email?: string,
+  github?: string,
+  twitter?: string,
+  facebook?: string,
+};
+
+type SettingProfile = Profile & {
+  profile_links: ProfileLinks,
+};
 export type SettingsState = {
-  profile: ?Profile,
+  profile: ?SettingProfile,
   uploadInfo: ?UploadInfo,
   emailInfo: ?EmailInfoData,
   askUnregister: boolean,

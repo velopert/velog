@@ -7,6 +7,7 @@ import SettingSection from 'components/settings/SettingSection/SettingSection';
 import SettingProfileContainer from './SettingProfileContainer';
 import SettingsEtcContainer from './SettingsEtcContainer';
 import SettingEmailContainer from './SettingEmailContainer';
+import SettingProfileLinksContainer from './SettingProfileLinksContainer';
 
 type Props = {};
 
@@ -16,6 +17,7 @@ class SettingSections extends Component<Props> {
       <Fragment>
         <SettingSection name="프로필">
           <SettingProfileContainer />
+          <SettingProfileLinksContainer />
         </SettingSection>
         <SettingSection name="이메일">
           <SettingEmailContainer />
