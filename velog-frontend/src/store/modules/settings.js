@@ -4,14 +4,15 @@ import { applyPenders, type GenericResponseAction } from 'lib/common';
 import { getProfile } from 'lib/api/users';
 import {
   updateProfile,
+  updateProfileLinks,
   createThumbnailSignedUrl,
-  type UpdateProfilePayload,
   generateUnregisterToken,
   unregister,
   getEmailInfo,
   changeEmail,
   resendCertmail,
   saveEmailPermissions,
+  type UpdateProfilePayload,
 } from 'lib/api/me';
 import produce from 'immer';
 import { type Profile } from './profile';
@@ -27,6 +28,7 @@ const CHANGE_EMAIL = 'settings/CHANGE_EMAIL';
 const RESEND_CERTMAIL = 'settings/RESEND_CERTMAIL';
 const UPDATE_EMAIL_PERMISSION = 'settings/UPDATE_EMAIL_PERMISSION';
 const SAVE_EMAIL_PERMISSIONS = 'settings/SAVE_EMAIL_PERMISSIONS';
+const UPDATE_PROFILE_LINKS = 'settings/UPDATE_PROFILE_LINKS';
 
 export const actionCreators = {
   getProfile: createAction(GET_PROFILE, getProfile),
@@ -43,6 +45,7 @@ export const actionCreators = {
     (payload: { name: string, value: boolean }) => payload,
   ),
   saveEmailPermissions: createAction(SAVE_EMAIL_PERMISSIONS, saveEmailPermissions),
+  updateProfileLinks: createAction(UPDATE_PROFILE_LINKS, updateProfileLinks),
 };
 
 export type UploadInfo = {
@@ -60,6 +63,14 @@ export type EmailInfoData = {
   },
 };
 
+export type ProfileLinks = {
+  url?: string,
+  email?: string,
+  github?: string,
+  twitter?: string,
+  facebook?: string,
+};
+
 type AskUnregisterAction = ActionType<typeof actionCreators.askUnregister>;
 type GetProfileResponseAction = GenericResponseAction<Profile, string>;
 type UpdateProfileResponseAction = GenericResponseAction<Profile, UpdateProfilePayload>;
@@ -70,14 +81,7 @@ type GenerateUnregisterTokenResponseAction = GenericResponseAction<
 >;
 type GetMailInfoResponseAction = GenericResponseAction<EmailInfoData, void>;
 type UpdateEmailPermissionAction = ActionType<typeof actionCreators.updateEmailPermission>;
-
-export type ProfileLinks = {
-  url?: string,
-  email?: string,
-  github?: string,
-  twitter?: string,
-  facebook?: string,
-};
+type UpdateProfileLinksResponseAction = GenericResponseAction<ProfileLinks, void>;
 
 type SettingProfile = Profile & {
   profile_links: ProfileLinks,
@@ -160,6 +164,15 @@ export default applyPenders(reducer, [
         ...state,
         emailInfo: action.payload.data,
       };
+    },
+  },
+  {
+    type: UPDATE_PROFILE_LINKS,
+    onSuccess: (state: SettingsState, action: UpdateProfileLinksResponseAction) => {
+      return produce(state, (draft) => {
+        if (!draft.profile) return;
+        draft.profile.profile_links = action.payload.data;
+      });
     },
   },
 ]);

@@ -7,6 +7,7 @@ import Button from '../../common/Button';
 
 type Props = {
   profileLinks: ?ProfileLinks,
+  onUpdate: (profileLinks: ProfileLinks) => Promise<any>,
 };
 type State = {
   email: string,
@@ -53,6 +54,17 @@ class SettingProfileLinks extends Component<Props, State> {
     });
   };
 
+  onUpdate = () => {
+    const { email, twitter, github, facebook, url } = this.state;
+    this.props.onUpdate({
+      email,
+      twitter,
+      github,
+      facebook,
+      url,
+    });
+  };
+
   render() {
     const { email, twitter, github, facebook, url } = this.state;
     return (
@@ -82,15 +94,12 @@ class SettingProfileLinks extends Component<Props, State> {
             onChange={this.onChange}
             templateURL="https://facebook.com/"
           />
-          <SettingProfileLink
-            label="홈페이지·블로그"
-            name="url"
-            value={url}
-            onChange={this.onChange}
-          />
+          <SettingProfileLink label="홈페이지" name="url" value={url} onChange={this.onChange} />
         </div>
         <div className="button-wrapper">
-          <Button large>저장</Button>
+          <Button large onClick={this.onUpdate}>
+            저장
+          </Button>
         </div>
       </section>
     );
