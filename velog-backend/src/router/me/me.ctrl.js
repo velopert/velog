@@ -242,3 +242,45 @@ export const updateEmailPermissions = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+export const updateProfileLinks = async (ctx: Context) => {
+  const schema = Joi.object().keys({
+    email: Joi.string().email(),
+    facebook: Joi.string(),
+    github: Joi.string(),
+    twitter: Joi.string(),
+    url: Joi.string(),
+  });
+
+  if (!validateSchema(ctx, schema)) {
+    return;
+  }
+
+  type ProfileLinks = {
+    email?: string,
+    facebook?: string,
+    github?: string,
+    twitter?: string,
+    url?: string,
+  };
+
+  const { user } = ctx;
+
+  const profile_links: ProfileLinks = (ctx.request.body: any);
+
+  try {
+    const profile = await UserProfile.findOne({
+      where: {
+        fk_user_id: user.id,
+      },
+    });
+    if (!profile) {
+      ctx.throw(500, 'Invalid Profile');
+    }
+    profile.profile_links = profile_links;
+    await profile.save();
+    ctx.body = profile_links;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};

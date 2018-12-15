@@ -48,7 +48,7 @@
         padding-bottom: 0.5rem;
       }
     }
-    .mini-profile {
+    .profile-content {
       border-top: 1px solid $oc-gray-2;
       padding-top: 0.5rem;
       h2,
@@ -61,10 +61,55 @@
       }
       p {
         margin-top: 0.75rem;
-        color: $oc-gray-6;
+        color: $oc-gray-7;
         line-height: 1.5em;
         font-size: 0.875rem;
         white-space: pre-wrap;
+      }
+      .social-info {
+        margin-top: 1rem;
+        .icons {
+          margin-left: -2px;
+          color: $oc-gray-7;
+          display: flex;
+          a {
+            display: block;
+            cursor: pointer;
+            &:hover {
+              color: $oc-gray-9;
+            }
+          }
+          font-size: 2.5rem;
+          a + a {
+            margin-left: 0.25rem;
+          }
+        }
+        .icons + .other-links {
+          margin-top: 1rem;
+        }
+        .other-links {
+          .link-line {
+            display: flex;
+            align-items: center;
+            svg {
+              color: $oc-gray-7;
+              font-size: 1.5rem;
+              margin-right: 0.5rem;
+            }
+            a {
+              flex: 1;
+              min-width: 0;
+              color: $oc-violet-5;
+              font-size: 1rem;
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+          .link-line + .link-line {
+            margin-top: 0.5rem;
+          }
+        }
       }
     }
   }

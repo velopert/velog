@@ -4,6 +4,7 @@ import produce from 'immer';
 import { applyPenders, type GenericResponseAction } from 'lib/common';
 import * as UsersAPI from 'lib/api/users';
 import * as CommonAPI from 'lib/api/common';
+import type { ProfileLinks } from 'store/modules/settings';
 
 const GET_USER_TAGS = 'profile/GET_USER_TAGS';
 const GET_PROFILE = 'profile/GET_PROFILE';
@@ -38,6 +39,7 @@ export type Profile = {
   thumbnail: ?string,
   short_bio: string,
   username: string,
+  profile_links: ProfileLinks,
 };
 
 type TagData = {

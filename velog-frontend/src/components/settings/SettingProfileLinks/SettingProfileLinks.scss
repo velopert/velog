@@ -1,0 +1,18 @@
+@import "utils";
+.SettingProfileLinks {
+  h5 {
+    color: $oc-gray-9;
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+  p {
+    color: $oc-gray-7;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+  .button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+}

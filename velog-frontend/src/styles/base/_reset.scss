@@ -37,3 +37,7 @@ body {
 button {
   @include unstyle-button();
 }
+
+input {
+  font-family: inherit;
+}

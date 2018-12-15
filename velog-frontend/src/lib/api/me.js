@@ -61,3 +61,11 @@ export type SaveEmailPermissionsPayload = {
 };
 export const saveEmailPermissions = (payload: SaveEmailPermissionsPayload) =>
   axios.patch('/me/email-permissions', payload);
+
+export const updateProfileLinks = (profileLinks: {
+  url?: string,
+  email?: string,
+  github?: string,
+  twitter?: string,
+  facebook?: string,
+}) => axios.patch('/me/profile-links', profileLinks);

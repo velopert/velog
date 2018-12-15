@@ -19,6 +19,10 @@ const UserProfile = db.define('user_profile', {
   display_name: Sequelize.STRING,
   short_bio: Sequelize.STRING,
   thumbnail: Sequelize.STRING,
+  profile_links: {
+    type: Sequelize.JSONB,
+    defaultValue: {},
+  },
 });
 
 UserProfile.associate = function associate() {

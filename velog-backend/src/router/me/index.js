@@ -14,5 +14,6 @@ me.get('/email-info', meCtrl.getEmailInfo);
 me.patch('/email', meCtrl.changeEmail);
 me.post('/resend-certmail', meCtrl.resendCertmail);
 me.patch('/email-permissions', meCtrl.updateEmailPermissions);
+me.patch('/profile-links', meCtrl.updateProfileLinks);
 
 export default me;
