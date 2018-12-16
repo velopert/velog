@@ -116,6 +116,7 @@ const routes = [
       const ProfileActions = bindActionCreators(profileActions, dispatch);
       const FollowActions = bindActionCreators(followActions, dispatch);
       if (!username) return null;
+      ProfileActions.setSideVisibility(false);
       await ProfileActions.getProfile(username);
       const state: State = getState();
       const { profile } = state.profile;

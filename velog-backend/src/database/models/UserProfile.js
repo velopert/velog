@@ -23,6 +23,7 @@ const UserProfile = db.define('user_profile', {
     type: Sequelize.JSONB,
     defaultValue: {},
   },
+  about: Sequelize.TEXT,
 });
 
 UserProfile.associate = function associate() {

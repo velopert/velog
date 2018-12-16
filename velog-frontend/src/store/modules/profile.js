@@ -40,6 +40,7 @@ export type Profile = {
   short_bio: string,
   username: string,
   profile_links: ProfileLinks,
+  about: string,
 };
 
 type TagData = {

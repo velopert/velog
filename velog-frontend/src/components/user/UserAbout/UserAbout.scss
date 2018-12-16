@@ -1,0 +1,48 @@
+@import "utils";
+.UserAbout {
+  margin-top: -2rem;
+  margin-bottom: 5rem;
+  .MarkdownRender {
+    & > div {
+      & > :first-child {
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  .empty-about {
+    margin-top: 3rem;
+    .text {
+      color: $oc-gray-6;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .btn-wrapper {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin-top: 1.5rem;
+      button {
+        cursor: pointer;
+        font-weight: 600;
+        border: 2px solid $oc-violet-6;
+        background: white;
+        border-radius: 1.5rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        color: $oc-violet-6;
+        &:hover {
+          background: $oc-violet-6;
+          color: white;
+        }
+        &:active {
+          background: $oc-violet-7;
+        }
+      }
+    }
+  }
+}

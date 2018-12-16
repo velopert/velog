@@ -284,3 +284,29 @@ export const updateProfileLinks = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
+
+export const updateAbout = async (ctx: Context) => {
+  const { content } = (ctx.request.body: any);
+  if (typeof content !== 'string') {
+    ctx.status = 400;
+    return;
+  }
+  const { user } = ctx;
+  try {
+    const profile = await UserProfile.findOne({
+      where: {
+        fk_user_id: user.id,
+      },
+    });
+    if (!profile) {
+      ctx.throw(500, 'Invalid Profile');
+    }
+    profile.about = content;
+    await profile.save();
+    ctx.body = {
+      about: content,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
