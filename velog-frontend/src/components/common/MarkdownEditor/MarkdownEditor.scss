@@ -1,0 +1,36 @@
+@import "utils";
+.MarkdownEditor {
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  textarea {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    font-family: inherit;
+  }
+  .CodeMirror {
+    padding: 1rem;
+    font-family: inherit;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    height: auto;
+    min-height: 5rem;
+    .cm-header {
+      color: $oc-violet-6;
+    }
+    .cm-quote {
+      color: $oc-gray-6;
+    }
+  }
+  .CodeMirror-scroll {
+    min-height: 5rem;
+    max-height: 40rem;
+  }
+  .CodeMirror-placeholder {
+    color: $oc-gray-6;
+  }
+}
