@@ -18,9 +18,11 @@ class UserAbout extends Component<Props> {
       <div className="UserAbout">
         {about ? (
           <Fragment>
-            <div className="edit-btn-wrapper">
-              <Button onClick={onEditClick}>수정하기</Button>
-            </div>
+            {self && (
+              <div className="edit-btn-wrapper">
+                <Button onClick={onEditClick}>수정하기</Button>
+              </div>
+            )}
             <MarkdownRender body={about} />
           </Fragment>
         ) : (
