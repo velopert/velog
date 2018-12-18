@@ -5,6 +5,7 @@ import { applyPenders, type GenericResponseAction } from 'lib/common';
 import * as UsersAPI from 'lib/api/users';
 import * as CommonAPI from 'lib/api/common';
 import type { ProfileLinks } from 'store/modules/settings';
+import * as MeAPI from 'lib/api/me';
 
 const GET_USER_TAGS = 'profile/GET_USER_TAGS';
 const GET_PROFILE = 'profile/GET_PROFILE';
@@ -15,6 +16,7 @@ const SET_SIDE_VISIBILITY = 'profile/SET_SIDE_VISIBILITY';
 const GET_USER_HISTORY = 'profile/GET_USER_HISTORY';
 const REVEAL_PREFETCHED_HISTORY = 'profile/REVEAL_PREFETCHED_HISTORY';
 const PREFETCH_USER_HISTORY = 'profile/PREFETCH_USER_HISTORY';
+const UPDATE_ABOUT = 'profile/UPDATE_ABOUT';
 
 export const actionCreators = {
   initialize: createAction(INITIALIZE),
@@ -26,6 +28,7 @@ export const actionCreators = {
   getUserHistory: createAction(GET_USER_HISTORY, UsersAPI.getHistory),
   revealPrefetchedHistory: createAction(REVEAL_PREFETCHED_HISTORY),
   prefetchUserHistory: createAction(PREFETCH_USER_HISTORY, UsersAPI.getHistory),
+  updateAbout: createAction(UPDATE_ABOUT, MeAPI.updateAbout, (meta: string) => meta),
 };
 
 export type TagCountInfo = {
@@ -40,6 +43,7 @@ export type Profile = {
   short_bio: string,
   username: string,
   profile_links: ProfileLinks,
+  about: string,
 };
 
 type TagData = {
@@ -83,6 +87,7 @@ type SetRawTagNameAction = ActionType<typeof actionCreators.setRawTagName>;
 type GetTagInfoResponseAction = GenericResponseAction<TagData, string>;
 type SetSideVisibilityAction = ActionType<typeof actionCreators.setSideVisibility>;
 type GetUserHistoryResponseAction = GenericResponseAction<UserHistoryItem[], any>;
+type UpdateAboutResponseAction = GenericResponseAction<{ about: string }, string>;
 
 export type ProfileState = {
   tagCounts: ?(TagCountInfo[]),
@@ -92,6 +97,7 @@ export type ProfileState = {
   rawTagName: ?string,
   side: boolean,
   historyEnd: false,
+  prevAbout: string,
 };
 
 const initialState = {
@@ -102,6 +108,7 @@ const initialState = {
   prefetchedHistory: null,
   side: true,
   historyEnd: false,
+  prevAbout: '',
 };
 
 const reducer = handleActions(
@@ -190,6 +197,28 @@ export default applyPenders(reducer, [
         prefetchedHistory: filtered,
         historyEnd: payload.data.length < 20,
       };
+    },
+  },
+  {
+    type: UPDATE_ABOUT,
+    onPending: (state: ProfileState, { meta }: { meta: string }) => {
+      return produce(state, (draft) => {
+        if (!draft.profile) return;
+        draft.prevAbout = draft.profile.about;
+        draft.profile.about = meta;
+      });
+    },
+    onSuccess: (state: ProfileState, { payload }: UpdateAboutResponseAction) => {
+      return produce(state, (draft) => {
+        if (!draft.profile) return;
+        draft.profile.about = payload.data.about;
+      });
+    },
+    onError: (state: ProfileState) => {
+      return produce(state, (draft) => {
+        if (!draft.profile) return;
+        draft.profile.about = draft.prevAbout;
+      });
     },
   },
 ]);

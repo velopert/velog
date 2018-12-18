@@ -116,6 +116,7 @@ const routes = [
       const ProfileActions = bindActionCreators(profileActions, dispatch);
       const FollowActions = bindActionCreators(followActions, dispatch);
       if (!username) return null;
+      ProfileActions.setSideVisibility(false);
       await ProfileActions.getProfile(username);
       const state: State = getState();
       const { profile } = state.profile;
@@ -129,6 +130,27 @@ const routes = [
         }
       }
       return Promise.all(promises);
+    },
+    stop: true,
+  },
+  {
+    path: '/@:username/about',
+    exact: true,
+    preload: async (ctx: any, { dispatch, getState }: any, match: Match) => {
+      const { username } = match.params;
+      const ProfileActions = bindActionCreators(profileActions, dispatch);
+      const FollowActions = bindActionCreators(followActions, dispatch);
+      if (!username) return null;
+      ProfileActions.setSideVisibility(false);
+      await ProfileActions.getProfile(username);
+      const state: State = getState();
+      const { profile } = state.profile;
+      if (profile) {
+        if (ctx.state.logged) {
+          await FollowActions.getUserFollow(profile.id);
+        }
+      }
+      return Promise.resolve();
     },
     stop: true,
   },

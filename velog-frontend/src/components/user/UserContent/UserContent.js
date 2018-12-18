@@ -20,6 +20,9 @@ const UserContent = ({ type, children, side, username }: Props) => (
       <Link className={cx({ active: type === 'history' })} to={`/@${username}/history`}>
         활동
       </Link>
+      <Link className={cx({ active: type === 'about' })} to={`/@${username}/about`}>
+        소개
+      </Link>
     </div>
     <div className="content">
       {side && <div className="side-wrapper">{side}</div>}

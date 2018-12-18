@@ -50,6 +50,7 @@ export const getProfile = async (ctx: Context) => {
         'short_bio',
         'thumbnail',
         'profile_links',
+        'about',
       ]),
       username: ctx.params.username,
     };

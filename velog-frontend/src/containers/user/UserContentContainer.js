@@ -10,6 +10,7 @@ import type { State } from 'store';
 import { compose } from 'redux';
 import UserPostsSubpage from 'pages/user/UserPostsSubpage';
 import UserHistorySubpage from '../../pages/user/UserHistorySubpage';
+import UserAboutSubpage from '../../pages/user/UserAboutSubpage';
 
 type Props = {
   match: Match,
@@ -63,6 +64,7 @@ class UserContentContainer extends Component<Props> {
         <Route exact path="/@:username" component={UserPostsSubpage} />
         <Route path="/@:username/history" component={UserHistorySubpage} />
         <Route path="/@:username/tags/:tag" component={UserPostsSubpage} />
+        <Route path="/@:username/about" component={UserAboutSubpage} />
       </UserContent>
     );
   }
