@@ -88,7 +88,7 @@ class UserHistoryContainer extends Component<Props> {
       <Fragment>
         {profile && (
           <Helmet>
-            <title>{`${profile.username} (${profile.display_name}) 활동 기록 - velog`}</title>
+            <title>{`${profile.username} (${profile.display_name}) 활동 기록 | velog`}</title>
             <meta
               name="description"
               content={`${profile.username}님이 벨로그에서 관심 있어 한 포스트들을 확인하세요.`}

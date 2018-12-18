@@ -1,14 +1,17 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ProfileActions, BaseActions } from 'store/actionCreators';
 import { type State } from 'store';
 import { connect } from 'react-redux';
 import UserAbout from 'components/user/UserAbout';
 import UserAboutEdit from 'components/user/UserAboutEdit';
+import { Helmet } from 'react-helmet';
 
 type Props = {
   about: ?string,
   self: boolean,
+  username: ?string,
+  displayName: ?string,
 };
 
 type OwnProps = {
@@ -66,17 +69,35 @@ class UserAboutContainer extends Component<Props, UserAboutContainerState> {
   }
 
   render() {
-    if (!this.props.about && this.props.about !== '') return null;
+    const { username, displayName } = this.props;
+    if ((!this.props.about && this.props.about !== '') || !username || !displayName) return null;
     if (this.state.editing) {
       return <UserAboutEdit text={this.state.text} onChange={this.onChange} onSave={this.onSave} />;
     }
     return (
-      <UserAbout about={this.props.about} self={this.props.self} onEditClick={this.onEditClick} />
+      <Fragment>
+        {
+          <Helmet>
+            <title>{`About ${username} (${displayName}) | velog`}</title>
+            <meta
+              name="description"
+              content={
+                this.props.about === ''
+                  ? `${displayName}님의 자기소개가 비어있습니다.`
+                  : this.props.about
+              }
+            />
+          </Helmet>
+        }
+        <UserAbout about={this.props.about} self={this.props.self} onEditClick={this.onEditClick} />
+      </Fragment>
     );
   }
 }
 
 export default connect(({ profile, user }: State, ownProps: OwnProps) => ({
+  username: profile.profile && profile.profile.username,
+  displayName: profile.profile && profile.profile.display_name,
   about: profile.profile && profile.profile.about,
   self: (user.user && user.user.username) === ownProps.username,
 }))(UserAboutContainer);
