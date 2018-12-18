@@ -9,7 +9,11 @@
       }
     }
   }
-
+  .edit-btn-wrapper {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+  }
   .empty-about {
     margin-top: 3rem;
     .text {

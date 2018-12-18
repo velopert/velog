@@ -1,10 +1,10 @@
 // @flow
 import React, { Component } from 'react';
-import { ProfileActions } from 'store/actionCreators';
+import { ProfileActions, BaseActions } from 'store/actionCreators';
 import { type State } from 'store';
 import { connect } from 'react-redux';
 import UserAbout from 'components/user/UserAbout';
-import MarkdownEditor from 'components/common/MarkdownEditor';
+import UserAboutEdit from 'components/user/UserAboutEdit';
 
 type Props = {
   about: ?string,
@@ -17,11 +17,13 @@ type OwnProps = {
 
 type UserAboutContainerState = {
   editing: boolean,
+  text: string,
 };
 
 class UserAboutContainer extends Component<Props, UserAboutContainerState> {
   state = {
     editing: false,
+    text: '',
   };
 
   onEditClick = () => {
@@ -29,6 +31,32 @@ class UserAboutContainer extends Component<Props, UserAboutContainerState> {
       editing: true,
     });
   };
+
+  onSave = async () => {
+    const { text } = this.state;
+    try {
+      await ProfileActions.updateAbout(text);
+      BaseActions.showToast({
+        message: '자기소개가 업데이트되었습니다.',
+        type: 'success',
+      });
+    } catch (e) {
+      BaseActions.showToast({
+        message: '자기소개 업데이트 실패',
+        type: 'error',
+      });
+    }
+    this.setState({
+      editing: false,
+    });
+  };
+
+  onChange = (text: string) => {
+    this.setState({
+      text,
+    });
+  };
+
   componentDidMount() {
     ProfileActions.setSideVisibility(false);
   }
@@ -40,12 +68,7 @@ class UserAboutContainer extends Component<Props, UserAboutContainerState> {
   render() {
     if (!this.props.about && this.props.about !== '') return null;
     if (this.state.editing) {
-      return (
-        <MarkdownEditor
-          placeholder="자기소개를 작성해보세요.
-* markdown을 사용 하실 수 있습니다."
-        />
-      );
+      return <UserAboutEdit text={this.state.text} onChange={this.onChange} onSave={this.onSave} />;
     }
     return (
       <UserAbout about={this.props.about} self={this.props.self} onEditClick={this.onEditClick} />

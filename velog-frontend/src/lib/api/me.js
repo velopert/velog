@@ -69,3 +69,8 @@ export const updateProfileLinks = (profileLinks: {
   twitter?: string,
   facebook?: string,
 }) => axios.patch('/me/profile-links', profileLinks);
+
+export const updateAbout = (content: string) =>
+  axios.patch('/me/about', {
+    content,
+  });

@@ -10,24 +10,37 @@ if (process.env.APP_ENV !== 'server') {
 }
 
 type Props = {
+  value: string,
   placeholder?: string,
+  onChange: (text: string) => void,
 };
 type State = {};
 
 class MarkdownEditor extends Component<Props, State> {
   state = {};
   textarea = null;
+  cm: any = null;
 
   initialize = () => {
     if (!CodeMirror) return;
     const { placeholder } = this.props;
-    CodeMirror.fromTextArea(this.textarea, {
+    const cm = CodeMirror.fromTextArea(this.textarea, {
       mode: 'markdown',
       placeholder,
     });
+    this.cm = cm;
+    cm.on('change', (instance) => {
+      this.props.onChange(instance.getValue());
+    });
+    cm.setValue(this.props.value);
   };
+
   componentDidMount() {
     this.initialize();
+  }
+
+  componentWillUnmount() {
+    this.cm.toTextArea();
   }
 
   render() {

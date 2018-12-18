@@ -245,11 +245,13 @@ export const updateEmailPermissions = async (ctx: Context) => {
 
 export const updateProfileLinks = async (ctx: Context) => {
   const schema = Joi.object().keys({
-    email: Joi.string().email(),
-    facebook: Joi.string(),
-    github: Joi.string(),
-    twitter: Joi.string(),
-    url: Joi.string(),
+    email: Joi.string()
+      .email()
+      .allow(''),
+    facebook: Joi.string().allow(''),
+    github: Joi.string().allow(''),
+    twitter: Joi.string().allow(''),
+    url: Joi.string().allow(''),
   });
 
   if (!validateSchema(ctx, schema)) {
