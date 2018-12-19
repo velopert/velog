@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import UserAbout from 'components/user/UserAbout';
 import UserAboutEdit from 'components/user/UserAboutEdit';
 import { Helmet } from 'react-helmet';
+// import FullpageUploader from 'components/common/FullpageUploader';
 
 type Props = {
   about: ?string,
@@ -28,6 +29,19 @@ class UserAboutContainer extends Component<Props, UserAboutContainerState> {
     editing: false,
     text: '',
   };
+
+  constructor(props) {
+    super(props);
+    this.state.text = this.props.about || '';
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.about !== this.props.about && this.props.about) {
+      this.setState({
+        text: this.props.about,
+      });
+    }
+  }
 
   onEditClick = () => {
     this.setState({
@@ -72,7 +86,12 @@ class UserAboutContainer extends Component<Props, UserAboutContainerState> {
     const { username, displayName } = this.props;
     if ((!this.props.about && this.props.about !== '') || !username || !displayName) return null;
     if (this.state.editing) {
-      return <UserAboutEdit text={this.state.text} onChange={this.onChange} onSave={this.onSave} />;
+      return (
+        <Fragment>
+          <UserAboutEdit text={this.state.text} onChange={this.onChange} onSave={this.onSave} />
+          {/* <FullpageUploader /> */}
+        </Fragment>
+      );
     }
     return (
       <Fragment>
