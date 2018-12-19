@@ -73,6 +73,9 @@ const Post = db.define(
       {
         fields: ['released_at'],
       },
+      {
+        fields: ['fk_user_id'],
+      },
     ],
   },
 );

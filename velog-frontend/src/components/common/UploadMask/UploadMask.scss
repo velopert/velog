@@ -1,0 +1,25 @@
+@import 'utils';
+
+.UploadMask {
+  border: 4px solid $oc-violet-4;
+  background: rgba(255, 255, 255, 0.6);
+  position: fixed;
+  z-index: z('upload-mask');
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $oc-violet-4;
+  svg {
+    font-size: 9rem;
+  }
+  h3 {
+    margin: 0;
+    font-size: 3rem;
+    font-weight: 600;
+  }
+}
