@@ -22,7 +22,7 @@ import {
   UrlSlugHistory,
   EmailCert,
   UserMeta,
-  UserImages,
+  UserImage,
 } from './models';
 import * as views from './views';
 
@@ -48,7 +48,7 @@ export function associate() {
   UrlSlugHistory.associate();
   EmailCert.associate();
   UserMeta.associate();
-  UserImages.associate();
+  UserImage.associate();
 }
 export default function sync() {
   associate();

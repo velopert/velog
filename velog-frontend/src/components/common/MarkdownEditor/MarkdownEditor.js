@@ -10,6 +10,7 @@ if (process.env.APP_ENV !== 'server') {
 }
 
 type Props = {
+  flash?: string,
   value: string,
   placeholder?: string,
   onChange: (text: string) => void,
@@ -42,6 +43,28 @@ class MarkdownEditor extends Component<Props, State> {
   componentWillUnmount() {
     this.cm.toTextArea();
   }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (prevProps.flash !== this.props.flash) {
+      this.insertText();
+    }
+  }
+
+  insertText = () => {
+    const { cm } = this;
+    const selection = cm.getSelection();
+    if (selection.length > 0) {
+      cm.replaceSelection(this.props.flash);
+    } else {
+      const doc = cm.getDoc();
+      const cursor = cm.getCursor();
+      const pos = {
+        line: cursor.line,
+        ch: cursor.ch,
+      };
+      doc.replaceRange(this.props.flash, pos);
+    }
+  };
 
   render() {
     return (

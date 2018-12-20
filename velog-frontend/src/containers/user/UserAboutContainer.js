@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 import UserAbout from 'components/user/UserAbout';
 import UserAboutEdit from 'components/user/UserAboutEdit';
 import { Helmet } from 'react-helmet';
-// import FullpageUploader from 'components/common/FullpageUploader';
+import FullpageUploader from 'components/common/FullpageUploader';
+import { createGeneralUploadUrl } from 'lib/api/common';
+import axios from 'axios';
 
 type Props = {
   about: ?string,
@@ -22,18 +24,48 @@ type OwnProps = {
 type UserAboutContainerState = {
   editing: boolean,
   text: string,
+  flash: string,
 };
 
 class UserAboutContainer extends Component<Props, UserAboutContainerState> {
   state = {
     editing: false,
     text: '',
+    flash: '',
   };
 
   constructor(props) {
     super(props);
     this.state.text = this.props.about || '';
   }
+
+  uploadImages = async (files: File[]) => {
+    const responses = await Promise.all(
+      files.map(file =>
+        createGeneralUploadUrl({
+          type: 'about',
+          filename: file.name,
+        }),
+      ),
+    );
+    const urls = responses.map(r => r.data.image_path);
+    this.setState({
+      flash: urls.map(url => `![](https://images.velog.io/${url})`).join('\n'),
+    });
+    const tasks = [];
+    for (let i = 0; i < files.length; i += 1) {
+      const file = files[i];
+      const uploadUrl = responses[i].data.url;
+      const task = axios.put(uploadUrl, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+        withCredentials: false,
+      });
+      tasks.push(task);
+    }
+    await Promise.all(tasks);
+  };
 
   componentDidUpdate(prevProps) {
     if (prevProps.about !== this.props.about && this.props.about) {
@@ -88,8 +120,13 @@ class UserAboutContainer extends Component<Props, UserAboutContainerState> {
     if (this.state.editing) {
       return (
         <Fragment>
-          <UserAboutEdit text={this.state.text} onChange={this.onChange} onSave={this.onSave} />
-          {/* <FullpageUploader /> */}
+          <UserAboutEdit
+            text={this.state.text}
+            onChange={this.onChange}
+            onSave={this.onSave}
+            flash={this.state.flash}
+          />
+          <FullpageUploader uploadImages={this.uploadImages} />
         </Fragment>
       );
     }

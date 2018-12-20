@@ -8,3 +8,13 @@ export const getTags = (sort: string = 'popular') => {
 export const getTagInfo = (tag: string) => {
   return axios.get(`/common/tags/${tag}`);
 };
+
+export type CreateGeneralUploadUrlPayload = { refId?: string, filename: string, type: string };
+
+export const createGeneralUploadUrl = ({
+  refId,
+  type,
+  filename,
+}: CreateGeneralUploadUrlPayload) => {
+  return axios.post('/files/create-url/general', { ref_id: refId, filename, type });
+};

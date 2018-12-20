@@ -21,4 +21,4 @@ export { default as UserThumbnail } from './UserThumbnail';
 export { default as UrlSlugHistory } from './UrlSlugHistory';
 export { default as EmailCert } from './EmailCert';
 export { default as UserMeta } from './UserMeta';
-export { default as UserImages } from './UserImages';
+export { default as UserImage } from './UserImage';

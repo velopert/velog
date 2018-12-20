@@ -9,6 +9,7 @@ import { isUUID } from 'lib/common';
 import downloadImage from 'lib/downloadImage';
 import mimeTypes from 'mime-types';
 import UserThumbnail from 'database/models/UserThumbnail';
+import UserImage from 'database/models/UserImage';
 
 const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
@@ -118,6 +119,41 @@ export const createThumbnailSignedUrl: Middleware = async (ctx) => {
       url,
       image_path: imagePath,
       id: userThumbnail.id,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const createGeneralSignedUrl: Middleware = async (ctx) => {
+  const { id: userId, username } = ctx.user;
+  const { filename, type, ref_id } = (ctx.request.body: any);
+
+  if (!type || !filename) {
+    ctx.status = 400;
+    return;
+  }
+
+  try {
+    const contentType = mimeTypes.contentType(filename);
+    const userImage = UserImage.build({
+      fk_user_id: userId,
+    });
+    const imagePath = ref_id
+      ? `images/${username}/${type}/${ref_id}/${userImage.id}-${filename}`
+      : `images/${username}/${type}/${userImage.id}-${filename}`;
+
+    userImage.path = imagePath;
+    await userImage.save();
+    const url = await s3.getSignedUrl('putObject', {
+      Bucket: 's3.images.velog.io',
+      Key: imagePath,
+      ContentType: contentType,
+    });
+    ctx.body = {
+      url,
+      image_path: imagePath,
+      id: userImage.id,
     };
   } catch (e) {
     ctx.throw(500, e);

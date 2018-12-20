@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import UploadMask from '../UploadMask/UploadMask';
 
-type Props = {};
+type Props = {
+  uploadImages: (files: File[]) => any,
+};
 type State = {
   drag: boolean,
 };
@@ -21,7 +23,7 @@ class FullpageUploader extends Component<Props, State> {
     const { /* items, */ files } = e.dataTransfer;
     if (!files) return;
     const filesArray = [...files];
-    console.log(filesArray);
+    this.props.uploadImages(filesArray);
   };
   onDragEnter = (e: any) => {
     this.dragCounter += 1;

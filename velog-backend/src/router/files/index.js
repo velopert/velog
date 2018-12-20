@@ -16,6 +16,8 @@ files.post(
   needsAuth,
   filesCtrl.createThumbnailSignedUrl,
 );
+
+files.post('/create-url/general', needsAuth, filesCtrl.createGeneralSignedUrl);
 files.post('/upload', needsAuth, filesCtrl.upload);
 files.post('/retrieve-size/:id', checkUUID, filesCtrl.retrieveSize);
 

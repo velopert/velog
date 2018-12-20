@@ -8,9 +8,10 @@ type Props = {
   text: string,
   onChange: (text: string) => void,
   onSave: () => any,
+  flash: string,
 };
 
-const UserAboutEdit = ({ text, onChange, onSave }: Props) => {
+const UserAboutEdit = ({ text, onChange, onSave, flash }: Props) => {
   return (
     <div className="UserAboutEdit">
       <MarkdownEditor
@@ -18,6 +19,7 @@ const UserAboutEdit = ({ text, onChange, onSave }: Props) => {
 * markdown을 사용 하실 수 있습니다."
         value={text}
         onChange={onChange}
+        flash={flash}
       />
       <div className="btn-wrapper">
         <Button large onClick={onSave}>
