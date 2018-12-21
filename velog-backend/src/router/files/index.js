@@ -11,11 +11,6 @@ files.post(
   needsAuth,
   filesCtrl.createPostImageSignedUrl,
 );
-files.post(
-  '/create-url/thumbnail',
-  needsAuth,
-  filesCtrl.createThumbnailSignedUrl,
-);
 
 files.post('/create-url/general', needsAuth, filesCtrl.createGeneralSignedUrl);
 files.post('/upload', needsAuth, filesCtrl.upload);

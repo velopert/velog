@@ -18,7 +18,6 @@ import {
   Feed,
   PostScore,
   PostRead,
-  UserThumbnail,
   UrlSlugHistory,
   EmailCert,
   UserMeta,
@@ -44,7 +43,6 @@ export function associate() {
   Feed.associate();
   PostScore.associate();
   PostRead.associate();
-  UserThumbnail.associate();
   UrlSlugHistory.associate();
   EmailCert.associate();
   UserMeta.associate();

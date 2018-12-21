@@ -8,7 +8,6 @@ import PostImage from 'database/models/PostImage';
 import { isUUID } from 'lib/common';
 import downloadImage from 'lib/downloadImage';
 import mimeTypes from 'mime-types';
-import UserThumbnail from 'database/models/UserThumbnail';
 import UserImage from 'database/models/UserImage';
 
 const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
@@ -96,33 +95,6 @@ export const retrieveSize: Middleware = async (ctx: Context) => {
   // get filesize
   // update filesize
   // return result
-};
-
-export const createThumbnailSignedUrl: Middleware = async (ctx) => {
-  const { id: userId, username } = ctx.user;
-  const { filename } = (ctx.request.body: any);
-
-  try {
-    const contentType = mimeTypes.contentType(filename);
-    const userThumbnail = UserThumbnail.build({
-      fk_user_id: userId,
-    });
-    const imagePath = `thumbnails/${username}/${userThumbnail.id}-${filename}`;
-    userThumbnail.path = imagePath;
-    await userThumbnail.save();
-    const url = await s3.getSignedUrl('putObject', {
-      Bucket: 's3.images.velog.io',
-      Key: imagePath,
-      ContentType: contentType,
-    });
-    ctx.body = {
-      url,
-      image_path: imagePath,
-      id: userThumbnail.id,
-    };
-  } catch (e) {
-    ctx.throw(500, e);
-  }
 };
 
 export const createGeneralSignedUrl: Middleware = async (ctx) => {

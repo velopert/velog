@@ -17,7 +17,6 @@ export { default as PostImage } from './PostImage';
 export { default as Feed } from './Feed';
 export { default as PostScore } from './PostScore';
 export { default as PostRead } from './PostRead';
-export { default as UserThumbnail } from './UserThumbnail';
 export { default as UrlSlugHistory } from './UrlSlugHistory';
 export { default as EmailCert } from './EmailCert';
 export { default as UserMeta } from './UserMeta';
