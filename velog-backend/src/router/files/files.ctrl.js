@@ -112,8 +112,8 @@ export const createGeneralSignedUrl: Middleware = async (ctx) => {
       fk_user_id: userId,
     });
     const imagePath = ref_id
-      ? `images/${username}/${type}/${ref_id}/${userImage.id}-${filename}`
-      : `images/${username}/${type}/${userImage.id}-${filename}`;
+      ? `images/${username}/${type}/${ref_id}/${userImage.id}/${filename}`
+      : `images/${username}/${type}/${userImage.id}/${filename}`;
 
     userImage.path = imagePath;
     await userImage.save();
