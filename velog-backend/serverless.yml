@@ -78,6 +78,11 @@ functions:
       subnetIds:
         - subnet-91481ef9
         - subnet-4f59dc03
+  checkImageFileSize:
+    handler: src/schedules.checkImageFileSize
+    events:
+      - schedule:
+        rate: rate(5 minutes)
 
 custom:
   apigwBinary:
