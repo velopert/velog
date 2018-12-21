@@ -2,6 +2,7 @@
 import Router from 'koa-router';
 import type { Context } from 'koa';
 import needsAuth from 'lib/middlewares/needsAuth';
+import axios from 'axios';
 import auth from './auth';
 import posts from './posts';
 import files from './files';
@@ -37,6 +38,9 @@ router.get('/check', (ctx: Context) => {
   };
 });
 
-router.get('/test', async (ctx: Context) => {});
+router.get('/test', async (ctx: Context) => {
+  const response = await axios.head('https://images.velog.io/images/velopert/profile/6b651f80-052c-11e9-82df-fde20d373f7d/IMG20180302210116.jpg');
+  console.log(response);
+});
 
 export default router;
