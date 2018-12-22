@@ -81,9 +81,7 @@ functions:
   checkImageFileSize:
     handler: src/schedules.checkImageFileSize
     events:
-      - schedule:
-        rate: rate(5 minutes)
-        enabled: true
+      - schedule: rate(5 minutes)
 
 custom:
   apigwBinary:
