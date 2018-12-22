@@ -127,14 +127,6 @@ export const createGeneralSignedUrl: Middleware = async (ctx) => {
       image_path: imagePath,
       id: userImage.id,
     };
-
-    for (let i = 0; i < 1000; i += 1) {
-      const img = UserImage.build({
-        fk_user_id: userId,
-        path: imagePath,
-      });
-      img.save();
-    }
   } catch (e) {
     ctx.throw(500, e);
   }
