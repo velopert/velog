@@ -29,7 +29,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-import": "^2.8.0",
-    "flow-bin": "^0.89.0",
+    "flow-bin": "0.72.0",
     "onchange": "^3.3.0",
     "pg-hstore": "^2.3.2",
     "pg-native": "^2.2.0",
