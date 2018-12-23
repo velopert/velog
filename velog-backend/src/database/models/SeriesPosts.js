@@ -26,7 +26,7 @@ const SeriesPosts = db.define(
 );
 
 SeriesPosts.associate = () => {
-  Post.belongsTo(Series, {
+  Post.belongsToMany(Series, {
     onDelete: 'CASCADE',
     onUpdate: 'Restrict',
     through: {
