@@ -34,12 +34,11 @@ SeriesPosts.associate = () => {
     },
     foreignKey: 'fk_post_id',
   });
-  Series.belongsTo(Post, {
+  SeriesPosts.belongsTo(Post, {
     onDelete: 'CASCADE',
     onUpdate: 'Restrict',
-    through: {
-      model: SeriesPosts,
-    },
     foreignKey: 'fk_series_id',
   });
 };
+
+export default SeriesPosts;

@@ -9,12 +9,20 @@ const Series = db.define(
     id: primaryUUID,
     fk_user_id: Sequelize.UUID,
     name: Sequelize.STRING,
-    description: Sequelize.STRING,
+    description: Sequelize.TEXT,
+    thumbnail: Sequelize.STRING,
+    url_slug: Sequelize.STRING,
   },
   {
     indexes: [
       {
         fields: ['fk_user_id'],
+      },
+      {
+        fields: ['created_at'],
+      },
+      {
+        fields: ['url_slug'],
       },
     ],
   },
