@@ -28,6 +28,7 @@ class MarkdownEditor extends Component<Props, State> {
     const cm = CodeMirror.fromTextArea(this.textarea, {
       mode: 'markdown',
       placeholder,
+      lineWrapping: true, // 내용이 너무 길면 다음 줄에 작성
     });
     this.cm = cm;
     cm.on('change', (instance) => {
