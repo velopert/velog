@@ -22,7 +22,7 @@ const Series = db.define(
         fields: ['created_at'],
       },
       {
-        fields: ['url_slug'],
+        fields: ['fk_user_id', 'url_slug'],
       },
     ],
   },
