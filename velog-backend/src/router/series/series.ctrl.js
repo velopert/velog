@@ -2,8 +2,10 @@
 import type { Context } from 'koa';
 import Joi from 'joi';
 import { checkEmpty, validateSchema } from 'lib/common';
-import { Series } from 'database/models';
+import { UserProfile, User, Post } from 'database/models';
+import pick from 'lodash/pick';
 import SeriesPosts from '../../database/models/SeriesPosts';
+import Series, { serializeSeries } from '../../database/models/Series';
 
 const seriesPostSchema = Joi.object().keys({
   id: Joi.string().required(),
@@ -75,6 +77,12 @@ async function updateSeriesPosts(seriesId: string, posts: SeriesPostInfo[]) {
         tasks.add.push(post);
       }
     });
+
+    const promises = [];
+    tasks.add.forEach((a) => {
+      promises.push(SeriesPosts.build({ ...a, fk_series_id: seriesId }).save());
+    });
+    await Promise.all(promises);
   } catch (e) {
     throw e;
   }
@@ -133,6 +141,11 @@ export const createSeries = async (ctx: Context) => {
       url_slug,
       fk_user_id: ctx.user.id,
     }).save();
+
+    await updateSeriesPosts(
+      series.id,
+      posts.map(p => ({ fk_post_id: p.id, index: p.index })),
+    );
     ctx.body = {
       id: series.id,
       name,
@@ -144,8 +157,51 @@ export const createSeries = async (ctx: Context) => {
     ctx.throw(500, e);
   }
 };
-export const listSeries = async (ctx: Context) => {};
-export const getSeries = async (ctx: Context) => {};
+export const listSeries = async (ctx: Context) => {
+  try {
+    const seriesList = await Series.findAll({
+      limit: 20,
+      include: [
+        {
+          model: User,
+          include: [UserProfile],
+        },
+      ],
+    });
+    ctx.body = seriesList.map(serializeSeries);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+export const getSeries = async (ctx: Context) => {
+  const { urlSlug, username } = ctx.params;
+  try {
+    const series = await Series.findOne({
+      include: [
+        {
+          model: User,
+          include: [UserProfile],
+          where: {
+            username,
+          },
+        },
+        // Post,
+      ],
+      where: {
+        url_slug: urlSlug,
+      },
+    });
+    if (!series) {
+      ctx.status = 404;
+      return;
+    }
+    const serialized = serializeSeries(series);
+    serialized.posts = series.posts;
+    ctx.body = serialized;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 export const updateSeries = async (ctx: Context) => {
   /*

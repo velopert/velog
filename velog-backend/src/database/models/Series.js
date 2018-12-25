@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import db from 'database/db';
 import { primaryUUID } from 'lib/common';
 import { User } from 'database/models';
+import pick from 'lodash/pick';
 
 const Series = db.define(
   'series',
@@ -35,5 +36,20 @@ Series.associate = () => {
     onUpdate: 'restrict',
   });
 };
+
+export const serializeSeries = data => ({
+  ...pick(data, [
+    'id',
+    'name',
+    'description',
+    'thumbnail',
+    'url_slug',
+    'created_at',
+  ]),
+  user: {
+    username: data.user.username,
+    thumbnail: data.user.user_profile.thumbnail,
+  },
+});
 
 export default Series;

@@ -34,7 +34,7 @@ SeriesPosts.associate = () => {
     },
     foreignKey: 'fk_post_id',
   });
-  SeriesPosts.belongsTo(Post, {
+  SeriesPosts.belongsTo(Series, {
     onDelete: 'CASCADE',
     onUpdate: 'Restrict',
     foreignKey: 'fk_series_id',
