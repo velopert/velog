@@ -64,10 +64,10 @@ async function updateSeriesPosts(seriesId: string, posts: SeriesPostInfo[]) {
       if (!match) {
         tasks.remove.push(post);
       }
-      if (match.index !== post.index) {
+      if (match !== post.index) {
         tasks.update.push({
-          fk_post_id: post.id,
-          index: match.index,
+          id: post.id,
+          index: match,
         });
       }
     });
@@ -79,8 +79,21 @@ async function updateSeriesPosts(seriesId: string, posts: SeriesPostInfo[]) {
     });
 
     const promises = [];
-    tasks.add.forEach((a) => {
-      promises.push(SeriesPosts.build({ ...a, fk_series_id: seriesId }).save());
+    tasks.add.forEach((t) => {
+      promises.push(SeriesPosts.build({ ...t, fk_series_id: seriesId }).save());
+    });
+    tasks.update.forEach((t) => {
+      promises.push(SeriesPosts.update(
+        { index: t.index },
+        {
+          where: {
+            id: t.id,
+          },
+        },
+      ));
+    });
+    tasks.remove.forEach((t) => {
+      promises.push(t.destroy());
     });
     await Promise.all(promises);
   } catch (e) {
@@ -185,7 +198,6 @@ export const getSeries = async (ctx: Context) => {
             username,
           },
         },
-        // Post,
       ],
       where: {
         url_slug: urlSlug,
@@ -196,7 +208,17 @@ export const getSeries = async (ctx: Context) => {
       return;
     }
     const serialized = serializeSeries(series);
-    serialized.posts = series.posts;
+    const seriesPosts = await SeriesPosts.findAll({
+      where: {
+        fk_series_id: series.id,
+      },
+      include: [Post],
+      order: [['index', 'ASC']],
+    });
+    serialized.posts = seriesPosts.map(p => ({
+      index: p.index,
+      ...pick(p.post, ['id', 'thumbnail', 'title', 'released_at']),
+    }));
     ctx.body = serialized;
   } catch (e) {
     ctx.throw(500, e);
@@ -211,6 +233,58 @@ export const updateSeries = async (ctx: Context) => {
       description,
       url_slug,
       posts?: [],
+      thumbnail,
     }
   */
+  if (!validateSchema(ctx, seriesSchema)) {
+    return;
+  }
+  const {
+    name, description, url_slug, posts, thumbnail,
+  } = (ctx.request
+    .body: any);
+  if (checkEmpty(name) || checkEmpty(description)) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'EMPTY_FIELD',
+    };
+    return;
+  }
+
+  // check url_slug duplicates
+  try {
+    const series = await Series.findOne({
+      include: [
+        {
+          model: User,
+          include: [UserProfile],
+          where: {
+            username: ctx.params.username,
+          },
+        },
+      ],
+      where: {
+        url_slug: ctx.params.urlSlug,
+      },
+    });
+
+    await updateSeriesPosts(
+      series.id,
+      posts.map(p => ({ fk_post_id: p.id, index: p.index })),
+    );
+    ctx.body = {
+      id: series.id,
+      name,
+      description,
+      url_slug,
+      thumbnail,
+    };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
+
+/*
+Executing (default): UPDATE "series_posts" SET "index"=4,"updated_at"='2018-12-26 14:49:01.724 +00:00' WHERE "fk_series_id" = 'c58a96d0-0918-11e9-a144-d18fee4fc68f' AND "fk_post_id" = 'c58e8e70-0918-11e9-a144-d18fee4fc68f'
+Executing (default): UPDATE "series_posts" SET "index"=3,"updated_at"='2018-12-26 14:49:01.726 +00:00' WHERE "fk_series_id" = 'c58a96d0-0918-11e9-a144-d18fee4fc68f' AND "fk_post_id" = '1c3461c0-091c-11e9-99ef-cb07d185eb21'
+*/

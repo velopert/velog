@@ -10,6 +10,6 @@ series.post('/', needsAuth, seriesCtrl.createSeries);
 series.get('/', seriesCtrl.listSeries);
 series.get('/:username', seriesCtrl.listSeries);
 series.get('/:username/:urlSlug', seriesCtrl.getSeries);
-series.patch('/:seriesId', seriesCtrl.updateSeries);
+series.patch('/:username/:urlSlug', seriesCtrl.updateSeries);
 
 export default series;
