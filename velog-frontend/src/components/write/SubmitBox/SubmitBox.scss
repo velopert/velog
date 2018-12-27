@@ -1,4 +1,4 @@
-@import "utils";
+@import 'utils';
 .SubmitBox {
   @keyframes submitBoxAppear {
     0% {
@@ -25,11 +25,11 @@
   top: 0.5rem;
   background: $oc-gray-7;
   width: 20rem;
-  @include media("<376px") {
+  @include media('<376px') {
     width: calc(100vw - 1rem);
   }
   padding: 1.5rem;
-  z-index: z("submit-box"); // @include material-shadow(2, 1);
+  z-index: z('submit-box'); // @include material-shadow(2, 1);
   color: white; // transition: transform 0.075s ease-in;
   // transform-origin: top right;
   // transform: scale(1);
@@ -67,7 +67,7 @@
       margin-top: 1rem;
     }
     .section-title {
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       font-weight: 600;
       margin-bottom: 0.75rem;
       color: $oc-gray-4;
