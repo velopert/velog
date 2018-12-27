@@ -1,7 +1,7 @@
 // @flow
 import type { Context } from 'koa';
 import Joi from 'joi';
-import { checkEmpty, validateSchema } from 'lib/common';
+import { checkEmpty, validateSchema, isUUID } from 'lib/common';
 import { UserProfile, User, Post } from 'database/models';
 import pick from 'lodash/pick';
 import SeriesPosts from '../../database/models/SeriesPosts';
@@ -225,6 +225,36 @@ export const getSeries = async (ctx: Context) => {
   }
 };
 
+export const getSeriesMiddleware = async (
+  ctx: Context,
+  next: () => Promise<*>,
+) => {
+  try {
+    const series = await Series.findOne({
+      include: [
+        {
+          model: User,
+          include: [UserProfile],
+          where: {
+            username: ctx.params.username,
+          },
+        },
+      ],
+      where: {
+        url_slug: ctx.params.urlSlug,
+      },
+    });
+    if (!series) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.state.series = series;
+    return next();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
 export const updateSeries = async (ctx: Context) => {
   /*
     Request Body
@@ -252,20 +282,39 @@ export const updateSeries = async (ctx: Context) => {
   }
 
   // check url_slug duplicates
+  const { series } = ctx.state;
   try {
-    const series = await Series.findOne({
-      include: [
-        {
-          model: User,
-          include: [UserProfile],
-          where: {
-            username: ctx.params.username,
+    if (url_slug !== series.url_slug) {
+      // check duplicates
+      const exists = await Series.findOne({
+        include: [
+          {
+            model: User,
+            include: [UserProfile],
+            where: {
+              username: ctx.params.username,
+            },
           },
+        ],
+        where: {
+          url_slug,
         },
-      ],
-      where: {
-        url_slug: ctx.params.urlSlug,
-      },
+      });
+
+      if (exists) {
+        ctx.status = 409;
+        ctx.body = {
+          name: 'URL_EXISTS',
+        };
+        return;
+      }
+    }
+
+    await series.update({
+      name,
+      description,
+      url_slug,
+      thumbnail,
     });
 
     await updateSeriesPosts(
@@ -279,6 +328,80 @@ export const updateSeries = async (ctx: Context) => {
       url_slug,
       thumbnail,
     };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const deleteSeries = async (ctx: Context) => {
+  const { series } = ctx.state;
+  try {
+    if (!series) {
+      ctx.status = 404;
+      return;
+    }
+    await series.destroy();
+    ctx.status = 204;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const appendToSeries = async (ctx: Context) => {
+  const { series } = ctx.state;
+  try {
+    // valid id
+    const { id } = (ctx.request.body: any);
+    if (!isUUID(id)) {
+      ctx.status = 400;
+      ctx.body = {
+        name: 'NOT_UUID',
+      };
+      return;
+    }
+    // find post
+    const post = await Post.findById(id);
+    if (!post) {
+      ctx.status = 404;
+      ctx.body = {
+        name: 'POST_NOT_FOUND',
+      };
+      return;
+    }
+    // check user
+    if (post.fk_user_id !== series.fk_user_id) {
+      ctx.status = 403;
+      ctx.body = [post.fk_user_id, series.fk_user_id];
+      return;
+    }
+    // list all series post
+    const seriesPosts = await SeriesPosts.findAll({
+      where: {
+        fk_series_id: series.id,
+      },
+      include: [Post],
+      order: [['index', 'ASC']],
+    });
+    const nextIndex =
+      seriesPosts.length === 0
+        ? 1
+        : seriesPosts[seriesPosts.length - 1].index + 1;
+    // check already added
+    const exists = seriesPosts.find(sp => sp.fk_post_id === id);
+    if (exists) {
+      ctx.status = 409;
+      ctx.body = {
+        name: 'ALREADY_EXISTS',
+      };
+      return;
+    }
+    const sp = await SeriesPosts.build({
+      fk_user_id: series.fk_user_id,
+      index: nextIndex,
+      fk_post_id: id,
+      fk_series_id: series.id,
+    }).save();
+    ctx.body = sp;
   } catch (e) {
     ctx.throw(500, e);
   }
