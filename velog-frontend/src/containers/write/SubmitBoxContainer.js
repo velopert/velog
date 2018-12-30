@@ -16,6 +16,8 @@ import { escapeForUrl } from 'lib/common';
 import { withRouter, type ContextRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import WriteVisibilitySelect from 'components/write/WriteVisibilitySelect';
+import WriteSeriesConfigureContainer from './WriteSeriesConfigureContainer';
+import SubmitBoxSeriesContainer from './SubmitBoxSeriesContainer';
 
 type Props = {
   open: boolean,
@@ -332,6 +334,7 @@ class SubmitBoxContainer extends Component<Props> {
             onClearThumbnail={onClearThumbnail}
           />
         }
+        configureSeries={<WriteSeriesConfigureContainer />}
         visibilitySelect={
           <WriteVisibilitySelect onSelect={this.onSelectVisibility} isPrivate={isPrivate} />
         }
@@ -356,6 +359,7 @@ class SubmitBoxContainer extends Component<Props> {
             />
           )
         }
+        series={<SubmitBoxSeriesContainer />}
       />
     );
   }

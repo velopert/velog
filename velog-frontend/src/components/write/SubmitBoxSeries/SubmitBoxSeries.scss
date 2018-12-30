@@ -1,0 +1,40 @@
+@import 'utils';
+.SubmitBoxSeries {
+  border: 1px solid $oc-gray-3;
+  background: white;
+  padding: 1.5rem;
+  color: $oc-gray-9;
+  h3 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  .list-wrapper {
+    margin-top: 0.75rem;
+    border: 1px solid $oc-gray-2;
+    form {
+      background: $oc-gray-2;
+      padding: 0.75rem;
+      input {
+        outline: none;
+        width: 100%;
+        font-size: 0.875rem;
+        padding: 0.5rem;
+      }
+    }
+    .list {
+      background: $oc-gray-0;
+      height: 14rem;
+      overflow-y: auto;
+      .item {
+        background: white;
+        font-size: 0.875rem;
+        padding: 8px;
+        border-bottom: 1px solid $oc-gray-2;
+        &.active {
+          background: $oc-gray-7;
+          color: white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@import 'utils';
+
+.WriteSeriesConfigure {
+  .create {
+    width: 100%;
+    border-radius: 4px;
+    background: white;
+    color: $oc-gray-9;
+    height: 3.375rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+    svg {
+      font-size: 1.5rem;
+    }
+    .text {
+      font-size: 1.125rem;
+      font-weight: 800;
+      margin-left: 0.75rem;
+    }
+    &:hover {
+      background: $oc-gray-0;
+    }
+  }
+}
