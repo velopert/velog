@@ -125,7 +125,7 @@ export const createSeries = async (ctx: Context) => {
     name, description, url_slug, posts, thumbnail,
   } = (ctx.request
     .body: any);
-  if (checkEmpty(name) || checkEmpty(description)) {
+  if (checkEmpty(name)) {
     ctx.status = 400;
     ctx.body = {
       name: 'EMPTY_FIELD',
@@ -180,6 +180,7 @@ export const listSeries = async (ctx: Context) => {
           include: [UserProfile],
         },
       ],
+      order: [['updated_at', 'DESC']],
     });
     ctx.body = seriesList.map(serializeSeries);
   } catch (e) {
@@ -273,7 +274,7 @@ export const updateSeries = async (ctx: Context) => {
     name, description, url_slug, posts, thumbnail,
   } = (ctx.request
     .body: any);
-  if (checkEmpty(name) || checkEmpty(description)) {
+  if (checkEmpty(name)) {
     ctx.status = 400;
     ctx.body = {
       name: 'EMPTY_FIELD',

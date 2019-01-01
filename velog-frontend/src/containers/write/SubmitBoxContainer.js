@@ -35,6 +35,7 @@ type Props = {
   username: ?string,
   urlSlug: ?string,
   isPrivate: boolean,
+  seriesMode: boolean,
 } & ContextRouter;
 
 class SubmitBoxContainer extends Component<Props> {
@@ -317,6 +318,7 @@ class SubmitBoxContainer extends Component<Props> {
       username,
       urlSlug,
       isPrivate,
+      seriesMode,
     } = this.props;
 
     const postLink = username && postData && `/@${username}/${postData.url_slug}`;
@@ -359,7 +361,7 @@ class SubmitBoxContainer extends Component<Props> {
             />
           )
         }
-        series={<SubmitBoxSeriesContainer />}
+        series={seriesMode && <SubmitBoxSeriesContainer />}
       />
     );
   }
@@ -383,6 +385,7 @@ const enhance = compose(
       username: user.user && user.user.username,
       urlSlug: write.submitBox.url_slug,
       isPrivate: write.submitBox.is_private,
+      seriesMode: write.seriesModal.visible,
     }),
     () => ({}),
   ),

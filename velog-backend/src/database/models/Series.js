@@ -23,6 +23,9 @@ const Series = db.define(
         fields: ['created_at'],
       },
       {
+        fields: ['updated_at'],
+      },
+      {
         fields: ['fk_user_id', 'url_slug'],
       },
     ],
@@ -45,6 +48,7 @@ export const serializeSeries = data => ({
     'thumbnail',
     'url_slug',
     'created_at',
+    'updated_at',
   ]),
   user: {
     username: data.user.username,

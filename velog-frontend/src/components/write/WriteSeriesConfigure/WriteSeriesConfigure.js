@@ -6,11 +6,12 @@ import './WriteSeriesConfigure.scss';
 
 type Props = {
   current: ?string,
+  onOpenModal: () => any,
 };
 
-const WriteSeriesConfigure = ({ current }: Props) => {
+const WriteSeriesConfigure = ({ current, onOpenModal }: Props) => {
   return (
-    <div className="WriteSeriesConfigure">
+    <div className="WriteSeriesConfigure" onClick={onOpenModal}>
       {current ? (
         <div className="edit" />
       ) : (

@@ -4,9 +4,15 @@ import produce from 'immer';
 import * as MeAPI from 'lib/api/me';
 import * as PostsAPI from 'lib/api/posts';
 import * as SavesAPI from 'lib/api/posts/saves';
+import * as SeriesAPI from 'lib/api/series';
 import format from 'date-fns/format';
 
-import { applyPenders, convertToPlainText, escapeForUrl, type GenericResponseAction } from 'lib/common';
+import {
+  applyPenders,
+  convertToPlainText,
+  escapeForUrl,
+  type GenericResponseAction,
+} from 'lib/common';
 
 /* ACTION TYPE */
 const EDIT_FIELD = 'write/EDIT_FIELD';
@@ -53,6 +59,10 @@ const LIST_TEMP_SAVES = 'write/LIST_TEMP_SAVES';
 const LOAD_TEMP_SAVE = 'write/LOAD_TEMP_SAVE';
 
 const GET_POST_BY_ID = 'write/GET_POST_BY_ID';
+
+const TOGGLE_SERIES_MODE = 'write/TOGGLE_SERIES_MODE';
+const CREATE_SERIES = 'write/CREATE_SERIES';
+const GET_SERIES_LIST = 'write/GET_SERIES_LIST';
 
 let tempCategoryId = 0;
 
@@ -103,6 +113,9 @@ export interface WriteActionCreators {
   listTempSaves(postId: string): any;
   loadTempSave(payload: SavesAPI.LoadTempSavePayload): any;
   getPostById(postId: string): any;
+  toggleSeriesMode(): any;
+  createSeries(payload: SeriesAPI.CreateSeriesPayload): any;
+  getSeriesList(username: string): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -154,6 +167,9 @@ export const actionCreators = {
   listTempSaves: createAction(LIST_TEMP_SAVES, SavesAPI.getTempSaveList),
   loadTempSave: createAction(LOAD_TEMP_SAVE, SavesAPI.loadTempSave),
   getPostById: createAction(GET_POST_BY_ID, PostsAPI.getPostById),
+  toggleSeriesMode: createAction(TOGGLE_SERIES_MODE),
+  createSeries: createAction(CREATE_SERIES, SeriesAPI.createSeries),
+  getSeriesList: createAction(GET_SERIES_LIST, SeriesAPI.getSeriesList),
 };
 
 export type BriefTempSaveInfo = {
@@ -231,6 +247,25 @@ export type WriteExtra = {
   layoutMode: LayoutMode,
 };
 
+export type SeriesItemData = {
+  id: string,
+  name: string,
+  description: string,
+  thumbnail: string,
+  url_slug: string,
+  created_at: string,
+  updated_at: string,
+  user: {
+    username: string,
+    thumbnail: string,
+  },
+};
+
+export type SeriesModal = {
+  visible: boolean,
+  list: ?(SeriesItemData[]),
+};
+
 export type Write = {
   body: string,
   title: string,
@@ -244,6 +279,7 @@ export type Write = {
   writeExtra: WriteExtra,
   tempSaves: ?(BriefTempSaveInfo[]),
   changed: boolean,
+  seriesModal: SeriesModal,
 };
 
 /* ACTION FLOW TYPE */
@@ -264,6 +300,8 @@ type LoadTempSaveResponseAction = GenericResponseAction<TempSaveData, null>;
 type GetPostByIdResponseAction = GenericResponseAction<PostData, null>;
 type ChangeUrlSlugAction = ActionType<typeof actionCreators.changeUrlSlug>;
 type SetVisibilityAction = ActionType<typeof actionCreators.setVisibility>;
+
+type GetSeriesResponseAction = GenericResponseAction<SeriesItemData[], null>;
 
 const initialState: Write = {
   body: '',
@@ -302,6 +340,10 @@ const initialState: Write = {
   insertText: null,
   tempSaves: null,
   changed: false,
+  seriesModal: {
+    visible: false,
+    list: null,
+  },
 };
 
 const reducer = handleActions(
@@ -323,6 +365,7 @@ const reducer = handleActions(
       return produce(state, (draft) => {
         draft.submitBox.open = true;
         draft.submitBox.additional = false;
+        draft.seriesModal.visible = false;
       });
     },
     [CLOSE_SUBMIT_BOX]: state =>
@@ -477,8 +520,8 @@ const reducer = handleActions(
             draft.meta.short_description = convertToPlainText(state.body);
           }
           if (!draft.submitBox.url_slug) {
-            draft.submitBox.url_slug = (state.postData && state.postData.url_slug)
-              || escapeForUrl(state.title);
+            draft.submitBox.url_slug =
+              (state.postData && state.postData.url_slug) || escapeForUrl(state.title);
           }
         }
         draft.submitBox.additional = !state.submitBox.additional;
@@ -505,6 +548,10 @@ const reducer = handleActions(
         draft.submitBox.is_private = payload;
       });
     },
+    [TOGGLE_SERIES_MODE]: state =>
+      produce(state, (draft) => {
+        draft.seriesModal.visible = !draft.seriesModal.visible;
+      }),
   },
   initialState,
 );
@@ -627,6 +674,14 @@ export default applyPenders(reducer, [
         draft.thumbnail = payload.data.thumbnail;
         draft.meta = payload.data.meta;
         draft.submitBox.is_private = payload.data.is_private;
+      });
+    },
+  },
+  {
+    type: GET_SERIES_LIST,
+    onSuccess: (state: Write, { payload }: GetSeriesResponseAction) => {
+      return produce(state, (draft) => {
+        draft.seriesModal.list = payload.data;
       });
     },
   },
