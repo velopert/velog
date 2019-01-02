@@ -63,6 +63,7 @@ const GET_POST_BY_ID = 'write/GET_POST_BY_ID';
 const TOGGLE_SERIES_MODE = 'write/TOGGLE_SERIES_MODE';
 const CREATE_SERIES = 'write/CREATE_SERIES';
 const GET_SERIES_LIST = 'write/GET_SERIES_LIST';
+const SELECT_SERIES = 'write/SELECT_SERIES';
 
 let tempCategoryId = 0;
 
@@ -116,6 +117,7 @@ export interface WriteActionCreators {
   toggleSeriesMode(): any;
   createSeries(payload: SeriesAPI.CreateSeriesPayload): any;
   getSeriesList(username: string): any;
+  selectSeries(payload: { id: string, name: string}): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -170,6 +172,7 @@ export const actionCreators = {
   toggleSeriesMode: createAction(TOGGLE_SERIES_MODE),
   createSeries: createAction(CREATE_SERIES, SeriesAPI.createSeries),
   getSeriesList: createAction(GET_SERIES_LIST, SeriesAPI.getSeriesList),
+  selectSeries: createAction(SELECT_SERIES, (payload: { id: string, name: string}) => payload),
 };
 
 export type BriefTempSaveInfo = {
@@ -204,6 +207,10 @@ export type SubmitBox = {
   additional: boolean,
   url_slug: ?string,
   is_private: boolean,
+  series: ?{
+    id: string,
+    name: string,
+  },
 };
 export type CategoryModal = {
   open: boolean,
@@ -302,6 +309,7 @@ type ChangeUrlSlugAction = ActionType<typeof actionCreators.changeUrlSlug>;
 type SetVisibilityAction = ActionType<typeof actionCreators.setVisibility>;
 
 type GetSeriesResponseAction = GenericResponseAction<SeriesItemData[], null>;
+type SelectSeriesAction = ActionType<typeof actionCreators.selectSeries>;
 
 const initialState: Write = {
   body: '',
@@ -318,6 +326,7 @@ const initialState: Write = {
     additional: false,
     url_slug: null,
     is_private: false,
+    series: null,
   },
   postData: null,
   categoryModal: {
@@ -552,6 +561,11 @@ const reducer = handleActions(
       produce(state, (draft) => {
         draft.seriesModal.visible = !draft.seriesModal.visible;
       }),
+    [SELECT_SERIES]: (state, { payload }: SelectSeriesAction) => {
+      return produce(state, (draft) => {
+        draft.submitBox.series = payload;
+      });
+    },
   },
   initialState,
 );

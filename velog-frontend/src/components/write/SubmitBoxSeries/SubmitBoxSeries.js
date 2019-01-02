@@ -8,13 +8,16 @@ import Button from '../../common/Button/Button';
 
 type Props = {
   onCreateSeries: (payload: { name: string, urlSlug: string }) => any,
+  onSelectSeries: (index: number) => void,
   list: ?(SeriesItemData[]),
+  series: ?{ id: string, name: string },
 };
 type State = {
   cancelling: boolean,
   editing: boolean,
   name: string,
   urlSlug: string,
+  selectedIndex: number,
 };
 class SubmitBoxSeries extends Component<Props, State> {
   input = React.createRef();
@@ -25,6 +28,7 @@ class SubmitBoxSeries extends Component<Props, State> {
     editing: false,
     name: '',
     urlSlug: '',
+    selectedIndex: -1,
   };
 
   onStartEditing = () => {
@@ -46,19 +50,42 @@ class SubmitBoxSeries extends Component<Props, State> {
     }, 150);
   };
 
-  onCreateSeries = () => {
+  onCreateSeries = async () => {
     const { name, urlSlug } = this.state;
-    this.props.onCreateSeries({
+    await this.props.onCreateSeries({
       name,
       urlSlug,
     });
+    this.setState({
+      name: '',
+      urlSlug: '',
+      selectedIndex: 0,
+    });
     this.onCancelEditing();
+  };
+
+  onSelectSeries = () => {
+    const { selectedIndex } = this.state;
+    this.props.onSelectSeries(selectedIndex);
   };
 
   onUrlWrapperClick = () => {
     if (!this.input.current) return;
     this.input.current.focus();
   };
+
+  autoSelect = () => {
+    const { series, list } = this.props;
+    if (!series || !list) return;
+    const index = list.findIndex(s => s.id === series.id);
+    this.setState({
+      selectedIndex: index,
+    });
+  };
+
+  componentDidMount() {
+    this.autoSelect();
+  }
 
   onChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -67,11 +94,21 @@ class SubmitBoxSeries extends Component<Props, State> {
     });
   };
 
+  onClick = (index: number) => {
+    this.setState({
+      selectedIndex: index,
+    });
+  };
+
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevState.name !== this.state.name) {
       this.setState({
         urlSlug: escapeForUrl(this.state.name),
       });
+    }
+
+    if (this.props.series && this.props.list !== prevProps.list) {
+      this.autoSelect();
     }
   }
 
@@ -115,14 +152,18 @@ class SubmitBoxSeries extends Component<Props, State> {
           </div>
           <div className="list">
             {list &&
-              list.map(item => (
-                <div className="item" key={item.id}>
+              list.map((item, index) => (
+                <div
+                  className={cn('item', { active: index === this.state.selectedIndex })}
+                  key={item.id}
+                  onClick={() => this.onClick(index)}
+                >
                   {item.name}
                 </div>
               ))}
           </div>
         </div>
-        <Button large fullWidth className="select">
+        <Button large fullWidth className="select" onClick={this.onSelectSeries}>
           선택
         </Button>
       </div>

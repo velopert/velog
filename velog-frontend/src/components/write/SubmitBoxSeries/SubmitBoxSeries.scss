@@ -100,6 +100,7 @@
       background: $oc-gray-0;
       overflow-y: auto;
       .item {
+        cursor: pointer;
         background: white;
         font-size: 0.875rem;
         padding: 8px;
