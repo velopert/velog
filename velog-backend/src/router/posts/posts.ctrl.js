@@ -28,6 +28,8 @@ import {
   PostLike,
   PostScore,
   PostRead,
+  SeriesPosts,
+  Series,
 } from 'database/models';
 
 import { serializePost, type PostModel } from 'database/models/Post';
@@ -127,6 +129,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     tags: Array<string>,
     url_slug: string,
     is_private: ?boolean, // until update
+    series_id: ?string,
   };
 
   const schema = Joi.object().keys({
@@ -154,6 +157,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
       .trim()
       .min(1)
       .max(130),
+    series_id: Joi.string().allow(null),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -170,6 +174,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     categories,
     tags,
     url_slug,
+    series_id,
   }: BodySchema = (ctx.request.body: any);
 
   const uniqueUrlSlug = escapeForUrl(`${title} ${generateSlugId()}`);
@@ -246,6 +251,22 @@ export const writePost = async (ctx: Context): Promise<*> => {
     const postId = post.id;
     await PostsTags.link(postId, tagIds);
     await PostsCategories.link(postId, uniqueCategories);
+
+    if (series_id) {
+      const series = await Series.findById(series_id);
+      if (!series) {
+        ctx.status = 404;
+        ctx.body = {
+          name: 'INVALID_SERIES',
+        };
+        return;
+      }
+      if (series.fk_user_id !== ctx.user.id) {
+        ctx.status = 403;
+        return;
+      }
+      await SeriesPosts.append(series_id, post.id, ctx.user.id);
+    }
 
     // const categoriesInfo = await PostsCategories.findCategoriesByPostId(postId);
 

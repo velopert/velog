@@ -26,6 +26,7 @@ type Props = {
   imagePath: ?string,
   urlSlug: ?string,
   isPrivate: boolean,
+  seriesId: ?string,
 } & ContextRouter;
 
 class WriteHeaderContainer extends Component<Props> {
@@ -95,7 +96,7 @@ class WriteHeaderContainer extends Component<Props> {
 
     if (!this.props.postData) {
       await WriteActions.setTempData();
-      const { title, body, tags, categories, thumbnail, isPrivate } = this.props;
+      const { title, body, tags, categories, thumbnail, isPrivate, seriesId } = this.props;
       const activeCategories = (() => {
         if (!categories || categories.length === 0) return [];
         return categories.filter(c => c.active).map(c => c.id);
@@ -109,6 +110,7 @@ class WriteHeaderContainer extends Component<Props> {
           categories: activeCategories,
           thumbnail,
           is_private: isPrivate,
+          series_id: seriesId,
         });
       } catch (e) {
         console.log(e);
@@ -147,7 +149,17 @@ class WriteHeaderContainer extends Component<Props> {
   };
 
   onTempSave = async () => {
-    const { postData, title, body, tags, categories, thumbnail, urlSlug, isPrivate } = this.props;
+    const {
+      postData,
+      title,
+      body,
+      tags,
+      categories,
+      thumbnail,
+      urlSlug,
+      isPrivate,
+      seriesId,
+    } = this.props;
 
     const activeCategories = (() => {
       if (!categories || categories.length === 0) return [];
@@ -165,6 +177,7 @@ class WriteHeaderContainer extends Component<Props> {
           categories: activeCategories,
           url_slug: urlSlug || escapeForUrl(title),
           is_private: isPrivate,
+          series_id: seriesId,
         });
       }
       if (postData && postData.is_temp) {
@@ -252,6 +265,7 @@ export default compose(
       imagePath: write.upload.imagePath,
       urlSlug: write.submitBox.url_slug,
       isPrivate: write.submitBox.is_private,
+      seriesId: write.submitBox.series ? write.submitBox.series.id : null,
     }),
     () => ({}),
   ),

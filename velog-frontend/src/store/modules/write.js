@@ -236,6 +236,10 @@ export type PostData = {
   url_slug: string,
   meta: Meta,
   is_private: boolean,
+  series: ?{
+    id: string,
+    name: string,
+  },
 };
 
 export type Upload = {
@@ -688,6 +692,7 @@ export default applyPenders(reducer, [
         draft.thumbnail = payload.data.thumbnail;
         draft.meta = payload.data.meta;
         draft.submitBox.is_private = payload.data.is_private;
+        draft.submitBox.series = payload.data.series;
       });
     },
   },

@@ -39,7 +39,11 @@ SeriesPosts.associate = () => {
   });
 };
 
-SeriesPosts.append = async (seriesId: string, postId: string, userId) => {
+SeriesPosts.append = async (
+  seriesId: string,
+  postId: string,
+  userId: string,
+) => {
   // list all series post
   const seriesPosts = await SeriesPosts.findAll({
     where: {
@@ -53,7 +57,7 @@ SeriesPosts.append = async (seriesId: string, postId: string, userId) => {
       ? 1
       : seriesPosts[seriesPosts.length - 1].index + 1;
   // check already added
-  const exists = seriesPosts.find(sp => sp.fk_post_id === id);
+  const exists = seriesPosts.find(sp => sp.fk_post_id === postId);
   if (exists) {
     return exists;
   }
