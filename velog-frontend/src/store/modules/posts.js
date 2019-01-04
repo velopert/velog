@@ -138,6 +138,7 @@ export type PostSequence = {
   }),
   url_slug: string,
   created_at: string,
+  released_at: string,
 };
 
 export type Posts = {
