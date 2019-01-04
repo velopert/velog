@@ -112,6 +112,27 @@
       }
     }
   }
+  .remove,
+  .select {
+    padding: 0;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .remove {
+    transition: none;
+    margin-top: 1rem;
+    border: 1px solid $oc-red-5;
+    color: $oc-red-5;
+    &:hover {
+      background: $oc-red-5;
+      color: white;
+      border: 1px solid $oc-red-5;
+    }
+  }
   .select {
     margin-top: 1rem;
   }

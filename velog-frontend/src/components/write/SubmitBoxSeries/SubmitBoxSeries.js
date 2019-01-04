@@ -100,6 +100,10 @@ class SubmitBoxSeries extends Component<Props, State> {
     });
   };
 
+  onRemoveSeries = () => {
+    this.props.onSelectSeries(-1);
+  };
+
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevState.name !== this.state.name) {
       this.setState({
@@ -120,7 +124,7 @@ class SubmitBoxSeries extends Component<Props, State> {
 
   render() {
     const { name, urlSlug, editing, cancelling } = this.state;
-    const { list } = this.props;
+    const { list, series } = this.props;
 
     return (
       <div className="SubmitBoxSeries">
@@ -163,6 +167,11 @@ class SubmitBoxSeries extends Component<Props, State> {
               ))}
           </div>
         </div>
+        {series && (
+          <Button large theme="outline" fullWidth className="remove" onClick={this.onRemoveSeries}>
+            시리즈에서 제거
+          </Button>
+        )}
         <Button large fullWidth className="select" onClick={this.onSelectSeries}>
           선택
         </Button>

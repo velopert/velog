@@ -40,10 +40,14 @@ class SubmitBoxSeriesContainer extends Component<Props> {
     const { list } = this.props;
     if (!list) return;
     const series = list[index];
-    WriteActions.selectSeries({
-      id: series.id,
-      name: series.name,
-    });
+    WriteActions.selectSeries(
+      series
+        ? {
+          id: series.id,
+          name: series.name,
+        }
+        : null,
+    );
     WriteActions.toggleSeriesMode();
   };
 

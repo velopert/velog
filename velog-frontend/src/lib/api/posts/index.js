@@ -27,6 +27,7 @@ export type UpdatePostPayload = {
   is_temp: boolean,
   thumbnail: ?string,
   is_private: boolean,
+  series_id: ?string,
 };
 
 export const updatePost = ({ id, ...payload }: UpdatePostPayload) =>

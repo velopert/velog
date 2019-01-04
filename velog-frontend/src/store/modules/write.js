@@ -117,7 +117,7 @@ export interface WriteActionCreators {
   toggleSeriesMode(): any;
   createSeries(payload: SeriesAPI.CreateSeriesPayload): any;
   getSeriesList(username: string): any;
-  selectSeries(payload: { id: string, name: string}): any;
+  selectSeries(payload: ?{ id: string, name: string}): any;
 }
 
 /* EXPORT ACTION CREATORS */
@@ -172,7 +172,7 @@ export const actionCreators = {
   toggleSeriesMode: createAction(TOGGLE_SERIES_MODE),
   createSeries: createAction(CREATE_SERIES, SeriesAPI.createSeries),
   getSeriesList: createAction(GET_SERIES_LIST, SeriesAPI.getSeriesList),
-  selectSeries: createAction(SELECT_SERIES, (payload: { id: string, name: string}) => payload),
+  selectSeries: createAction(SELECT_SERIES, (payload: ?{ id: string, name: string}) => payload),
 };
 
 export type BriefTempSaveInfo = {

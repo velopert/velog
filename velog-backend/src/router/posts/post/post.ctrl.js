@@ -196,46 +196,46 @@ export const updatePost = async (ctx: Context): Promise<*> => {
   });
 
   // Update Series
-  // let series = null;
-  // try {
-  //   const seriesPost = await SeriesPosts.findOne({
-  //     where: { fk_post_id: id },
-  //     include: [Series],
-  //   });
-  //   // Check Series Validity
-  //   if (series_id) {
-  //     const nextSeries = await Series.findById(series_id);
-  //     if (!nextSeries) {
-  //       ctx.status = 404;
-  //       ctx.body = {
-  //         name: 'INVALID_SERIES',
-  //       };
-  //     }
-  //     if (nextSeries.fk_user_id !== ctx.user.id) {
-  //       ctx.status = 403;
-  //       return;
-  //     }
-  //     series = {
-  //       id: nextSeries.id,
-  //       name: nextSeries.name,
-  //     };
-  //   }
+  let series = null;
+  try {
+    const seriesPost = await SeriesPosts.findOne({
+      where: { fk_post_id: id },
+      include: [Series],
+    });
+    // Check Series Validity
+    if (series_id) {
+      const nextSeries = await Series.findById(series_id);
+      if (!nextSeries) {
+        ctx.status = 404;
+        ctx.body = {
+          name: 'INVALID_SERIES',
+        };
+      }
+      if (nextSeries.fk_user_id !== ctx.user.id) {
+        ctx.status = 403;
+        return;
+      }
+      series = {
+        id: nextSeries.id,
+        name: nextSeries.name,
+      };
+    }
 
-  //   if (seriesPost) {
-  //     if (seriesPost.series.id !== series_id) {
-  //       seriesPost.destroy();
-  //       if (!series_id) {
-  //         series = null;
-  //       } else {
-  //         await SeriesPosts.append(series_id, id, ctx.user.id);
-  //       }
-  //     }
-  //   } else {
-  //     await SeriesPosts.append(series_id, id, ctx.user.id);
-  //   }
-  // } catch (e) {
-  //   ctx.throw(500, e);
-  // }
+    if (seriesPost) {
+      if (seriesPost.series.id !== series_id) {
+        seriesPost.destroy();
+        if (!series_id) {
+          series = null;
+        } else {
+          await SeriesPosts.append(series_id, id, ctx.user.id);
+        }
+      }
+    } else {
+      await SeriesPosts.append(series_id, id, ctx.user.id);
+    }
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 
   // Update Tags
   if (tags) {
@@ -301,7 +301,7 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     await ctx.post.update(updateQuery);
     const post = await Post.readPostById(id);
     const serialized = serializePost(post);
-    ctx.body = serialized;
+    ctx.body = { ...serialized, series };
   } catch (e) {
     ctx.throw(500, e);
   }

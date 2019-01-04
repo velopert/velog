@@ -180,6 +180,7 @@ class SubmitBoxContainer extends Component<Props> {
           meta,
           url_slug: urlSlug,
           is_private: isPrivate,
+          series_id: seriesId,
         });
         BaseActions.showToast({
           type: 'success',
@@ -264,6 +265,7 @@ class SubmitBoxContainer extends Component<Props> {
           categories: activeCategories,
           url_slug: urlSlug,
           is_private: isPrivate,
+          series_id: seriesId,
         });
       }
       if (this.props.postData) {

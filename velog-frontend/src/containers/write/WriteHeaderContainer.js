@@ -191,6 +191,7 @@ class WriteHeaderContainer extends Component<Props> {
           categories: activeCategories,
           url_slug: urlSlug,
           is_private: isPrivate,
+          series_id: seriesId,
         });
       }
       if (this.props.postData) {
