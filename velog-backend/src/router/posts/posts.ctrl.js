@@ -516,6 +516,7 @@ export const listSequences = async (ctx: Context) => {
         'url_slug',
         'fk_user_id',
         'created_at',
+        'released_at',
       ],
       raw: true,
     });
@@ -528,7 +529,7 @@ export const listSequences = async (ctx: Context) => {
     // loads posts before post
     promises.push(Post.findAll({
       order: [['created_at', 'asc']],
-      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at'],
+      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at', 'released_at'],
       where: {
         fk_user_id,
         created_at: {
@@ -559,7 +560,7 @@ export const listSequences = async (ctx: Context) => {
     // loads posts after post
     promises.push(Post.findAll({
       order: [['created_at', 'desc']],
-      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at'],
+      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at', 'released_at'],
       where: {
         fk_user_id,
         created_at: {

@@ -22,11 +22,11 @@ type Props = {
 };
 
 const PostSequenceItem = ({ sequence, username, active }: PostSequenceItemProps) => {
-  const { title, body, meta, url_slug, created_at } = sequence;
+  const { title, body, meta, url_slug, released_at } = sequence;
   const to = `/@${username}/${url_slug}`;
   return (
     <FakeLink className={cx('PostSequenceItem', { active })} to={to}>
-      <div className="date">{fromNow(created_at)}</div>
+      <div className="date">{fromNow(released_at)}</div>
       <div className="title">
         <Link to={to}>{title}</Link>
       </div>
