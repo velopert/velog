@@ -116,6 +116,16 @@ export type PostData = {
     code_theme: string,
     short_description: ?string,
   },
+  series: ?{
+    description: string,
+    id: string,
+    index: number,
+    length: number,
+    url_slug: string,
+    thumbnail: ?string,
+    name: string,
+    list: { index: number, id: string, title: string, url_slug: string },
+  },
 };
 
 export type SubcommentsMap = {
@@ -132,10 +142,10 @@ export type PostSequence = {
   id: string,
   title: string,
   body: string,
-  meta: ?({
+  meta: ?{
     code_theme: string,
     short_description: string,
-  }),
+  },
   url_slug: string,
   created_at: string,
   released_at: string,

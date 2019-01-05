@@ -565,6 +565,7 @@ const reducer = handleActions(
       produce(state, (draft) => {
         draft.seriesModal.visible = !draft.seriesModal.visible;
       }),
+    // $FlowFixMe
     [SELECT_SERIES]: (state, { payload }: SelectSeriesAction) => {
       return produce(state, (draft) => {
         draft.submitBox.series = payload;

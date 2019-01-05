@@ -51,6 +51,10 @@ class SubmitBoxSeriesContainer extends Component<Props> {
     WriteActions.toggleSeriesMode();
   };
 
+  onClose = () => {
+    WriteActions.toggleSeriesMode();
+  };
+
   render() {
     const { list, series } = this.props;
     return (
@@ -59,6 +63,7 @@ class SubmitBoxSeriesContainer extends Component<Props> {
         onCreateSeries={this.onCreateSeries}
         list={list}
         onSelectSeries={this.onSelectSeries}
+        onClose={this.onClose}
       />
     );
   }

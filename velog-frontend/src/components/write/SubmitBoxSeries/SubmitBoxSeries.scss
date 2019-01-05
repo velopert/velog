@@ -32,7 +32,7 @@
   }
   .list-wrapper {
     margin-top: 0.75rem;
-    border: 1px solid $oc-gray-2;
+    border: 1px solid $oc-gray-4;
     height: 17.8125rem;
     display: flex;
     flex-direction: column;
@@ -112,6 +112,11 @@
       }
     }
   }
+
+  .close {
+    margin-top: 1rem;
+  }
+  .close,
   .remove,
   .select {
     padding: 0;

@@ -7,6 +7,7 @@ import './SubmitBoxSeries.scss';
 import Button from '../../common/Button/Button';
 
 type Props = {
+  onClose: () => void,
   onCreateSeries: (payload: { name: string, urlSlug: string }) => any,
   onSelectSeries: (index: number) => void,
   list: ?(SeriesItemData[]),
@@ -167,9 +168,13 @@ class SubmitBoxSeries extends Component<Props, State> {
               ))}
           </div>
         </div>
-        {series && (
+        {series ? (
           <Button large theme="outline" fullWidth className="remove" onClick={this.onRemoveSeries}>
             시리즈에서 제거
+          </Button>
+        ) : (
+          <Button large theme="outline" className="close" fullWidth onClick={this.props.onClose}>
+            취소
           </Button>
         )}
         <Button large fullWidth className="select" onClick={this.onSelectSeries}>
