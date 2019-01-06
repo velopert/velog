@@ -1,0 +1,70 @@
+@import 'utils';
+.PostSeriesInfo {
+  border-radius: 4px;
+  box-shadow: 0 0 8px 0 rgba(218, 218, 218, 0.58);
+  background-color: #f8f9fa;
+  padding: 1rem;
+  .top-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .label {
+      display: inline-flex;
+      align-items: center;
+      background: #9775fa;
+      color: white;
+      padding: 8px;
+      svg {
+        margin-right: 4px;
+      }
+      span {
+        font-size: 0.875rem;
+        font-weight: 800;
+      }
+    }
+    .number {
+      font-size: 1.125rem;
+      color: $oc-gray-8;
+      font-weight: 600;
+    }
+  }
+  h2 {
+    font-size: 2rem;
+    line-height: 1.5;
+    margin-top: 0.25rem;
+    font-weight: 700;
+    color: $oc-gray-8;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.3125rem;
+    .controls {
+      display: flex;
+      border: 1px solid $oc-gray-5;
+      color: $oc-gray-5;
+      .square {
+        background: white;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.125rem;
+        &.disabled {
+          background: $oc-gray-0;
+          color: $oc-gray-3;
+        }
+        &:not(.disabled) {
+          &:hover {
+            color: $oc-violet-5;
+          }
+        }
+      }
+      .square + .square {
+        border-left: 1px solid $oc-gray-5;
+      }
+    }
+  }
+}
