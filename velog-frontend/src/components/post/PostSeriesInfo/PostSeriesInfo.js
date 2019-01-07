@@ -3,18 +3,20 @@ import React, { Component } from 'react';
 import BookIcon from 'react-icons/lib/md/book';
 import LeftIcon from 'react-icons/lib/md/chevron-left';
 import RightIcon from 'react-icons/lib/md/chevron-right';
+import DropDownIcon from 'react-icons/lib/md/arrow-drop-down';
+import DropUpIcon from 'react-icons/lib/md/arrow-drop-up';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 
 import './PostSeriesInfo.scss';
 
 type SquareProps = {
-  disabled: boolean,
-  to?: string,
+  to?: string | null,
   mode: 'left' | 'right',
 };
 
-const Square = ({ disabled, to, mode }: SquareProps) => {
+const Square = ({ to, mode }: SquareProps) => {
+  const disabled = !to;
   const icon = mode === 'left' ? <LeftIcon /> : <RightIcon />;
   return disabled ? (
     <div className="square disabled">{icon}</div>
@@ -30,6 +32,7 @@ Square.defaultProps = {
 };
 
 type Props = {
+  username: string,
   series: {
     description: string,
     id: string,
@@ -38,14 +41,28 @@ type Props = {
     url_slug: string,
     thumbnail: ?string,
     name: string,
-    list: { index: number, id: string, title: string, url_slug: string },
+    list: { index: number, id: string, title: string, url_slug: string }[],
   },
 };
 
-class PostSeriesInfo extends Component<Props> {
+type State = {
+  open: boolean,
+};
+class PostSeriesInfo extends Component<Props, State> {
+  state = {
+    open: false,
+  };
+
+  onToggle = () => {
+    this.setState({
+      open: !this.state.open,
+    });
+  };
   render() {
-    const { series } = this.props;
-    const { name, index, length } = series;
+    const { series, username } = this.props;
+    const { name, index, length, list } = series;
+    const { open } = this.state;
+    console.log(index, list);
 
     return (
       <div className="PostSeriesInfo">
@@ -59,11 +76,26 @@ class PostSeriesInfo extends Component<Props> {
           </div>
         </div>
         <h2>{this.props.series.name}</h2>
+        {open && (
+          <ol>
+            {list.map(item => (
+              <li>
+                <Link to={`/@${username}/${item.url_slug}`}>{item.title}</Link>
+              </li>
+            ))}
+          </ol>
+        )}
         <div className="footer">
-          <div className="show-all">목록보기</div>
+          <div className="show-all" onClick={this.onToggle}>
+            {open ? <DropUpIcon /> : <DropDownIcon />}
+            목록보기
+          </div>
           <div className="controls">
-            <Square mode="left" disabled={index === 0} />
-            <Square mode="right" disabled={index === length} />
+            <Square mode="left" to={index === 1 ? null : `/@${username}/${list[index].url_slug}`} />
+            <Square
+              mode="right"
+              to={index === length ? null : `/@${username}/${list[index].url_slug}`}
+            />
           </div>
         </div>
       </div>

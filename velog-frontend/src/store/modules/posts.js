@@ -124,7 +124,7 @@ export type PostData = {
     url_slug: string,
     thumbnail: ?string,
     name: string,
-    list: { index: number, id: string, title: string, url_slug: string },
+    list: { index: number, id: string, title: string, url_slug: string }[],
   },
 };
 
