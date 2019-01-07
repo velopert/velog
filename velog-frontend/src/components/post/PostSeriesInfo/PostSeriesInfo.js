@@ -62,7 +62,6 @@ class PostSeriesInfo extends Component<Props, State> {
     const { series, username } = this.props;
     const { name, index, length, list } = series;
     const { open } = this.state;
-    console.log(index, list);
 
     return (
       <div className="PostSeriesInfo">
@@ -91,11 +90,8 @@ class PostSeriesInfo extends Component<Props, State> {
             목록보기
           </div>
           <div className="controls">
-            <Square mode="left" to={index === 1 ? null : `/@${username}/${list[index].url_slug}`} />
-            <Square
-              mode="right"
-              to={index === length ? null : `/@${username}/${list[index].url_slug}`}
-            />
+            <Square mode="left" to={index === 0 ? null : `/@${username}`} />
+            <Square mode="right" to={index === length ? null : `/@${username}/}`} />
           </div>
         </div>
       </div>
