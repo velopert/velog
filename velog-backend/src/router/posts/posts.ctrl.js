@@ -358,9 +358,9 @@ export const readPost = async (ctx: Context): Promise<*> => {
           {
             model: Post,
             attributes: ['id', 'url_slug', 'title'],
-            order: [['index', 'ASC']],
           },
         ],
+        order: [['index', 'ASC']],
       });
       seriesLength = seriesPosts.length;
       list = seriesPosts.map(sp => ({

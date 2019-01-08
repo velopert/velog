@@ -99,8 +99,8 @@
         justify-content: center;
         font-size: 1.125rem;
         &.disabled {
-          background: $oc-gray-0;
-          color: $oc-gray-3;
+          background: $oc-gray-3;
+          color: $oc-gray-5;
         }
         &:not(.disabled) {
           &:hover {

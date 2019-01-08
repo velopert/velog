@@ -90,8 +90,14 @@ class PostSeriesInfo extends Component<Props, State> {
             목록보기
           </div>
           <div className="controls">
-            <Square mode="left" to={index === 0 ? null : `/@${username}`} />
-            <Square mode="right" to={index === length ? null : `/@${username}/}`} />
+            <Square
+              mode="left"
+              to={index === 1 ? null : `/@${username}/${list[index - 2].url_slug}`}
+            />
+            <Square
+              mode="right"
+              to={index === length ? null : `/@${username}/${list[index].url_slug}`}
+            />
           </div>
         </div>
       </div>
