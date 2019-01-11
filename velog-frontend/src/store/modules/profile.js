@@ -6,6 +6,7 @@ import * as UsersAPI from 'lib/api/users';
 import * as CommonAPI from 'lib/api/common';
 import type { ProfileLinks } from 'store/modules/settings';
 import * as MeAPI from 'lib/api/me';
+import * as SeriesAPI from 'lib/api/series';
 
 const GET_USER_TAGS = 'profile/GET_USER_TAGS';
 const GET_PROFILE = 'profile/GET_PROFILE';
@@ -17,6 +18,7 @@ const GET_USER_HISTORY = 'profile/GET_USER_HISTORY';
 const REVEAL_PREFETCHED_HISTORY = 'profile/REVEAL_PREFETCHED_HISTORY';
 const PREFETCH_USER_HISTORY = 'profile/PREFETCH_USER_HISTORY';
 const UPDATE_ABOUT = 'profile/UPDATE_ABOUT';
+const GET_SERIES_LIST = 'profile/GET_SERIES_LIST';
 
 export const actionCreators = {
   initialize: createAction(INITIALIZE),
@@ -29,6 +31,7 @@ export const actionCreators = {
   revealPrefetchedHistory: createAction(REVEAL_PREFETCHED_HISTORY),
   prefetchUserHistory: createAction(PREFETCH_USER_HISTORY, UsersAPI.getHistory),
   updateAbout: createAction(UPDATE_ABOUT, MeAPI.updateAbout, (meta: string) => meta),
+  getSeriesList: createAction(GET_SERIES_LIST, SeriesAPI.getSeriesList),
 };
 
 export type TagCountInfo = {
@@ -83,11 +86,27 @@ export type UserHistoryItem = {
   },
 };
 
+export type SeriesItemData = {
+  id: string,
+  name: string,
+  description: string,
+  thumbnail: string,
+  url_slug: string,
+  created_at: string,
+  updated_at: string,
+  user: {
+    username: string,
+    thumbnail: string,
+  },
+};
+
 type SetRawTagNameAction = ActionType<typeof actionCreators.setRawTagName>;
 type GetTagInfoResponseAction = GenericResponseAction<TagData, string>;
 type SetSideVisibilityAction = ActionType<typeof actionCreators.setSideVisibility>;
 type GetUserHistoryResponseAction = GenericResponseAction<UserHistoryItem[], any>;
 type UpdateAboutResponseAction = GenericResponseAction<{ about: string }, string>;
+type GetSeriesListResponseAction = GenericResponseAction<SeriesItemData, any>;
+
 
 export type ProfileState = {
   tagCounts: ?(TagCountInfo[]),
@@ -98,6 +117,7 @@ export type ProfileState = {
   side: boolean,
   historyEnd: false,
   prevAbout: string,
+  seriesList: ?(SeriesItemData[]),
 };
 
 const initialState = {
@@ -109,6 +129,7 @@ const initialState = {
   side: true,
   historyEnd: false,
   prevAbout: '',
+  seriesList: null,
 };
 
 const reducer = handleActions(
@@ -219,6 +240,15 @@ export default applyPenders(reducer, [
         if (!draft.profile) return;
         draft.profile.about = draft.prevAbout;
       });
+    },
+  },
+  {
+    type: GET_SERIES_LIST,
+    onSuccess: (state: ProfileState, { payload }: GetSeriesListResponseAction) => {
+      return {
+        ...state,
+        seriesList: payload.data,
+      };
     },
   },
 ]);

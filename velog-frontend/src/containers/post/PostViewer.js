@@ -182,7 +182,7 @@ class PostViewer extends Component<Props> {
           url={this.props.match.url}
           informCopy={this.informCopy}
         />
-        {post.series && <PostSeriesInfo series={post.series} username={username} />}
+        {post.series && <PostSeriesInfo series={post.series} username={username || ''} />}
         <PostContent
           thumbnail={post.thumbnail}
           body={post.body}
