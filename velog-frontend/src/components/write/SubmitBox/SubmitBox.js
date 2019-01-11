@@ -1,13 +1,10 @@
 // @flow
 import React, { Fragment, Component, type Node } from 'react';
 import onClickOutside from 'react-onclickoutside';
-import SettingsIcon from 'react-icons/lib/md/settings';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import './SubmitBox.scss';
-import SubmitBoxAdditional from '../SubmitBoxAdditional';
-import WriteVisibilitySelect from '../WriteVisibilitySelect';
 
 type Props = {
   isEditing: boolean,

@@ -12,6 +12,7 @@ type Props = {
   meta: Meta,
   body: string,
   urlSlug: ?string,
+  username: string,
   onChangeShortDescription(e: SyntheticInputEvent<HTMLInputElement>): void,
   onChangeCodeTheme(e: SyntheticInputEvent<HTMLSelectElement>): void,
   onChangeUrlSlug(e: SyntheticInputEvent<HTMLInputElement>): void,
@@ -45,6 +46,7 @@ const codeThemes = [
 const SubmitBoxAdditional = ({
   realMeta,
   meta,
+  username,
   body,
   urlSlug,
   onChangeShortDescription,
@@ -79,7 +81,7 @@ const SubmitBoxAdditional = ({
       <section>
         <div className="section-title">URL</div>
         <div className="url">
-          <div className="base">/@velopert/</div>
+          <div className="base">/@{username}/</div>
           <input value={urlSlug} onChange={onChangeUrlSlug} />
         </div>
       </section>

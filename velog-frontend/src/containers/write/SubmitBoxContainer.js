@@ -347,6 +347,7 @@ class SubmitBoxContainer extends Component<Props> {
               body={body}
               meta={meta}
               urlSlug={urlSlug}
+              username={username}
               realMeta={postData && postData.meta}
               onChangeCodeTheme={onChangeCodeTheme}
               onChangeShortDescription={onChangeShortDescription}
