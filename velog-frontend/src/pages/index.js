@@ -9,3 +9,4 @@ export { default as Policy } from './Policy';
 export { default as NotFound } from './errors/NotFound';
 export { default as Success } from './Success';
 export { default as Search } from './Search';
+export { default as Series } from './Series';

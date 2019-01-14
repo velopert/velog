@@ -1,0 +1,7 @@
+@import 'utils';
+.SeriesViewer {
+  margin-top: 4rem;
+  @include media('<medium') {
+    margin-top: 0;
+  }
+}

@@ -94,6 +94,7 @@ export type SeriesItemData = {
   url_slug: string,
   created_at: string,
   updated_at: string,
+  posts_count: number,
   user: {
     username: string,
     thumbnail: string,
@@ -106,7 +107,6 @@ type SetSideVisibilityAction = ActionType<typeof actionCreators.setSideVisibilit
 type GetUserHistoryResponseAction = GenericResponseAction<UserHistoryItem[], any>;
 type UpdateAboutResponseAction = GenericResponseAction<{ about: string }, string>;
 type GetSeriesListResponseAction = GenericResponseAction<SeriesItemData, any>;
-
 
 export type ProfileState = {
   tagCounts: ?(TagCountInfo[]),

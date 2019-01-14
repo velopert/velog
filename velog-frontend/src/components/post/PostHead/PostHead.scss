@@ -1,4 +1,4 @@
-@import "utils";
+@import 'utils';
 .PostHead {
   &.placeholder {
     .gray-block {
@@ -8,12 +8,6 @@
       animation: Blink 0.5s ease-in-out;
       animation-iteration-count: infinite;
       animation-direction: alternate;
-      &._username {
-        width: 7em;
-      }
-      &._description {
-        width: 11em;
-      }
       &._title {
         margin-top: 1.875rem;
         height: 3.2rem;
@@ -26,19 +20,10 @@
     .description {
       margin-top: 0.5rem;
     }
-    .fake-img {
-      background: $oc-gray-1;
-      border-radius: 50%;
-      width: 100%;
-      height: 100%;
-      animation: Blink 0.5s ease-in-out;
-      animation-iteration-count: infinite;
-      animation-direction: alternate;
-    }
   }
   margin-top: 4rem;
   font-size: 1rem;
-  @include media("<medium") {
+  @include media('<medium') {
     font-size: 0.875rem;
     margin-top: 0rem;
   }
@@ -64,7 +49,7 @@
     margin-bottom: 0.5rem;
   }
   h1 {
-    font-family: "Noto Serif KR", sans-serif;
+    font-family: 'Noto Serif KR', sans-serif;
     margin: 0;
     font-size: 2.5em;
     line-height: 3.2rem;
@@ -73,48 +58,7 @@
     font-size: 1.125em;
     color: $oc-gray-6;
   }
-  .userinfo {
-    @include media("<medium") {
-      background: $oc-gray-0;
-      margin-top: -0.25rem;
-      border-top: 1px solid $oc-gray-2;
-      border-bottom: 1px solid $oc-gray-2;
-      padding: 1rem;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      margin-left: -1rem;
-      margin-right: -1rem;
-    }
-    display: flex;
-    margin-top: 1em;
-    margin-bottom: 2rem;
-    align-items: center;
-    .user-thumbnail {
-      flex-shrink: 0;
-      width: 4em;
-      height: 4em;
-      position: relative;
-      img {
-        border-radius: 50%;
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .info {
-      margin-left: 1em;
-      font-size: 0.875em;
-      line-height: 1.5em;
-      .username {
-        font-weight: 500;
-        color: $oc-gray-9;
-      }
-      .description {
-        word-break: break-word;
-        color: $oc-gray-6;
-      }
-    }
-  }
+
   .date-and-likes {
     display: flex;
     align-items: center;
@@ -124,7 +68,7 @@
     }
     .PostLikeButton,
     .PostMobileShare {
-      @include media(">=large") {
+      @include media('>=large') {
         display: none;
       }
     }

@@ -3,8 +3,13 @@ import React, { Component } from 'react';
 import { ProfileActions } from 'store/actionCreators';
 import { withRouter, type ContextRouter } from 'react-router-dom';
 import UserSeriesList from 'components/user/UserSeriesList/UserSeriesList';
+import { type State } from 'store';
+import { connect } from 'react-redux';
+import { type SeriesItemData } from 'store/modules/profile';
 
-type Props = {} & ContextRouter;
+type Props = {
+  seriesList: ?(SeriesItemData[]),
+} & ContextRouter;
 class UserSeriesContainer extends Component<Props> {
   initialize = async () => {
     const { username } = this.props.match.params;
@@ -25,8 +30,12 @@ class UserSeriesContainer extends Component<Props> {
   }
 
   render() {
-    return <UserSeriesList />;
+    const { seriesList } = this.props;
+    if (!seriesList) return null;
+    return <UserSeriesList seriesList={seriesList} />;
   }
 }
 
-export default withRouter(UserSeriesContainer);
+export default connect((state: State) => ({
+  seriesList: state.profile.seriesList,
+}))(withRouter(UserSeriesContainer));

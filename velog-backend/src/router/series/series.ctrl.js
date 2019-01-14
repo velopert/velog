@@ -4,6 +4,9 @@ import Joi from 'joi';
 import { checkEmpty, validateSchema, isUUID } from 'lib/common';
 import { UserProfile, User, Post } from 'database/models';
 import pick from 'lodash/pick';
+import {
+  getSeriesPostCountList,
+} from 'database/rawQuery/series';
 import SeriesPosts from '../../database/models/SeriesPosts';
 import Series, { serializeSeries } from '../../database/models/Series';
 
@@ -171,18 +174,35 @@ export const createSeries = async (ctx: Context) => {
   }
 };
 export const listSeries = async (ctx: Context) => {
+  const { username } = ctx.params;
   try {
     const seriesList = await Series.findAll({
-      limit: 20,
+      // limit: 20,
       include: [
         {
           model: User,
           include: [UserProfile],
+          ...(username
+            ? {
+              where: {
+                username,
+              },
+            }
+            : {}),
         },
       ],
       order: [['updated_at', 'DESC']],
     });
-    ctx.body = seriesList.map(serializeSeries);
+    const counts = await getSeriesPostCountList(seriesList.map(series => series.id));
+    const flatData = {};
+    counts.forEach((c) => {
+      flatData[c.id] = c.count;
+    });
+    const serialized = seriesList.map(serializeSeries);
+    serialized.forEach((s) => {
+      s.posts_count = flatData[s.id];
+    });
+    ctx.body = serialized;
   } catch (e) {
     ctx.throw(500, e);
   }

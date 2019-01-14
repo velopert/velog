@@ -187,7 +187,6 @@ export const writePost = async (ctx: Context): Promise<*> => {
         userId: ctx.user.id,
         urlSlug: url_slug,
       });
-      console.log(exists);
       if (exists > 0) {
         processedSlug = uniqueUrlSlug;
       }
@@ -265,6 +264,8 @@ export const writePost = async (ctx: Context): Promise<*> => {
         ctx.status = 403;
         return;
       }
+      series.changed('updated_at', true);
+      await series.save();
       await SeriesPosts.append(series_id, post.id, ctx.user.id);
     }
 
@@ -385,7 +386,6 @@ export const readPost = async (ctx: Context): Promise<*> => {
       liked,
     });
 
-    console.log(seriesPost);
     ctx.body = {
       ...serialized,
       series: seriesPost

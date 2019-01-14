@@ -10,6 +10,7 @@ import LockIcon from 'react-icons/lib/md/lock';
 import PostActionButtons from '../PostActionButtons';
 import './PostHead.scss';
 import PostMobileShare from '../PostMobileShare/PostMobileShare';
+import HorizontalUserInfo from '../../common/HorizontalUserInfo/HorizontalUserInfo';
 
 type Props = {
   id: string,
@@ -49,21 +50,9 @@ const PostHead = ({
   url,
   informCopy,
 }: Props) => {
-  const userLink = `/@${user.username}`;
-
   return (
     <div className="PostHead">
-      <div className="userinfo">
-        <Link to={userLink} className="user-thumbnail">
-          <img src={resizeImage(user.thumbnail || defaultThumbnail, 128)} alt="user-thumbnail" />
-        </Link>
-        <div className="info">
-          <Link to={userLink} className="username">
-            @{user.username}
-          </Link>
-          <div className="description">{user.short_bio}</div>
-        </div>
-      </div>
+      <HorizontalUserInfo user={user} />
       {isPrivate && (
         <div className="private">
           <LockIcon />비공개
@@ -84,19 +73,7 @@ const PostHead = ({
 
 PostHead.Placeholder = () => (
   <div className="PostHead placeholder">
-    <div className="userinfo">
-      <div className="user-thumbnail">
-        <div className="fake-img" />
-      </div>
-      <div className="info">
-        <div className="username">
-          <div className="gray-block _username" />
-        </div>
-        <div className="description">
-          <div className="gray-block _description" />
-        </div>
-      </div>
-    </div>
+    <HorizontalUserInfo.Placeholder />
     <div className="gray-block _title" />
     <div className="date-and-likes">
       <div className="date">
@@ -107,40 +84,4 @@ PostHead.Placeholder = () => (
     <div className="separator" />
   </div>
 );
-
-/*
-type Props = {
-  title: string,
-  tags: string[]
-};
-
-const PostHead = ({ title, tags }: Props) => (
-  <div className="PostHead">
-    <div className="sub-info">
-      <div className="thumbnail util flex-center">
-        <img
-          src="https://avatars0.githubusercontent.com/u/17202261?v=4"
-          alt="user-thumbnail"
-        />
-      </div>
-      <div className="information">
-        <div>
-          <div className="username">@velopert</div>
-          <div className="description">Frontend Engineer at Laftel Inc.</div>
-          <div className="date-time">Mar 30</div>
-        </div>
-      </div>
-    </div>
-    <h1>
-      {title}
-    </h1>
-    <div className="tags">
-      {
-        tags.map(tag => (<span className="tag" key={tag}>{tag}</span>))
-      }
-    </div>
-  </div>
-);
-*/
-
 export default PostHead;
