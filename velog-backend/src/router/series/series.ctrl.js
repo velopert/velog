@@ -1,12 +1,15 @@
 // @flow
 import type { Context } from 'koa';
 import Joi from 'joi';
-import { checkEmpty, validateSchema, isUUID } from 'lib/common';
+import {
+  checkEmpty,
+  validateSchema,
+  isUUID,
+  formatShortDescription,
+} from 'lib/common';
 import { UserProfile, User, Post } from 'database/models';
 import pick from 'lodash/pick';
-import {
-  getSeriesPostCountList,
-} from 'database/rawQuery/series';
+import { getSeriesPostCountList } from 'database/rawQuery/series';
 import SeriesPosts from '../../database/models/SeriesPosts';
 import Series, { serializeSeries } from '../../database/models/Series';
 
@@ -238,7 +241,8 @@ export const getSeries = async (ctx: Context) => {
     });
     serialized.posts = seriesPosts.map(p => ({
       index: p.index,
-      ...pick(p.post, ['id', 'thumbnail', 'title', 'released_at']),
+      ...pick(p.post, ['id', 'thumbnail', 'title', 'released_at', 'meta', 'url_slug']),
+      body: formatShortDescription(p.post.body),
     }));
     ctx.body = serialized;
   } catch (e) {

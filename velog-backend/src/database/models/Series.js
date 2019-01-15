@@ -51,6 +51,8 @@ export const serializeSeries = data => ({
     'updated_at',
   ]),
   user: {
+    id: data.user.id,
+    short_bio: data.user.user_profile.short_bio,
     username: data.user.username,
     thumbnail: data.user.user_profile.thumbnail,
   },

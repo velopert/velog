@@ -13,6 +13,7 @@ import { actionCreators as followActions } from './modules/follow';
 import { actionCreators as commonActions } from './modules/common';
 import { actionCreators as settingsActions } from './modules/settings';
 import { actionCreators as searchActions } from './modules/search';
+import { actionCreators as seriesActions } from './modules/series';
 
 const { dispatch } = store;
 
@@ -31,3 +32,4 @@ export const SettingsActions: typeof settingsActions = bindActionCreators(
   dispatch,
 );
 export const SearchActions: typeof searchActions = bindActionCreators(searchActions, dispatch);
+export const SeriesActions: typeof seriesActions = bindActionCreators(seriesActions, dispatch);

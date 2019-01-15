@@ -1,0 +1,32 @@
+@import 'utils';
+
+.SeriesPostItem {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.5;
+    a {
+      &:hover {
+        color: $oc-violet-4;
+        text-decoration: underline;
+      }
+    }
+  }
+  .date {
+    font-size: 0.875rem;
+    color: $oc-gray-6;
+    margin-bottom: 2rem;
+  }
+  p {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: $oc-gray-8;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  & + & {
+    border-top: 1px solid $oc-gray-2;
+  }
+}

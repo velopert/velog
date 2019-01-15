@@ -32,7 +32,7 @@ export type ResponseAction = {
   meta: any,
 };
 
-export type GenericResponseAction<D, M> = {
+export type GenericResponseAction<D, M = any> = {
   type: string,
   payload: {
     data: D,
