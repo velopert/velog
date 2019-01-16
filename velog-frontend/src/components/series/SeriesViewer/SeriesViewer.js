@@ -1,23 +1,23 @@
 // @flow
 import React from 'react';
-import BookIcon from 'react-icons/lib/md/book';
 import { type SeriesData } from 'store/modules/series';
 import './SeriesViewer.scss';
-import HorizontalUserInfo from '../../common/HorizontalUserInfo/HorizontalUserInfo';
 import SeriesPostItem from '../SeriesPostItem/SeriesPostItem';
 
 type Props = {
   series: SeriesData,
+  onEnableEditing: () => void,
 };
-const SeriesViewer = ({ series }: Props) => {
+const SeriesViewer = ({ series, onEnableEditing }: Props) => {
   return (
     <div className="SeriesViewer">
-      <HorizontalUserInfo user={series.user} />
-      <div className="series-label">
-        <BookIcon />
-        <span>SERIES</span>
-      </div>
       <h1>{series.name}</h1>
+      <div className="manage">
+        <button className="text-btn" onClick={onEnableEditing}>
+          수정
+        </button>
+        <button className="text-btn">삭제</button>
+      </div>
       <div className="list">
         {series.posts.map(p => (
           <SeriesPostItem key={p.id} post={p} username={series.user.username} />

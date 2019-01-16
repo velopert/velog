@@ -15,7 +15,6 @@ class RedisClient {
   }
   connect() {
     const p = new Promise((resolve, reject) => {
-      const { REDIS_HOST, REDIS_PASS } = process.env;
       const client = redis.createClient({
         host: process.env.REDIS_HOST || '',
         password: process.env.REDIS_PASS || '',

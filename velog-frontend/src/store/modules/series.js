@@ -6,10 +6,12 @@ import * as SeriesAPI from 'lib/api/series';
 
 const GET_SERIES = 'series/GET_SERIES';
 const INITIALIZE = 'series/INITIALIZE';
+const ENABLE_EDITING = 'series/ENABLE_EDITING';
 
 export const actionCreators = {
   getSeries: createAction(GET_SERIES, SeriesAPI.getSeries),
   initialize: createAction(INITIALIZE),
+  enableEditing: createAction(ENABLE_EDITING),
 };
 
 export type SeriesPostData = {
@@ -45,15 +47,21 @@ type GetSeriesResponseAction = GenericResponseAction<SeriesData>;
 
 export type SeriesState = {
   series: ?SeriesData,
+  editing: boolean,
 };
 
 const initialState: SeriesState = {
   series: null,
+  editing: false,
 };
 
 const reducer = handleActions(
   {
     [INITIALIZE]: () => initialState,
+    [ENABLE_EDITING]: state => ({
+      ...state,
+      editing: true,
+    }),
   },
   initialState,
 );
