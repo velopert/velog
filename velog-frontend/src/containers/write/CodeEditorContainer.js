@@ -26,6 +26,7 @@ type Props = {
   thumbnail: ?string,
   categoryModalOpen: boolean,
   isPrivate: boolean,
+  seriesId: ?string,
 };
 
 class CodeEditorContainer extends Component<Props> {
@@ -76,7 +77,7 @@ class CodeEditorContainer extends Component<Props> {
     // uploading needs postId
     if (!this.props.postData) {
       await WriteActions.setTempData();
-      const { title, body, tags, categories, thumbnail, isPrivate } = this.props;
+      const { title, body, tags, categories, thumbnail, isPrivate, seriesId } = this.props;
       const activeCategories = (() => {
         if (!categories || categories.length === 0) return [];
         return categories.filter(c => c.active).map(c => c.id);
@@ -90,6 +91,7 @@ class CodeEditorContainer extends Component<Props> {
           categories: activeCategories,
           thumbnail,
           is_private: isPrivate,
+          series_id: seriesId,
         });
       } catch (e) {
         console.log(e);
@@ -182,6 +184,7 @@ export default connect(
     thumbnail: write.thumbnail,
     categoryModalOpen: write.categoryModal.open,
     isPrivate: write.submitBox.is_private,
+    seriesId: write.submitBox.series ? write.submitBox.series.id : null,
   }),
   () => ({}),
 )(CodeEditorContainer);

@@ -1,3 +1,4 @@
+// @flow
 import Sequelize from 'sequelize';
 import db from 'database/db';
 import { primaryUUID } from 'lib/common';
@@ -26,20 +27,47 @@ const SeriesPosts = db.define(
 );
 
 SeriesPosts.associate = () => {
-  Post.belongsTo(Series, {
+  SeriesPosts.belongsTo(Post, {
     onDelete: 'CASCADE',
-    onUpdate: 'Restrict',
-    through: {
-      model: SeriesPosts,
-    },
+    onUpdate: 'restrict',
     foreignKey: 'fk_post_id',
   });
-  Series.belongsTo(Post, {
+  SeriesPosts.belongsTo(Series, {
     onDelete: 'CASCADE',
-    onUpdate: 'Restrict',
-    through: {
-      model: SeriesPosts,
-    },
+    onUpdate: 'restrict',
     foreignKey: 'fk_series_id',
   });
 };
+
+SeriesPosts.append = async (
+  seriesId: string,
+  postId: string,
+  userId: string,
+) => {
+  // list all series post
+  const seriesPosts = await SeriesPosts.findAll({
+    where: {
+      fk_series_id: seriesId,
+    },
+    include: [Post],
+    order: [['index', 'ASC']],
+  });
+  const nextIndex =
+    seriesPosts.length === 0
+      ? 1
+      : seriesPosts[seriesPosts.length - 1].index + 1;
+  // check already added
+  const exists = seriesPosts.find(sp => sp.fk_post_id === postId);
+  if (exists) {
+    return exists;
+  }
+  const sp = await SeriesPosts.build({
+    fk_user_id: userId,
+    index: nextIndex,
+    fk_post_id: postId,
+    fk_series_id: seriesId,
+  }).save();
+  return sp;
+};
+
+export default SeriesPosts;

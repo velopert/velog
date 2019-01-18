@@ -1,4 +1,4 @@
-@import "utils";
+@import 'utils';
 .SubmitBox {
   @keyframes submitBoxAppear {
     0% {
@@ -25,11 +25,161 @@
   top: 0.5rem;
   background: $oc-gray-7;
   width: 20rem;
-  @include media("<376px") {
+  @include media('<376px') {
     width: calc(100vw - 1rem);
   }
-  padding: 1.5rem;
-  z-index: z("submit-box"); // @include material-shadow(2, 1);
+  .wrapper {
+    background: $oc-gray-7;
+    padding: 1.5rem;
+    .title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      .text {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+      .view {
+        margin-left: auto;
+        font-size: 0.9rem;
+        color: $oc-orange-6;
+        font-weight: 600;
+        &:hover {
+          cursor: pointer;
+          color: $oc-orange-5;
+        }
+      }
+    }
+    .sections {
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      section + section {
+        margin-top: 1rem;
+      }
+      .section-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: $oc-gray-4;
+        &.category {
+          display: flex;
+          align-items: center;
+          .edit {
+            line-height: 0.8rem;
+            margin-left: auto;
+            padding: 0.25rem;
+            border: 1px solid $oc-gray-0;
+            border-radius: 2px;
+            color: white;
+            cursor: pointer;
+            div {
+              margin-top: 0.1rem;
+              margin-left: 0.25rem;
+            }
+            &:hover {
+              background: white;
+              color: $oc-gray-9;
+            }
+          }
+        }
+      }
+    }
+    .footer {
+      padding-top: 1rem;
+      user-select: none;
+      margin: -1.5rem;
+      padding: 1.5rem;
+      margin-top: 0rem;
+      background: $oc-gray-8;
+      .buttons {
+        display: flex;
+        button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex: 1;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+          border-radius: 4px; // @include material-shadow(2, 0.75);
+          font-weight: 500;
+          font-size: 0.9rem;
+          &.gray {
+            background: #65707b;
+            &:hover {
+              background: lighten(#65707b, 5%);
+            }
+            &:active {
+              background: darken(#65707b, 5%);
+            }
+          }
+          &.purple {
+            background: $oc-violet-5;
+            &:hover {
+              background: lighten($oc-violet-5, 5%);
+            }
+            &:active {
+              background: $oc-violet-5;
+            }
+          }
+          &.blue {
+            background: $oc-blue-5;
+            &:hover {
+              background: lighten($oc-blue-5, 5%);
+            }
+            &:active {
+              background: $oc-blue-5;
+            }
+          }
+        }
+        button + button {
+          margin-left: 1rem;
+        }
+      }
+      .between {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .open-options {
+        text-align: right;
+        font-size: 0.9rem;
+        color: $oc-orange-7;
+        display: block;
+        margin-right: 0.125rem;
+        font-weight: 600;
+        a {
+          &:hover {
+            cursor: pointer;
+            color: $oc-orange-6;
+          }
+        }
+      } // .submit-button {
+      //   @include material-shadow(2, 0.75);
+      //   background: $oc-violet-5;
+      //   border-radius: 3px;
+      //   font-weight: 600;
+      //   transition: 0.1s all ease-in;
+      //   cursor: pointer;
+      //   &:hover {
+      //     background: lighten($oc-violet-5, 5%);
+      //   }
+      //   &:active {
+      //     background: $oc-violet-5;
+      //   }
+      //   &.edit {
+      //     background: $oc-indigo-5;
+      //     &:hover {
+      //       background: lighten($oc-indigo-5, 5%);
+      //     }
+      //     &:active {
+      //       background: $oc-indigo-5;
+      //     }
+      //   }
+      // }
+    }
+  }
+  z-index: z('submit-box'); // @include material-shadow(2, 1);
   color: white; // transition: transform 0.075s ease-in;
   // transform-origin: top right;
   // transform: scale(1);
@@ -40,152 +190,5 @@
   &.disappear {
     animation: submitBoxDisappear 0.15s ease-in-out;
     animation-fill-mode: forwards;
-  }
-  .title {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    .text {
-      font-size: 1.25rem;
-      font-weight: 600;
-    }
-    .view {
-      margin-left: auto;
-      font-size: 0.9rem;
-      color: $oc-orange-6;
-      font-weight: 600;
-      &:hover {
-        cursor: pointer;
-        color: $oc-orange-5;
-      }
-    }
-  }
-  .sections {
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
-    section + section {
-      margin-top: 1rem;
-    }
-    .section-title {
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      color: $oc-gray-4;
-      &.category {
-        display: flex;
-        align-items: center;
-        .edit {
-          line-height: 0.8rem;
-          margin-left: auto;
-          padding: 0.25rem;
-          border: 1px solid $oc-gray-0;
-          border-radius: 2px;
-          color: white;
-          cursor: pointer;
-          div {
-            margin-top: 0.1rem;
-            margin-left: 0.25rem;
-          }
-          &:hover {
-            background: white;
-            color: $oc-gray-9;
-          }
-        }
-      }
-    }
-  }
-  .footer {
-    padding-top: 1rem;
-    user-select: none;
-    margin: -1.5rem;
-    padding: 1.5rem;
-    margin-top: 0rem;
-    background: $oc-gray-8;
-    .buttons {
-      display: flex;
-      button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-radius: 4px; // @include material-shadow(2, 0.75);
-        font-weight: 500;
-        font-size: 0.9rem;
-        &.gray {
-          background: #65707b;
-          &:hover {
-            background: lighten(#65707b, 5%);
-          }
-          &:active {
-            background: darken(#65707b, 5%);
-          }
-        }
-        &.purple {
-          background: $oc-violet-5;
-          &:hover {
-            background: lighten($oc-violet-5, 5%);
-          }
-          &:active {
-            background: $oc-violet-5;
-          }
-        }
-        &.blue {
-          background: $oc-blue-5;
-          &:hover {
-            background: lighten($oc-blue-5, 5%);
-          }
-          &:active {
-            background: $oc-blue-5;
-          }
-        }
-      }
-      button + button {
-        margin-left: 1rem;
-      }
-    }
-    .between {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .open-options {
-      text-align: right;
-      font-size: 0.9rem;
-      color: $oc-orange-7;
-      display: block;
-      margin-right: 0.125rem;
-      font-weight: 600;
-      a {
-        &:hover {
-          cursor: pointer;
-          color: $oc-orange-6;
-        }
-      }
-    } // .submit-button {
-    //   @include material-shadow(2, 0.75);
-    //   background: $oc-violet-5;
-    //   border-radius: 3px;
-    //   font-weight: 600;
-    //   transition: 0.1s all ease-in;
-    //   cursor: pointer;
-    //   &:hover {
-    //     background: lighten($oc-violet-5, 5%);
-    //   }
-    //   &:active {
-    //     background: $oc-violet-5;
-    //   }
-    //   &.edit {
-    //     background: $oc-indigo-5;
-    //     &:hover {
-    //       background: lighten($oc-indigo-5, 5%);
-    //     }
-    //     &:active {
-    //       background: $oc-indigo-5;
-    //     }
-    //   }
-    // }
   }
 }

@@ -1,0 +1,144 @@
+@import 'utils';
+
+@keyframes editingAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(-2.5625rem);
+  }
+  100% {
+    opacity: 1;
+    tranform: translateY(0rem);
+  }
+}
+
+@keyframes editingDisappear {
+  0% {
+    opacity: 1;
+    tranform: translateY(0rem);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-2.5625rem);
+  }
+}
+.SubmitBoxSeries {
+  border: 1px solid $oc-gray-7;
+  background: white;
+  padding: 1.5rem;
+  color: $oc-gray-9;
+  h3 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  .list-wrapper {
+    margin-top: 0.75rem;
+    border: 1px solid $oc-gray-4;
+    height: 17.8125rem;
+    display: flex;
+    flex-direction: column;
+    .create-form {
+      background: $oc-gray-2;
+      padding: 0.75rem;
+      transition: 0.15s all ease-in-out;
+      height: 3.6875rem;
+      &.editing {
+        height: 8.625rem;
+      }
+      &.cancelling {
+        height: 3.6875rem;
+      }
+
+      input {
+        &.regular {
+          position: relative;
+          z-index: 2;
+          border: 1px solid $oc-gray-3;
+          outline: none;
+          width: 100%;
+          font-size: 0.875rem;
+          padding: 0.5rem;
+        }
+      }
+      .url-wrapper {
+        padding: 0.5rem;
+        border: 1px solid $oc-gray-3;
+        display: flex;
+        font-size: 0.75rem;
+        background: white;
+        margin-top: 0.5rem;
+        line-height: 1.125;
+        align-items: center;
+        .text {
+          color: $oc-gray-6;
+        }
+        input {
+          color: $oc-gray-9;
+          display: block;
+          flex: 1;
+          font-size: 0.75rem;
+          line-height: 1.125;
+          border: none;
+          outline: none;
+        }
+      }
+      .editing {
+        animation: editingAppear 0.15s ease-in-out;
+        animation-fill-mode: forwards;
+        &.cancelling {
+          animation: editingDisappear 0.15s ease-in-out;
+          animation-fill-mode: forwards;
+        }
+        .buttons {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+    .list {
+      flex: 1;
+      background: $oc-gray-0;
+      overflow-y: auto;
+      .item {
+        cursor: pointer;
+        background: white;
+        font-size: 0.875rem;
+        padding: 8px;
+        border-bottom: 1px solid $oc-gray-2;
+        &.active {
+          background: $oc-gray-7;
+          color: white;
+        }
+      }
+    }
+  }
+
+  .close {
+    margin-top: 1rem;
+  }
+  .close,
+  .remove,
+  .select {
+    padding: 0;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .remove {
+    transition: none;
+    margin-top: 1rem;
+    border: 1px solid $oc-red-5;
+    color: $oc-red-5;
+    &:hover {
+      background: $oc-red-5;
+      color: white;
+      border: 1px solid $oc-red-5;
+    }
+  }
+  .select {
+    margin-top: 1rem;
+  }
+}

@@ -16,6 +16,8 @@ import { escapeForUrl } from 'lib/common';
 import { withRouter, type ContextRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import WriteVisibilitySelect from 'components/write/WriteVisibilitySelect';
+import WriteSeriesConfigureContainer from './WriteSeriesConfigureContainer';
+import SubmitBoxSeriesContainer from './SubmitBoxSeriesContainer';
 
 type Props = {
   open: boolean,
@@ -33,6 +35,8 @@ type Props = {
   username: ?string,
   urlSlug: ?string,
   isPrivate: boolean,
+  seriesMode: boolean,
+  seriesId: ?string,
 } & ContextRouter;
 
 class SubmitBoxContainer extends Component<Props> {
@@ -66,7 +70,7 @@ class SubmitBoxContainer extends Component<Props> {
     // temp save post if not released
     if (!this.props.postData) {
       await WriteActions.setTempData(); // nextTick
-      const { title, body, tags, categories, thumbnail, urlSlug, isPrivate } = this.props;
+      const { title, body, tags, categories, thumbnail, urlSlug, isPrivate, seriesId } = this.props;
       const activeCategories = (() => {
         if (!categories || categories.length === 0) return [];
         return categories.filter(c => c.active).map(c => c.id);
@@ -81,6 +85,7 @@ class SubmitBoxContainer extends Component<Props> {
           categories: activeCategories,
           url_slug: urlSlug || escapeForUrl(title),
           is_private: isPrivate,
+          series_id: seriesId,
         });
       } catch (e) {
         console.log(e);
@@ -159,6 +164,7 @@ class SubmitBoxContainer extends Component<Props> {
       meta,
       urlSlug,
       isPrivate,
+      seriesId,
     } = this.props;
     try {
       if (postData) {
@@ -174,6 +180,7 @@ class SubmitBoxContainer extends Component<Props> {
           meta,
           url_slug: urlSlug,
           is_private: isPrivate,
+          series_id: seriesId,
         });
         BaseActions.showToast({
           type: 'success',
@@ -190,6 +197,7 @@ class SubmitBoxContainer extends Component<Props> {
           meta,
           url_slug: urlSlug || escapeForUrl(title),
           is_private: isPrivate,
+          series_id: seriesId,
         });
 
         BaseActions.showToast({
@@ -215,7 +223,17 @@ class SubmitBoxContainer extends Component<Props> {
   };
 
   onTempSave = async () => {
-    const { postData, title, body, tags, categories, thumbnail, urlSlug, isPrivate } = this.props;
+    const {
+      postData,
+      title,
+      body,
+      tags,
+      categories,
+      thumbnail,
+      urlSlug,
+      isPrivate,
+      seriesId,
+    } = this.props;
 
     const activeCategories = (() => {
       if (!categories || categories.length === 0) return [];
@@ -233,6 +251,7 @@ class SubmitBoxContainer extends Component<Props> {
           categories: activeCategories,
           url_slug: urlSlug || escapeForUrl(title),
           is_private: isPrivate,
+          series_id: seriesId,
         });
       }
       if (postData && postData.is_temp) {
@@ -246,6 +265,7 @@ class SubmitBoxContainer extends Component<Props> {
           categories: activeCategories,
           url_slug: urlSlug,
           is_private: isPrivate,
+          series_id: seriesId,
         });
       }
       if (this.props.postData) {
@@ -315,6 +335,7 @@ class SubmitBoxContainer extends Component<Props> {
       username,
       urlSlug,
       isPrivate,
+      seriesMode,
     } = this.props;
 
     const postLink = username && postData && `/@${username}/${postData.url_slug}`;
@@ -332,6 +353,7 @@ class SubmitBoxContainer extends Component<Props> {
             onClearThumbnail={onClearThumbnail}
           />
         }
+        configureSeries={<WriteSeriesConfigureContainer />}
         visibilitySelect={
           <WriteVisibilitySelect onSelect={this.onSelectVisibility} isPrivate={isPrivate} />
         }
@@ -357,6 +379,7 @@ class SubmitBoxContainer extends Component<Props> {
             />
           )
         }
+        series={seriesMode && <SubmitBoxSeriesContainer />}
       />
     );
   }
@@ -380,6 +403,8 @@ const enhance = compose(
       username: user.user && user.user.username,
       urlSlug: write.submitBox.url_slug,
       isPrivate: write.submitBox.is_private,
+      seriesMode: write.seriesModal.visible,
+      seriesId: write.submitBox.series ? write.submitBox.series.id : null,
     }),
     () => ({}),
   ),

@@ -1,0 +1,116 @@
+@import 'utils';
+.PostSeriesInfo {
+  border-radius: 4px;
+  box-shadow: 0 0 8px 0 rgba(218, 218, 218, 0.58);
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  .top-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .label {
+      display: inline-flex;
+      align-items: center;
+      background: #9775fa;
+      color: white;
+      padding: 8px;
+      svg {
+        margin-right: 4px;
+      }
+      span {
+        font-size: 0.875rem;
+        font-weight: 800;
+      }
+    }
+    .number {
+      font-size: 1.125rem;
+      color: $oc-gray-8;
+      font-weight: 600;
+    }
+  }
+  h2 {
+    font-size: 2rem;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+    font-weight: 700;
+    color: $oc-gray-8;
+  }
+  ol {
+    list-style: none;
+    counter-reset: li;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+    li {
+      color: $oc-gray-7;
+      font-size: 1.3125rem;
+      line-height: 1.5;
+      a {
+        &:hover {
+          color: $oc-violet-5;
+          text-decoration: underline;
+        }
+      }
+      li + li {
+        margin-top: 1.5rem;
+      }
+      &::before {
+        font-family: 'Noto Serif KR', sans-serif;
+        font-style: italic;
+        color: $oc-gray-5;
+        content: counter(li) '. ';
+        counter-increment: li;
+      }
+    }
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.3125rem;
+    .show-all {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: $oc-gray-6;
+      svg {
+        margin-top: -0.25rem;
+        font-size: 1.25rem;
+        margin-right: 0.25rem;
+        color: $oc-gray-7;
+      }
+      &:hover {
+        color: $oc-gray-5;
+        svg {
+          color: $oc-gray-6;
+        }
+      }
+    }
+    .controls {
+      display: flex;
+      border: 1px solid $oc-gray-5;
+      color: $oc-gray-5;
+      .square {
+        background: white;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.125rem;
+        &.disabled {
+          background: $oc-gray-3;
+          color: $oc-gray-5;
+        }
+        &:not(.disabled) {
+          &:hover {
+            color: $oc-violet-5;
+          }
+        }
+      }
+      .square + .square {
+        border-left: 1px solid $oc-gray-5;
+      }
+    }
+  }
+}

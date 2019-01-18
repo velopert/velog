@@ -21,3 +21,5 @@ export { default as UrlSlugHistory } from './UrlSlugHistory';
 export { default as EmailCert } from './EmailCert';
 export { default as UserMeta } from './UserMeta';
 export { default as UserImage } from './UserImage';
+export { default as Series } from './Series';
+export { default as SeriesPosts } from './SeriesPosts';

@@ -1,0 +1,54 @@
+@import 'utils';
+
+.SeriesEditor {
+  color: $oc-gray-9;
+  .title {
+    resize: none !important;
+    width: 100%;
+    margin-top: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    border-bottom: 1px solid $oc-gray-2;
+    margin-bottom: 0;
+    padding: 0.5rem;
+    border: 1px solid $oc-gray-3;
+    outline: none;
+    font-family: inherit;
+    display: block;
+  }
+  .buttons-wrapper {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .list {
+    margin-top: 2rem;
+    .item {
+      background: $oc-gray-0;
+      border: 1px solid $oc-gray-2;
+      padding: 1rem;
+      cursor: pointer;
+      .post-title {
+        font-size: 1.3125rem;
+        font-weight: 600;
+      }
+      .date {
+        margin-top: 0.5rem;
+        color: $oc-gray-6;
+        font-size: 0.875rem;
+      }
+
+      &.chosen {
+        border: 1px solid $oc-violet-6;
+      }
+      &.ghost {
+        opacity: 0.4;
+      }
+      &.drag {
+      }
+      & + .item {
+        margin-top: 0.5rem;
+      }
+    }
+  }
+}

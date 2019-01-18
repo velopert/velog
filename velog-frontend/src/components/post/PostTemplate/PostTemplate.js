@@ -1,6 +1,5 @@
 // @flow
 import React, { type Node } from 'react';
-import ViewerHead from 'components/base/ViewerHead';
 import './PostTemplate.scss';
 
 type Props = {

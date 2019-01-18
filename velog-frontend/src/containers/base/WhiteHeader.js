@@ -6,7 +6,7 @@ import RightCorner from 'containers/base/RightCorner';
 type Props = {};
 
 const WhiteHeader = (props: Props) => {
-  return <ViewerHead rightCorner={<RightCorner />} />;
+  return <ViewerHead />;
 };
 
 export default WhiteHeader;

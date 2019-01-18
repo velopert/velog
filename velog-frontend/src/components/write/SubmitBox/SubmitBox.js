@@ -11,6 +11,7 @@ type Props = {
   selectCategory: any,
   inputTags: any,
   configureThumbnail: Node,
+  configureSeries: Node,
   visible: boolean,
   isEdit: boolean,
   onClose(): void,
@@ -19,6 +20,7 @@ type Props = {
   onEditCategoryClick(): void,
   onToggleAdditionalConfig(): void,
   additional: Node | false,
+  series: Node | false,
   postLink: ?string,
   visibilitySelect: Node,
 };
@@ -78,26 +80,32 @@ class SubmitBox extends Component<Props, State> {
       postLink,
       onTempSave,
       visibilitySelect,
+      configureSeries,
+      series,
     } = this.props;
     const { animating } = this.state;
 
     if (!visible && !animating) return null;
+    if (series) {
+      return <div className={cx('SubmitBox', visible ? 'appear' : 'disappear')}>{series}</div>;
+    }
 
     return (
       <div className={cx('SubmitBox', visible ? 'appear' : 'disappear')}>
-        <div className="title">
-          <div className="text">{isEdit ? '글 수정하기' : '새 글 작성하기'}</div>
-          {isEdit &&
-            postLink && (
-              <Link className="view" to={postLink}>
-                글 보기
-              </Link>
-            )}
-        </div>
-        {additional || (
-          <Fragment>
-            <div className="sections">
-              {/* <section>
+        <div className="wrapper">
+          <div className="title">
+            <div className="text">{isEdit ? '글 수정하기' : '새 글 작성하기'}</div>
+            {isEdit &&
+              postLink && (
+                <Link className="view" to={postLink}>
+                  글 보기
+                </Link>
+              )}
+          </div>
+          {additional || (
+            <Fragment>
+              <div className="sections">
+                {/* <section>
                 <div className="section-title category" onClick={onEditCategoryClick}>
                   카테고리 선택
                   <div className="edit util flex-center">
@@ -107,33 +115,38 @@ class SubmitBox extends Component<Props, State> {
                 </div>
                 {selectCategory}
               </section> */}
-              <section>
-                <div className="section-title">태그 설정</div>
-                {inputTags}
-              </section>
-              <section>
-                <div className="section-title">썸네일 지정</div>
-                {configureThumbnail}
-              </section>
-            </div>
-            <div className="footer">
-              <div className="buttons">
-                <button className="gray" onClick={onTempSave}>
-                  임시저장
-                </button>
-                <button className={cx('purple', { blue: isEdit })} onClick={onSubmit}>
-                  {isEdit ? '업데이트' : '작성하기'}
-                </button>
+                <section>
+                  <div className="section-title">태그 설정</div>
+                  {inputTags}
+                </section>
+                <section>
+                  <div className="section-title">썸네일 지정</div>
+                  {configureThumbnail}
+                </section>
+                <section>
+                  <div className="section-title">시리즈 설정</div>
+                  {configureSeries}
+                </section>
               </div>
-              <div className="between">
-                <div className="visibility-select">{visibilitySelect}</div>
-                <div className="open-options">
-                  <a onClick={onToggleAdditionalConfig}>추가설정</a>
+              <div className="footer">
+                <div className="buttons">
+                  <button className="gray" onClick={onTempSave}>
+                    임시저장
+                  </button>
+                  <button className={cx('purple', { blue: isEdit })} onClick={onSubmit}>
+                    {isEdit ? '업데이트' : '작성하기'}
+                  </button>
+                </div>
+                <div className="between">
+                  <div className="visibility-select">{visibilitySelect}</div>
+                  <div className="open-options">
+                    <a onClick={onToggleAdditionalConfig}>추가설정</a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Fragment>
-        )}
+            </Fragment>
+          )}
+        </div>
       </div>
     );
   }

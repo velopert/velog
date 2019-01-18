@@ -17,6 +17,9 @@ const UserContent = ({ type, children, side, username }: Props) => (
       <Link className={cx({ active: type === 'posts' })} to={`/@${username}`}>
         글
       </Link>
+      <Link className={cx({ active: type === 'series' })} to={`/@${username}/series`}>
+        시리즈
+      </Link>
       <Link className={cx({ active: type === 'history' })} to={`/@${username}/history`}>
         활동
       </Link>

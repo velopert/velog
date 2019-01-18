@@ -15,6 +15,7 @@ import { convertToPlainText } from 'lib/common';
 import PostPlaceholder from 'components/post/PostPlaceholder';
 import throttle from 'lodash/throttle';
 import PostLeftSticker from '../../components/post/PostLeftSticker/PostLeftSticker';
+import PostSeriesInfo from '../../components/post/PostSeriesInfo/PostSeriesInfo';
 
 type Props = {
   username: ?string,
@@ -181,6 +182,7 @@ class PostViewer extends Component<Props> {
           url={this.props.match.url}
           informCopy={this.informCopy}
         />
+        {post.series && <PostSeriesInfo series={post.series} username={username || ''} />}
         <PostContent
           thumbnail={post.thumbnail}
           body={post.body}

@@ -1,6 +1,17 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Home, Register, Write, Post, User, Saves, Settings, Policy, NotFound } from 'pages';
+import {
+  Home,
+  Register,
+  Write,
+  Post,
+  User,
+  Saves,
+  Settings,
+  Policy,
+  Series,
+  NotFound,
+} from 'pages';
 import EmailLogin from 'containers/etc/EmailLogin';
 import Core from 'containers/base/Core';
 import { Helmet } from 'react-helmet';
@@ -31,7 +42,8 @@ const App = () => (
       <Route path="/write" component={Write} />
       <Route exact path="/@:username/" component={User} />
       <Route exact path="/@:username/tags/:tag" component={User} />
-      <Route exact path="/@:username/:tab(history|about)" component={User} />
+      <Route exact path="/@:username/:tab(history|about|series)" component={User} />
+      <Route path="/@:username/series/:urlSlug" component={Series} />
       <Route path="/@:username/:urlSlug" component={Post} />
       <Route path="/posts/preview/:id" component={Post} />
       <Route path="/saves" component={Saves} />

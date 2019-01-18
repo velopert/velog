@@ -13,7 +13,8 @@ import common from './common';
 import sitemaps from './sitemaps';
 import internal from './internal';
 import atom from './atom';
-import search from './search/search';
+import search from './search';
+import series from './series';
 
 const router: Router = new Router();
 
@@ -28,6 +29,7 @@ router.use('/sitemaps', sitemaps.routes());
 router.use('/internal', internal.routes());
 router.use('/atom', atom.routes());
 router.use('/search', search.routes());
+router.use('/series', series.routes());
 
 router.get('/check', (ctx: Context) => {
   console.log('avoiding cold start...');

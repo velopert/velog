@@ -12,6 +12,7 @@ import type { FollowState } from './modules/follow';
 import type { CommonState } from './modules/common';
 import type { SettingsState } from './modules/settings';
 import type { SearchState } from './modules/search';
+import type { SeriesState } from './modules/series';
 
 const store = configure(typeof window === 'undefined' ? undefined : window.__REDUX_STATE__);
 
@@ -30,6 +31,7 @@ export type State = {
   common: CommonState,
   settings: SettingsState,
   search: SearchState,
+  series: SeriesState,
   pender: {
     pending: any,
     success: any,

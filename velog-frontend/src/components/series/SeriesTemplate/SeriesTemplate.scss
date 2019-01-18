@@ -1,0 +1,32 @@
+@import 'utils';
+.SeriesTemplate {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  color: $oc-gray-9;
+  @include media('<medium') {
+    margin-top: 0;
+    width: 100%;
+  }
+  .series-label {
+    background: $oc-violet-4;
+    color: white;
+    width: 7.5rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    span {
+      margin-left: 0.25rem;
+    }
+    @include media('<medium') {
+      width: 5rem;
+      height: 2rem;
+      font-size: 1rem;
+      span {
+        margin-left: 0.125rem;
+      }
+    }
+  }
+}

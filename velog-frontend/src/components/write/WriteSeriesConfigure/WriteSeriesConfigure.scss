@@ -1,0 +1,60 @@
+@import 'utils';
+
+.WriteSeriesConfigure {
+  .box {
+    width: 100%;
+    background: white;
+    color: $oc-gray-9;
+  }
+  .edit {
+    .name {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .separator {
+      height: 1.25rem;
+      width: 1px;
+      background: $oc-gray-4;
+    }
+    .change {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      min-width: 0;
+      font-size: 0.875rem;
+      color: $oc-orange-5;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      cursor: pointer;
+      &:hover {
+        background: $oc-gray-0;
+      }
+    }
+    align-items: center;
+    height: 2.5rem;
+    display: flex;
+  }
+  .create {
+    border-radius: 4px;
+    height: 3.375rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+    svg {
+      font-size: 1.5rem;
+    }
+    .text {
+      font-size: 1.125rem;
+      font-weight: 800;
+      margin-left: 0.75rem;
+    }
+    &:hover {
+      background: $oc-gray-0;
+    }
+  }
+}

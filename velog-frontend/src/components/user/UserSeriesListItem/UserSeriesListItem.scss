@@ -1,0 +1,32 @@
+@import 'utils';
+.UserSeriesListItem {
+  width: calc((100% - 3rem) / 2);
+  background: $oc-gray-0;
+  box-shadow: 0 0 8px 0 rgba(205, 205, 205, 0.4);
+  margin: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  .content {
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: $oc-gray-9;
+      a {
+        &:hover {
+          color: $oc-violet-5;
+        }
+      }
+    }
+    .meta {
+      font-size: 1rem;
+      line-height: 1.5;
+      .updated {
+        color: $oc-gray-6;
+      }
+    }
+  }
+}

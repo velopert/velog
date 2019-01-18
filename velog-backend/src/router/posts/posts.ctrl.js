@@ -28,6 +28,8 @@ import {
   PostLike,
   PostScore,
   PostRead,
+  SeriesPosts,
+  Series,
 } from 'database/models';
 
 import { serializePost, type PostModel } from 'database/models/Post';
@@ -127,6 +129,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     tags: Array<string>,
     url_slug: string,
     is_private: ?boolean, // until update
+    series_id: ?string,
   };
 
   const schema = Joi.object().keys({
@@ -154,6 +157,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
       .trim()
       .min(1)
       .max(130),
+    series_id: Joi.string().allow(null),
   });
 
   if (!validateSchema(ctx, schema)) {
@@ -170,6 +174,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
     categories,
     tags,
     url_slug,
+    series_id,
   }: BodySchema = (ctx.request.body: any);
 
   const uniqueUrlSlug = escapeForUrl(`${title} ${generateSlugId()}`);
@@ -182,7 +187,6 @@ export const writePost = async (ctx: Context): Promise<*> => {
         userId: ctx.user.id,
         urlSlug: url_slug,
       });
-      console.log(exists);
       if (exists > 0) {
         processedSlug = uniqueUrlSlug;
       }
@@ -247,6 +251,24 @@ export const writePost = async (ctx: Context): Promise<*> => {
     await PostsTags.link(postId, tagIds);
     await PostsCategories.link(postId, uniqueCategories);
 
+    if (series_id) {
+      const series = await Series.findById(series_id);
+      if (!series) {
+        ctx.status = 404;
+        ctx.body = {
+          name: 'INVALID_SERIES',
+        };
+        return;
+      }
+      if (series.fk_user_id !== ctx.user.id) {
+        ctx.status = 403;
+        return;
+      }
+      series.changed('updated_at', true);
+      await series.save();
+      await SeriesPosts.append(series_id, post.id, ctx.user.id);
+    }
+
     // const categoriesInfo = await PostsCategories.findCategoriesByPostId(postId);
 
     const postData = await Post.readPostById(postId);
@@ -283,9 +305,7 @@ export const writePost = async (ctx: Context): Promise<*> => {
 export const readPost = async (ctx: Context): Promise<*> => {
   const { username, urlSlug } = ctx.params;
   try {
-    console.time('readPost');
     let post = await Post.readPost(username, urlSlug);
-    console.timeEnd('readPost');
     if (!post) {
       // try using urlslugHistory
       const user = await User.findUser('username', username);
@@ -304,9 +324,7 @@ export const readPost = async (ctx: Context): Promise<*> => {
         ctx.status = 404;
         return;
       }
-      console.time('readPostById');
       post = await Post.readPostById(history.fk_post_id);
-      console.timeEnd('readPostById');
       if (!post) {
         ctx.status = 404;
         return;
@@ -320,26 +338,69 @@ export const readPost = async (ctx: Context): Promise<*> => {
       return;
     }
 
+    const [commentsCount, seriesPost] = await Promise.all([
+      Comment.getCommentsCount(post.id),
+      SeriesPosts.findOne({
+        where: {
+          fk_post_id: post.id,
+        },
+        include: [Series],
+      }),
+    ]);
 
-    console.time('getCommentsCount');
-    const commentsCount = await Comment.getCommentsCount(post.id);
-    console.timeEnd('getCommentsCount');
+    let seriesLength = 0;
+    let list = null;
+    if (seriesPost) {
+      const seriesPosts = await SeriesPosts.findAll({
+        where: {
+          fk_series_id: seriesPost.fk_series_id,
+        },
+        include: [
+          {
+            model: Post,
+            attributes: ['id', 'url_slug', 'title'],
+          },
+        ],
+        order: [['index', 'ASC']],
+      });
+      seriesLength = seriesPosts.length;
+      list = seriesPosts.map(sp => ({
+        index: sp.index,
+        id: sp.fk_post_id,
+        title: sp.post.title,
+        url_slug: sp.post.url_slug,
+      }));
+    }
     let liked = false;
     if (ctx.user) {
-      console.time('checkLikeExists');
       const exists = await PostLike.checkExists({
         userId: ctx.user.id,
         postId: post.id,
       });
-      console.timeEnd('checkLikeExists');
       liked = !!exists;
     }
 
-    ctx.body = serializePost({
+    const serialized = serializePost({
       ...post.toJSON(),
       comments_count: commentsCount,
       liked,
     });
+
+    ctx.body = {
+      ...serialized,
+      series: seriesPost
+        ? {
+          id: seriesPost.series.id,
+          name: seriesPost.series.name,
+          url_slug: seriesPost.series.url_slug,
+          index: seriesPost.index,
+          thumbnail: seriesPost.series.thumbnail,
+          description: seriesPost.series.description,
+          length: seriesLength,
+          list,
+        }
+        : null,
+    };
 
     setTimeout(async () => {
       const hash = generalHash(ctx.request.ip);
@@ -495,6 +556,7 @@ export const listSequences = async (ctx: Context) => {
         'url_slug',
         'fk_user_id',
         'created_at',
+        'released_at',
       ],
       raw: true,
     });
@@ -507,7 +569,15 @@ export const listSequences = async (ctx: Context) => {
     // loads posts before post
     promises.push(Post.findAll({
       order: [['created_at', 'asc']],
-      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at'],
+      attributes: [
+        'id',
+        'title',
+        'body',
+        'meta',
+        'url_slug',
+        'created_at',
+        'released_at',
+      ],
       where: {
         fk_user_id,
         created_at: {
@@ -538,7 +608,15 @@ export const listSequences = async (ctx: Context) => {
     // loads posts after post
     promises.push(Post.findAll({
       order: [['created_at', 'desc']],
-      attributes: ['id', 'title', 'body', 'meta', 'url_slug', 'created_at'],
+      attributes: [
+        'id',
+        'title',
+        'body',
+        'meta',
+        'url_slug',
+        'created_at',
+        'released_at',
+      ],
       where: {
         fk_user_id,
         created_at: {

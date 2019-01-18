@@ -1,0 +1,17 @@
+@import 'utils';
+.PlainTemplate {
+  & > .content-area {
+    margin: 0 auto;
+    width: 768px;
+    position: relative;
+    @include media('<large') {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      width: 100%;
+    }
+    @include media('<medium') {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}

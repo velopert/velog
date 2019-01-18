@@ -22,6 +22,8 @@ import {
   EmailCert,
   UserMeta,
   UserImage,
+  Series,
+  SeriesPosts,
 } from './models';
 import * as views from './views';
 
@@ -47,6 +49,8 @@ export function associate() {
   EmailCert.associate();
   UserMeta.associate();
   UserImage.associate();
+  Series.associate();
+  SeriesPosts.associate();
 }
 export default function sync() {
   associate();
