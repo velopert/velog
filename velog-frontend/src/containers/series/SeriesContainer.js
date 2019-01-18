@@ -17,7 +17,7 @@ type Props = {
 
 class SeriesContainer extends Component<Props> {
   initialize = async () => {
-    if (!this.props.shouldCancel) return;
+    if (this.props.shouldCancel) return;
     SeriesActions.initialize();
     const { username, urlSlug } = this.props.match.params;
     if (!username || !urlSlug) return;
