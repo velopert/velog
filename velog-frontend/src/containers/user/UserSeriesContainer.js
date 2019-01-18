@@ -9,9 +9,11 @@ import { type SeriesItemData } from 'store/modules/profile';
 
 type Props = {
   seriesList: ?(SeriesItemData[]),
+  shouldCancel: boolean,
 } & ContextRouter;
 class UserSeriesContainer extends Component<Props> {
   initialize = async () => {
+    if (this.props.shouldCancel) return;
     const { username } = this.props.match.params;
     try {
       if (!username) return;
@@ -38,4 +40,5 @@ class UserSeriesContainer extends Component<Props> {
 
 export default connect((state: State) => ({
   seriesList: state.profile.seriesList,
+  shouldCancel: state.common.ssr && !state.common.router.altered,
 }))(withRouter(UserSeriesContainer));

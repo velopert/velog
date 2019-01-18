@@ -5,6 +5,8 @@ import { actionCreators as profileActions } from 'store/modules/profile';
 import { actionCreators as listingActions } from 'store/modules/listing';
 import { actionCreators as commonActions } from 'store/modules/common';
 import { actionCreators as followActions } from 'store/modules/follow';
+import { actionCreators as seriesActions } from 'store/modules/series';
+
 import { bindActionCreators } from 'redux';
 import type { State } from 'store';
 import { type Match } from 'react-router';
@@ -143,6 +145,43 @@ const routes = [
       if (!username) return null;
       ProfileActions.setSideVisibility(false);
       await ProfileActions.getProfile(username);
+      const state: State = getState();
+      const { profile } = state.profile;
+      if (profile) {
+        if (ctx.state.logged) {
+          await FollowActions.getUserFollow(profile.id);
+        }
+      }
+      return Promise.resolve();
+    },
+    stop: true,
+  },
+  {
+    path: '/@:username/series/:urlSlug',
+    preload: async (ctx: any, { dispatch, getState }: any, match: Match) => {
+      const SeriesActions = bindActionCreators(seriesActions, dispatch);
+      const { username, urlSlug } = match.params;
+      if (!username || !urlSlug) return null;
+      return SeriesActions.getSeries({
+        username,
+        urlSlug,
+      });
+    },
+    stop: true,
+  },
+  {
+    path: '/@:username/series',
+    exact: true,
+    preload: async (ctx: any, { dispatch, getState }: any, match: Match) => {
+      const { username } = match.params;
+      const ProfileActions = bindActionCreators(profileActions, dispatch);
+      const FollowActions = bindActionCreators(followActions, dispatch);
+      if (!username) return null;
+      ProfileActions.setSideVisibility(false);
+      await Promise.all([
+        ProfileActions.getProfile(username),
+        ProfileActions.getSeriesList(username),
+      ]);
       const state: State = getState();
       const { profile } = state.profile;
       if (profile) {

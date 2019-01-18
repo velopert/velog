@@ -12,10 +12,13 @@ import SeriesTemplate from '../../components/series/SeriesTemplate/SeriesTemplat
 type Props = {
   series: ?SeriesData,
   editing: boolean,
+  shouldCancel: boolean,
 } & ContextRouter;
 
 class SeriesContainer extends Component<Props> {
   initialize = async () => {
+    if (!this.props.shouldCancel) return;
+    SeriesActions.initialize();
     const { username, urlSlug } = this.props.match.params;
     if (!username || !urlSlug) return;
     try {
@@ -85,5 +88,6 @@ export default withRouter(
   connect((state: State) => ({
     series: state.series.series,
     editing: state.series.editing,
+    shouldCancel: state.common.ssr && !state.common.router.altered,
   }))(SeriesContainer),
 );
