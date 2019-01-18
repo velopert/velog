@@ -10,6 +10,8 @@ import './SeriesEditor.scss';
 
 type Props = {
   series: SeriesData,
+  onCancel: () => void,
+  onUpdate: (data: { name: string, posts: any[] }) => Promise<any>,
 };
 
 type State = {
@@ -43,6 +45,17 @@ class SeriesEditor extends Component<Props, State> {
     });
   };
 
+  onSave = () => {
+    const converted = this.state.tempPosts.map((tp, i) => ({
+      id: tp.id,
+      index: i + 1,
+    }));
+    this.props.onUpdate({
+      name: this.state.name,
+      posts: converted,
+    });
+  };
+
   reorder = (oldIndex: number, newIndex: number) => {
     const nextPosts = [...this.state.tempPosts];
     const temp = nextPosts[oldIndex];
@@ -71,7 +84,7 @@ class SeriesEditor extends Component<Props, State> {
   }
 
   render() {
-    const { series } = this.props;
+    const { onCancel } = this.props;
     return (
       <div className="SeriesEditor">
         <TextareaAutosize
@@ -81,8 +94,10 @@ class SeriesEditor extends Component<Props, State> {
           onKeyPress={this.onKeyPress}
         />
         <div className="buttons-wrapper">
-          <Button cancel>취소</Button>
-          <Button>적용</Button>
+          <Button cancel onClick={onCancel}>
+            취소
+          </Button>
+          <Button onClick={this.onSave}>적용</Button>
         </div>
         <div className="list" ref={this.list}>
           {this.state.tempPosts.map(post => (

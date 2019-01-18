@@ -1,6 +1,7 @@
 @import 'utils';
 .SeriesTemplate {
   margin-top: 4rem;
+  margin-bottom: 4rem;
   color: $oc-gray-9;
   @include media('<medium') {
     margin-top: 0;

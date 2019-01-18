@@ -19,3 +19,12 @@ export type GetSeriesParams = {
 };
 export const getSeries = ({ username, urlSlug }: GetSeriesParams) =>
   axios.get(`/series/${username}/${urlSlug}`);
+
+export type UpdateSeriesPayload = {
+  urlSlug: string,
+  username: string,
+  data: CreateSeriesPayload,
+};
+
+export const updateSeries = (payload: UpdateSeriesPayload) =>
+  axios.patch(`/series/${payload.username}/${payload.urlSlug}`, payload.data);

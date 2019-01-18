@@ -7,11 +7,15 @@ import * as SeriesAPI from 'lib/api/series';
 const GET_SERIES = 'series/GET_SERIES';
 const INITIALIZE = 'series/INITIALIZE';
 const ENABLE_EDITING = 'series/ENABLE_EDITING';
+const DISABLE_EDITING = 'series/DISABLE_EDITING';
+const UPDATE_SERIES = 'series/UPDATE_SERIES';
 
 export const actionCreators = {
   getSeries: createAction(GET_SERIES, SeriesAPI.getSeries),
   initialize: createAction(INITIALIZE),
   enableEditing: createAction(ENABLE_EDITING),
+  disableEditing: createAction(DISABLE_EDITING),
+  updateSeries: createAction(UPDATE_SERIES, SeriesAPI.updateSeries),
 };
 
 export type SeriesPostData = {
@@ -61,6 +65,10 @@ const reducer = handleActions(
     [ENABLE_EDITING]: state => ({
       ...state,
       editing: true,
+    }),
+    [DISABLE_EDITING]: state => ({
+      ...state,
+      editing: false,
     }),
   },
   initialState,
