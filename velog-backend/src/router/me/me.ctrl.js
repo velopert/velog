@@ -46,7 +46,13 @@ export const updateProfile = async (ctx: Context): Promise<*> => {
       where: {
         fk_user_id: user.id,
       },
-      attributes: ['id', 'display_name', 'short_bio', 'thumbnail'],
+      attributes: [
+        'id',
+        'display_name',
+        'short_bio',
+        'thumbnail',
+        'profile_links',
+      ],
     });
     if (!profile) {
       ctx.throw(500, 'Invalid Profile');
@@ -65,6 +71,7 @@ export const updateProfile = async (ctx: Context): Promise<*> => {
       display_name: profile.display_name,
       thumbnail: profile.thumbnail,
       short_bio: profile.short_bio,
+      profile_links: profile.profile_links,
     };
   } catch (e) {
     ctx.throw(500, e);
