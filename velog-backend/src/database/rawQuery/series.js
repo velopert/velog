@@ -26,3 +26,25 @@ export const getSeriesPostCountList = async (
     throw e;
   }
 };
+
+export const subtractIndexes = async (
+  seriesId: string,
+  from: number,
+): Promise<any> => {
+  const query = `update series_posts
+set index = index - 1
+where fk_series_id = $seriesId
+and index > $from`;
+  try {
+    const result = await db.query(query, {
+      type: Sequelize.QueryTypes.BULKUPDATE,
+      bind: {
+        seriesId,
+        from,
+      },
+    });
+    return result;
+  } catch (e) {
+    throw e;
+  }
+};

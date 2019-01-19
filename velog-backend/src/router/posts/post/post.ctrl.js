@@ -22,6 +22,7 @@ import {
 } from 'database/models';
 import redisClient from 'lib/redisClient';
 import UrlSlugHistory from 'database/models/UrlSlugHistory';
+import { subtractIndexes } from 'database/rawQuery/series';
 
 export const checkPostExistancy = async (
   ctx: Context,
@@ -224,15 +225,16 @@ export const updatePost = async (ctx: Context): Promise<*> => {
     if (seriesPost) {
       if (seriesPost.series.id !== series_id) {
         seriesPost.destroy();
+        subtractIndexes(seriesPost.series.id, seriesPost.index);
         if (!series_id) {
           series = null;
         } else {
           await SeriesPosts.append(series_id, id, ctx.user.id);
         }
       }
-    } /* else {
+    } else if (series_id) {
       await SeriesPosts.append(series_id, id, ctx.user.id);
-    } */
+    }
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -347,6 +349,15 @@ export const deletePost = async (ctx: Context): Promise<*> => {
       db.getQueryInterface().bulkDelete('posts_tags', { fk_post_id: post.id }),
       db.getQueryInterface().bulkDelete('post_likes', { fk_post_id: post.id }),
     ]);
+    const seriesPost = await SeriesPosts.findOne({
+      where: {
+        fk_post_id: post.id,
+      },
+    });
+    if (seriesPost) {
+      subtractIndexes(seriesPost.fk_series_id, seriesPost.index);
+      seriesPost.destroy();
+    }
     await post.destroy();
     redisClient.remove(`/@${ctx.user.username}/${ctx.post.url_slug}`);
     ctx.status = 204;

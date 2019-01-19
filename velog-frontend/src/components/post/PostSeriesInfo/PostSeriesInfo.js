@@ -74,7 +74,9 @@ class PostSeriesInfo extends Component<Props, State> {
             {index}/{length}
           </div>
         </div>
-        <h2>{this.props.series.name}</h2>
+        <h2>
+          <Link to={`/@${username}/series/${series.url_slug}`}>{this.props.series.name}</Link>
+        </h2>
         {open && (
           <ol>
             {list.map(item => (
