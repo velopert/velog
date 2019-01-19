@@ -386,6 +386,7 @@ export const readPost = async (ctx: Context): Promise<*> => {
       liked,
     });
 
+
     ctx.body = {
       ...serialized,
       series: seriesPost

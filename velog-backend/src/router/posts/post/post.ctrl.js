@@ -230,9 +230,9 @@ export const updatePost = async (ctx: Context): Promise<*> => {
           await SeriesPosts.append(series_id, id, ctx.user.id);
         }
       }
-    } else {
+    } /* else {
       await SeriesPosts.append(series_id, id, ctx.user.id);
-    }
+    } */
   } catch (e) {
     ctx.throw(500, e);
   }
