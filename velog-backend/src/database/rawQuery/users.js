@@ -15,6 +15,7 @@ export const getUserHistory = async (
 ): Promise<UserHistoryRow[]> => {
   const query = `SELECT c.id, c.created_at, 'comment' AS type FROM comments AS c
   WHERE fk_user_id = $userId
+  AND deleted = false
   UNION ALL SELECT p.id, p.created_at, 'like' AS type FROM post_likes AS p
   WHERE fk_user_id = $userId
   ORDER BY created_at DESC
