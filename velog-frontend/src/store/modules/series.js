@@ -9,6 +9,7 @@ const INITIALIZE = 'series/INITIALIZE';
 const ENABLE_EDITING = 'series/ENABLE_EDITING';
 const DISABLE_EDITING = 'series/DISABLE_EDITING';
 const UPDATE_SERIES = 'series/UPDATE_SERIES';
+const REMOVE_SERIES = 'seres/REMOVE_SERIES';
 
 export const actionCreators = {
   getSeries: createAction(GET_SERIES, SeriesAPI.getSeries),
@@ -16,6 +17,7 @@ export const actionCreators = {
   enableEditing: createAction(ENABLE_EDITING),
   disableEditing: createAction(DISABLE_EDITING),
   updateSeries: createAction(UPDATE_SERIES, SeriesAPI.updateSeries),
+  removeSeries: createAction(REMOVE_SERIES, SeriesAPI.removeSeries),
 };
 
 export type SeriesPostData = {

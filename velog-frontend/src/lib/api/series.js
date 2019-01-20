@@ -28,3 +28,11 @@ export type UpdateSeriesPayload = {
 
 export const updateSeries = (payload: UpdateSeriesPayload) =>
   axios.patch(`/series/${payload.username}/${payload.urlSlug}`, payload.data);
+
+export type RemoveSeriesPayload = {
+  urlSlug: string,
+  username: string,
+};
+export const removeSeries = ({ username, urlSlug }: RemoveSeriesPayload) => {
+  return axios.delete(`/series/${username}/${urlSlug}`);
+};

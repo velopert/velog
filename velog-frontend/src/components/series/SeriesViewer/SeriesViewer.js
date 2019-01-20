@@ -8,8 +8,9 @@ type Props = {
   series: SeriesData,
   ownSeries: boolean,
   onEnableEditing: () => void,
+  onAskRemove: () => void,
 };
-const SeriesViewer = ({ series, onEnableEditing, ownSeries }: Props) => {
+const SeriesViewer = ({ series, onEnableEditing, onAskRemove, ownSeries }: Props) => {
   return (
     <div className="SeriesViewer">
       <h1>{series.name}</h1>
@@ -18,7 +19,9 @@ const SeriesViewer = ({ series, onEnableEditing, ownSeries }: Props) => {
           <button className="text-btn" onClick={onEnableEditing}>
             수정
           </button>
-          <button className="text-btn">삭제</button>
+          <button className="text-btn" onClick={onAskRemove}>
+            삭제
+          </button>
         </div>
       )}
       <div className="list">

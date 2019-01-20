@@ -4,6 +4,7 @@ import { withRouter, type ContextRouter } from 'react-router-dom';
 import { SeriesActions } from 'store/actionCreators';
 import { connect } from 'react-redux';
 import { type State } from 'store';
+import QuestionModal from 'components/common/QuestionModal/QuestionModal';
 import { type SeriesData } from 'store/modules/series';
 import SeriesViewer from '../../components/series/SeriesViewer/SeriesViewer';
 import SeriesEditor from '../../components/series/SeriesEditor/SeriesEditor';
@@ -16,7 +17,14 @@ type Props = {
   currentUsername: ?string,
 } & ContextRouter;
 
-class SeriesContainer extends Component<Props> {
+type LocalState = {
+  remove: boolean,
+};
+
+class SeriesContainer extends Component<Props, LocalState> {
+  state = {
+    remove: false,
+  };
   initialize = async () => {
     if (this.props.shouldCancel) return;
     SeriesActions.initialize();
@@ -61,6 +69,27 @@ class SeriesContainer extends Component<Props> {
     }
   };
 
+  askRemoveSeries = () => {
+    this.setState({
+      remove: true,
+    });
+  };
+
+  cancelRemove = () => {
+    this.setState({
+      remove: false,
+    });
+  };
+
+  confirmRemove = () => {
+    const { username, urlSlug } = this.props.match.params;
+    if (!username || !urlSlug) return;
+    SeriesActions.removeSeries({
+      username,
+      urlSlug,
+    });
+    this.props.history.push(`/@${this.props.currentUsername || ''}`);
+  };
   componentDidMount() {
     this.initialize();
   }
@@ -80,10 +109,19 @@ class SeriesContainer extends Component<Props> {
         ) : (
           <SeriesViewer
             series={series}
+            onAskRemove={this.askRemoveSeries}
             onEnableEditing={this.enableEditing}
             ownSeries={currentUsername === series.user.username}
           />
         )}
+        <QuestionModal
+          title="시리즈 삭제"
+          description="시리즈를 삭제하시겠습니까?"
+          confirmText="삭제"
+          open={this.state.remove}
+          onCancel={this.cancelRemove}
+          onConfirm={this.confirmRemove}
+        />
       </SeriesTemplate>
     );
   }
