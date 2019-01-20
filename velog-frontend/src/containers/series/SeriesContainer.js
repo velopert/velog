@@ -66,7 +66,7 @@ class SeriesContainer extends Component<Props> {
   }
 
   render() {
-    const { series, editing, currentUser } = this.props;
+    const { series, editing, currentUsername } = this.props;
     if (!series) return null;
 
     return (
@@ -78,7 +78,11 @@ class SeriesContainer extends Component<Props> {
             onUpdate={this.updateSeries}
           />
         ) : (
-          <SeriesViewer series={series} onEnableEditing={this.enableEditing} ownSeries={currentUser === series.user.username}>
+          <SeriesViewer
+            series={series}
+            onEnableEditing={this.enableEditing}
+            ownSeries={currentUsername === series.user.username}
+          />
         )}
       </SeriesTemplate>
     );
