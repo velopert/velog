@@ -240,6 +240,20 @@ class SubmitBoxContainer extends Component<Props> {
       return categories.filter(c => c.active).map(c => c.id);
     })();
 
+    if (!title) {
+      BaseActions.showToast({
+        type: 'error',
+        message: '제목을 입력해주세요',
+      });
+      return;
+    }
+    if (!body) {
+      BaseActions.showToast({
+        type: 'error',
+        message: '내용을 입력해주세요',
+      });
+      return;
+    }
     try {
       if (!postData) {
         await WriteActions.writePost({
@@ -277,7 +291,10 @@ class SubmitBoxContainer extends Component<Props> {
         message: '포스트가 임시저장 되었습니다',
       });
     } catch (e) {
-      console.log(e);
+      BaseActions.showToast({
+        type: 'error',
+        message: '임시저장 실패',
+      });
     }
   };
 
@@ -369,7 +386,7 @@ class SubmitBoxContainer extends Component<Props> {
               body={body}
               meta={meta}
               urlSlug={urlSlug}
-              username={username}
+              username={username || ''}
               realMeta={postData && postData.meta}
               onChangeCodeTheme={onChangeCodeTheme}
               onChangeShortDescription={onChangeShortDescription}
