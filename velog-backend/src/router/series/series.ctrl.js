@@ -196,6 +196,10 @@ export const listSeries = async (ctx: Context) => {
       ],
       order: [['updated_at', 'DESC']],
     });
+    if (seriesList.length === 0) {
+      ctx.body = [];
+      return;
+    }
     const counts = await getSeriesPostCountList(seriesList.map(series => series.id));
     const flatData = {};
     counts.forEach((c) => {
