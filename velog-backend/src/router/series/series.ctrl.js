@@ -241,7 +241,14 @@ export const getSeries = async (ctx: Context) => {
     });
     serialized.posts = seriesPosts.map(p => ({
       index: p.index,
-      ...pick(p.post, ['id', 'thumbnail', 'title', 'released_at', 'meta', 'url_slug']),
+      ...pick(p.post, [
+        'id',
+        'thumbnail',
+        'title',
+        'released_at',
+        'meta',
+        'url_slug',
+      ]),
       body: formatShortDescription(p.post.body),
     }));
     ctx.body = serialized;
@@ -294,6 +301,11 @@ export const updateSeries = async (ctx: Context) => {
   if (!validateSchema(ctx, seriesSchema)) {
     return;
   }
+
+  if (!ctx.user) {
+    ctx.status = 401;
+    return;
+  }
   const {
     name, description, url_slug, posts, thumbnail,
   } = (ctx.request
@@ -308,6 +320,12 @@ export const updateSeries = async (ctx: Context) => {
 
   // check url_slug duplicates
   const { series } = ctx.state;
+
+  if (series.fk_user_id !== ctx.user.id) {
+    ctx.status = 403;
+    return;
+  }
+
   try {
     if (url_slug !== series.url_slug) {
       // check duplicates
@@ -360,9 +378,17 @@ export const updateSeries = async (ctx: Context) => {
 
 export const deleteSeries = async (ctx: Context) => {
   const { series } = ctx.state;
+  if (!ctx.user) {
+    ctx.status = 401;
+    return;
+  }
   try {
     if (!series) {
       ctx.status = 404;
+      return;
+    }
+    if (series.fk_user_id !== ctx.user.id) {
+      ctx.status = 403;
       return;
     }
     await series.destroy();

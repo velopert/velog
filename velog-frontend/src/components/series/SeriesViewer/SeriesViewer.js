@@ -6,18 +6,21 @@ import SeriesPostItem from '../SeriesPostItem/SeriesPostItem';
 
 type Props = {
   series: SeriesData,
+  ownSeries: boolean,
   onEnableEditing: () => void,
 };
-const SeriesViewer = ({ series, onEnableEditing }: Props) => {
+const SeriesViewer = ({ series, onEnableEditing, ownSeries }: Props) => {
   return (
     <div className="SeriesViewer">
       <h1>{series.name}</h1>
-      <div className="manage">
-        <button className="text-btn" onClick={onEnableEditing}>
-          수정
-        </button>
-        <button className="text-btn">삭제</button>
-      </div>
+      {ownSeries && (
+        <div className="manage">
+          <button className="text-btn" onClick={onEnableEditing}>
+            수정
+          </button>
+          <button className="text-btn">삭제</button>
+        </div>
+      )}
       <div className="list">
         {series.posts.map(p => (
           <SeriesPostItem key={p.id} post={p} username={series.user.username} />

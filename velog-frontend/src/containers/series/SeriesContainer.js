@@ -13,6 +13,7 @@ type Props = {
   series: ?SeriesData,
   editing: boolean,
   shouldCancel: boolean,
+  currentUsername: ?string,
 } & ContextRouter;
 
 class SeriesContainer extends Component<Props> {
@@ -65,7 +66,7 @@ class SeriesContainer extends Component<Props> {
   }
 
   render() {
-    const { series, editing } = this.props;
+    const { series, editing, currentUser } = this.props;
     if (!series) return null;
 
     return (
@@ -77,7 +78,7 @@ class SeriesContainer extends Component<Props> {
             onUpdate={this.updateSeries}
           />
         ) : (
-          <SeriesViewer series={series} onEnableEditing={this.enableEditing} />
+          <SeriesViewer series={series} onEnableEditing={this.enableEditing} ownSeries={currentUser === series.user.username}>
         )}
       </SeriesTemplate>
     );
@@ -89,5 +90,6 @@ export default withRouter(
     series: state.series.series,
     editing: state.series.editing,
     shouldCancel: state.common.ssr && !state.common.router.altered,
+    currentUsername: state.user.user && state.user.user.username,
   }))(SeriesContainer),
 );
