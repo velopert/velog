@@ -80,7 +80,7 @@ export function formatShortDescription(markdown: string): string {
     .replace(/[<>]/g, '');
 
   return (
-    removeMd(replaced)
+    removeMd(replaced.slice(0, 500))
       .slice(0, 200)
       .replace(/#/g, '') + (replaced.length > 200 ? '...' : '')
   );
