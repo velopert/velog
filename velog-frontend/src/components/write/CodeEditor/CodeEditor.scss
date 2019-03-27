@@ -1,4 +1,4 @@
-@import "utils";
+@import 'utils';
 .CodeEditor {
   position: relative;
   display: flex;
@@ -23,29 +23,28 @@
     flex: 1;
     display: flex;
     .CodeMirror {
+      height: 100%;
       padding-top: 1rem;
       padding-bottom: 1rem;
-      @include media("<large") {
+      @include media('<large') {
         padding-top: 0.75rem;
         padding-bottom: 0.75rem;
       }
       .CodeMirror-lines {
         padding-left: 1rem;
         padding-right: 1rem;
-        @include media("<large") {
+        @include media('<large') {
           padding-left: 0.75rem;
           padding-right: 0.75rem;
         }
       }
       flex: 1;
-      font-family: "initial";
+      font-family: 'initial';
       height: auto; // font-family: 'D2 coding';
-      font-family: "Inconsolata",
-      "D2 Coding",
-      sans-serif;
+      font-family: 'Inconsolata', 'D2 Coding', sans-serif;
       font-size: 1.125rem;
       line-height: 1.5;
-      @include media("<large") {
+      @include media('<large') {
         font-size: 1rem;
         line-height: 1.25;
       }
