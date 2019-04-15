@@ -75,6 +75,9 @@ export const extractKeys = (object: any, params: Array<string>): any => {
 
 export function formatShortDescription(markdown: string): string {
   const replaced = markdown
+    .replace(/  +/g, '')
+    .replace(/--/g, '')
+    .replace(/\|/g, '')
     .replace(/\n/g, ' ')
     .replace(/```(.*)```/g, '')
     .replace(/[<>]/g, '');

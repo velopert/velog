@@ -94,11 +94,19 @@ export const fromNow = (date: string) => {
 };
 
 export function convertToPlainText(markdown: string): string {
-  if (!markdown) return '';
-  const replaced = markdown.replace(/\n/g, ' ').replace(/```(.*)```/g, '');
-  return removeMd(replaced)
-    .slice(0, 150)
-    .replace(/#/g, '');
+  const replaced = markdown
+    .replace(/  +/g, '')
+    .replace(/--/g, '')
+    .replace(/\|/g, '')
+    .replace(/\n/g, ' ')
+    .replace(/```(.*)```/g, '')
+    .replace(/[<>]/g, '');
+
+  return (
+    removeMd(replaced.slice(0, 500))
+      .slice(0, 200)
+      .replace(/#/g, '') + (replaced.length > 200 ? '...' : '')
+  );
 }
 
 export function resizeImage(url: string, width?: number = 256) {
