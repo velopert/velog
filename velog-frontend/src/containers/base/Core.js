@@ -57,6 +57,9 @@ class Core extends Component<Props> {
   listenHistory = () => {
     const { history } = this.props;
     this.unlisten = history.listen((location, type) => {
+      if (window.gtag) {
+        window.gtag('config', 'UA-125599395-1', { page_path: location.pathname });
+      }
       CommonActions.changeRoute({
         type,
         ...location,
