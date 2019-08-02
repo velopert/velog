@@ -99,9 +99,9 @@ export function formatShortDescriptionForAtom(markdown: string): string {
     .replace(/[<>]/g, '');
 
   return (
-    removeMd(replaced.slice(0, 700))
-      .slice(0, 700)
-      .replace(/#/g, '') + (replaced.length > 500 ? '...' : '')
+    removeMd(replaced.slice(0, 1200))
+      .slice(0, 1200)
+      .replace(/#/g, '') + (replaced.length > 1000 ? '...' : '')
   );
 }
 
