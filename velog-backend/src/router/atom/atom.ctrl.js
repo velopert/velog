@@ -4,7 +4,7 @@ import User from 'database/models/User';
 import UserProfile from 'database/models/UserProfile';
 
 import { Feed } from 'feed';
-import { formatShortDescription } from 'lib/common';
+import { formatShortDescriptionForAtom } from 'lib/common';
 
 import type { Middleware } from 'koa';
 
@@ -14,7 +14,7 @@ const convertToFeed = (post) => {
   return {
     link,
     title: post.title,
-    description: post.short_description || formatShortDescription(post.body),
+    description: formatShortDescriptionForAtom(post.body),
     id: link,
     image: post.thumbnail,
     date: post.released_at,

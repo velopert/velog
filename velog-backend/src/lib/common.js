@@ -89,6 +89,22 @@ export function formatShortDescription(markdown: string): string {
   );
 }
 
+export function formatShortDescriptionForAtom(markdown: string): string {
+  const replaced = markdown
+    .replace(/  +/g, '')
+    .replace(/--/g, '')
+    .replace(/\|/g, '')
+    .replace(/\n/g, ' ')
+    .replace(/```(.*)```/g, '')
+    .replace(/[<>]/g, '');
+
+  return (
+    removeMd(replaced.slice(0, 700))
+      .slice(0, 700)
+      .replace(/#/g, '') + (replaced.length > 500 ? '...' : '')
+  );
+}
+
 export function generalHash(text: string) {
   const hashKey = process.env.HASH_KEY;
   if (!hashKey) return null;
