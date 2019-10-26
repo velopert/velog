@@ -20,7 +20,6 @@ import UserMeta from '../../database/models/UserMeta';
 
 const s3 = new AWS.S3({ region: 'ap-northeast-2', signatureVersion: 'v4' });
 
-
 export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   type BodySchema = {
     email: string,
@@ -44,7 +43,8 @@ export const sendAuthEmail = async (ctx: Context): Promise<*> => {
   }
 
   try {
-    const { email }: BodySchema = (ctx.request.body: any);
+    const { email: rawEmail }: BodySchema = (ctx.request.body: any);
+    const email = rawEmail.toLowerCase();
 
     // TODO: check email existancy
     const user = await User.findUser('email', email);
@@ -279,7 +279,6 @@ export const createLocalAccount = async (ctx: Context): Promise<*> => {
       },
       token,
     };
-
 
     setTimeout(() => {
       UserMeta.build({
