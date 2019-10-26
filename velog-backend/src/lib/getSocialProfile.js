@@ -51,36 +51,21 @@ const profileGetters = {
       };
     });
   },
-  google(accessToken: string): Promise<Profile> {
-    const plus = google.plus({
-      version: 'v1',
-      auth: process.env.GOOGLE_SECRET,
+  async google(accessToken: string): Promise<Profile> {
+    const people = google.people('v1');
+    const profile = await people.people.get({
+      access_token: accessToken,
+      resourceName: 'people/me',
+      personFields: 'names,emailAddresses,photos',
     });
-    return new Promise((resolve, reject) => {
-      plus.people.get(
-        {
-          userId: 'me',
-          access_token: accessToken,
-        },
-        (err, auth) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          const {
-            id, image, emails, displayName,
-          } = auth.data;
-
-          const profile = {
-            id,
-            thumbnail: image.url,
-            email: emails[0].value,
-            name: displayName && displayName.split(' (')[0],
-          };
-          resolve(profile);
-        },
-      );
-    });
+    const { data } = profile;
+    const socialProfile = {
+      email: data.emailAddresses[0].value || null,
+      name: data.names[0].displayName || 'emptyname',
+      thumbnail: data.photos[0].url || null,
+      id: data.resourceName.replace('people/', ''),
+    };
+    return socialProfile;
   },
 };
 

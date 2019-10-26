@@ -102,7 +102,10 @@ export const redirectGoogleLogin: Middleware = (ctx) => {
   );
 
   const url = oauth2Client.generateAuthUrl({
-    scope: ['https://www.googleapis.com/auth/userinfo.email'],
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+    ],
     state: JSON.stringify({ next: next || '/trending' }),
   });
 
@@ -139,7 +142,7 @@ export const googleCallback: Middleware = async (ctx) => {
     }
     const { access_token } = tokens;
     const hash = crypto.randomBytes(40).toString('hex');
-    await redisClient.set(hash, access_token, 'EX', 30);
+    await redisClient.set(hash, access_token, 'EX', 300);
     let nextUrl = `${baseUrl}callback?type=google&key=${hash}`;
     if (state) {
       const { next } = JSON.parse(state);
