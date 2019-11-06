@@ -75,7 +75,7 @@
     "qs": "^6.5.2",
     "redis": "^2.8.0",
     "remove-markdown": "^0.3.0",
-    "sequelize": "^4.38.0",
+    "sequelize": "^5.15.1",
     "sequelize-cockroachdb": "^1.0.3",
     "serverless-http": "^1.5.2",
     "shortid": "^2.2.8",
