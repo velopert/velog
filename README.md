@@ -1,4 +1,9 @@
-# velog
+# velog (v1, Archived)
+
+This project is source code of velog v1. After v2 update, this project is now archived. For source code of v2, check out the links below:
+
+- https://github.com/velopert/velog-client
+- https://github.com/velopert/velog-server
 
 > velog is a blog platform for developers. It provides compfy markdown editor with syntax highlighter enabled. Currently, the service is only available in Korean.
 
